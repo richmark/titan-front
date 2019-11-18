@@ -6,12 +6,12 @@ const Signup = () => {
 	const [result, setResult] = useState(false);
 	const [message, setMessage] = useState('');
 	const [values, setValues] = useState({
-		first_name: 'Richmark Jinn',
-		last_name: 'Ravina',
-		email: 'richmark.jinn.ravina@gmail.com',
-		mobile_number: '09771877285',
-		address: 'BLK 138 Lot 6 Zone 7 AFP Housing Bulihan, Silang, Cavite',
-		password: 'qweqwe123@',
+		first_name: '',
+		last_name: '',
+		email: '',
+		mobile_number: '',
+		address: '',
+		password: '',
 		role: 1
 	});
 	const {
