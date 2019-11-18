@@ -30,3 +30,18 @@ export const sendResetPassword = (oData, sTokenId) => {
 		})
 		.catch(err => console.log(err));
 };
+
+export const sendSignup = oData => {
+	return fetch(`${API}/register`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(oData)
+	})
+		.then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+};

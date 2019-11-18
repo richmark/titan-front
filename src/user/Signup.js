@@ -1,7 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../core/Layout';
+import { sendSignup } from '../core/client/clientApi';
 
 const Signup = () => {
+	const [result, setResult] = useState(false);
+	const [message, setMessage] = useState('');
+	const [values, setValues] = useState({
+		first_name: 'Richmark Jinn',
+		last_name: 'Ravina',
+		email: 'richmark.jinn.ravina@gmail.com',
+		mobile_number: '09771877285',
+		address: 'BLK 138 Lot 6 Zone 7 AFP Housing Bulihan, Silang, Cavite',
+		password: 'qweqwe123@',
+		role: 1
+	});
+	const {
+		first_name,
+		last_name,
+		email,
+		mobile_number,
+		address,
+		password,
+		role
+	} = values;
+	const handleChange = name => event => {
+		setValues({ ...values, error: false, [name]: event.target.value });
+	};
+	const clickSubmit = oEvent => {
+		oEvent.preventDefault();
+		sendSignup(values).then(oData => {
+			if (oData.error) {
+				console.log(oData.error);
+			} else {
+				console.log(oData);
+				setResult(true);
+				setMessage(oData.message);
+			}
+		});
+	};
 	const showFooter = () => {
 		return (
 			<div className='navbar navbar-light bg-light'>
@@ -9,120 +45,119 @@ const Signup = () => {
 			</div>
 		);
 	};
-	const showForm = () => {
-		return (
-			<div>
-				<nav className='navbar navbar-light bg-light'>
-					<a className='navbar-brand'>Titan Supertools</a>
-					<form className='form-inline'>
-						<input
-							className='form-control mr-sm-2'
-							type='search'
-							placeholder='Search'
-							aria-label='Search'
-						/>
+	const showForm = () =>
+		!result && (
+			<div className='container text-center'>
+				<div className='row'>
+					<div className='col-sm'></div>
+					<div className='col-sm border m-5 p-5'>
+						<h3>REGISTER (PERSONAL)</h3>
+						<div className='form-group'>
+							<label htmlFor='exampleInputEmail1'>
+								Email address
+							</label>
+							<input
+								onChange={handleChange('email')}
+								value={email}
+								type='email'
+								className='form-control'
+								placeholder='Enter email'
+							/>
+							<small
+								id='emailHelp'
+								className='form-text text-muted'
+							>
+								We'll never share your email with anyone else.
+							</small>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='exampleInputEmail1'>
+								First Name
+							</label>
+							<input
+								onChange={handleChange('first_name')}
+								className='form-control'
+								value={first_name}
+								type='text'
+								placeholder='Enter First Name'
+							/>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='exampleInputEmail1'>
+								Last Name
+							</label>
+							<input
+								onChange={handleChange('last_name')}
+								className='form-control'
+								value={last_name}
+								type='text'
+								placeholder='Enter Last Name'
+							/>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='exampleInputEmail1'>
+								Mobile Number
+							</label>
+							<input
+								onChange={handleChange(mobile_number)}
+								className='form-control'
+								value={mobile_number}
+								type='text'
+								placeholder='Enter Mobile Number'
+							/>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='exampleInputEmail1'>Address</label>
+							<input
+								onChange={handleChange('address')}
+								className='form-control'
+								value={address}
+								type='text'
+								placeholder='Enter Address'
+							/>
+						</div>
+						<div className='form-group'>
+							<label htmlFor='exampleInputPassword1'>
+								Password input
+							</label>
+							<input
+								onChange={handleChange('password')}
+								type='password'
+								className='form-control'
+								value={password}
+								placeholder='Password'
+							/>
+						</div>
+						{/* <div className='form-group'>
+							<label htmlFor='exampleInputPassword1'>
+								Confirm Password Input
+							</label>
+							<input onChange={handleChange()}
+								type='password'
+								className='form-control'
+								type='text'
+								placeholder='Password'
+							/>
+						</div> */}
 						<button
-							className='btn btn-outline-success my-2 my-sm-0'
-							type='submit'
+							onClick={clickSubmit}
+							type='button'
+							className='btn btn-success'
 						>
-							Search
+							REGISTER
 						</button>
-					</form>
-				</nav>
-				<div style={{ display: 'block' }}>
-					<div
-						style={{
-							display: 'block',
-							position: 'fixed',
-							bottom: '70px',
-							right: '20px',
-							zIndex: 1000
-						}}
-					>
-						<div>
-							<span className='dot text-center '>
-								<i
-									className='fa fa-commenting middle'
-									style={{ fontSize: '24px' }}
-								/>
-							</span>
-						</div>
 					</div>
+					<div className='col-sm'></div>
 				</div>
-				<h1 className='text-center'>TITAN SUPERTOOLS</h1>
-				<div className='container mt-5 text-center'>
-					<div className='row'>
-						<div className='col-sm border-right'>
-							<button
-								type='button'
-								className='btn btn-success mb-5'
-							>
-								Personal
-							</button>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur
-								adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Ut
-								enim ad minim veniam, quis nostrud exercitation
-								ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in
-								reprehenderit in voluptate velit esse cillum
-								dolore eu fugiat nulla pariatur. Excepteur sint
-								occaecat cupidatat non proident, sunt in culpa
-								qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div className='col-sm border-right'>
-							<button
-								type='button'
-								className='btn btn-success mb-5'
-							>
-								Corporate
-							</button>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur
-								adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Ut
-								enim ad minim veniam, quis nostrud exercitation
-								ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in
-								reprehenderit in voluptate velit esse cillum
-								dolore eu fugiat nulla pariatur. Excepteur sint
-								occaecat cupidatat non proident, sunt in culpa
-								qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-						<div className='col-sm'>
-							<button
-								type='button'
-								className='btn btn-success mb-5'
-							>
-								Whole Sale
-							</button>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur
-								adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Ut
-								enim ad minim veniam, quis nostrud exercitation
-								ullamco laboris nisi ut aliquip ex ea commodo
-								consequat. Duis aute irure dolor in
-								reprehenderit in voluptate velit esse cillum
-								dolore eu fugiat nulla pariatur. Excepteur sint
-								occaecat cupidatat non proident, sunt in culpa
-								qui officia deserunt mollit anim id est laborum.
-							</p>
-						</div>
-					</div>
-				</div>
-				<footer className='text-center mt-5'>
-					Titan Super Tools 2020 - titansupertools.com
-				</footer>
 			</div>
 		);
-	};
+
+	const showSuccess = () =>
+		result && <div className='alert alert-info'>{message}</div>;
 
 	return (
 		<Layout title='Signup' description='Sign up here'>
+			{showSuccess()}
 			{showForm()}
 			{showFooter()}
 		</Layout>
