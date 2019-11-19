@@ -6,13 +6,23 @@ const Signup = () => {
 	const [result, setResult] = useState(false);
 	const [message, setMessage] = useState('');
 	const [values, setValues] = useState({
-		first_name: '',
-		last_name: '',
-		email: '',
-		mobile_number: '',
-		address: '',
-		password: '',
-		role: 1
+		first_name: 'Joven',
+		last_name: 'Pajanustan',
+		email: 'simplex@email.com',
+		mobile_number: '0915826886',
+		address: 'Cubao',
+		password: 'simplex123',
+		confirm_password: 'simplex123',
+		role: 1,
+	});
+	const [danger, setDanger] = useState({
+		danger_first: '',
+		danger_last: '',
+		danger_email: '',
+		danger_mobile: '',
+		danger_address: '',
+		danger_password: '',
+		danger_confirm: ''
 	});
 	const {
 		first_name,
@@ -21,22 +31,51 @@ const Signup = () => {
 		mobile_number,
 		address,
 		password,
-		role
+		role,
+		confirm_password,
 	} = values;
+
+	const {
+		danger_first,
+		danger_last,
+		danger_email,
+		danger_mobile,
+		danger_address,
+		danger_password,
+		danger_confirm
+	} = danger;
 	const handleChange = name => event => {
 		setValues({ ...values, error: false, [name]: event.target.value });
 	};
+
+	// const handleSubmit = name => oEvent = {
+
+	// };
+	
 	const clickSubmit = oEvent => {
+		const sDanger = 'border-danger';
 		oEvent.preventDefault();
-		sendSignup(values).then(oData => {
-			if (oData.error) {
-				console.log(oData.error);
-			} else {
-				console.log(oData);
-				setResult(true);
-				setMessage(oData.message);
-			}
-		});
+		// console.log(values);
+		// console.log(first_name);
+		// const bContinue = true;
+		if (confirm_password !== password) {
+			setDanger({
+				...danger,
+				danger_password: sDanger,
+				danger_confirm: sDanger
+			});
+			alert('bading si joven');
+		}
+	
+		// sendSignup(values).then(oData => {
+		// 	if (oData.error) {
+		// 		console.log(oData.error);
+		// 	} else {
+		// 		console.log(oData);
+		// 		setResult(true);
+		// 		setMessage(oData.message);
+		// 	}
+		// });
 	};
 	const showFooter = () => {
 		return (
@@ -98,9 +137,9 @@ const Signup = () => {
 							<label htmlFor='exampleInputEmail1'>
 								Mobile Number
 							</label>
-							<input
-								onChange={handleChange(mobile_number)}
-								className='form-control'
+							<input 
+								onChange={handleChange('mobile_number')}
+								className={`form-control ${danger_mobile}`}
 								value={mobile_number}
 								type='text'
 								placeholder='Enter Mobile Number'
@@ -123,22 +162,23 @@ const Signup = () => {
 							<input
 								onChange={handleChange('password')}
 								type='password'
-								className='form-control'
+								className={`form-control ${danger_password}`}
 								value={password}
 								placeholder='Password'
 							/>
 						</div>
-						{/* <div className='form-group'>
+						<div className='form-group'>
 							<label htmlFor='exampleInputPassword1'>
 								Confirm Password Input
 							</label>
-							<input onChange={handleChange()}
+							<input onChange={handleChange('confirm_password')}
 								type='password'
-								className='form-control'
-								type='text'
+								className={`form-control ${danger_confirm}`}
+								type='password'
 								placeholder='Password'
+								value={confirm_password}
 							/>
-						</div> */}
+						</div>
 						<button
 							onClick={clickSubmit}
 							type='button'
@@ -152,8 +192,7 @@ const Signup = () => {
 			</div>
 		);
 
-	const showSuccess = () =>
-		result && <div className='alert alert-info'>{message}</div>;
+	const showSuccess = () => result && <div className='alert alert-info'>{message}</div>;
 
 	return (
 		<Layout title='Signup' description='Sign up here'>
