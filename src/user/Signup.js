@@ -99,7 +99,7 @@ const Signup = () => {
 								Mobile Number
 							</label>
 							<input
-								onChange={handleChange(mobile_number)}
+								onChange={handleChange('mobile_number')}
 								className='form-control'
 								value={mobile_number}
 								type='text'
