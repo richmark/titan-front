@@ -6,13 +6,13 @@ const Signup = () => {
 	const [result, setResult] = useState(false);
 	const [message, setMessage] = useState('');
 	const [values, setValues] = useState({
-		first_name: 'Joven',
-		last_name: 'Pajanustan',
-		email: 'simplex@email.com',
-		mobile_number: '0915826886',
-		address: 'Cubao',
-		password: 'simplex123',
-		confirm_password: 'simplex123',
+		first_name: '',
+		last_name: '',
+		email: '',
+		mobile_number: '',
+		address: '',
+		password: '',
+		confirm_password: '',
 		role: 1,
 	});
 	const [danger, setDanger] = useState({
@@ -54,28 +54,54 @@ const Signup = () => {
 	
 	const clickSubmit = oEvent => {
 		const sDanger = 'border-danger';
+		var sMessage = '';
 		oEvent.preventDefault();
-		// console.log(values);
-		// console.log(first_name);
-		// const bContinue = true;
 		if (confirm_password !== password) {
+			console.log('mismatch');
 			setDanger({
-				...danger,
 				danger_password: sDanger,
 				danger_confirm: sDanger
 			});
-			alert('bading si joven');
+			sMessage += '- Password not match \n';
+		}
+
+		if (password.length < 8 || password.length > 16) {
+			console.log('invalid password');
+			setDanger({
+				danger_password: sDanger
+			});
+			sMessage += '- Password must be atleast 8 characters and max of 16 characters \n';
+		}
+
+		if (isNaN(last_name) === false) {
+			console.log('lastname');
+			setDanger({
+				danger_last: sDanger
+			});
+			sMessage += '- Invalid last name. \n';
+		}
+
+		if (mobile_number.length !== 11 && mobile_number.substring(0, 2) !== '09') {
+			console.log('invalid numebr');
+			setDanger({
+				danger_mobile: sDanger
+			});
+			sMessage += '- Invalid mobile number. \n';
+		}
+
+		if (sMessage !== '') {
+			return alert(sMessage);
 		}
 	
-		// sendSignup(values).then(oData => {
-		// 	if (oData.error) {
-		// 		console.log(oData.error);
-		// 	} else {
-		// 		console.log(oData);
-		// 		setResult(true);
-		// 		setMessage(oData.message);
-		// 	}
-		// });
+		sendSignup(values).then(oData => {
+			if (oData.error) {
+				console.log(oData.error);
+			} else {
+				console.log(oData);
+				setResult(true);
+				setMessage(oData.message);
+			}
+		});
 	};
 	const showFooter = () => {
 		return (
@@ -115,7 +141,7 @@ const Signup = () => {
 							</label>
 							<input
 								onChange={handleChange('first_name')}
-								className='form-control'
+								className={`form-control ${danger_first}`}
 								value={first_name}
 								type='text'
 								placeholder='Enter First Name'
@@ -127,7 +153,7 @@ const Signup = () => {
 							</label>
 							<input
 								onChange={handleChange('last_name')}
-								className='form-control'
+								className={`form-control ${danger_last}`}
 								value={last_name}
 								type='text'
 								placeholder='Enter Last Name'
