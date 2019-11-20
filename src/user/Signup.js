@@ -55,53 +55,43 @@ const Signup = () => {
 	const clickSubmit = oEvent => {
 		const sDanger = 'border-danger';
 		var sMessage = '';
+		const oDanger = {};
 		oEvent.preventDefault();
 		if (confirm_password !== password) {
-			console.log('mismatch');
-			setDanger({
-				danger_password: sDanger,
-				danger_confirm: sDanger
-			});
 			sMessage += '- Password not match \n';
+			oDanger.danger_password = sDanger;
+			oDanger.danger_confirm = sDanger;
 		}
 
 		if (password.length < 8 || password.length > 16) {
-			console.log('invalid password');
-			setDanger({
-				danger_password: sDanger
-			});
 			sMessage += '- Password must be atleast 8 characters and max of 16 characters \n';
+			oDanger.danger_password = sDanger;
 		}
 
 		if (isNaN(last_name) === false) {
-			console.log('lastname');
-			setDanger({
-				danger_last: sDanger
-			});
 			sMessage += '- Invalid last name. \n';
+			oDanger.danger_last = sDanger;
 		}
 
 		if (mobile_number.length !== 11 && mobile_number.substring(0, 2) !== '09') {
-			console.log('invalid numebr');
-			setDanger({
-				danger_mobile: sDanger
-			});
+			oDanger.danger_mobile = sDanger;
 			sMessage += '- Invalid mobile number. \n';
 		}
 
 		if (sMessage !== '') {
+			setDanger(oDanger);
 			return alert(sMessage);
 		}
 	
-		sendSignup(values).then(oData => {
-			if (oData.error) {
-				console.log(oData.error);
-			} else {
-				console.log(oData);
-				setResult(true);
-				setMessage(oData.message);
-			}
-		});
+		// sendSignup(values).then(oData => {
+		// 	if (oData.error) {
+		// 		console.log(oData.error);
+		// 	} else {
+		// 		console.log(oData);
+		// 		setResult(true);
+		// 		setMessage(oData.message);
+		// 	}
+		// });
 	};
 	const showFooter = () => {
 		return (
@@ -125,7 +115,7 @@ const Signup = () => {
 								onChange={handleChange('email')}
 								value={email}
 								type='email'
-								className='form-control'
+								className={`form-control ${danger_email}`}
 								placeholder='Enter email'
 							/>
 							<small
@@ -175,7 +165,7 @@ const Signup = () => {
 							<label htmlFor='exampleInputEmail1'>Address</label>
 							<input
 								onChange={handleChange('address')}
-								className='form-control'
+								className={`form-control ${danger_address}`}
 								value={address}
 								type='text'
 								placeholder='Enter Address'
