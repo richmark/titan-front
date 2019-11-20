@@ -47,15 +47,14 @@ const Signup = () => {
 	const handleChange = name => event => {
 		setValues({ ...values, error: false, [name]: event.target.value });
 	};
-
-	// const handleSubmit = name => oEvent = {
-
-	// };
 	
 	const clickSubmit = oEvent => {
 		const sDanger = 'border-danger';
 		var sMessage = '';
 		const oDanger = {};
+		const sLettersOnly = /^[a-z ]+$/i;
+		const sNumbersOnly =  /^[0-9]+$/i;
+		const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		oEvent.preventDefault();
 		if (confirm_password !== password) {
 			sMessage += '- Password not match \n';
@@ -68,12 +67,27 @@ const Signup = () => {
 			oDanger.danger_password = sDanger;
 		}
 
-		if (isNaN(last_name) === false) {
+		if (email.match(sValidEmail) === null) {
+			sMessage += '- Invalid email. \n';
+			oDanger.danger_email = sDanger;
+		}
+
+		if (last_name.match(sLettersOnly) === null) {
 			sMessage += '- Invalid last name. \n';
 			oDanger.danger_last = sDanger;
 		}
 
-		if (mobile_number.length !== 11 && mobile_number.substring(0, 2) !== '09') {
+		if (address.length <= 5) {
+			sMessage += '- Invalid address. \n';
+			oDanger.danger_address = sDanger;
+		}
+
+		if  (first_name.match(sLettersOnly) === null) {
+			sMessage += '- Invalid first name. \n';
+			oDanger.danger_first = sDanger;
+		}
+
+		if (mobile_number.length !== 11 && mobile_number.substring(0, 2) !== '09' && mobile_number.match(sNumbersOnly) === null) {
 			oDanger.danger_mobile = sDanger;
 			sMessage += '- Invalid mobile number. \n';
 		}
@@ -83,15 +97,15 @@ const Signup = () => {
 			return alert(sMessage);
 		}
 	
-		// sendSignup(values).then(oData => {
-		// 	if (oData.error) {
-		// 		console.log(oData.error);
-		// 	} else {
-		// 		console.log(oData);
-		// 		setResult(true);
-		// 		setMessage(oData.message);
-		// 	}
-		// });
+		sendSignup(values).then(oData => {
+			if (oData.error) {
+				console.log(oData.error);
+			} else {
+				console.log(oData);
+				setResult(true);
+				setMessage(oData.message);
+			}
+		});
 	};
 	const showFooter = () => {
 		return (
@@ -191,7 +205,7 @@ const Signup = () => {
 								type='password'
 								className={`form-control ${danger_confirm}`}
 								type='password'
-								placeholder='Password'
+								placeholder='Confirm Password'
 								value={confirm_password}
 							/>
 						</div>
