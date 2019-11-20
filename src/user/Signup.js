@@ -170,6 +170,7 @@ const Signup = () => {
 							<input 
 								onChange={handleChange('mobile_number')}
 								className={`form-control ${danger_mobile}`}
+
 								value={mobile_number}
 								type='text'
 								placeholder='Enter Mobile Number'
