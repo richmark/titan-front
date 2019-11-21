@@ -4,55 +4,90 @@ import { sendForgotPassword } from '../core/client/clientApi';
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState(false);
+
 	const submitForm = oEvent => {
 		oEvent.preventDefault();
+		setError(false);
 		sendForgotPassword(email).then(oData => {
 			if (oData.error) {
+				setError(true);
 				console.log(oData.error);
 			} else {
-				console.log(oData);
+				setSuccess(oData.message);
+				console.log(oData.message);
 			}
 		});
 	};
+
 	const handleChange = () => oEvent => {
 		setEmail(oEvent.target.value);
 	};
+
 	const showForgotPassword = () => {
 		return (
-			<div className='container mt-5'>
-				<div className='row'>
-					<div className='col-sm' />
-					<div className='col-sm border p-5'>
-						<h3 className='text-center mb-5'>
-							Recover your account
-						</h3>
-						<div className='form-group'>
-							<label htmlFor='exampleInputEmail1'>Email</label>
-							<input
-								value={email}
-								onChange={handleChange()}
-								type='email'
-								className='form-control'
-								id='exampleInputEmail1'
-								placeholder='Enter email'
-							/>
-						</div>
-						<div className='align-content-center text-center mt-2'>
-							<button
-								onClick={submitForm}
-								type='submit'
-								className='btn btn-primary mx-auto'
-							>
-								Send
-							</button>
-						</div>
-					</div>
-					<div className='col-sm' />
+			<div className='col-sm-4 mx-auto border p-5'>
+				<h3 className='text-center mb-5'>
+					Recover your account
+				</h3>
+				<div className='form-group'>
+					<label htmlFor='exampleInputEmail1'>Email</label>
+					<input
+						value={email}
+						onChange={handleChange()}
+						type='email'
+						className='form-control'
+						id='exampleInputEmail1'
+						placeholder='Enter email'
+					/>
+				</div>
+				<div className='align-content-center text-center mt-2'>
+					{showErrorMessage()}
+					<button
+						onClick={submitForm}
+						type='submit'
+						className='btn btn-primary mx-auto'
+					>
+						Send
+					</button>
 				</div>
 			</div>
+			
 		);
 	};
-	return <Layout>{showForgotPassword()}</Layout>;
+
+	const showSuccessMessage = () => {
+		return (
+			<div className="col-sm-5 mx-auto border p-5 text-center">
+				A reset link has been sent to this email: <br /> {success}
+			</div>
+		);
+	}
+
+	const showErrorMessage = () => {
+		if (error === true) {
+			return (
+				<div className="alert alert-danger text-center">Email is not registered!</div>
+			);
+		}
+	};
+
+	const viewForgotPassword = () => {
+		if (success !== false) {
+			return showSuccessMessage();
+		}
+		return showForgotPassword();
+	}
+	return (
+		<Layout>
+			<div className='container mt-5'>
+				<div className='row'>
+					{viewForgotPassword()}
+				</div>
+			</div>			
+		</Layout>
+	); 
 };
 
 export default ForgotPassword;
