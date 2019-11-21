@@ -4,6 +4,7 @@ import Signup from './user/Signup';
 import Login from './user/Login';
 import ForgotPassword from './user/ForgotPassword';
 import ResetPassword from './user/ResetPassword';
+import HomePage from './user/HomePage';
 import AdminDashboard from './core/admin/Dashboard';
 
 // custom routes
@@ -15,6 +16,7 @@ const Routes = () => {
             <Route path='/login' exact component={Login} />
             <Route path='/signup' exact component={Signup} />
             <Route path='/forgotPassword' exact component={ForgotPassword} />
+            <Route path='/' exact component={HomePage} />
             <Route
                 path='/resetPassword/:tokenId'
                 exact
