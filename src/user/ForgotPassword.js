@@ -6,9 +6,28 @@ const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState(false);
-
+	const [danger, setDanger] = useState({
+		danger_email: ''
+	});
+	const {
+		danger_email
+	} = danger;
 	const submitForm = oEvent => {
+		const sDanger = 'border-danger';
+		var sMessage = '';
+		const oDanger = {};
+		const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		oEvent.preventDefault();
+		if (email.match(sValidEmail) === null) {
+			sMessage += '- Invalid email. \n';
+			oDanger.danger_email = sDanger;
+		}
+
+		if (sMessage !== '') {
+			setDanger(oDanger);
+			return alert(sMessage);
+		}
+
 		setError(false);
 		sendForgotPassword(email).then(oData => {
 			if (oData.error) {
@@ -37,7 +56,7 @@ const ForgotPassword = () => {
 						value={email}
 						onChange={handleChange()}
 						type='email'
-						className='form-control'
+						className={`form-control ${danger_email}`}
 						id='exampleInputEmail1'
 						placeholder='Enter email'
 					/>
