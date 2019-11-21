@@ -41,12 +41,13 @@ const Login = () => {
             <div className='container mt-5'>
                 <div className='row'>
                     <div className='col-sm' />
-                    <div className='col-sm border p-4'>
+                    <div className='col-sm-5 border p-5'>
                         <h3 className='text-center mb-5'>LOGIN</h3>
-                        <div className='form-group'>
-                            <label htmlFor='exampleInputEmail1'>
-                                Email address
-                            </label>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <label className="mt-2" htmlFor="exampleInputEmail1" style={{fontSize: '16px'}}>Email</label>
+                            </div>
+                            <div className="col-sm">
                             <input
                                 onChange={handleChange('email')}
                                 value={email}
@@ -54,27 +55,30 @@ const Login = () => {
                                 className='form-control'
                                 placeholder='Enter email'
                             />
+                            </div>
                         </div>
-                        <div className='form-group'>
-                            <label htmlFor='exampleInputPassword1'>
-                                Password
-                            </label>
+                        <div className="row mt-3">
+                            <div className="col-sm-3">
+                                <label className="mt-2 " htmlFor="exampleInputEmail1">Password</label>
+                            </div>
+                            <div className="col-sm">
                             <input
                                 onChange={handleChange('password')}
                                 value={password}
                                 type='password'
                                 className='form-control'
-                                placeholder='Password'
+                                placeholder='Enter Password'
                             />
+                            </div>
                         </div>
-                        <p>
+                        <p className="mt-1 offset-3">
                             <a href='/forgotPassword'>Forgot password</a>
                         </p>
                         <div className='align-content-center text-center mt-2'>
                             <button
                                 onClick={clickSubmit}
                                 type='submit'
-                                className='btn btn-primary mx-auto mb-2'
+                                className='btn btn-primary mb-2 px-4'
                             >
                                 Login
                             </button>
