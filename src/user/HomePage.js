@@ -26,13 +26,13 @@ const HomePage = () => {
                         {/* The slideshow */}
                         <div className="carousel-inner text-center">
                         <div className="carousel-item active">
-                            <img src="../images/wide-image.PNG" alt="Los Angeles" width={1100} height={300} />
+                            <img src="../images/wide-image.PNG" alt="Los Angeles" width={800} height={300} />
                         </div>
                         <div className="carousel-item">
-                            <img src="../images/wide-image.PNG" alt="Chicago" width={1100} height={300} />
+                            <img src="../images/wide-image.PNG" alt="Chicago" width={800} height={300} />
                         </div>
                         <div className="carousel-item">
-                            <img src="../images/wide-image.PNG" alt="New York" width={1100} height={300} />
+                            <img src="../images/wide-image.PNG" alt="New York" width={800} height={300} />
                         </div>
                         </div>
                         {/* Left and right controls */}

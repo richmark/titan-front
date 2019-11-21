@@ -41,7 +41,7 @@ const Layout = ({ children }) => (
 		</div>
 		<h1 className='text-center'>TITAN SUPERTOOLS</h1>
 		{children}
-		<footer className='text-center mt-5'>
+		<footer className='text-center mt-5 mb-5'>
 			Titan Super Tools 2020 - titansupertools.com
 		</footer>
 	</div>
