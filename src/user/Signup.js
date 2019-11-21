@@ -12,7 +12,17 @@ const Signup = () => {
 		mobile_number: '',
 		address: '',
 		password: '',
-		role: 1
+		confirm_password: '',
+		role: 1,
+	});
+	const [danger, setDanger] = useState({
+		danger_first: '',
+		danger_last: '',
+		danger_email: '',
+		danger_mobile: '',
+		danger_address: '',
+		danger_password: '',
+		danger_confirm: ''
 	});
 	const {
 		first_name,
@@ -21,13 +31,72 @@ const Signup = () => {
 		mobile_number,
 		address,
 		password,
-		role
+		role,
+		confirm_password,
 	} = values;
+
+	const {
+		danger_first,
+		danger_last,
+		danger_email,
+		danger_mobile,
+		danger_address,
+		danger_password,
+		danger_confirm
+	} = danger;
 	const handleChange = name => event => {
 		setValues({ ...values, error: false, [name]: event.target.value });
 	};
+	
 	const clickSubmit = oEvent => {
+		const sDanger = 'border-danger';
+		var sMessage = '';
+		const oDanger = {};
+		const sLettersOnly = /^[a-z ]+$/i;
+		const sNumbersOnly =  /^[0-9]+$/i;
+		const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		oEvent.preventDefault();
+		if (confirm_password !== password) {
+			sMessage += '- Password not match \n';
+			oDanger.danger_password = sDanger;
+			oDanger.danger_confirm = sDanger;
+		}
+
+		if (password.length < 8 || password.length > 16) {
+			sMessage += '- Password must be atleast 8 characters and max of 16 characters \n';
+			oDanger.danger_password = sDanger;
+		}
+
+		if (email.match(sValidEmail) === null) {
+			sMessage += '- Invalid email. \n';
+			oDanger.danger_email = sDanger;
+		}
+
+		if (last_name.match(sLettersOnly) === null) {
+			sMessage += '- Invalid last name. \n';
+			oDanger.danger_last = sDanger;
+		}
+
+		if (address.length <= 5) {
+			sMessage += '- Invalid address. \n';
+			oDanger.danger_address = sDanger;
+		}
+
+		if  (first_name.match(sLettersOnly) === null) {
+			sMessage += '- Invalid first name. \n';
+			oDanger.danger_first = sDanger;
+		}
+
+		if (mobile_number.length !== 11 && mobile_number.substring(0, 2) !== '09' && mobile_number.match(sNumbersOnly) === null) {
+			oDanger.danger_mobile = sDanger;
+			sMessage += '- Invalid mobile number. \n';
+		}
+
+		if (sMessage !== '') {
+			setDanger(oDanger);
+			return alert(sMessage);
+		}
+	
 		sendSignup(values).then(oData => {
 			if (oData.error) {
 				console.log(oData.error);
@@ -60,7 +129,7 @@ const Signup = () => {
 								onChange={handleChange('email')}
 								value={email}
 								type='email'
-								className='form-control'
+								className={`form-control ${danger_email}`}
 								placeholder='Enter email'
 							/>
 							<small
@@ -76,7 +145,7 @@ const Signup = () => {
 							</label>
 							<input
 								onChange={handleChange('first_name')}
-								className='form-control'
+								className={`form-control ${danger_first}`}
 								value={first_name}
 								type='text'
 								placeholder='Enter First Name'
@@ -88,7 +157,7 @@ const Signup = () => {
 							</label>
 							<input
 								onChange={handleChange('last_name')}
-								className='form-control'
+								className={`form-control ${danger_last}`}
 								value={last_name}
 								type='text'
 								placeholder='Enter Last Name'
@@ -98,9 +167,10 @@ const Signup = () => {
 							<label htmlFor='exampleInputEmail1'>
 								Mobile Number
 							</label>
-							<input
+							<input 
 								onChange={handleChange('mobile_number')}
-								className='form-control'
+								className={`form-control ${danger_mobile}`}
+
 								value={mobile_number}
 								type='text'
 								placeholder='Enter Mobile Number'
@@ -110,7 +180,7 @@ const Signup = () => {
 							<label htmlFor='exampleInputEmail1'>Address</label>
 							<input
 								onChange={handleChange('address')}
-								className='form-control'
+								className={`form-control ${danger_address}`}
 								value={address}
 								type='text'
 								placeholder='Enter Address'
@@ -123,22 +193,23 @@ const Signup = () => {
 							<input
 								onChange={handleChange('password')}
 								type='password'
-								className='form-control'
+								className={`form-control ${danger_password}`}
 								value={password}
 								placeholder='Password'
 							/>
 						</div>
-						{/* <div className='form-group'>
+						<div className='form-group'>
 							<label htmlFor='exampleInputPassword1'>
 								Confirm Password Input
 							</label>
-							<input onChange={handleChange()}
+							<input onChange={handleChange('confirm_password')}
 								type='password'
-								className='form-control'
-								type='text'
-								placeholder='Password'
+								className={`form-control ${danger_confirm}`}
+								type='password'
+								placeholder='Confirm Password'
+								value={confirm_password}
 							/>
-						</div> */}
+						</div>
 						<button
 							onClick={clickSubmit}
 							type='button'
@@ -152,8 +223,7 @@ const Signup = () => {
 			</div>
 		);
 
-	const showSuccess = () =>
-		result && <div className='alert alert-info'>{message}</div>;
+	const showSuccess = () => result && <div className='alert alert-info'>{message}</div>;
 
 	return (
 		<Layout title='Signup' description='Sign up here'>
