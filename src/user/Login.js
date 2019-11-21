@@ -67,16 +67,19 @@ const Login = () => {
                                 placeholder='Password'
                             />
                         </div>
+                        <p>
+                            <a href='/forgotPassword'>Forgot password</a>
+                        </p>
                         <div className='align-content-center text-center mt-2'>
                             <button
                                 onClick={clickSubmit}
                                 type='submit'
-                                className='btn btn-primary mx-auto'
+                                className='btn btn-primary mx-auto mb-2'
                             >
                                 Login
                             </button>
                             <p>
-                                <a href='#'>Not yet a member? Register here</a>
+                                <a href='/signup'>Not yet a member? Register here</a>
                             </p>
                         </div>
                     </div>
