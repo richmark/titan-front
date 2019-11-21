@@ -4,7 +4,9 @@ import { sendSignup } from '../core/client/clientApi';
 
 const Signup = ({ match }) => {
     const [result, setResult] = useState(false);
+
     const [message, setMessage] = useState('');
+
     const [values, setValues] = useState({
         first_name: 'Richmark Jinn',
         last_name: 'Ravina',
@@ -12,8 +14,12 @@ const Signup = ({ match }) => {
         mobile_number: '09771877285',
         address: 'BLK 138 Lot 6 Zone 7 AFP Housing Bulihan, Silang, Cavite',
         password: 'qweqwe123',
-        confirm_password: 'qweqwe123'
+        confirm_password: 'qweqwe123',
+        company_name: '',
+        company_address: '',
+        tin: ''
     });
+
     const [danger, setDanger] = useState({
         danger_first: '',
         danger_last: '',
@@ -21,8 +27,12 @@ const Signup = ({ match }) => {
         danger_mobile: '',
         danger_address: '',
         danger_password: '',
-        danger_confirm: ''
+        danger_confirm: '',
+        danger_company_name: '',
+        danger_company_address: '',
+        danger_tin: ''
     });
+
     const {
         first_name,
         last_name,
@@ -30,8 +40,12 @@ const Signup = ({ match }) => {
         mobile_number,
         address,
         password,
-        confirm_password
+        confirm_password,
+        company_name,
+        company_address,
+        tin
     } = values;
+
     const {
         danger_first,
         danger_last,
@@ -39,7 +53,10 @@ const Signup = ({ match }) => {
         danger_mobile,
         danger_address,
         danger_password,
-        danger_confirm
+        danger_confirm,
+        danger_company_name,
+        danger_company_address,
+        danger_tin
     } = danger;
 
     const handleChange = name => event => {
@@ -100,7 +117,8 @@ const Signup = ({ match }) => {
             return alert(sMessage);
         }
 
-        sendSignup(values).then(oData => {
+        let role = match.params.roleId !== 'personal' ? 3 : 2;
+        sendSignup({ ...values, role: role }).then(oData => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
@@ -110,6 +128,7 @@ const Signup = ({ match }) => {
             }
         });
     };
+
     const showTitle = () => {
         if (match.params.roleId === 'personal') {
             return <h3>REGISTER (PERSONAL)</h3>;
@@ -120,70 +139,7 @@ const Signup = ({ match }) => {
             return <h6>REGISTER (WHOLESALER - CORPORATE)</h6>;
         }
     };
-    const showUploadImage = () => {
-        return (
-            <div className='col-sm p-5 align-content-center text-center'>
-                <h4 className='mb-5'>Upload Image</h4>
-                <label
-                    htmlFor='upload-photo'
-                    className='mr-5 mb-5'
-                    style={{ cursor: 'pointer' }}
-                >
-                    Store Front <i className='fa fa-upload' />
-                </label>
-                <img
-                    className='float-right mr-5'
-                    src='./image/default.PNG'
-                    style={{ width: '100px', height: '50px' }}
-                />
-                <input
-                    type='file'
-                    name='photo'
-                    id='upload-photo'
-                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                />
-                <br />
-                <label
-                    htmlFor='upload-photo'
-                    className='mr-5 mb-5'
-                    style={{ cursor: 'pointer' }}
-                >
-                    Company BIR 2307 <i className='fa fa-upload' />
-                </label>
-                <img
-                    className='float-right mr-5'
-                    src='./image/default.PNG'
-                    style={{ width: '100px', height: '50px' }}
-                />
-                <input
-                    type='file'
-                    name='photo'
-                    id='upload-photo'
-                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                />
-                <br />
-                <label
-                    htmlFor='upload-photo'
-                    className='mr-5 mb-5'
-                    style={{ cursor: 'pointer' }}
-                >
-                    Mayor’s Permit <i className='fa fa-upload' />
-                </label>
-                <img
-                    className='float-right mr-5'
-                    src='./image/default.PNG'
-                    style={{ width: '100px', height: '50px' }}
-                />
-                <input
-                    type='file'
-                    name='photo'
-                    id='upload-photo'
-                    style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
-                />
-                <br />
-            </div>
-        );
-    };
+
     const showCommonForm = () => {
         return (
             <Fragment>
@@ -256,37 +212,64 @@ const Signup = ({ match }) => {
             </Fragment>
         );
     };
-    const showPersonal = () => {
-        return (
-            <Fragment>
-                <div className='col-sm'></div>
-                <div className='col-sm border m-5 p-5'>{showCommonForm()}</div>
-                <div className='col-sm'></div>
-            </Fragment>
-        );
-    };
+
     const showWholeSalerCorporate = () => {
         return (
             <Fragment>
-                <div className='col-sm'>{showCommonForm()}</div>
-                {showUploadImage()}
+                <div className='form-group'>
+                    <label htmlFor='exampleInputEmail1'>Company Name</label>
+                    <input
+                        onChange={handleChange('company_name')}
+                        value={company_name}
+                        className='form-control'
+                        aria-describedby='emailHelp'
+                        placeholder='Enter Name'
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='exampleInputEmail1'>Company Address</label>
+                    <input
+                        onChange={handleChange('company_address')}
+                        value={company_address}
+                        className='form-control'
+                        aria-describedby='emailHelp'
+                        placeholder='Enter Address'
+                    />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='exampleInputEmail1'>TIN</label>
+                    <input
+                        onChange={handleChange('tin')}
+                        value={tin}
+                        className='form-control'
+                        aria-describedby='emailHelp'
+                        placeholder='Enter TIN'
+                    />
+                </div>
             </Fragment>
         );
     };
+
     const showConditionalForm = () => {
-        if (match.params.roleId === 'personal') {
-            return showPersonal();
-        } else if (
+        if (
             match.params.roleId === 'wholesaler' ||
             match.params.roleId === 'corporate'
         ) {
             return showWholeSalerCorporate();
         }
     };
+
     const showForm = () =>
         !result && (
             <div className='container text-center'>
-                <div className='row'>{showConditionalForm()}</div>
+                <div className='row'>
+                    <div className='col-sm'></div>
+                    <div className='col-sm border m-5 p-5'>
+                        {showCommonForm()}
+                        {showConditionalForm()}
+                    </div>
+                    <div className='col-sm'></div>
+                </div>
                 <button
                     onClick={clickSubmit}
                     type='button'
