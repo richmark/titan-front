@@ -39,8 +39,10 @@ const Layout = ({ children }) => (
 				</div>
 			</div>
 		</div>
-		<h1 className='text-center'>TITAN SUPERTOOLS</h1>
+		<h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
+		<div style={{minHeight: '60vh'}}>
 		{children}
+		</div>
 		<footer className='text-center mt-5 mb-5'>
 			Titan Super Tools 2020 - titansupertools.com
 		</footer>
