@@ -7,9 +7,37 @@ const ResetPassword = props => {
 		password: '',
 		confirm_password: ''
 	});
+	const [danger, setDanger] = useState({
+		danger_password: '',
+		danger_confirm: ''
+	});
+	const {
+		danger_password,
+		danger_confirm
+	} = danger;
 	const { password, confirm_password } = values;
 	const submitForm = oEvent => {
+		const sDanger = 'border-danger';
+		var sMessage = '';
+		const oDanger = {};
 		oEvent.preventDefault();
+
+		if (confirm_password !== password) {
+			sMessage += '- Password not match \n';
+			oDanger.danger_password = sDanger;
+			oDanger.danger_confirm = sDanger;
+		}
+
+		if (password.length < 8 || password.length > 16) {
+			sMessage += '- Password must be atleast 8 characters and max of 16 characters \n';
+			oDanger.danger_password = sDanger;
+		}
+
+		if (sMessage !== '') {
+			setDanger(oDanger);
+			return alert(sMessage);
+		}
+
 		sendResetPassword(values, props.match.params.tokenId).then(oData => {
 			console.log(oData);
 			if (oData.error) {
@@ -37,7 +65,7 @@ const ResetPassword = props => {
 								value={password}
 								onChange={handleChange('password')}
 								type='password'
-								className='form-control'
+								className={`form-control ${danger_password}`}
 								id='exampleInputPassword1'
 								placeholder='New Password'
 							/>
@@ -50,7 +78,7 @@ const ResetPassword = props => {
 								value={confirm_password}
 								onChange={handleChange('confirm_password')}
 								type='password'
-								className='form-control'
+								className={`form-control ${danger_confirm}`}
 								id='exampleInputPassword1'
 								placeholder='Confirm Password'
 							/>
