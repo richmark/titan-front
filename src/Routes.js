@@ -5,6 +5,7 @@ import Login from './user/Login';
 import ForgotPassword from './user/ForgotPassword';
 import ResetPassword from './user/ResetPassword';
 import AdminDashboard from './core/admin/Dashboard';
+import PreRegister from './user/PreRegister';
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
@@ -13,7 +14,9 @@ const Routes = () => {
     return (
         <BrowserRouter>
             <Route path='/login' exact component={Login} />
-            <Route path='/signup' exact component={Signup} />
+            {/* <Route path='/signup' exact component={Signup} /> */}
+            <Route path='/signup' exact component={PreRegister} />
+            <Route path='/signup/:roleId' exact component={Signup} />
             <Route path='/forgotPassword' exact component={ForgotPassword} />
             <Route
                 path='/resetPassword/:tokenId'
