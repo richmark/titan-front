@@ -5,8 +5,15 @@ import Login from './user/Login';
 import ForgotPassword from './user/ForgotPassword';
 import ResetPassword from './user/ResetPassword';
 import HomePage from './user/HomePage';
-import AdminDashboard from './core/admin/Dashboard';
+import Menu from './core/admin/Menu';
 import PreRegister from './user/PreRegister';
+import Bundles from './core/admin/bundles/Bundles';
+import Coupons from './core/admin/coupons/Coupons';
+import Orders from './core/admin/orders/Orders';
+import Products from './core/admin/products/Products';
+import Reviews from './core/admin/reviews/Reviews';
+import Shippers from './core/admin/shippers/Shippers';
+import Wholesalers from './core/admin/wholesalers/Wholesalers';
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
@@ -25,10 +32,18 @@ const Routes = () => {
                 exact
                 component={ResetPassword}
             />
+            {/* Menu Tabs */}
+            <AdminRoute path='/admin/dashboard' exact component={Menu} />
+            <AdminRoute path='/admin/shippers' exact component={Shippers} />
+            <AdminRoute path='/admin/bundles' exact component={Bundles} />
+            <AdminRoute path='/admin/coupons' exact component={Coupons} />
+            <AdminRoute path='/admin/orders' exact component={Orders} />
+            <AdminRoute path='/admin/products' exact component={Products} />
+            <AdminRoute path='/admin/reviews' exact component={Reviews} />
             <AdminRoute
-                path='/admin/dashboard'
+                path='/admin/wholesalers'
                 exact
-                component={AdminDashboard}
+                component={Wholesalers}
             />
         </BrowserRouter>
     );
