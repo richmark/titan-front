@@ -216,7 +216,7 @@ const Signup = ({ match }) => {
                 </div>
                 <div className="row mt-3">
                     <div className="col-sm-4">
-                        <label className="mt-2 " htmlFor="exampleInputEmail1">Address</label>
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Password</label>
                     </div>
                     <div className="col-sm">
                     <input
@@ -224,6 +224,20 @@ const Signup = ({ match }) => {
                         type='password'
                         className={`form-control ${danger_password}`}
                         value={password}
+                        placeholder='Password'
+                    />
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Confirm Password</label>
+                    </div>
+                    <div className="col-sm">
+                    <input
+                        onChange={handleChange('confirm_password')}
+                        type='password'
+                        className={`form-control ${danger_confirm}`}
+                        value={confirm_password}
                         placeholder='Password'
                     />
                     </div>
