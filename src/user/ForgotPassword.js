@@ -46,12 +46,15 @@ const ForgotPassword = () => {
 
 	const showForgotPassword = () => {
 		return (
-			<div className='col-sm-4 mx-auto border p-5'>
+			<div className='col-sm-6 mx-auto border p-5'>
 				<h3 className='text-center mb-5'>
 					Recover your account
 				</h3>
-				<div className='form-group'>
-					<label htmlFor='exampleInputEmail1'>Email</label>
+				<div className="row mt-3">
+					<div className="col-sm-2">
+						<label className="mt-2 " htmlFor="exampleInputEmail1">Email</label>
+					</div>
+					<div className="col-sm">
 					<input
 						value={email}
 						onChange={handleChange()}
@@ -60,8 +63,9 @@ const ForgotPassword = () => {
 						id='exampleInputEmail1'
 						placeholder='Enter email'
 					/>
+					</div>
 				</div>
-				<div className='align-content-center text-center mt-2'>
+				<div className='align-content-center text-center mt-4'>
 					{showErrorMessage()}
 					<button
 						onClick={submitForm}
