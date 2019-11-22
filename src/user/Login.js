@@ -11,13 +11,44 @@ const Login = () => {
         error: '',
         redirectToReferrer: false
     });
+
+    const [danger, setDanger] = useState({
+        danger_email: '',
+        danger_password: '',
+    });
+
+    const {
+        danger_email,
+        danger_password
+    } = danger;
     const { user } = isAuthenticated();
     const handleChange = name => event => {
         setValues({ ...values, [name]: event.target.value });
     };
     const { email, password, error, redirectToReferrer } = values;
     const clickSubmit = oEvent => {
+        const sDanger = 'border-danger';
+        var sMessage = '';
+        const oDanger = {};
+        const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         oEvent.preventDefault();
+
+        if (email.match(sValidEmail) === null) {
+            sMessage += '- Invalid email. \n';
+            oDanger.danger_email = sDanger;
+        }
+
+        if (password.length < 8 || password.length > 16) {
+            sMessage +=
+                '- Password must be atleast 8 characters and max of 16 characters \n';
+            oDanger.danger_password = sDanger;
+        }
+
+        if (sMessage !== '') {
+            setDanger(oDanger);
+            return alert(sMessage);
+        }
+
         sendSignin(values).then(oData => {
             if (oData.error) {
                 setValues({ ...values, error: oData.error });
@@ -52,8 +83,9 @@ const Login = () => {
                                 onChange={handleChange('email')}
                                 value={email}
                                 type='email'
-                                className='form-control'
+                                className={`form-control ${danger_email}`}
                                 placeholder='Enter email'
+                                required
                             />
                             </div>
                         </div>
@@ -66,8 +98,9 @@ const Login = () => {
                                 onChange={handleChange('password')}
                                 value={password}
                                 type='password'
-                                className='form-control'
+                                className={`form-control ${danger_password}`}
                                 placeholder='Enter Password'
+                                required
                             />
                             </div>
                         </div>
@@ -105,7 +138,9 @@ const Login = () => {
     return (
         <Layout title='Login' description='Login here'>
             {showError()}
-            {showLoginForm()}
+            <form>
+                {showLoginForm()}
+            </form>
             {redirectUser()}
         </Layout>
     );
