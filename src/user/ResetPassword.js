@@ -55,35 +55,39 @@ const ResetPassword = props => {
 			<div className='container mt-5'>
 				<div className='row'>
 					<div className='col-sm' />
-					<div className='col-sm border p-5'>
+					<div className='col-sm-6 border p-5'>
 						<h3 className='text-center mb-5'>PASSWORD RESET</h3>
-						<div className='form-group'>
-							<label htmlFor='exampleInputPassword1'>
-								New Password
-							</label>
-							<input
-								value={password}
+						<div className="row mt-3">
+                            <div className="col-sm-3">
+                                <label className="mt-2 " htmlFor="exampleInputEmail1">New Password</label>
+                            </div>
+                            <div className="col-sm">
+                            <input
+                                value={password}
 								onChange={handleChange('password')}
 								type='password'
 								className={`form-control ${danger_password}`}
 								id='exampleInputPassword1'
 								placeholder='New Password'
-							/>
-						</div>
-						<div className='form-group'>
-							<label htmlFor='exampleInputPassword1'>
-								Confirm Password
-							</label>
-							<input
-								value={confirm_password}
+                            />
+                            </div>
+                        </div>
+						<div className="row mt-3">
+                            <div className="col-sm-3">
+                                <label className="mt-2 " htmlFor="exampleInputEmail1">Confirm Password</label>
+                            </div>
+                            <div className="col-sm">
+                            <input
+                                value={confirm_password}
 								onChange={handleChange('confirm_password')}
 								type='password'
 								className={`form-control ${danger_confirm}`}
 								id='exampleInputPassword1'
 								placeholder='Confirm Password'
-							/>
-						</div>
-						<div className='align-content-center text-center mt-2'>
+                            />
+                            </div>
+                        </div>
+						<div className='align-content-center text-center mt-4'>
 							<button
 								onClick={submitForm}
 								type='submit'

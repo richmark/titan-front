@@ -136,7 +136,7 @@ const Signup = ({ match }) => {
             match.params.roleId === 'wholesaler' ||
             match.params.roleId === 'corporate'
         ) {
-            return <h6>REGISTER (WHOLESALER - CORPORATE)</h6>;
+            return <h3>REGISTER (WHOLESALER - CORPORATE)</h3>;
         }
     };
 
@@ -144,8 +144,11 @@ const Signup = ({ match }) => {
         return (
             <Fragment>
                 {showTitle()}
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Email address</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Email</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('email')}
                         value={email}
@@ -153,12 +156,13 @@ const Signup = ({ match }) => {
                         className={`form-control ${danger_email}`}
                         placeholder='Enter email'
                     />
-                    <small id='emailHelp' className='form-text text-muted'>
-                        We'll never share your email with anyone else.
-                    </small>
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>First Name</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">First Name</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('first_name')}
                         className={`form-control ${danger_first}`}
@@ -166,9 +170,13 @@ const Signup = ({ match }) => {
                         type='text'
                         placeholder='Enter First Name'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Last Name</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Last Name</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('last_name')}
                         className={`form-control ${danger_last}`}
@@ -176,9 +184,13 @@ const Signup = ({ match }) => {
                         type='text'
                         placeholder='Enter Last Name'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Mobile Number</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Mobile Number</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('mobile_number')}
                         className={`form-control ${danger_mobile}`}
@@ -186,9 +198,13 @@ const Signup = ({ match }) => {
                         type='text'
                         placeholder='Enter Mobile Number'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Address</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Address</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('address')}
                         className={`form-control ${danger_address}`}
@@ -196,11 +212,13 @@ const Signup = ({ match }) => {
                         type='text'
                         placeholder='Enter Address'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputPassword1'>
-                        Password input
-                    </label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Address</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('password')}
                         type='password'
@@ -208,6 +226,7 @@ const Signup = ({ match }) => {
                         value={password}
                         placeholder='Password'
                     />
+                    </div>
                 </div>
             </Fragment>
         );
@@ -216,8 +235,11 @@ const Signup = ({ match }) => {
     const showWholeSalerCorporate = () => {
         return (
             <Fragment>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Company Name</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Company Name</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('company_name')}
                         value={company_name}
@@ -225,9 +247,13 @@ const Signup = ({ match }) => {
                         aria-describedby='emailHelp'
                         placeholder='Enter Name'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>Company Address</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">Company Address</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('company_address')}
                         value={company_address}
@@ -235,9 +261,13 @@ const Signup = ({ match }) => {
                         aria-describedby='emailHelp'
                         placeholder='Enter Address'
                     />
+                    </div>
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='exampleInputEmail1'>TIN</label>
+                <div className="row mt-3">
+                    <div className="col-sm-4">
+                        <label className="mt-2 " htmlFor="exampleInputEmail1">TIN</label>
+                    </div>
+                    <div className="col-sm">
                     <input
                         onChange={handleChange('tin')}
                         value={tin}
@@ -245,6 +275,7 @@ const Signup = ({ match }) => {
                         aria-describedby='emailHelp'
                         placeholder='Enter TIN'
                     />
+                    </div>
                 </div>
             </Fragment>
         );
@@ -264,7 +295,7 @@ const Signup = ({ match }) => {
             <div className='container text-center'>
                 <div className='row'>
                     <div className='col-sm'></div>
-                    <div className='col-sm border m-5 p-5'>
+                    <div className='col-sm-6 border m-5 p-5'>
                         {showCommonForm()}
                         {showConditionalForm()}
                     </div>
