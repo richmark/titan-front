@@ -2,15 +2,14 @@ import React from 'react';
 
 const Layout = ({ children }) => (
     <div>
-        <div id='nav'>
-            <nav className='navbar navbar-light bg-dark'>
-                <a href='' className='float-right'>
-                    Login
-                </a>
-                <a href='' className='float-right'>
-                    Register
-                </a>
-            </nav>
+		{/* Logged IN */}
+        {/* <div id='nav'>
+			<ul className="nav bg-secondary">
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Welcome, John Doe</a>
+				</li>
+				<a className="nav-link text-white float-right text-right" href="#">My Profile</a>
+			</ul>
             <div className='row p-3'>
                 <div className='col-sm-1'>
                     <label className='mt-2 ' htmlFor='exampleInputEmail1'>
@@ -34,12 +33,36 @@ const Layout = ({ children }) => (
                     </form>
                 </div>
             </div>
-            <div className='row'>sdgsdg</div>
-        </div>
-
-        <nav className='navbar navbar-light bg-light'>
-            <div className='row mt-3'>
-                <div className='col-sm-4'>
+			<ul className="nav bg-secondary">
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Categories</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Home</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Shop</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">My Cart</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Orders</a>
+				</li>
+			</ul>
+        </div> */}
+		{/* Not Logged IN */}
+		<div id='nav'>
+			<ul className="nav justify-content-end bg-secondary">
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Login</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Register</a>
+				</li>
+			</ul>
+            <div className='row p-3'>
+                <div className='col-sm-1'>
                     <label className='mt-2 ' htmlFor='exampleInputEmail1'>
                         Titan Supertools
                     </label>
@@ -47,7 +70,7 @@ const Layout = ({ children }) => (
                 <div className='col-sm-8'>
                     <form className='form-inline'>
                         <input
-                            className='form-control mr-sm-2 w-100'
+                            className='form-control mr-sm-2 w-75'
                             type='search'
                             placeholder='Search'
                             aria-label='Search'
@@ -61,37 +84,24 @@ const Layout = ({ children }) => (
                     </form>
                 </div>
             </div>
-            <form className='form-inline'>
-                <input
-                    className='form-control mr-sm-2'
-                    type='search'
-                    placeholder='Search'
-                    aria-label='Search'
-                />
-                <button
-                    className='btn btn-outline-success my-2 my-sm-0'
-                    type='submit'
-                >
-                    Search
-                </button>
-            </form>
-            {/* <a className='navbar-brand'>Titan Supertools</a>
-			
-			<form className='form-inline'>
-				<input
-					className='form-control mr-sm-2'
-					type='search'
-					placeholder='Search'
-					aria-label='Search'
-				/>
-				<button
-					className='btn btn-outline-success my-2 my-sm-0'
-					type='submit'
-				>
-					Search
-				</button>
-			</form> */}
-        </nav>
+			<ul className="nav bg-secondary">
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Categories</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Home</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Shop</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">My Cart</a>
+				</li>
+				<li className="nav-item">
+					<a className="nav-link text-white" href="#">Orders</a>
+				</li>
+			</ul>
+        </div>
         <div style={{ display: 'block' }}>
             <div
                 style={{
