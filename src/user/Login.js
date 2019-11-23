@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import Layout from '../core/Layout';
-import { sendSignin } from '../core/client/clientApi';
+import { sendSignin, resendTokenEmail } from '../core/client/clientApi';
 import { authenticate, isAuthenticated } from '../auth/authUtil';
+import { REGEX_EMAIL } from '../config';
 
 const Login = () => {
     const [values, setValues] = useState({
@@ -11,6 +12,12 @@ const Login = () => {
         error: '',
         redirectToReferrer: false
     });
+    const [sendToken, setSendToken] = useState({
+        email: '',
+        resend: false
+    });
+
+    const [verify, setVerify] = useState(false);
 
     const [danger, setDanger] = useState({
         danger_email: '',
@@ -27,11 +34,16 @@ const Login = () => {
     };
     const { email, password, error, redirectToReferrer } = values;
     const clickSubmit = oEvent => {
+        oEvent.preventDefault();
         const sDanger = 'border-danger';
         var sMessage = '';
         const oDanger = {};
-        const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        oEvent.preventDefault();
+        const sValidEmail = REGEX_EMAIL;
+        setSendToken({
+            ...sendToken,
+            resend: false
+        });
+        setVerify(false);
 
         if (email.match(sValidEmail) === null) {
             sMessage += '- Invalid email. \n';
@@ -52,6 +64,13 @@ const Login = () => {
         sendSignin(values).then(oData => {
             if (oData.error) {
                 setValues({ ...values, error: oData.error });
+                if (oData.email) {
+                    setSendToken({
+                        ...sendToken,
+                        email: oData.email,
+                        resend: true
+                    });
+                }
             } else {
                 authenticate(oData, () => {
                     setValues({
@@ -62,11 +81,54 @@ const Login = () => {
             }
         });
     };
+
     const showError = () => {
         if (error !== '') {
-            return <div className='alert alert-warning'>{error}</div>;
+            return (
+                <div className='alert alert-warning'>
+                    {error}
+                    {resendTokenButton()}
+                </div>
+            );
         }
     };
+
+    const showVerificationMessage = () => {
+        if (verify !== false) {
+            return (
+                <div className='alert alert-info'>
+                    {verify}
+                </div>    
+            );
+        }
+    }
+
+    const resendTokenButton = () => {
+        if (sendToken.resend) {
+            return (
+                <Fragment>
+                    <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={resendToken(sendToken.email)}>  Resend Token</span>
+                </Fragment>
+            );
+        }
+    };
+
+    const resendToken = sEmail => oEvent => {
+        oEvent.preventDefault();
+        setSendToken({
+            ...sendToken,
+            resend: false
+        });
+        setValues({
+            ...values,
+            error: ''
+        });
+        resendTokenEmail({ email: sEmail}).then(oData => {
+            setVerify(oData.message);
+            console.log(oData.message);
+        });
+    };
+
     const showLoginForm = () => {
         return (
             <div className='container mt-5'>
@@ -138,6 +200,7 @@ const Login = () => {
     return (
         <Layout title='Login' description='Login here'>
             {showError()}
+            {showVerificationMessage()}
             <form>
                 {showLoginForm()}
             </form>

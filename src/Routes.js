@@ -23,7 +23,6 @@ const Routes = () => {
     return (
         <BrowserRouter>
             <Route path='/login' exact component={Login} />
-            {/* <Route path='/signup' exact component={Signup} /> */}
             <Route path='/signup' exact component={PreRegister} />
             <Route path='/signup/:roleId' exact component={Signup} />
             <Route path='/forgotPassword' exact component={ForgotPassword} />
