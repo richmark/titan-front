@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../core/Layout';
+import { Link } from 'react-router-dom';
 import { sendForgotPassword } from '../core/client/clientApi';
 
 const ForgotPassword = () => {
@@ -13,11 +14,11 @@ const ForgotPassword = () => {
 		danger_email
 	} = danger;
 	const submitForm = oEvent => {
+		oEvent.preventDefault();
 		const sDanger = 'border-danger';
 		var sMessage = '';
 		const oDanger = {};
 		const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		oEvent.preventDefault();
 		if (email.match(sValidEmail) === null) {
 			sMessage += '- Invalid email. \n';
 			oDanger.danger_email = sDanger;
@@ -74,6 +75,11 @@ const ForgotPassword = () => {
 					>
 						Send
 					</button>
+					<Link to="/login">
+						<button className='btn btn-secondary mx-3'>
+							Cancel
+						</button>
+                	</Link>
 				</div>
 			</div>
 			
@@ -102,6 +108,7 @@ const ForgotPassword = () => {
 		}
 		return showForgotPassword();
 	}
+
 	return (
 		<Layout>
 			<div className='container mt-5'>

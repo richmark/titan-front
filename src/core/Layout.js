@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const Layout = ({ children }) => (
     <div>
@@ -54,18 +55,25 @@ const Layout = ({ children }) => (
 		{/* Not Logged IN */}
 		<div id='nav'>
 			<ul className="nav justify-content-end bg-secondary">
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Login</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Register</a>
-				</li>
+                <Link to="/login" style={{ textDecoration : 'none' }}>
+                    <li className="nav-item">
+                        <span className="nav-link text-white">Login</span>
+                    </li>
+                </Link>
+                <Link to="/signup" style={{ textDecoration : 'none' }}>
+                    <li className="nav-item">
+                        <span className="nav-link text-white">Register</span>
+                    </li>
+                </Link>
+				
 			</ul>
             <div className='row p-3'>
                 <div className='col-sm-1'>
-                    <label className='mt-2 ' htmlFor='exampleInputEmail1'>
-                        Titan Supertools
-                    </label>
+                    <Link to="/"  style={{ color: '#858796' }}>
+                        <label className='mt-2' style={{ cursor: 'pointer' }} htmlFor='exampleInputEmail1'>
+                            Titan Supertools
+                        </label>
+                    </Link>
                 </div>
                 <div className='col-sm-8'>
                     <form className='form-inline'>

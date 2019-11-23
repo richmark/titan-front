@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { sendSignin } from '../core/client/clientApi';
 import { authenticate, isAuthenticated } from '../auth/authUtil';
@@ -104,9 +104,11 @@ const Login = () => {
                             />
                             </div>
                         </div>
-                        <p className="mt-1 offset-3">
-                            <a href='/forgotPassword'>Forgot password</a>
-                        </p>
+                        <Link to="/forgotPassword">
+                            <p className="mt-1 offset-3">
+                               Forgot password
+                            </p>
+                        </Link>
                         <div className='align-content-center text-center mt-2'>
                             <button
                                 onClick={clickSubmit}
@@ -115,9 +117,9 @@ const Login = () => {
                             >
                                 Login
                             </button>
-                            <p>
-                                <a href='/signup'>Not yet a member? Register here</a>
-                            </p>
+                            <Link to="/signup">
+                                <p>Not yet a member? Register here</p> 
+                            </Link> 
                         </div>
                     </div>
                     <div className='col-sm' />
@@ -129,8 +131,6 @@ const Login = () => {
         if (redirectToReferrer) {
             if (user && user.role === 1) {
                 return <Redirect to='/admin/dashboard' />;
-                // admin
-                //   return <Redirect to='/admin/dashboard' />;
             }
             return <Redirect to='/user/dashboard' />;
         }

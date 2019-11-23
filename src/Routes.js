@@ -14,6 +14,7 @@ import Products from './core/admin/products/Products';
 import Reviews from './core/admin/reviews/Reviews';
 import Shippers from './core/admin/shippers/Shippers';
 import Wholesalers from './core/admin/wholesalers/Wholesalers';
+import VerifyEmail from './user/VerifyEmail';
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
@@ -26,6 +27,7 @@ const Routes = () => {
             <Route path='/signup' exact component={PreRegister} />
             <Route path='/signup/:roleId' exact component={Signup} />
             <Route path='/forgotPassword' exact component={ForgotPassword} />
+            <Route path='/verify/:sToken' exact component={VerifyEmail} />
             <Route path='/' exact component={HomePage} />
             <Route
                 path='/resetPassword/:tokenId'
