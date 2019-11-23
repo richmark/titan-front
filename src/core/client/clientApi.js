@@ -69,3 +69,18 @@ export const sendConfirmation = (sToken) => {
         console.log(oError);
     });
 };
+
+export const resendTokenEmail = (oEmail) => {
+    return fetch(`${API}/resendVerification`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(oEmail)
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError);
+    });;
+};
