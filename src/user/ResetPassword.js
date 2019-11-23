@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Layout from '../core/Layout';
 import { sendResetPassword } from '../core/client/clientApi';
+import { Link } from 'react-router-dom';
 
 const ResetPassword = props => {
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState(false);
 	const [values, setValues] = useState({
 		password: '',
 		confirm_password: ''
@@ -17,11 +20,11 @@ const ResetPassword = props => {
 	} = danger;
 	const { password, confirm_password } = values;
 	const submitForm = oEvent => {
+		oEvent.preventDefault();
+		setError(false);
 		const sDanger = 'border-danger';
 		var sMessage = '';
 		const oDanger = {};
-		oEvent.preventDefault();
-
 		if (confirm_password !== password) {
 			sMessage += '- Password not match \n';
 			oDanger.danger_password = sDanger;
@@ -41,8 +44,10 @@ const ResetPassword = props => {
 		sendResetPassword(values, props.match.params.tokenId).then(oData => {
 			console.log(oData);
 			if (oData.error) {
+				setError(oData.error);
 				console.log(oData.error);
 			} else {
+				setSuccess(oData.message);
 				console.log(oData);
 			}
 		});
@@ -87,22 +92,76 @@ const ResetPassword = props => {
                             />
                             </div>
                         </div>
+						{showErrorMessage()}
 						<div className='align-content-center text-center mt-4'>
-							<button
-								onClick={submitForm}
-								type='submit'
-								className='btn btn-primary mx-auto'
-							>
-								Confirm
-							</button>
-						</div>
+							{showConfirmButton()}
+							</div>
 					</div>
 					<div className='col-sm' />
 				</div>
 			</div>
 		);
 	};
-	return <Layout>{showResetPassword()}</Layout>;
+
+	const showConfirmButton = () => {
+		if (error !== false) {
+			return (
+				<Link to="/forgotPassword">
+					<button className="btn btn-primary mx-auto">
+						Try Again
+					</button>
+				</Link>
+			);
+		}
+		return (		
+			<button
+				onClick={submitForm}
+				type='submit'
+				className='btn btn-primary mx-auto'
+			>
+				Confirm
+			</button>
+		);
+	}
+
+	const showErrorMessage = () => {
+		if (error !== false) {
+			return (
+				<div className="alert alert-danger text-center my-auto">
+					{error}
+					<p>
+						Please check your email or try again.
+					</p>
+				</div>
+			);
+		}
+	};
+
+	const showSuccessMessage = () => {
+		return (
+			<div className="col-sm-5 mx-auto border p-5 text-center mt-5">
+				{success}
+				<div className="mt-2">
+					<Link to="/login">
+						<button className="btn btn-primary">Ok</button>
+					</Link>
+				</div>
+			</div>
+		);
+	}
+
+	const viewLayout = () => {
+		if (success !== false) {
+			return showSuccessMessage();
+		}
+		return showResetPassword();
+	}
+
+	return (
+		<Layout>
+			{viewLayout()}
+		</Layout>
+	);
 };
 
 export default ResetPassword;

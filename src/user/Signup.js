@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { sendSignup } from '../core/client/clientApi';
+import { Link } from 'react-router-dom';
 
 const Signup = ({ match }) => {
     const [result, setResult] = useState(false);
-
+    const [error, setError] = useState(false);
     const [message, setMessage] = useState('');
 
     const [values, setValues] = useState({
@@ -64,13 +65,13 @@ const Signup = ({ match }) => {
     };
 
     const clickSubmit = oEvent => {
+        oEvent.preventDefault();
         const sDanger = 'border-danger';
         var sMessage = '';
         const oDanger = {};
         const sLettersOnly = /^[a-z ]+$/i;
         const sNumbersOnly = /^[0-9]+$/i;
         const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        oEvent.preventDefault();
         if (confirm_password !== password) {
             sMessage += '- Password not match \n';
             oDanger.danger_password = sDanger;
@@ -120,7 +121,8 @@ const Signup = ({ match }) => {
         let role = match.params.roleId !== 'personal' ? 3 : 2;
         sendSignup({ ...values, role: role }).then(oData => {
             if (oData.error) {
-                console.log(oData.error);
+                console.log(oData);
+                setError(oData.error);
             } else {
                 console.log(oData);
                 setResult(true);
@@ -129,15 +131,26 @@ const Signup = ({ match }) => {
         });
     };
 
-    const showTitle = () => {
-        if (match.params.roleId === 'personal') {
-            return <h3>REGISTER (PERSONAL)</h3>;
-        } else if (
-            match.params.roleId === 'wholesaler' ||
-            match.params.roleId === 'corporate'
-        ) {
-            return <h3>REGISTER (WHOLESALER - CORPORATE)</h3>;
+    const alertDuplicateUser = () => {
+        if (error !== false) {
+            alert(error);
+            setDanger({
+                ...danger,
+                danger_email : 'border-danger'
+            });
+            setError(false);
         }
+    };
+
+    const showTitle = () => {
+        const oTitle = {
+            'personal'  : 'Personal',
+            'corporate' : 'Corporate',
+            'wholesaler': 'WholeSaler'
+        };
+        return (
+            <h3>{`REGISTER (${oTitle[match.params.roleId]})`}</h3>
+        );
     };
 
     const showCommonForm = () => {
@@ -322,16 +335,34 @@ const Signup = ({ match }) => {
                 >
                     REGISTER
                 </button>
+                <Link to="/signup">
+                    <button
+                        className='btn btn-secondary mx-3'
+                    >
+                        Cancel
+                    </button>
+                </Link>
             </div>
         );
 
-    const showSuccess = () =>
-        result && <div className='alert alert-info'>{message}</div>;
+    const showSuccess = () => {
+        return result && (
+            <div className="col-sm-5 mx-auto border p-5 text-center mt-5">
+				{message}
+				<div className="mt-2">
+					<Link to="/login">
+						<button className="btn btn-primary">Ok</button>
+					</Link>
+				</div>
+			</div>
+        );
+    };
 
     return (
         <Layout title='Signup' description='Sign up here'>
             {showSuccess()}
             {showForm()}
+            {alertDuplicateUser()}
         </Layout>
     );
 };

@@ -59,3 +59,13 @@ export const sendSignin = oData => {
         })
         .catch(err => console.log(err));
 };
+
+export const sendConfirmation = (sToken) => {
+    return fetch(`${API}/confirmation/${sToken}`, {
+        method: 'GET'
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError);
+    });
+};
