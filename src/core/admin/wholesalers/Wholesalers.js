@@ -1,7 +1,24 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { getAllWholesalers } from './wholesalersApi';
+import { isAuthenticated } from '../../../auth/authUtil';
 import DashboardLayout from '../DashboardLayout';
+import { Link } from 'react-router-dom'
 
 const Wholesalers = () => {
+    const { sToken, user } = isAuthenticated();
+    const [wholesalers, setWholesalers] = useState([]);
+    const init = () => {
+        getAllWholesalers(user._id, sToken).then(oData => {
+            if(oData.error) {
+                console.log(oData.error)
+            } else {
+                setWholesalers(oData.data);
+            }
+        });
+    };
+    useEffect(() => {
+        init();
+    }, []);
     const showWholesalers = () => {
         return (
             <Fragment>
@@ -47,18 +64,16 @@ const Wholesalers = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1087334</td>
-                                        <td>Makr</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1024034</td>
-                                        <td>Joven</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1023124</td>
-                                        <td>John</td>
-                                    </tr>
+                                    {wholesalers.map((oData, iIndex) => (
+                                        <tr key={iIndex}>
+                                            <td>
+                                                <Link to={`wholesalers/${oData._id}`}>
+                                                    {oData.company_name}
+                                                </Link>
+                                            </td>
+                                            <td>{oData.verified_admin ?  'Verified' : 'Rejected'}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>

@@ -18,6 +18,7 @@ import VerifyEmail from './user/VerifyEmail';
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
+import ProcessWholesaler from './core/admin/wholesalers/ProcessWholesaler';
 
 const Routes = () => {
     return (
@@ -45,6 +46,11 @@ const Routes = () => {
                 path='/admin/wholesalers'
                 exact
                 component={Wholesalers}
+            />
+            <AdminRoute
+                path='/admin/wholesalers/:wholesalerId'
+                exact
+                component={ProcessWholesaler}
             />
         </BrowserRouter>
     );
