@@ -1,20 +1,47 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { getWholesaler } from './wholesalersApi';
+import { getWholesaler, updateWholesaler } from './wholesalersApi';
 import { isAuthenticated } from '../../../auth/authUtil';
 import DashboardLayout from '../DashboardLayout';
 
 const ProcessWholesaler = ({ match }) => {
     const [data, setData] = useState({});
+    const [result, setResult] = useState(undefined);
     const { sToken, user } = isAuthenticated();
     const init = () => {
         getWholesaler(user._id, sToken, match.params.wholesalerId).then(oData => {
             if(oData.error) {
                 console.log(oData.error)
             } else {
-                console.log(oData);
                 setData(oData.data);
             }
         });
+    };
+    const acceptUser = (oEvent) => {
+        oEvent.preventDefault();
+        updateWholesaler(user._id, sToken, match.params.wholesalerId, true).then(oData => {
+            if(oData.error) {
+                console.log(oData.error)
+            } else {
+                setResult(oData.data.verified_admin);
+            }
+        });
+    };
+    const rejectUser = (oEvent) => {
+        oEvent.preventDefault();
+        updateWholesaler(user._id, sToken, match.params.wholesalerId, false).then(oData => {
+            if(oData.error) {
+                console.log(oData.error)
+            } else {
+                setResult(oData.data.verified_admin);
+            }
+        });
+    };
+    const showResult = () => {
+        return result !== undefined && (
+            <div className='alert alert-info'>
+                {result === true ? 'User has been accepted' : 'User has been rejected'}
+            </div>
+        );
     };
     useEffect(() => {
         init();
@@ -23,6 +50,7 @@ const ProcessWholesaler = ({ match }) => {
         return (
             <Fragment>
                 <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
+                    {showResult()}
                     <div className="card border-left-primary shadow h-100 py-2">
                         <div className="card-body">
                             <div className="row">
@@ -62,8 +90,8 @@ const ProcessWholesaler = ({ match }) => {
                     </div>
                 </div>
                 <div className="form-inline mb-2">
-                    <button className="btn btn-primary mr-2">Accept</button>
-                    <button className="btn btn-primary">Reject</button>
+                    <button onClick={acceptUser} className="btn btn-primary mr-2">Accept</button>
+                    <button onClick={rejectUser} className="btn btn-primary">Reject</button>
                 </div>
             </Fragment>
         );
