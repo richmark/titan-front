@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../core/Layout';
 import { Link } from 'react-router-dom';
 import { sendForgotPassword } from '../core/client/clientApi';
+import CardResponse from './format/CardResponse';
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
@@ -87,11 +88,7 @@ const ForgotPassword = () => {
 	};
 
 	const showSuccessMessage = () => {
-		return (
-			<div className="col-sm-5 mx-auto border p-5 text-center">
-				A reset link has been sent to this email: <br /> {success}
-			</div>
-		);
+		return CardResponse(`A reset link has been sent to this email: ${success}`, 'Back to Login', '/login');
 	}
 
 	const showErrorMessage = () => {
