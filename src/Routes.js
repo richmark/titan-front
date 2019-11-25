@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Signup from './user/Signup';
+import Signout from './user/Signout';
 import Login from './user/Login';
 import ForgotPassword from './user/ForgotPassword';
 import ResetPassword from './user/ResetPassword';
@@ -25,6 +26,7 @@ const Routes = () => {
         <BrowserRouter>
             <Route path='/login' exact component={Login} />
             <Route path='/signup' exact component={PreRegister} />
+            <Route path='/signout' exact component={Signout} />
             <Route path='/signup/:roleId' exact component={Signup} />
             <Route path='/forgotPassword' exact component={ForgotPassword} />
             <Route path='/verify/:sToken' exact component={VerifyEmail} />

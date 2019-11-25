@@ -70,6 +70,19 @@ export const sendConfirmation = (sToken) => {
     });
 };
 
+export const sendSignout = () => {
+    if (typeof window !== undefined) {
+        localStorage.removeItem('jwt');
+        return fetch(`${API}/signout`, {
+            method: 'GET'
+        })
+        .then(oResponse => {
+            return oResponse.json();
+        })
+        .catch(oError => console.log(oError));
+    }
+};
+
 export const resendTokenEmail = (oEmail) => {
     return fetch(`${API}/resendVerification`, {
         method: 'POST',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Layout from '../core/Layout';
 import { sendResetPassword } from '../core/client/clientApi';
 import { Link } from 'react-router-dom';
+import CardResponse from './format/CardResponse';
 
 const ResetPassword = props => {
 	const [success, setSuccess] = useState(false);
@@ -138,16 +139,7 @@ const ResetPassword = props => {
 	};
 
 	const showSuccessMessage = () => {
-		return (
-			<div className="col-sm-5 mx-auto border p-5 text-center mt-5">
-				{success}
-				<div className="mt-2">
-					<Link to="/login">
-						<button className="btn btn-primary">Ok</button>
-					</Link>
-				</div>
-			</div>
-		);
+		return CardResponse(`${success}`, 'Back to Login', '/login'); 
 	}
 
 	const viewLayout = () => {
