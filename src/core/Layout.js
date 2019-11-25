@@ -1,141 +1,101 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {Link} from 'react-router-dom';
+import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Row} from 'react-bootstrap';
 
-const Layout = ({ children }) => (
-    <div>
-		{/* Logged IN */}
-        {/* <div id='nav'>
-			<ul className="nav bg-secondary">
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Welcome, John Doe</a>
-				</li>
-				<a className="nav-link text-white float-right text-right" href="#">My Profile</a>
-			</ul>
-            <div className='row p-3'>
-                <div className='col-sm-1'>
-                    <label className='mt-2 ' htmlFor='exampleInputEmail1'>
-                        Titan Supertools
-                    </label>
-                </div>
-                <div className='col-sm-8'>
-                    <form className='form-inline'>
-                        <input
-                            className='form-control mr-sm-2 w-75'
-                            type='search'
-                            placeholder='Search'
-                            aria-label='Search'
-                        />
-                        <button
-                            className='btn btn-outline-success my-2 my-sm-0'
-                            type='submit'
-                        >
-                            Search
-                        </button>
-                    </form>
-                </div>
-            </div>
-			<ul className="nav bg-secondary">
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Categories</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Home</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Shop</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">My Cart</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Orders</a>
-				</li>
-			</ul>
-        </div> */}
-		{/* Not Logged IN */}
-		<div id='nav'>
-			<ul className="nav justify-content-end bg-secondary">
-                <Link to="/login" style={{ textDecoration : 'none' }}>
-                    <li className="nav-item">
-                        <span className="nav-link text-white">Login</span>
-                    </li>
-                </Link>
-                <Link to="/signup" style={{ textDecoration : 'none' }}>
-                    <li className="nav-item">
-                        <span className="nav-link text-white">Register</span>
-                    </li>
-                </Link>
-				
-			</ul>
-            <div className='row p-3'>
-                <div className='col-sm-1'>
-                    <Link to="/"  style={{ color: '#858796' }}>
-                        <label className='mt-2' style={{ cursor: 'pointer' }} htmlFor='exampleInputEmail1'>
-                            Titan Supertools
-                        </label>
-                    </Link>
-                </div>
-                <div className='col-sm-8'>
-                    <form className='form-inline'>
-                        <input
-                            className='form-control mr-sm-2 w-75'
-                            type='search'
-                            placeholder='Search'
-                            aria-label='Search'
-                        />
-                        <button
-                            className='btn btn-outline-success my-2 my-sm-0'
-                            type='submit'
-                        >
-                            Search
-                        </button>
-                    </form>
-                </div>
-            </div>
-			<ul className="nav bg-secondary">
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Categories</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Home</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Shop</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">My Cart</a>
-				</li>
-				<li className="nav-item">
-					<a className="nav-link text-white" href="#">Orders</a>
-				</li>
-			</ul>
-        </div>
-        <div style={{ display: 'block' }}>
-            <div
-                style={{
-                    display: 'block',
-                    position: 'fixed',
-                    bottom: '70px',
-                    right: '20px',
-                    zIndex: 1000
-                }}
-            >
-                <div>
-                    <span className='dot text-center '>
-                        <i
-                            className='fa fa-commenting middle'
-                            style={{ fontSize: '24px' }}
-                        />
-                    </span>
-                </div>
-            </div>
-        </div>
-        <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
-        <div style={{ minHeight: '60vh' }}>{children}</div>
-        <footer className='text-center mt-5 mb-5'>
-            Titan Super Tools 2020 - titansupertools.com
-        </footer>
-    </div>
-);
+const Layout = ({ children }) => {
+
+    const { user } = isAuthenticated();
+    console.log(user);
+
+    const showUserGuest = () => {
+        if (user) {
+            return (
+                <Fragment>
+                    <Nav.Item>
+                        <Nav.Link className="text-white" href="/profile">My Profile</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link className="text-white" href="/signout">Logout</Nav.Link>
+                    </Nav.Item>
+                </Fragment>
+            );  
+        }
+        return (
+            <Fragment>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="/login">Login</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="/signup">Register</Nav.Link>
+                </Nav.Item>
+            </Fragment>
+        );
+    }
+
+    const showNavFirst = () => {
+        return (
+            <Nav className="justify-content-end bg-secondary" activeKey="/home">
+                {showUserGuest()}
+            </Nav>
+        );
+    };
+
+    const showNavBarSecond = () => {
+        return (
+            <Navbar bg="light" expand="lg">
+            <Navbar.Brand href="/">Titan Super Tools</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">  
+                <Form inline>
+                    <FormControl type="text" placeholder="Search" className="mr-sm-2" style={{ width : '50vw' }}/>
+                    <Button variant="outline-success">Search</Button>
+                </Form>
+            </Navbar.Collapse>
+            </Navbar>
+        );
+    };
+
+    const showNavBarThird = () => {
+        return (
+            <Nav className="bg-secondary" activeKey="/home">
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="#">Categories</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="#">Home</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="#">Shop</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="#">My Cart</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link className="text-white" href="#">Orders</Nav.Link>
+                </Nav.Item>
+            </Nav>
+        );
+    };
+
+    const showFooter = () => {
+        return (
+            <footer className='text-center mt-5 mb-5'>
+                Titan Super Tools 2020 - titansupertools.com
+            </footer>
+        );
+    };
+
+    return (
+        <Fragment>
+            {showNavFirst()}
+            {showNavBarSecond()}
+            {showNavBarThird()}
+            <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
+            <div style={{ minHeight: '60vh' }}>{children}</div>
+            {showFooter()}
+        </Fragment>
+    );
+};
 
 export default Layout;
