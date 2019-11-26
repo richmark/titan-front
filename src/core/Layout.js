@@ -5,7 +5,6 @@ import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Row} from 're
 const Layout = ({ children }) => {
 
     const { user } = isAuthenticated();
-    console.log(user);
 
     const showUserGuest = () => {
         if (user) {

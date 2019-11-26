@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '../core/Layout';
-import { Link } from 'react-router-dom';
 import { sendForgotPassword } from '../core/client/clientApi';
 import CardResponse from './format/CardResponse';
+import BasicFormInput from './format/BasicFormInput';
+import BasicAlert from './format/BasicAlert';
+import { REGEX_EMAIL } from '../config';
+import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState('');
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState(false);
-	const [danger, setDanger] = useState({
-		danger_email: ''
-	});
-	const {
-		danger_email
-	} = danger;
+	const [danger, setDanger] = useState('');
+	const sDanger = 'border-danger';
+
 	const submitForm = oEvent => {
 		oEvent.preventDefault();
-		const sDanger = 'border-danger';
+		
+		setDanger('');
 		var sMessage = '';
-		const oDanger = {};
-		const sValidEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		const sValidEmail = REGEX_EMAIL;
 		if (email.match(sValidEmail) === null) {
 			sMessage += '- Invalid email. \n';
-			oDanger.danger_email = sDanger;
 		}
 
 		if (sMessage !== '') {
-			setDanger(oDanger);
+			setDanger(sDanger);
 			return alert(sMessage);
 		}
 
@@ -46,56 +45,15 @@ const ForgotPassword = () => {
 		setEmail(oEvent.target.value);
 	};
 
-	const showForgotPassword = () => {
-		return (
-			<div className='col-sm-6 mx-auto border p-5'>
-				<h3 className='text-center mb-5'>
-					Recover your account
-				</h3>
-				<div className="row mt-3">
-					<div className="col-sm-2">
-						<label className="mt-2 " htmlFor="exampleInputEmail1">Email</label>
-					</div>
-					<div className="col-sm">
-					<input
-						value={email}
-						onChange={handleChange()}
-						type='email'
-						className={`form-control ${danger_email}`}
-						id='exampleInputEmail1'
-						placeholder='Enter email'
-					/>
-					</div>
-				</div>
-				<div className='align-content-center text-center mt-4'>
-					{showErrorMessage()}
-					<button
-						onClick={submitForm}
-						type='submit'
-						className='btn btn-primary mx-auto'
-					>
-						Send
-					</button>
-					<Link to="/login">
-						<button className='btn btn-secondary mx-3'>
-							Cancel
-						</button>
-                	</Link>
-				</div>
-			</div>
-			
-		);
-	};
-
 	const showSuccessMessage = () => {
-		return CardResponse(`A reset link has been sent to this email: ${success}`, 'Back to Login', '/login');
+		const sMessage = `A reset link has been sent to this email: ${success}`;
+		return CardResponse(sMessage, 'Back to Login', '/login');
 	}
 
 	const showErrorMessage = () => {
 		if (error === true) {
-			return (
-				<div className="alert alert-danger text-center">Email is not registered!</div>
-			);
+			console.log(danger);
+			return BasicAlert('danger', 'Email not registered!');
 		}
 	};
 
@@ -106,13 +64,33 @@ const ForgotPassword = () => {
 		return showForgotPassword();
 	}
 
+	const showForgotPassword = () => {
+		return (
+			<Row>
+				<Col sm={{span: 6, offset: 3}}>
+					<Card>
+					<Card.Title className="text-center mt-5">
+						<h2>Recover your account</h2>
+					</Card.Title>
+						<Form className="mt-3 align-content-center">
+							{BasicFormInput('Email', 'email', 'formEmail', handleChange(), 2, 7, danger)}
+							{showErrorMessage()}
+							<Col sm={{offset: 4}} className="p-2 mb-2">
+								<Button variant="primary" onClick={submitForm} className="mr-2" type="submit">Send</Button>
+								<Button variant="secondary" href="/login">Cancel</Button>
+							</Col>
+						</Form>
+					</Card>	
+				</Col>
+			</Row>
+		);
+	};
+
 	return (
 		<Layout>
-			<div className='container mt-5'>
-				<div className='row'>
-					{viewForgotPassword()}
-				</div>
-			</div>			
+			<Container className="mt-5">
+				{viewForgotPassword()}	
+			</Container>
 		</Layout>
 	); 
 };

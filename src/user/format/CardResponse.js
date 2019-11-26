@@ -11,7 +11,7 @@ const CardResponse = (sText, sButton, sHref) => {
                             <Card.Text >
                                 {sText}
                             </Card.Text>
-                            <Button variant="primary" href={sHref} className="mt-2">{sButton}</Button>
+                            <Button column sm="6" variant="primary" href={sHref} className="mt-2">{sButton}</Button>
                         </Card.Body>
                     </Card>
                 </Col>
