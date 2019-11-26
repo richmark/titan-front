@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
             return (
                 <Fragment>
                     <Nav.Item>
-                        <Nav.Link className="text-white" href="/profile">My Profile</Nav.Link>
+                        <Nav.Link className="text-white" href={`/profile/${user._id}`}>My Profile</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link className="text-white" href="/signout">Logout</Nav.Link>
@@ -59,13 +59,13 @@ const Layout = ({ children }) => {
         return (
             <Nav className="bg-secondary" activeKey="/home">
                 <Nav.Item>
-                    <Nav.Link className="text-white" href="#">Categories</Nav.Link>
+                    <Nav.Link className="text-white" href="/">Categories</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link className="text-white" href="#">Home</Nav.Link>
+                    <Nav.Link className="text-white" href="/">Home</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link className="text-white" href="#">Shop</Nav.Link>
+                    <Nav.Link className="text-white" href="/">Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link className="text-white" href="#">My Cart</Nav.Link>
