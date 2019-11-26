@@ -16,9 +16,11 @@ import Reviews from './core/admin/reviews/Reviews';
 import Shippers from './core/admin/shippers/Shippers';
 import Wholesalers from './core/admin/wholesalers/Wholesalers';
 import VerifyEmail from './user/VerifyEmail';
+import Profile from './user/Profile';
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
+import PrivateRoute from './auth/PrivateRoute';
 import ProcessWholesaler from './core/admin/wholesalers/ProcessWholesaler';
 
 const Routes = () => {
@@ -36,6 +38,8 @@ const Routes = () => {
                 exact
                 component={ResetPassword}
             />
+            {/* Private Routes */}
+            <PrivateRoute path='/profile/:userId' exact component={Profile} />
             {/* Menu Tabs */}
             <AdminRoute path='/admin/dashboard' exact component={Menu} />
             <AdminRoute path='/admin/shippers' exact component={Shippers} />
