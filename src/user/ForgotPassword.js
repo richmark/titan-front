@@ -73,7 +73,7 @@ const ForgotPassword = () => {
 						<h2>Recover your account</h2>
 					</Card.Title>
 						<Form className="mt-3 align-content-center">
-							{BasicFormInput('Email', 'email', 'formEmail', handleChange(), 2, 7, danger)}
+							{BasicFormInput('Email', 'email', 'formEmail', handleChange(), [2,1], 7, danger)}
 							{showErrorMessage()}
 							<Col sm={{offset: 4}} className="p-2 mb-2">
 								<Button variant="primary" onClick={submitForm} className="mr-2" type="submit">Send</Button>
