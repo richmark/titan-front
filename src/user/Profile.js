@@ -9,16 +9,15 @@ const Profile = () => {
     const { user } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
-    const [changeEdit, setChangeEdit] = useState({
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        address: user.address,
-        mobile_number: user.mobile_number
-    });
 
-    const handleChange = oName => oEvent => {
-		console.log(oName, oEvent.target.value);
+
+    const handleChange = sName => oEvent => {
+        oEvent.preventDefault();
+        console.log(oEvent.target.value);
+        // setChangeEdit({
+        //     ...changeEdit,
+        //     sName : oEvent.target.value
+        // });
     };
     
     const showProfileCard = () => {
@@ -140,6 +139,7 @@ const Profile = () => {
     const EditProfileModal = (props) => {
         const aFormLabel = [3,0];
         const iFormLength = 8;
+        const oEmpty = () => {};
         return (
             <Modal
                 {...props}
@@ -152,17 +152,17 @@ const Profile = () => {
                         Edit Profile {`(${user.email})`}
                     </Modal.Title>
                 </Modal.Header>
-                <Form>
+                <Form onSubmit={submitProfile}>
                 <Modal.Body>
                     <Fragment>
-                        {BasicFormInput('First Name', 'text', 'formfirstName', handleChange('first_name'), aFormLabel, iFormLength, '', user.first_name)}
-                        {BasicFormInput('Last Name', 'text', 'formLastName', handleChange('last_name'), aFormLabel, iFormLength, '', user.last_name)}
-                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', handleChange('mobile_number'), aFormLabel, iFormLength, '', user.mobile_number)}
-                        {BasicFormInput('Address', 'text', 'formMobileNumber', handleChange('address'), aFormLabel, iFormLength, '', user.address)}
+                        {BasicFormInput('First Name', 'text', 'formfirstName', oEmpty, aFormLabel, iFormLength, '', user.first_name)}
+                        {BasicFormInput('Last Name', 'text', 'formLastName', oEmpty, aFormLabel, iFormLength, '', user.last_name)}
+                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', oEmpty, aFormLabel, iFormLength, '', user.mobile_number)}
+                        {BasicFormInput('Address', 'text', 'formAddress', oEmpty, aFormLabel, iFormLength, '', user.address)}
                     </Fragment>            
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" className="m-1">Save</Button>
+                    <Button variant="primary" className="m-1" type="submit">Save</Button>
                     <Button variant="secondary" onClick={props.onHide}>Close</Button>
                 </Modal.Footer>
                 </Form>
@@ -196,6 +196,21 @@ const Profile = () => {
                 </Modal.Footer>
             </Modal>
         );
+    };
+
+    const getValue = (sValue) => {
+        return document.getElementById(sValue).value.trim()
+    }
+
+    const submitProfile = (oEvent) => {
+        oEvent.preventDefault();
+        const oData = {
+            first_name    : getValue('formfirstName'),
+            last_name     : getValue('formLastName'),
+            mobile_number : getValue('formMobileNumber'),
+            address       : getValue('formAddress'),
+        }
+        console.log(oData);
     };
 
     return (
