@@ -4,8 +4,12 @@ import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth/authUtil';
 import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-bootstrap';
 import BasicFormInput from './format/BasicFormInput';
+import SimpleReactValidator from 'simple-react-validator';
 
 const Profile = () => {
+
+    const oValidator = new SimpleReactValidator();
+
     const { user } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
@@ -210,7 +214,12 @@ const Profile = () => {
             mobile_number : getValue('formMobileNumber'),
             address       : getValue('formAddress'),
         }
-        console.log(oData);
+        oValidator.message('first_name', oData.first_name, 'required');
+        oValidator.message('last_name', oData.last_name, 'required');
+        oValidator.message('mobile_number', oData.last_name, 'required');
+        oValidator.message('address', oData.last_name, 'required');
+        console.log(oValidator.getErrorMessages(), oValidator.allValid());
+        console.log(oData, oData.first_name);
     };
 
     return (
