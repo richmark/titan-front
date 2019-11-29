@@ -97,3 +97,20 @@ export const resendTokenEmail = (oEmail) => {
         console.log(oError);
     });;
 };
+
+export const uploadImage = (sUserId, sToken, oImages) => {
+    return fetch(`${API}/user/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${sToken}`
+        },
+        body: oImages
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
