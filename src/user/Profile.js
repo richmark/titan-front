@@ -4,6 +4,7 @@ import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth/authUtil';
 import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-bootstrap';
 import BasicFormInput from './format/BasicFormInput';
+import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 
 const Profile = () => {
@@ -11,7 +12,6 @@ const Profile = () => {
     const { user } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
-
 
     const handleChange = sName => oEvent => {
         oEvent.preventDefault();
@@ -138,6 +138,14 @@ const Profile = () => {
         const aFormLabel = [3,0];
         const iFormLength = 8;
         const oEmpty = () => {};
+        const oData = {
+            first_name : '',
+            last_name : '',
+            mobile_number : '',
+            address : ''
+        }
+        const [danger, setDanger] = useState(oData);
+        const [message, setMessage] = useState('');
         return (
             <Modal
                 {...props}
@@ -150,13 +158,14 @@ const Profile = () => {
                         Edit Profile {`(${user.email})`}
                     </Modal.Title>
                 </Modal.Header>
-                <Form onSubmit={submitProfile}>
+                <Form onSubmit={submitProfile(setDanger, setMessage, oData)}>
                 <Modal.Body>
                     <Fragment>
-                        {BasicFormInput('First Name', 'text', 'formfirstName', oEmpty, aFormLabel, iFormLength, '', user.first_name)}
-                        {BasicFormInput('Last Name', 'text', 'formLastName', oEmpty, aFormLabel, iFormLength, '', user.last_name)}
-                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', oEmpty, aFormLabel, iFormLength, '', user.mobile_number)}
-                        {BasicFormInput('Address', 'text', 'formAddress', oEmpty, aFormLabel, iFormLength, '', user.address)}
+                        {BasicFormInput('First Name', 'text', 'formfirstName', oEmpty, aFormLabel, iFormLength, danger.first_name, user.first_name)}
+                        {BasicFormInput('Last Name', 'text', 'formLastName', oEmpty, aFormLabel, iFormLength, danger.last_name, user.last_name)}
+                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', oEmpty, aFormLabel, iFormLength, danger.mobile_number, user.mobile_number)}
+                        {BasicFormInput('Address', 'text', 'formAddress', oEmpty, aFormLabel, iFormLength, danger.address, user.address)}
+                        {message !== '' ? BasicAlert('danger', message) : ''}
                     </Fragment>            
                 </Modal.Body>
                 <Modal.Footer>
@@ -168,40 +177,28 @@ const Profile = () => {
         );
     };
 
-    const EditPasswordModal = (props) => {
-        const aFormLabel = [3,0];
-        const iFormLength = 8;
-        return (
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Change Password
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {BasicFormInput('Current Password', 'password', 'formCurrentPassword', handleChange('current_password'), aFormLabel, iFormLength)}
-                    {BasicFormInput('New Password', 'password', 'formNewPassword', handleChange('new_password'), aFormLabel, iFormLength)}
-                    {BasicFormInput('Confirm Password', 'password', 'formConfirmPassword', handleChange('current_password'), aFormLabel, iFormLength)}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" className="m-1">Save</Button>
-                    <Button variant="secondary" onClick={props.onHide}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        );
+    const setErrorBorder = (sName) => {
+        return (sName === null) ? '' : 'border-danger';
     };
 
-    const getValue = (sValue) => {
-        return document.getElementById(sValue).value.trim()
-    }
+    const setErrorMessage = (oError) => {
+        // var oDiv = document.createElement('div');
+        var sMessage = '';
+        Object.keys(oError).map(mKey => {
+            // var oParagraph = document.createElement('p');
+            // if (typeof oError[mKey] === 'string') {
+            //     oParagraph.innerHTML = oError[mKey];
+            //     oDiv.appendChild(oParagraph);
+            // }
+            sMessage += (typeof oError[mKey] === 'object') ? '' : oError[mKey];
+        });
+        return sMessage;
+    };
 
-    const submitProfile = (oEvent) => {
+    const submitProfile = (oDanger, oMessage, oInitial) => (oEvent) => {
         oEvent.preventDefault();
+        oDanger(oInitial);
+        oMessage('');
         var oValidator = oValidatorLibrary();
         const oData = {
             first_name    : getValue('formfirstName'),
@@ -215,9 +212,59 @@ const Profile = () => {
         oValidator.message('mobile_number', oData.mobile_number, 'required|contact_number');
         oValidator.message('address', oData.address, 'required|alpha_num_dash_space|max:500');
         if (oValidator.allValid()) {
+            // fetch call goes here
             console.log('Pass!');
+            return;
         }
+        // error messages goes here
+        var oError = oValidator.getErrorMessages();
+        var sMessage = setErrorMessage(oError);
+        console.log(sMessage);
+        oMessage(sMessage);
+        oDanger({
+            first_name : setErrorBorder(oError.first_name),
+            last_name : setErrorBorder(oError.last_name),
+            mobile_number :setErrorBorder(oError.mobile_number),
+            address : setErrorBorder(oError.address)
+        });
         console.log(oValidator.getErrorMessages(), oValidator.allValid());
+    };
+
+    const EditPasswordModal = (props) => {
+        const aFormLabel = [3,0];
+        const iFormLength = 8;
+        const oEmpty = () => {};
+        return (
+            <Modal
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Change Password
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {BasicFormInput('Current Password', 'password', 'formCurrentPassword', oEmpty, aFormLabel, iFormLength)}
+                    {BasicFormInput('New Password', 'password', 'formNewPassword',oEmpty, aFormLabel, iFormLength)}
+                    {BasicFormInput('Confirm Password', 'password', 'formConfirmPassword', oEmpty, aFormLabel, iFormLength)}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" className="m-1">Save</Button>
+                    <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
+
+    const getValue = (sValue) => {
+        return document.getElementById(sValue).value.trim()
+    }
+
+    const setClassname = (sValue, sClassname) => {
+        document.getElementById(sValue).className = sClassname;
     };
 
     return (
