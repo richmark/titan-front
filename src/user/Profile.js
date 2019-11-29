@@ -182,17 +182,11 @@ const Profile = () => {
     };
 
     const setErrorMessage = (oError) => {
-        // var oDiv = document.createElement('div');
-        var sMessage = '';
+        var aMessage = [];
         Object.keys(oError).map(mKey => {
-            // var oParagraph = document.createElement('p');
-            // if (typeof oError[mKey] === 'string') {
-            //     oParagraph.innerHTML = oError[mKey];
-            //     oDiv.appendChild(oParagraph);
-            // }
-            sMessage += (typeof oError[mKey] === 'object') ? '' : oError[mKey];
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
         });
-        return sMessage;
+        return aMessage;
     };
 
     const submitProfile = (oDanger, oMessage, oInitial) => (oEvent) => {
