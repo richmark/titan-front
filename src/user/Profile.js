@@ -4,11 +4,9 @@ import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth/authUtil';
 import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-bootstrap';
 import BasicFormInput from './format/BasicFormInput';
-import SimpleReactValidator from 'simple-react-validator';
+import { oValidatorLibrary } from '../libraries/validatorLibrary';
 
 const Profile = () => {
-
-    const oValidator = new SimpleReactValidator();
 
     const { user } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
@@ -18,10 +16,6 @@ const Profile = () => {
     const handleChange = sName => oEvent => {
         oEvent.preventDefault();
         console.log(oEvent.target.value);
-        // setChangeEdit({
-        //     ...changeEdit,
-        //     sName : oEvent.target.value
-        // });
     };
     
     const showProfileCard = () => {
@@ -208,18 +202,22 @@ const Profile = () => {
 
     const submitProfile = (oEvent) => {
         oEvent.preventDefault();
+        var oValidator = oValidatorLibrary();
         const oData = {
             first_name    : getValue('formfirstName'),
             last_name     : getValue('formLastName'),
             mobile_number : getValue('formMobileNumber'),
             address       : getValue('formAddress'),
         }
-        oValidator.message('first_name', oData.first_name, 'required');
-        oValidator.message('last_name', oData.last_name, 'required');
-        oValidator.message('mobile_number', oData.last_name, 'required');
-        oValidator.message('address', oData.last_name, 'required');
+        console.log(oData);
+        oValidator.message('first_name', oData.first_name, 'required|alpha_space');
+        oValidator.message('last_name', oData.last_name, 'required|alpha_space');
+        oValidator.message('mobile_number', oData.mobile_number, 'required|contact_number');
+        oValidator.message('address', oData.address, 'required|alpha_num_dash_space|max:500');
+        if (oValidator.allValid()) {
+            console.log('Pass!');
+        }
         console.log(oValidator.getErrorMessages(), oValidator.allValid());
-        console.log(oData, oData.first_name);
     };
 
     return (
