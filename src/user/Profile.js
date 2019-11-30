@@ -207,7 +207,6 @@ const Profile = ({match}) => {
         oEvent.preventDefault();
         oDanger(oInitial);
         oMessage('');
-        var oValidator = oValidatorLibrary();
         const oData = {
             first_name    : getValue('formfirstName'),
             last_name     : getValue('formLastName'),
@@ -217,7 +216,7 @@ const Profile = ({match}) => {
         if (checkSameUserData(oData, oProfile.profile) === true) {
             return;
         }
-        
+        var oValidator = oValidatorLibrary();
         oValidator.message('first_name', oData.first_name, 'required|alpha_space');
         oValidator.message('last_name', oData.last_name, 'required|alpha_space');
         oValidator.message('mobile_number', oData.mobile_number, 'required|contact_number');

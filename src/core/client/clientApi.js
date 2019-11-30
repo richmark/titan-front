@@ -99,7 +99,7 @@ export const resendTokenEmail = (oEmail) => {
 };
 
 export const sendUpdateUserData = (sUserId, sToken, oUser) => {
-    return fetch(`${API_URL}/updateUser/${sUserId}`, {
+    return fetch(`${API_URL}/user/${sUserId}`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
@@ -114,7 +114,7 @@ export const sendUpdateUserData = (sUserId, sToken, oUser) => {
 };
 
 export const sendUpdateUserPassword = (sUserId, sToken, oUser) => {
-    return fetch(`${API_URL}/changePassword/${sUserId}`, {
+    return fetch(`${API_URL}/user/password/${sUserId}`, {
         method: 'PUT',
         headers: {
             Accept: 'application/json',
