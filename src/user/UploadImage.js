@@ -40,7 +40,15 @@ const UploadImage = () => {
             if (oData.error) {
                 console.log(oData);
             } else {
-                console.log(oData);
+                const sPrefix = `${IMAGE_API}/images/users/`;
+                const { data } = oData;
+                setValues({
+                    ...values,
+                    store_front: `${sPrefix}${data.store_front}`,
+                    company_bir: `${sPrefix}${data.company_bir}`,
+                    mayor_permit: `${sPrefix}${data.mayor_permit}`,
+                    user: data
+                });
             }
         })
     };
@@ -100,11 +108,11 @@ const UploadImage = () => {
                         <div className='col-sm' ></div>
                             <div className="col-sm align-content-center text-center">
                                 <h4 className="mb-5">Upload Image</h4>
-                                <label htmlFor="store_front" className="mr-5 mb-5" style={{cursor: 'pointer'}}>Store Front  <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={store_front} style={{width: '100px', height: '50px'}} />
+                                <label htmlFor="store_front" className="mb-5" style={{cursor: 'pointer'}}>Store Front  <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={store_front} style={{width: '100px', height: '50px'}} />
                                 <input onChange={handleChange('store_front')} type="file" name="store_front" id='store_front' style={{opacity: 0, position: 'absolute', zIndex: -1}} /><br />
-                                <label htmlFor="company_bir" className="mr-5 mb-5" style={{cursor: 'pointer'}}>Company BIR 2307 <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={company_bir} style={{width: '100px', height: '50px'}} />
+                                <label htmlFor="company_bir" className="mb-5" style={{cursor: 'pointer'}}>Company BIR 2307 <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={company_bir} style={{width: '100px', height: '50px'}} />
                                 <input onChange={handleChange('company_bir')} type="file" name="company_bir" id='company_bir' style={{opacity: 0, position: 'absolute', zIndex: -1}} /><br />
-                                <label htmlFor="mayor_permit" className="mr-5 mb-5" style={{cursor: 'pointer'}}>Mayor’s Permit <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={mayor_permit} style={{width: '100px', height: '50px'}} />  
+                                <label htmlFor="mayor_permit" className="mb-5" style={{cursor: 'pointer'}}>Mayor’s Permit <i className="fa fa-upload" /></label><img onError={handleError} className="float-right mr-5" src={mayor_permit} style={{width: '100px', height: '50px'}} />  
                                 <input onChange={handleChange('mayor_permit')} type="file" name="mayor_permit" id='mayor_permit' style={{opacity: 0, position: 'absolute', zIndex: -1}} /><br />
                             </div>
                         <div className='col-sm' ></div>
