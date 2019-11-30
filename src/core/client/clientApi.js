@@ -98,6 +98,48 @@ export const resendTokenEmail = (oEmail) => {
     });;
 };
 
+export const sendUpdateUserData = (sUserId, sToken, oUser) => {
+    return fetch(`${API_URL}/user/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: oUser
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError)
+    });
+};
+
+export const sendUpdateUserPassword = (sUserId, sToken, oUser) => {
+    return fetch(`${API_URL}/user/password/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: JSON.stringify(oUser)
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError)
+    });
+};
+
+export const updateUserData = (oUser, oNext) => {
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('jwt')) {
+            let oAuth = JSON.parse(localStorage.getItem('jwt'));
+            oAuth.user = oUser;
+            localStorage.setItem('jwt', JSON.stringify(oAuth));
+            oNext();
+        }
+    }
+};
+
 export const uploadImage = (sUserId, sToken, oImages) => {
     return fetch(`${API_URL}/user/${sUserId}`, {
         method: 'PUT',
