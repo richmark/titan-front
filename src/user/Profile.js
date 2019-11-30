@@ -5,19 +5,13 @@ import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-boo
 import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
-import { sendUpdateUserData, updateUserData } from '../core/client/clientApi';
+import { sendUpdateUserData, updateUserData, sendUpdateUserPassword } from '../core/client/clientApi';
 
 const Profile = ({match}) => {
 
     const { user, sToken } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
-   
-    const handleChange = sName => oEvent => {
-        oEvent.preventDefault();
-        console.log(oEvent.target.value);
-    };
-    console.log(isAuthenticated());
     
     const showProfileCard = () => {
         return (
@@ -147,6 +141,23 @@ const Profile = ({match}) => {
         }
         const [danger, setDanger] = useState(oData);
         const [message, setMessage] = useState('');
+        const [success, setSuccess] = useState(false);
+        const [profile, setProfile] = useState({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            mobile_number: user.mobile_number,
+            address: user.address
+        });
+
+        const closeModal = (props) => {
+            if (success !== false) {
+                setTimeout(() => {
+                    props.onHide();
+                }, 1000);
+                return BasicAlert('success', 'Update Successful!');
+            }
+        };
+
         return (
             <Modal
                 {...props}
@@ -159,14 +170,15 @@ const Profile = ({match}) => {
                         Edit Profile {`(${user.email})`}
                     </Modal.Title>
                 </Modal.Header>
-                <Form onSubmit={submitProfile(setDanger, setMessage, oData)}>
+                <Form onSubmit={submitProfile(setDanger, setMessage, oData, {profile, setProfile}, setSuccess)}>
                 <Modal.Body>
                     <Fragment>
-                        {BasicFormInput('First Name', 'text', 'formfirstName', oEmpty, aFormLabel, iFormLength, danger.first_name, user.first_name)}
-                        {BasicFormInput('Last Name', 'text', 'formLastName', oEmpty, aFormLabel, iFormLength, danger.last_name, user.last_name)}
-                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', oEmpty, aFormLabel, iFormLength, danger.mobile_number, user.mobile_number)}
-                        {BasicFormInput('Address', 'text', 'formAddress', oEmpty, aFormLabel, iFormLength, danger.address, user.address)}
+                        {BasicFormInput('First Name', 'text', 'formfirstName', oEmpty, aFormLabel, iFormLength, danger.first_name, profile.first_name)}
+                        {BasicFormInput('Last Name', 'text', 'formLastName', oEmpty, aFormLabel, iFormLength, danger.last_name, profile.last_name)}
+                        {BasicFormInput('Mobile Number', 'text', 'formMobileNumber', oEmpty, aFormLabel, iFormLength, danger.mobile_number, profile.mobile_number)}
+                        {BasicFormInput('Address', 'text', 'formAddress', oEmpty, aFormLabel, iFormLength, danger.address, profile.address)}
                         {message !== '' ? BasicAlert('danger', message) : ''}
+                        {closeModal(props)}
                     </Fragment>            
                 </Modal.Body>
                 <Modal.Footer>
@@ -178,23 +190,23 @@ const Profile = ({match}) => {
         );
     };
 
-    const setErrorBorder = (sName) => {
-        return (sName === null) ? '' : 'border-danger';
-    };
+    const checkSameUserData = (oCheck, oProfile) => {
+        const oData = {
+            first_name : oProfile.first_name,
+            last_name : oProfile.last_name,
+            mobile_number : oProfile.mobile_number,
+            address : oProfile.address
+        }
+        if (JSON.stringify(oData) === JSON.stringify(oCheck)) {
+            return true;
+        }
+        return false;
+    }
 
-    const setErrorMessage = (oError) => {
-        var aMessage = [];
-        Object.keys(oError).map(mKey => {
-            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
-        });
-        return aMessage;
-    };
-
-    const submitProfile = (oDanger, oMessage, oInitial) => (oEvent) => {
+    const submitProfile = (oDanger, oMessage, oInitial, oProfile, oSuccess) => (oEvent) => {
         oEvent.preventDefault();
         oDanger(oInitial);
         oMessage('');
-        const oEmpty = () => {};
         var oValidator = oValidatorLibrary();
         const oData = {
             first_name    : getValue('formfirstName'),
@@ -202,7 +214,10 @@ const Profile = ({match}) => {
             mobile_number : getValue('formMobileNumber'),
             address       : getValue('formAddress'),
         }
-        console.log(oData);
+        if (checkSameUserData(oData, oProfile.profile) === true) {
+            return;
+        }
+        
         oValidator.message('first_name', oData.first_name, 'required|alpha_space');
         oValidator.message('last_name', oData.last_name, 'required|alpha_space');
         oValidator.message('mobile_number', oData.mobile_number, 'required|contact_number');
@@ -217,10 +232,17 @@ const Profile = ({match}) => {
                 if (oData.error) {
                     console.log(oData.error)
                 } else {
-                    updateUserData(oData.data, oEmpty);
+                    updateUserData(oData.data, () => {
+                        oProfile.setProfile({
+                            first_name : oData.data.first_name,
+                            last_name : oData.data.last_name,
+                            mobile_number : oData.data.mobile_number,
+                            address : oData.data.address
+                        });
+                        oSuccess(true);
+                    });
                 }
             });
-            console.log('Pass!');
             return;
         }
         // error messages goes here
@@ -239,6 +261,26 @@ const Profile = ({match}) => {
         const aFormLabel = [3,0];
         const iFormLength = 8;
         const oEmpty = () => {};
+        const oData = {
+            current_password : '',
+            new_password : '',
+            confirm_password : '',
+        }
+        const [danger, setDanger] = useState(oData);
+        const [message, setMessage] = useState('');
+        const [success, setSuccess] = useState({
+            status : false,
+            message: ''
+        });
+        const closeModal = (props, sMessage) => {
+            if (success.status !== false) {
+                setTimeout(() => {
+                    props.onHide();
+                }, 1000);
+                return BasicAlert('success', sMessage);
+            }
+        };
+
         return (
             <Modal
                 {...props}
@@ -251,22 +293,90 @@ const Profile = ({match}) => {
                         Change Password
                     </Modal.Title>
                 </Modal.Header>
+                <Form onSubmit={submitChangePassword(setDanger, setMessage, oData, {success, setSuccess})}>
                 <Modal.Body>
-                    {BasicFormInput('Current Password', 'password', 'formCurrentPassword', oEmpty, aFormLabel, iFormLength)}
-                    {BasicFormInput('New Password', 'password', 'formNewPassword',oEmpty, aFormLabel, iFormLength)}
-                    {BasicFormInput('Confirm Password', 'password', 'formConfirmPassword', oEmpty, aFormLabel, iFormLength)}
+                    {BasicFormInput('Current Password', 'password', 'formCurrentPassword', oEmpty, aFormLabel, iFormLength, danger.current_password)}
+                    {BasicFormInput('New Password', 'password', 'formNewPassword', oEmpty, aFormLabel, iFormLength, danger.new_password)}
+                    {BasicFormInput('Confirm Password', 'password', 'formConfirmPassword', oEmpty, aFormLabel, iFormLength, danger.confirm_password)}
+                    {message !== '' ? BasicAlert('danger', message) : ''}
+                    {closeModal(props, success.message)}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" className="m-1">Save</Button>
+                    <Button variant="primary" className="m-1" type="submit">Save</Button>
                     <Button variant="secondary" onClick={props.onHide}>Close</Button>
                 </Modal.Footer>
+                </Form>
             </Modal>
         );
+    };
+
+    const submitChangePassword = (oDanger, oMessage, oInitial, oSuccess) => oEvent => {
+        oEvent.preventDefault();
+        oDanger(oInitial);
+        oMessage('');
+        var oValidator = oValidatorLibrary();
+        const oData = {
+            current_password    : getValue('formCurrentPassword'),
+            password        : getValue('formNewPassword'),
+            confirm_password    : getValue('formConfirmPassword'),
+        }
+
+        var oConfirm = {
+            messages: {
+                in: 'The field confirm password must match new password',
+                not_in : 'The field new password must not match current password'
+            }
+        }
+        oValidator.message('current_password', oData.current_password, 'required|password');
+        oValidator.message('password', oData.password, 'required|password|not_in:' + oData.current_password, oConfirm);
+        oValidator.message('confirm_password', oData.confirm_password, 'required|in:' + oData.password, oConfirm);
+
+        if (oValidator.allValid()) {
+            //fetch call goes here
+            delete oData.confirm_password;
+            sendUpdateUserPassword(match.params.userId, sToken, oData).then((oResponse) => {
+                if (oResponse.error) {
+                    oDanger({
+                        current_password : setErrorBorder(oResponse.error),
+                    });
+                    oMessage(oResponse.error);
+                    return;
+                } else {
+                    oSuccess.setSuccess({
+                        status : true,
+                        message : oResponse.message
+                    });
+                    return;
+                }
+            });
+            return;
+        }
+        // error messages goes here
+        var oError = oValidator.getErrorMessages();
+        var sMessage = setErrorMessage(oError);
+        oMessage(sMessage);
+        oDanger({
+            current_password : setErrorBorder(oError.current_password),
+            new_password : setErrorBorder(oError.new_password),
+            confirm_password :setErrorBorder(oError.confirm_password)
+        });
     };
 
     const getValue = (sValue) => {
         return document.getElementById(sValue).value.trim()
     }
+
+    const setErrorBorder = (sName) => {
+        return (sName === null) ? '' : 'border-danger';
+    };
+
+    const setErrorMessage = (oError) => {
+        var aMessage = [];
+        Object.keys(oError).map(mKey => {
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
+        });
+        return aMessage;
+    };
 
     return (
         <Layout title='Login' description='Login here'>

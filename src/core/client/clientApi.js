@@ -113,6 +113,22 @@ export const sendUpdateUserData = (sUserId, sToken, oUser) => {
     });
 };
 
+export const sendUpdateUserPassword = (sUserId, sToken, oUser) => {
+    return fetch(`${API}/changePassword/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type' : 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: JSON.stringify(oUser)
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError)
+    });
+};
+
 export const updateUserData = (oUser, oNext) => {
     if (typeof window !== 'undefined') {
         if (localStorage.getItem('jwt')) {
