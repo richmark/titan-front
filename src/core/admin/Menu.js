@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
+import "../../../src/styles.css";
 
 const Menu = () => {
   const showMenu = () => {
@@ -25,8 +26,7 @@ const Menu = () => {
         <hr className="sidebar-divider" />
         {/* Nav Item - Pages Collapse Menu */}
         <li className="nav-item">
-          <Link
-            to="bundles"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#bundleMgmt"
@@ -34,7 +34,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Bundle Deals Management</span>
-          </Link>
+          </a>
           <div
             id="bundleMgmt"
             className="collapse"
@@ -48,8 +48,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="coupons"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#couponMgmt"
@@ -57,7 +56,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Coupon Management</span>
-          </Link>
+          </a>
           <div
             id="couponMgmt"
             className="collapse"
@@ -71,8 +70,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="orders"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#orderMgmt"
@@ -80,7 +78,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Order Management</span>
-          </Link>
+          </a>
           <div
             id="orderMgmt"
             className="collapse"
@@ -94,8 +92,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="products"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#prodMgmt"
@@ -103,7 +100,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Product Management</span>
-          </Link>
+          </a>
           <div
             id="prodMgmt"
             className="collapse"
@@ -118,8 +115,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="reviews"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#reviewMgmt"
@@ -127,7 +123,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Review Management</span>
-          </Link>
+          </a>
           <div
             id="reviewMgmt"
             className="collapse"
@@ -140,8 +136,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="shippers"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#shipperMgmt"
@@ -149,7 +144,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Shipper Management</span>
-          </Link>
+          </a>
           <div
             id="shipperMgmt"
             className="collapse"
@@ -162,8 +157,7 @@ const Menu = () => {
           </div>
         </li>
         <li className="nav-item">
-          <Link
-            to="wholesalers"
+          <a
             className="nav-link collapsed"
             data-toggle="collapse"
             data-target="#wholesaleApp"
@@ -171,7 +165,7 @@ const Menu = () => {
             aria-controls="collapseTwo"
           >
             <span>Wholsale User Applications</span>
-          </Link>
+          </a>
           <div
             id="wholesaleApp"
             className="collapse"
@@ -179,7 +173,7 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <a className="collapse-item">All Wholesale User</a>
+              <a href='wholesalers' className="collapse-item">All Wholesale User</a>
               <a className="collapse-item">Process User</a>
             </div>
           </div>
