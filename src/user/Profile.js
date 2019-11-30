@@ -5,17 +5,19 @@ import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-boo
 import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
-import { sendUpdateUserData } from '../core/client/clientApi';
+import { sendUpdateUserData, updateUserData } from '../core/client/clientApi';
 
 const Profile = ({match}) => {
 
-    const { user, token } = isAuthenticated();
+    const { user, sToken } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
+   
     const handleChange = sName => oEvent => {
         oEvent.preventDefault();
         console.log(oEvent.target.value);
     };
+    console.log(isAuthenticated());
     
     const showProfileCard = () => {
         return (
@@ -192,6 +194,7 @@ const Profile = ({match}) => {
         oEvent.preventDefault();
         oDanger(oInitial);
         oMessage('');
+        const oEmpty = () => {};
         var oValidator = oValidatorLibrary();
         const oData = {
             first_name    : getValue('formfirstName'),
@@ -210,7 +213,13 @@ const Profile = ({match}) => {
             Object.keys(oData).map(sKey => {
                 oForm.set(sKey, oData[sKey]);
             });
-            sendUpdateUserData().then();
+            sendUpdateUserData(match.params.userId, sToken, oForm).then((oData) => {
+                if (oData.error) {
+                    console.log(oData.error)
+                } else {
+                    updateUserData(oData.data, oEmpty);
+                }
+            });
             console.log('Pass!');
             return;
         }

@@ -112,3 +112,14 @@ export const sendUpdateUserData = (sUserId, sToken, oUser) => {
         console.log(oError)
     });
 };
+
+export const updateUserData = (oUser, oNext) => {
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('jwt')) {
+            let oAuth = JSON.parse(localStorage.getItem('jwt'));
+            oAuth.user = oUser;
+            localStorage.setItem('jwt', JSON.stringify(oAuth));
+            oNext();
+        }
+    }
+};
