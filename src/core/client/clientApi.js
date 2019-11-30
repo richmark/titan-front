@@ -1,7 +1,7 @@
-import { API } from '../../config';
+import { API_URL } from '../../config';
 
 export const sendForgotPassword = email => {
-    return fetch(`${API}/forgot`, {
+    return fetch(`${API_URL}/forgot`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -16,7 +16,7 @@ export const sendForgotPassword = email => {
 };
 
 export const sendResetPassword = (oData, sTokenId) => {
-    return fetch(`${API}/reset/${sTokenId}`, {
+    return fetch(`${API_URL}/reset/${sTokenId}`, {
         method: 'PATCH',
         headers: {
             Accept: 'application/json',
@@ -31,7 +31,7 @@ export const sendResetPassword = (oData, sTokenId) => {
 };
 
 export const sendSignup = oData => {
-    return fetch(`${API}/register`, {
+    return fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -46,7 +46,7 @@ export const sendSignup = oData => {
 };
 
 export const sendSignin = oData => {
-    return fetch(`${API}/signin`, {
+    return fetch(`${API_URL}/signin`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -61,7 +61,7 @@ export const sendSignin = oData => {
 };
 
 export const sendConfirmation = (sToken) => {
-    return fetch(`${API}/confirmation/${sToken}`, {
+    return fetch(`${API_URL}/confirmation/${sToken}`, {
         method: 'GET'
     }).then(oResponse => {
         return oResponse.json();
@@ -73,7 +73,7 @@ export const sendConfirmation = (sToken) => {
 export const sendSignout = () => {
     if (typeof window !== undefined) {
         localStorage.removeItem('jwt');
-        return fetch(`${API}/signout`, {
+        return fetch(`${API_URL}/signout`, {
             method: 'GET'
         })
         .then(oResponse => {
@@ -84,7 +84,7 @@ export const sendSignout = () => {
 };
 
 export const resendTokenEmail = (oEmail) => {
-    return fetch(`${API}/resendVerification`, {
+    return fetch(`${API_URL}/resendVerification`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -97,3 +97,20 @@ export const resendTokenEmail = (oEmail) => {
         console.log(oError);
     });;
 };
+
+export const uploadImage = (sUserId, sToken, oImages) => {
+    return fetch(`${API_URL}/user/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${sToken}`
+        },
+        body: oImages
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}

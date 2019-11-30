@@ -1,4 +1,4 @@
-import { API } from '../config';
+import { API_URL } from '../config';
 
 export const authenticate = (data, next) => {
     if (typeof window !== 'undefined') {
@@ -12,7 +12,7 @@ export const signout = async next => {
         localStorage.removeItem('jwt');
         next();
         try {
-            const response = await fetch(`${API}/users/signout`, {
+            const response = await fetch(`${API_URL}/users/signout`, {
                 method: 'GET'
             });
             console.log('signout', response);
