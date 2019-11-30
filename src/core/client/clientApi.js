@@ -97,3 +97,18 @@ export const resendTokenEmail = (oEmail) => {
         console.log(oError);
     });;
 };
+
+export const sendUpdateUserData = (sUserId, sToken, oUser) => {
+    return fetch(`${API}/updateUser/${sUserId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: oUser
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError)
+    });
+};
