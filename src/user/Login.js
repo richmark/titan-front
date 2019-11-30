@@ -195,6 +195,9 @@ const Login = () => {
             if (user && user.role === 1) {
                 return <Redirect to='/admin/dashboard' />;
             }
+            if (user.verified_admin === false && user.role > 2) {
+                return <Redirect to='/upload' />;
+            }
             return <Redirect to='/' />;
         }
     };

@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react';
+import { APP_URL } from '../../config';
+
 
 const Navbar = () => {
     const showNavbar = () => {
@@ -38,7 +40,7 @@ const Navbar = () => {
                             className='dropdown-menu dropdown-menu-right shadow animated--grow-in'
                             aria-labelledby='userDropdown'
                         >
-                            <a className='dropdown-item' href='#'>
+                            <a className='dropdown-item' href='signout'>
                                 <i className='fas fa-user fa-sm fa-fw mr-2 text-gray-400' />
                                 Profile
                             </a>
@@ -48,10 +50,8 @@ const Navbar = () => {
                             </a>
                             <div className='dropdown-divider' />
                             <a
+                                href={`${APP_URL}/signout`}
                                 className='dropdown-item'
-                                href='#'
-                                data-toggle='modal'
-                                data-target='#logoutModal'
                             >
                                 <i className='fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400' />
                                 Logout
