@@ -4,6 +4,8 @@ import Layout from '../core/Layout';
 import { sendSignin, resendTokenEmail } from '../core/client/clientApi';
 import { authenticate, isAuthenticated } from '../auth/authUtil';
 import { REGEX_EMAIL } from '../config';
+import {Col, Container, Row, Card, Button} from 'react-bootstrap';
+import BasicFormInput from './format/BasicFormInput';
 
 const Login = () => {
     const [values, setValues] = useState({
@@ -30,6 +32,7 @@ const Login = () => {
     } = danger;
     const { user } = isAuthenticated();
     const handleChange = name => event => {
+        console.log(name);
         setValues({ ...values, [name]: event.target.value });
     };
     const { email, password, error, redirectToReferrer } = values;
@@ -130,6 +133,47 @@ const Login = () => {
         });
     };
 
+    const bootstrapLogin = () => {
+        const aFormLabel = [3,0];
+        const iFormLength = 8;
+        return(
+            <Container className="px-3 py-2">
+                <Row>
+                    <Col sm={{span: 6, offset:3}}>
+                        <Card className="mx-4 pt-2 pb-4">
+                            <Card.Title className="text-center p-3 mt-3" style={{fontSize : "27px"}}>LOGIN</Card.Title>
+                            <Card.Body>
+                                {BasicFormInput('Email', 'text', 'formEmail', handleChange('email'), aFormLabel, iFormLength, danger_email)}
+                                {BasicFormInput('Password', 'password', 'formPassword', handleChange('password'), aFormLabel, iFormLength, danger_password)}
+                                <Row>
+                                    <Col sm={{span: 6, offset:3}}>
+                                        <Link to="/forgotPassword">
+                                            Forgot password
+                                        </Link>
+                                    </Col>
+                                </Row>
+                                <Row className="my-3">
+                                    <Col sm={{ offset: 5}}>
+                                        <Row>
+                                            <Button variant="primary" className="px-4">Login</Button>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col sm={{span: 7, offset:3}}>
+                                        <Link to="/signup">
+                                            Not yet a member? Register here
+                                        </Link>
+                                    </Col>
+                                </Row>  
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+
     const showLoginForm = () => {
         return (
             <div className='container mt-5'>
@@ -207,7 +251,9 @@ const Login = () => {
             {showVerificationMessage()}
             <form>
                 {showLoginForm()}
+                {bootstrapLogin()}
             </form>
+            
             {redirectUser()}
         </Layout>
     );

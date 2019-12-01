@@ -18,42 +18,42 @@ const Profile = ({match}) => {
             <Card className="px-3 py-2" style={{ fontSize: "16px"}}>
                 <Container>
                     <Row className="mt-3">Personal Profile</Row>
-                    <Row className="mt-3">
-                        <Col>
-                            <Row>
-                                <Col sm={3} className="p-0">Email:</Col>
-                                <Col className="text-left">{user.email}</Col>
-                            </Row>
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Col sm={3} className="p-0">Mobile No:</Col>
-                                <Col className="text-left">{user.mobile_number}</Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className="mt-3">
-                        <Col>
-                            <Row>
-                                <Col sm={3} className="p-0">First Name:</Col>
-                                <Col className="text-left">{user.first_name}</Col>
-                            </Row>
-                        </Col>
-                        <Col>
-                            <Row>
-                                <Col sm={3} className="p-0">Address:</Col>
-                                <Col className="text-left">{user.address}</Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className="mt-3">
-                        <Col sm={{ span: 6}}>
-                            <Row>
-                                <Col sm={3} className="p-0">Last Name:</Col>
-                                <Col className="text-left">{user.last_name}</Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                        <Row className="mt-3">
+                            <Col>
+                                <Row>
+                                    <Col sm={3} className="p-0">Email:</Col>
+                                    <Col className="text-left">{user.email}</Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Col sm={3} className="p-0">Mobile No:</Col>
+                                    <Col className="text-left">{user.mobile_number}</Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                        <Row className="mt-3">
+                            <Col>
+                                <Row>
+                                    <Col sm={3} className="p-0">First Name:</Col>
+                                    <Col className="text-left">{user.first_name}</Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Row>
+                                    <Col sm={3} className="p-0">Address:</Col>
+                                    <Col className="text-left">{user.address}</Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                        <Row className="mt-3">
+                            <Col sm={{ span: 6}}>
+                                <Row>
+                                    <Col sm={3} className="p-0">Last Name:</Col>
+                                    <Col className="text-left">{user.last_name}</Col>
+                                </Row>
+                            </Col>
+                        </Row>
                     <Row className="my-3">
                         <Col sm={{ offset: 7}}>
                             <Row>
