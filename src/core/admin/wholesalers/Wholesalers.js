@@ -71,7 +71,7 @@ const Wholesalers = () => {
                                                     {oData.company_name}
                                                 </Link>
                                             </td>
-                                            <td>{oData.verified_admin ?  'Verified' : 'Rejected'}</td>
+                                            <td>{oData.verified_admin ?  'Verified' : 'Pending'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
