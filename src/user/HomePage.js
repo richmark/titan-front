@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
+import CategoryCard from './format/category/CategoryCard';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const HomePage = () => {
 	const showHomePage = () => {
@@ -266,8 +268,21 @@ const HomePage = () => {
                 </div>
             </div>
 		);
-	};
-	return <Layout>{showHomePage()}</Layout>;
+    };
+    
+    const showCategoryLayout = () => {
+        return (
+            <Container>
+                {CategoryCard()}
+            </Container>            
+        );
+    };
+	return (
+        <Layout>
+            {showCategoryLayout()}
+            {showHomePage()}
+        </Layout>
+    );
 };
 
 export default HomePage;
