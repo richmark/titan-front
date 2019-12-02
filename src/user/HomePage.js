@@ -28,13 +28,13 @@ const HomePage = () => {
                         {/* The slideshow */}
                         <div className="carousel-inner text-center">
                         <div className="carousel-item active">
-                            <img src="../images/wide-image.PNG" alt="Los Angeles" width={800} height={300} />
+                            <img src="https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg" alt="Los Angeles" width={800} height={300} />
                         </div>
                         <div className="carousel-item">
-                            <img src="../images/wide-image.PNG" alt="Chicago" width={800} height={300} />
+                            <img src="https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg" alt="Chicago" width={800} height={300} />
                         </div>
                         <div className="carousel-item">
-                            <img src="../images/wide-image.PNG" alt="New York" width={800} height={300} />
+                            <img src="https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg" alt="New York" width={800} height={300} />
                         </div>
                         </div>
                         {/* Left and right controls */}

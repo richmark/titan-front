@@ -5,43 +5,52 @@ const CategoryCard = () => {
 
     const aData = [
         {
-            name : "Bose"
+            name : "Pipe Tools",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Pipe-Tools.jpg"
         },
         {
-            name : "Sony"
+            name : "PowerTools",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Powertools.jpg"
         },
         {
-            name : "AudioPhile"
+            name : "Welding Machine",
+            image: "https://titansupertools.com/wp-content/uploads/2019/03/TITAN-PP-R-Pipe-Welding-75-110mm.jpg"
         },
         {
-            name : "Harman"
+            name : "Accessories",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Accessories.jpg"
         },
         
     ];
 
     const aData2 = [
         {
-            name : "Bose"
+            name : "Air Tools",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/titan-air-compressor.jpg",
         },
         {
-            name : "Sony"
+            name : "Automotive",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Automotive.jpg"
         },
         {
-            name : "AudioPhile"
+            name : "Construction Machine",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Contruction.jpg"
         },
         {
-            name : "Harman"
+            name : "Material Handling",
+            image: "https://titansupertools.com/wp-content/uploads/2019/08/Material-Handling.jpg"
         },
         
     ];
 
     const showCardBase = (oCategories) => {
+        var sImage = (oCategories.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.image;
         return (
             <Card className="pt-3">
                 <Row>
                     <Col>
                         <Image className="ml-3" 
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" 
+                        src={sImage}
                         style={{width: "150px", height: "150px"}} 
                         />
                     </Col>
