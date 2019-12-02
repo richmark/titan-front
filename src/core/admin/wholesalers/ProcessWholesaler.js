@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { getWholesaler, updateWholesaler } from './wholesalersApi';
 import { isAuthenticated } from '../../../auth/authUtil';
 import DashboardLayout from '../DashboardLayout';
+import { IMAGE_API } from '../../../config';
 
 const ProcessWholesaler = ({ match }) => {
     const [data, setData] = useState({});
@@ -39,7 +40,7 @@ const ProcessWholesaler = ({ match }) => {
     const showResult = () => {
         return result !== undefined && (
             <div className='alert alert-info'>
-                {result === true ? 'User has been accepted' : 'User has been rejected'}
+                {`User status: ${result === true ? 'accepted' : 'pending'}`}
             </div>
         );
     };
@@ -75,15 +76,15 @@ const ProcessWholesaler = ({ match }) => {
                             <div className="row text-center">
                                 <div className="col-sm-4 col-md-4 col-xl-4">
                                     <p>Store Front</p>
-                                    <img src="./img/default.PNG" style={{width: '50%'}} />
+                                    <img src={`${IMAGE_API}/images/users/${data.store_front}`} style={{width: '50%'}} />
                                 </div>
                                 <div className="col-sm-4 col-md-4 col-xl-4">
                                     <p>Company BIR 2307</p>
-                                    <img src="./img/default.PNG" style={{width: '50%'}} />
+                                    <img src={`${IMAGE_API}/images/users/${data.company_bir}`} style={{width: '50%'}} />
                                 </div>
                                 <div className="col-sm-4 col-md-4 col-xl-4">
                                     <p>Mayor's Permit</p>
-                                    <img src="./img/default.PNG" style={{width: '50%'}} />
+                                    <img src={`${IMAGE_API}/images/users/${data.mayor_permit}`} style={{width: '50%'}} />
                                 </div>
                             </div>
                         </div>
@@ -91,7 +92,7 @@ const ProcessWholesaler = ({ match }) => {
                 </div>
                 <div className="form-inline mb-2">
                     <button onClick={acceptUser} className="btn btn-primary mr-2">Accept</button>
-                    <button onClick={rejectUser} className="btn btn-primary">Reject</button>
+                    <button onClick={rejectUser} className="btn btn-primary">Pending</button>
                 </div>
             </Fragment>
         );
