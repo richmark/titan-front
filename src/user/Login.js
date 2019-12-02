@@ -3,7 +3,10 @@ import { Redirect, Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { sendSignin, resendTokenEmail } from '../core/client/clientApi';
 import { authenticate, isAuthenticated } from '../auth/authUtil';
-import { REGEX_EMAIL } from '../config';
+import {Col, Container, Row, Card, Button} from 'react-bootstrap';
+import BasicFormInput from './format/BasicFormInput';
+import BasicAlert from './format/BasicAlert';
+import { oValidatorLibrary } from '../libraries/validatorLibrary';
 
 const Login = () => {
     const [values, setValues] = useState({
@@ -28,68 +31,78 @@ const Login = () => {
         danger_email,
         danger_password
     } = danger;
+    
     const { user } = isAuthenticated();
+    
+    const [message, setMessage] = useState('');
+    
     const handleChange = name => event => {
         setValues({ ...values, [name]: event.target.value });
     };
+
     const { email, password, error, redirectToReferrer } = values;
-    
-    const clickSubmit = oEvent => {
+
+    const sendSubmit = oEvent => {
         oEvent.preventDefault();
-        const sDanger = 'border-danger';
-        var sMessage = '';
-        const oDanger = {};
-        const sValidEmail = REGEX_EMAIL;
-        setSendToken({
-            ...sendToken,
-            resend: false
+        var oValidator = oValidatorLibrary();
+        setMessage('');
+        setDanger({
+            danger_email: '',
+            danger_password: '',
         });
-        setVerify(false);
-
-        if (email.match(sValidEmail) === null) {
-            sMessage += '- Invalid email. \n';
-            oDanger.danger_email = sDanger;
-        }
-
-        if (password.length < 8 || password.length > 16) {
-            sMessage +=
-                '- Password must be atleast 8 characters and max of 16 characters \n';
-            oDanger.danger_password = sDanger;
-        }
-
-        if (sMessage !== '') {
-            setDanger(oDanger);
-            return alert(sMessage);
-        }
-
-        sendSignin(values).then(oData => {
-            if (oData.error) {
-                setValues({ ...values, error: oData.error });
-                if (oData.email) {
-                    setSendToken({
-                        ...sendToken,
-                        email: oData.email,
-                        resend: true
+        oValidator.message('email', values.email, 'required|email');
+        oValidator.message('password', values.password, 'required');
+        if (oValidator.allValid()) {
+            console.log('pass');
+            sendSignin(values).then(oData => {
+                if (oData.error) {
+                    setValues({ ...values, error: oData.error });
+                    setMessage(oData.error);
+                    if (oData.email) {
+                        setSendToken({
+                            ...sendToken,
+                            email: oData.email,
+                            resend: true
+                        });
+                    }
+                } else {
+                    authenticate(oData, () => {
+                        setValues({
+                            ...values,
+                            redirectToReferrer: true
+                        });
                     });
                 }
-            } else {
-                authenticate(oData, () => {
-                    setValues({
-                        ...values,
-                        redirectToReferrer: true
-                    });
-                });
-            }
+            });
+            return;
+        }
+        var oError = oValidator.getErrorMessages();
+        var sMessage = setErrorMessage(oError);
+        setMessage(sMessage);
+        setDanger({
+            danger_email: setErrorBorder(oError.email),
+            danger_password: setErrorBorder(oError.password),
         });
+    }
+
+    const setErrorBorder = (sName) => {
+        return (sName === null) ? '' : 'border-danger';
     };
 
-    const showError = () => {
-        if (error !== '') {
+    const setErrorMessage = (oError) => {
+        var aMessage = [];
+        Object.keys(oError).map(mKey => {
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
+        });
+        return aMessage;
+    };
+
+    const showErrorMessage = () => {
+        if (message !== '') {
             return (
-                <div className='alert alert-warning'>
-                    {error}
-                    {resendTokenButton()}
-                </div>
+                <Fragment>
+                    {BasicAlert('danger', message)}
+                </Fragment>
             );
         }
     };
@@ -104,18 +117,30 @@ const Login = () => {
         }
     }
 
-    const resendTokenButton = () => {
+    const showButtons = () => {
+        var iOffset = 5;
+        var ResendButton = () => {};
         if (sendToken.resend) {
-            return (
-                <Fragment>
-                    <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={resendToken(sendToken.email)}>  Resend Token</span>
-                </Fragment>
-            );
+            iOffset = 3;
+            ResendButton = () => {
+                return (
+                    <Button variant="info" className="mx-2" onClick={resendToken(sendToken.email)}>Resend Token</Button>
+                );
+            }
         }
+        return (
+            <Col sm={{ offset: iOffset}}>
+                <Row>
+                    <Button variant="primary" className="px-4" onClick={sendSubmit}>Login</Button>
+                    {ResendButton()}
+                </Row>
+            </Col>
+        );
     };
 
     const resendToken = sEmail => oEvent => {
         oEvent.preventDefault();
+        setMessage('');
         setSendToken({
             ...sendToken,
             resend: false
@@ -126,70 +151,48 @@ const Login = () => {
         });
         resendTokenEmail({ email: sEmail}).then(oData => {
             setVerify(oData.message);
-            console.log(oData.message);
         });
     };
 
-    const showLoginForm = () => {
-        return (
-            <div className='container mt-5'>
-                <div className='row'>
-                    <div className='col-sm' />
-                    <div className='col-sm-5 border p-5'>
-                        <h3 className='text-center mb-5'>LOGIN</h3>
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <label className="mt-2" htmlFor="exampleInputEmail1" style={{fontSize: '16px'}}>Email</label>
-                            </div>
-                            <div className="col-sm">
-                            <input
-                                onChange={handleChange('email')}
-                                value={email}
-                                type='email'
-                                className={`form-control ${danger_email}`}
-                                placeholder='Enter email'
-                                required
-                            />
-                            </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-sm-3">
-                                <label className="mt-2 " htmlFor="exampleInputEmail1">Password</label>
-                            </div>
-                            <div className="col-sm">
-                            <input
-                                onChange={handleChange('password')}
-                                value={password}
-                                type='password'
-                                className={`form-control ${danger_password}`}
-                                placeholder='Enter Password'
-                                required
-                            />
-                            </div>
-                        </div>
-                        <Link to="/forgotPassword">
-                            <p className="mt-1 offset-3">
-                               Forgot password
-                            </p>
-                        </Link>
-                        <div className='align-content-center text-center mt-2'>
-                            <button
-                                onClick={clickSubmit}
-                                type='submit'
-                                className='btn btn-primary mb-2 px-4'
-                            >
-                                Login
-                            </button>
-                            <Link to="/signup">
-                                <p>Not yet a member? Register here</p> 
-                            </Link> 
-                        </div>
-                    </div>
-                    <div className='col-sm' />
-                </div>
-            </div>
+    const bootstrapLogin = () => {
+        const aFormLabel = [3,0];
+        const iFormLength = 8;
+
+        return(
+            <Container className="px-3 py-2">
+                <Row>
+                    <Col sm={{span: 6, offset:3}}>
+                        <Card className="mx-4 pt-2 pb-4 mt-2">
+                            <Card.Title className="text-center p-3 mt-3" style={{fontSize : "27px"}}>LOGIN</Card.Title>
+                            <Card.Body>
+                                {BasicFormInput('Email', 'text', 'formEmail', handleChange('email'), aFormLabel, iFormLength, danger_email)}
+                                {BasicFormInput('Password', 'password', 'formPassword', handleChange('password'), aFormLabel, iFormLength, danger_password)}
+                                {showErrorMessage()}
+                                <Row>
+                                    <Col sm={{span: 6, offset:3}}>
+                                        <Link to="/forgotPassword">
+                                            Forgot password
+                                        </Link>
+                                    </Col>
+                                </Row>
+                                <Row className="my-3">
+                                    {showButtons()}
+                                </Row>
+                                <Row>
+                                    <Col sm={{span: 7, offset:3}}>
+                                        <Link to="/signup">
+                                            Not yet a member? Register here
+                                        </Link>
+                                    </Col>
+                                </Row>  
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
         );
-    };
+    }
+
     const redirectUser = () => {
         if (redirectToReferrer) {
             if (user && user.role === 1) {
@@ -201,13 +204,13 @@ const Login = () => {
             return <Redirect to='/' />;
         }
     };
+
     return (
         <Layout title='Login' description='Login here'>
-            {showError()}
             {showVerificationMessage()}
             <form>
-                {showLoginForm()}
-            </form>
+                {bootstrapLogin()}
+            </form>          
             {redirectUser()}
         </Layout>
     );
