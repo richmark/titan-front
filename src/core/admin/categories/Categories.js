@@ -65,7 +65,7 @@ const Categories = () => {
             <div className="col-md-8 col-sm-8 col-xl-8 mb-4">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
-                  <div className="float-left"><span>10</span> Items</div>
+                  {/* <div className="float-left"><span>10</span> Items</div> */}
                   <div className="float-right mb-2">
                     <button className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                   </div>
