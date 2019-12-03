@@ -20,6 +20,7 @@ import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
 import AddProducts from "./core/admin/products/AddProducts";
+import ProductDetails from "./user/ProductDetails";
 
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
@@ -38,6 +39,7 @@ const Routes = () => {
       <Route path="/verify/:sToken" exact component={VerifyEmail} />
       <Route path="/" exact component={HomePage} />
       <Route path="/resetPassword/:tokenId" exact component={ResetPassword} />
+      <Route path="/product/details" exact component={ProductDetails} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
@@ -50,8 +52,8 @@ const Routes = () => {
       <AdminRoute path="/admin/products" exact component={Products} />
       <AdminRoute path="/admin/categories" exact component={Categories} />
       <AdminRoute path="/admin/reviews" exact component={Reviews} />
-      <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
       <AdminRoute path="/admin/add/products" exact component={AddProducts} />
+      <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
       <AdminRoute
         path="/admin/wholesalers/:wholesalerId"
         exact
