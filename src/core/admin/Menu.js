@@ -110,7 +110,7 @@ const Menu = () => {
             <div className="bg-white py-2 collapse-inner rounded">
               <a className="collapse-item">Add Products</a>
               <a className="collapse-item">All Products</a>
-              <a className="collapse-item">Categories</a>
+              <Link to='/admin/categories' className="collapse-item">Categories</Link>
             </div>
           </div>
         </li>
