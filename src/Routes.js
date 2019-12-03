@@ -19,52 +19,48 @@ import VerifyEmail from "./user/VerifyEmail";
 import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
+import AddProducts from "./core/admin/products/AddProducts";
+import ProductDetails from "./user/ProductDetails";
 
 // custom routes
-import AdminRoute from './auth/AdminRoute';
-import PrivateRoute from './auth/PrivateRoute';
-import ProcessWholesaler from './core/admin/wholesalers/ProcessWholesaler';
-import UploadImage from './user/UploadImage';
+import AdminRoute from "./auth/AdminRoute";
+import PrivateRoute from "./auth/PrivateRoute";
+import ProcessWholesaler from "./core/admin/wholesalers/ProcessWholesaler";
+import UploadImage from "./user/UploadImage";
 
 const Routes = () => {
-    return (
-        <BrowserRouter>
-            <Route path='/login' exact component={Login} />
-            <Route path='/signup' exact component={PreRegister} />
-            <Route path='/signout' exact component={Signout} />
-            <Route path='/signup/:roleId' exact component={Signup} />
-            <Route path='/forgotPassword' exact component={ForgotPassword} />
-            <Route path='/verify/:sToken' exact component={VerifyEmail} />
-            <Route path='/' exact component={HomePage} />
-            <Route
-                path='/resetPassword/:tokenId'
-                exact
-                component={ResetPassword}
-            />
-            {/* Private Routes */}
-            <PrivateRoute path='/profile/:userId' exact component={Profile} />
-            <PrivateRoute path='/upload' exact component={UploadImage} />
-            {/* Menu Tabs */}
-            <AdminRoute path='/admin/dashboard' exact component={AdminDashboard} />
-            <AdminRoute path='/admin/shippers' exact component={Shippers} />
-            <AdminRoute path='/admin/bundles' exact component={Bundles} />
-            <AdminRoute path='/admin/coupons' exact component={Coupons} />
-            <AdminRoute path='/admin/orders' exact component={Orders} />
-            <AdminRoute path='/admin/products' exact component={Products} />
-            <AdminRoute path='/admin/categories' exact component={Categories} />
-            <AdminRoute path='/admin/reviews' exact component={Reviews} />
-            <AdminRoute
-                path='/admin/wholesalers'
-                exact
-                component={Wholesalers}
-            />
-            <AdminRoute
-                path='/admin/wholesalers/:wholesalerId'
-                exact
-                component={ProcessWholesaler}
-            />
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Route path="/login" exact component={Login} />
+      <Route path="/signup" exact component={PreRegister} />
+      <Route path="/signout" exact component={Signout} />
+      <Route path="/signup/:roleId" exact component={Signup} />
+      <Route path="/forgotPassword" exact component={ForgotPassword} />
+      <Route path="/verify/:sToken" exact component={VerifyEmail} />
+      <Route path="/" exact component={HomePage} />
+      <Route path="/resetPassword/:tokenId" exact component={ResetPassword} />
+      <Route path="/product/details" exact component={ProductDetails} />
+      {/* Private Routes */}
+      <PrivateRoute path="/profile/:userId" exact component={Profile} />
+      <PrivateRoute path="/upload" exact component={UploadImage} />
+      {/* Menu Tabs */}
+      <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
+      <AdminRoute path="/admin/shippers" exact component={Shippers} />
+      <AdminRoute path="/admin/bundles" exact component={Bundles} />
+      <AdminRoute path="/admin/coupons" exact component={Coupons} />
+      <AdminRoute path="/admin/orders" exact component={Orders} />
+      <AdminRoute path="/admin/products" exact component={Products} />
+      <AdminRoute path="/admin/categories" exact component={Categories} />
+      <AdminRoute path="/admin/reviews" exact component={Reviews} />
+      <AdminRoute path="/admin/add/products" exact component={AddProducts} />
+      <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
+      <AdminRoute
+        path="/admin/wholesalers/:wholesalerId"
+        exact
+        component={ProcessWholesaler}
+      />
+    </BrowserRouter>
+  );
 };
 
 export default Routes;
