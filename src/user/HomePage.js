@@ -4,13 +4,31 @@ import CategoryCard from './format/category/CategoryCard';
 import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col } from 'react-bootstrap';
+import { getAllCategories } from '../core/admin/categories/categoriesApi';
 
 const HomePage = () => {
+
+    const [aCategories, setCategories] = useState([]);
+
+    const init = () => {
+        getAllCategories().then(oData => {
+            console.log(oData);
+            if(oData.error) {
+                console.log(oData.error)
+              } else {
+                setCategories(oData.data);
+              }
+        });
+    };
+
+    useEffect(() => {
+        init();
+    }, []);
     
     const showCategoryLayout = () => {
         return (
             <Container>
-                {CategoryCard()}
+                {CategoryCard(aCategories)}
             </Container>            
         );
     };
