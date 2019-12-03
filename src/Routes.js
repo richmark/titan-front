@@ -18,6 +18,7 @@ import Wholesalers from "./core/admin/wholesalers/Wholesalers";
 import VerifyEmail from "./user/VerifyEmail";
 import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
+import Categories from "./core/admin/categories/Categories";
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
@@ -50,6 +51,7 @@ const Routes = () => {
             <AdminRoute path='/admin/coupons' exact component={Coupons} />
             <AdminRoute path='/admin/orders' exact component={Orders} />
             <AdminRoute path='/admin/products' exact component={Products} />
+            <AdminRoute path='/admin/categories' exact component={Categories} />
             <AdminRoute path='/admin/reviews' exact component={Reviews} />
             <AdminRoute
                 path='/admin/wholesalers'
