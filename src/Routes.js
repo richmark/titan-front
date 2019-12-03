@@ -19,6 +19,7 @@ import VerifyEmail from "./user/VerifyEmail";
 import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
+import ProductDetails from "./user/ProductDetails";
 
 // custom routes
 import AdminRoute from './auth/AdminRoute';
@@ -41,6 +42,7 @@ const Routes = () => {
                 exact
                 component={ResetPassword}
             />
+            <Route path='/product/details' exact component={ProductDetails} />
             {/* Private Routes */}
             <PrivateRoute path='/profile/:userId' exact component={Profile} />
             <PrivateRoute path='/upload' exact component={UploadImage} />
