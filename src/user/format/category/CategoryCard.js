@@ -50,8 +50,8 @@ const CategoryCard = () => {
                 <Row>
                     <Col>
                         <Image className="ml-3" 
-                        src={sImage}
-                        style={{width: "150px", height: "150px"}} 
+                            src={sImage}
+                            style={{width: "150px", height: "150px"}} 
                         />
                     </Col>
                 </Row>
@@ -86,6 +86,7 @@ const CategoryCard = () => {
 
     return (
         <Fragment>
+            <p>Categories</p>
             {showLayout(aData)}
             {showLayout(aData2)}
         </Fragment>
