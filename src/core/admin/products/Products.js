@@ -1,7 +1,42 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import DashboardLayout from '../DashboardLayout';
+import { getAllProducts } from './productsApi';
+import { getAllCategories } from '../categories/categoriesApi';
+import oMoment from 'moment';
+import { IMAGE_API } from '../../../config';
 
 const Products = () => {
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    const loadProducts = () => {
+        getAllProducts().then(oProducts => {
+            console.log(oProducts);
+            if(oProducts.error) {
+                console.log(oProducts.error);
+            } else {
+                setProducts(oProducts.data);
+            }
+        });
+    };
+
+    const loadCategories = () => {
+        getAllCategories().then(oCategories => {
+            console.log(oCategories);
+            if(oCategories.error) {
+                console.log(oCategories.error);
+            } else {
+                setCategories(oCategories.data);
+            }
+        });
+    };
+
+    useEffect(() => {
+        // init();
+        loadCategories();
+        loadProducts();
+    }, []);
+
     const showProducts = () => {
         return (
             <Fragment>
@@ -43,6 +78,14 @@ const Products = () => {
                                 <option disabled defaultValue>
                                     Select a Category
                                 </option>
+                                {
+                                    categories &&
+                                    categories.map((oCategory, iIndex) => (
+                                    <option key={iIndex} value={oCategory._id}>
+                                        {oCategory.name}
+                                    </option>
+                                    ))
+                                }
                             </select>
                             <select
                                 id='category'
@@ -89,54 +132,27 @@ const Products = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>
-                                            <img
-                                                src='./img/default.PNG'
-                                                style={{ width: '100%' }}
-                                            />
-                                        </td>
-                                        <td>Otto</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>
-                                            <img
-                                                src='./img/default.PNG'
-                                                style={{ width: '100%' }}
-                                            />
-                                        </td>
-                                        <td>Thornton</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>
-                                            <img
-                                                src='./img/default.PNG'
-                                                style={{ width: '100%' }}
-                                            />
-                                        </td>
-                                        <td>Name</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                    </tr>
+                                    {
+                                        products &&
+                                        products.map((oProduct, iIndex) => (
+                                            <tr key={iIndex}>
+                                                <th scope='row'>
+                                                    <input type='checkbox' />
+                                                </th>
+                                                <td>
+                                                    <img
+                                                        src={`${IMAGE_API}/images/products/${oProduct.image}`}
+                                                        style={{ width: '100%' }}
+                                                    />
+                                                </td>
+                                                <td>{oProduct.product_name}</td>
+                                                <td>{oProduct.stock}</td>
+                                                <td>{oProduct.price}</td>
+                                                <td>{oProduct.category.name}</td>
+                                                <td>{oMoment(oProduct.createdAt).format('LLL')}</td>
+                                            </tr>
+                                        ))
+                                    }
                                 </tbody>
                             </table>
                             <div className=' text-center'>
