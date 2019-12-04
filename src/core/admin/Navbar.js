@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { APP_URL } from '../../config';
 
-
 const Navbar = () => {
     const showNavbar = () => {
         return (
