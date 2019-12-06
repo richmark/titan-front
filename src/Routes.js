@@ -40,7 +40,7 @@ const Routes = () => {
       <Route path="/verify/:sToken" exact component={VerifyEmail} />
       <Route path="/" exact component={HomePage} />
       <Route path="/resetPassword/:tokenId" exact component={ResetPassword} />
-      <Route path="/product/details" exact component={ProductDetails} />
+      <Route path="/product/details/:productId" exact component={ProductDetails} />
       <Route path="/checkout" exact component={Checkout} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />

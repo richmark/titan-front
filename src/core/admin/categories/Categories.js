@@ -33,7 +33,6 @@ const Categories = () => {
   const submitCategory = (oEvent) => {
     oEvent.preventDefault();
     createCategory(user._id, sToken, formData).then(oData => {
-      console.log(oData);
         if (oData.error) {
             console.log(oData);
         } else {

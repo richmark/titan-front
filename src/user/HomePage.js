@@ -5,19 +5,29 @@ import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col } from 'react-bootstrap';
 import { getAllCategories } from '../core/admin/categories/categoriesApi';
+import { getAllProducts } from '../core/admin/products/productsApi';
+
 
 const HomePage = () => {
 
     const [aCategories, setCategories] = useState([]);
+    const [aProducts, setProducts] = useState([]);
 
     const init = () => {
         getAllCategories().then(oData => {
-            console.log(oData);
-            if(oData.error) {
+            if (oData.error) {
                 console.log(oData.error)
-              } else {
+            } else {
                 setCategories(oData.data);
-              }
+            }
+        });
+
+        getAllProducts().then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            } else {
+                setProducts(oData.data);
+            }
         });
     };
 
@@ -37,7 +47,7 @@ const HomePage = () => {
         <Layout>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard()}
+            {ProductCard(aProducts)}
         </Layout>
     );
 };

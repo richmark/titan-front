@@ -27,7 +27,6 @@ const CategoryCard = (aData) => {
     };
 
     const showLayout = (aCategories) => {
-        console.log(aCategories);
         return (
             <Container>
                 <Row className="mt-2">
