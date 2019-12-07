@@ -13,12 +13,14 @@ export const getAllProducts = () => {
     .catch(err => console.log(err));
 };
 
-export const createProduct = () => {
-    return fetch(`${API_URL}/products`, {
-        method: 'GET',
+export const createProduct = (sId, sToken, oProduct) => {
+    return fetch(`${API_URL}/product/create/${sId}`, {
+        method: 'POST',
         headers: {
-            Accept: 'application/json'
-        }
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: oProduct
     })
     .then(response => {
         return response.json();
