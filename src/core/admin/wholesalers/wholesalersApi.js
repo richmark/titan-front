@@ -38,8 +38,8 @@ export const updateWholesaler = (sId, sToken, sWholesalerId, bVerify) => {
         },
         body: JSON.stringify({ verified_admin: bVerify })
     })
-        .then(response => {
-            return response.json();
-        })
-        .catch(err => console.log(err));
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
 }

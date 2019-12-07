@@ -1,11 +1,10 @@
 import { API_URL } from '../../../config';
 
-export const getAllCategories = (sToken) => {
+export const getAllCategories = () => {
     return fetch(`${API_URL}/category`, {
         method: 'GET',
         headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${sToken}`
+            Accept: 'application/json'
         }
     })
         .then(response => {
