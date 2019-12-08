@@ -19,7 +19,7 @@ import VerifyEmail from "./user/VerifyEmail";
 import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
-import AddProducts from "./core/admin/products/AddProducts";
+import AddProduct from "./core/admin/products/AddProduct";
 import ProductDetails from "./user/ProductDetails";
 import Checkout from "./user/Checkout";
 
@@ -54,7 +54,7 @@ const Routes = () => {
       <AdminRoute path="/admin/products" exact component={Products} />
       <AdminRoute path="/admin/categories" exact component={Categories} />
       <AdminRoute path="/admin/reviews" exact component={Reviews} />
-      <AdminRoute path="/admin/add/products" exact component={AddProducts} />
+      <AdminRoute path="/admin/products/add" exact component={AddProduct} />
       <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
       <AdminRoute
         path="/admin/wholesalers/:wholesalerId"
