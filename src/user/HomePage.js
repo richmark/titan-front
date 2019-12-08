@@ -4,13 +4,41 @@ import CategoryCard from './format/category/CategoryCard';
 import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col } from 'react-bootstrap';
+import { getAllCategories } from '../core/admin/categories/categoriesApi';
+import { getAllProducts } from '../core/admin/products/productsApi';
+
 
 const HomePage = () => {
+
+    const [aCategories, setCategories] = useState([]);
+    const [aProducts, setProducts] = useState([]);
+
+    const init = () => {
+        getAllCategories().then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            } else {
+                setCategories(oData.data);
+            }
+        });
+
+        getAllProducts().then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            } else {
+                setProducts(oData.data);
+            }
+        });
+    };
+
+    useEffect(() => {
+        init();
+    }, []);
     
     const showCategoryLayout = () => {
         return (
             <Container>
-                {CategoryCard()}
+                {CategoryCard(aCategories)}
             </Container>            
         );
     };
@@ -19,7 +47,7 @@ const HomePage = () => {
         <Layout>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard()}
+            {ProductCard(aProducts)}
         </Layout>
     );
 };

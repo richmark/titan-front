@@ -14,7 +14,7 @@ const Categories = () => {
   });
   const [result, setResult] = useState(false);
   const init = () => {
-    getAllCategories(sToken).then(oData => {
+    getAllCategories().then(oData => {
       if(oData.error) {
         console.log(oData.error)
       } else {
@@ -79,7 +79,7 @@ const Categories = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {categories.map((oCategory, iIndex) => (
+                      {categories && categories.map((oCategory, iIndex) => (
                         <tr key={iIndex}>
                           <th scope="row"><input type="checkbox" /></th>
                           <td><img src={`${IMAGE_API}/images/categories/${oCategory.category_image}`} style={{width: '100%'}} /></td>

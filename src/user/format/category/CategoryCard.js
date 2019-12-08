@@ -1,56 +1,18 @@
 import React, { Fragment } from 'react';
 import { Card, Container, Image, Col, Row } from 'react-bootstrap';
+import { IMAGE_API } from '../../../config';
+import _ from 'lodash';
 
-const CategoryCard = () => {
-
-    const aData = [
-        {
-            name : "Pipe Tools",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Pipe-Tools.jpg"
-        },
-        {
-            name : "PowerTools",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Powertools.jpg"
-        },
-        {
-            name : "Welding Machine",
-            image: "https://titansupertools.com/wp-content/uploads/2019/03/TITAN-PP-R-Pipe-Welding-75-110mm.jpg"
-        },
-        {
-            name : "Accessories",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Accessories.jpg"
-        },
-        
-    ];
-
-    const aData2 = [
-        {
-            name : "Air Tools",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/titan-air-compressor.jpg",
-        },
-        {
-            name : "Automotive",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Automotive.jpg"
-        },
-        {
-            name : "Construction Machine",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Contruction.jpg"
-        },
-        {
-            name : "Material Handling",
-            image: "https://titansupertools.com/wp-content/uploads/2019/08/Material-Handling.jpg"
-        },
-        
-    ];
+const CategoryCard = (aData) => {
 
     const showCardBase = (oCategories) => {
-        var sImage = (oCategories.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.image;
+        var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Card className="pt-3">
                 <Row>
                     <Col>
                         <Image className="ml-3" 
-                            src={sImage}
+                            src={`${IMAGE_API}/images/categories/${sImage}`}
                             style={{width: "150px", height: "150px"}} 
                         />
                     </Col>
@@ -69,7 +31,7 @@ const CategoryCard = () => {
             <Container>
                 <Row className="mt-2">
                     <Col sm={{offset:1, span: 9}}>
-                        <Row>
+                        <Row className="mb-2">
                             {aCategories.map((oCategories, iIndex) => {
                                 return (
                                     <Col sm={3} key={iIndex}>
@@ -84,11 +46,21 @@ const CategoryCard = () => {
         );
     }
 
+    const arrangeCategories = (aData) => {
+        const aChunks = _.chunk(aData, 4);
+        return aChunks.map((aCategories, iIndex) => {
+            return (
+                <Fragment key={iIndex}>
+                    {showLayout(aCategories)}
+                </Fragment>
+            );
+        });
+    }
+
     return (
         <Fragment>
             <p>Categories</p>
-            {showLayout(aData)}
-            {showLayout(aData2)}
+            {arrangeCategories(aData)}
         </Fragment>
     );    
 };
