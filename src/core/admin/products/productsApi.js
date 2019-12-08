@@ -27,3 +27,16 @@ export const createProduct = (sId, sToken, oProduct) => {
     })
     .catch(err => console.log(err));
 };
+
+export const getProduct = (sId) => {
+    return fetch(`${API_URL}/product/${sId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json'
+        }
+    })
+    .then(oResponse => {
+        return oResponse.json();
+    })
+    .catch(oError => console.log(oError));
+};

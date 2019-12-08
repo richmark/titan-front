@@ -30,6 +30,19 @@ export const createCategory = (sId, sToken, oCategory) => {
       });
 }
 
+export const getCategory = (sId) => {
+  return fetch(`${API_URL}/category/${sId}`, {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json'
+      }
+  })
+  .then(oResponse => {
+      return oResponse.json();
+  })
+  .catch(oError => console.log(oError));
+};
+
 // export const getWholesaler = (sId, sToken, sWholesalerId) => {
 //     return fetch(`${API_URL}/users/${sId}/wholesaler/${sWholesalerId}`, {
 //         method: 'GET',

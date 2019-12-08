@@ -1,11 +1,80 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import ProductCard from "./format/product/ProductCard";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
+import { getProduct } from "../core/admin/products/productsApi";
+import { getCategory } from "../core/admin/categories/categoriesApi";
+import { IMAGE_API } from "../config";
 
-const ProductDetails = () => {
+const ProductDetails = ({match}) => {
+  
+  const [oProduct, setProduct] = useState({
+    image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
+    product_name: "My Product",
+    price: '',
+    description: ''
+  });
+
+  const [oCategory, setCategory] = useState({
+    _id : '',
+    name: ''
+  });
+
+  const [iCount, setCount] = useState(1);
+
+  const [bProduct, setBoolProduct] = useState(true);
+
+  const init = () => {
+    getProduct(match.params.productId).then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+        setBoolProduct(false);
+      } else {
+        setProduct({
+          image : `${IMAGE_API}/images/products/${oData.image}`,
+          product_name: oData.product_name,
+          price: oData.price,
+          description: oData.description
+        });
+
+        fetchCategory(oData.category);
+      }
+    });
+  };
+
+  const fetchCategory = sId => {
+    getCategory(sId).then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+      } else {
+        setCategory({
+          _id : oData._id,
+          name: oData.name
+        });
+      }
+    });
+  };
+  
+  useEffect(() => {
+    init();
+  }, []);
+
+  const handleCount = oEvent => {
+    setCount(oEvent.target.value < 1 ? 1 : oEvent.target.value);
+  };
+
+  const checkProduct = bProduct => {
+    if (bProduct === false) {
+        return (
+            <Redirect to="/404"/>
+        );
+    }
+};
+
+  
   const showProductMain = () => {
+
     return (
       <Fragment>
         <Container className="border border-black rounded p-5">
@@ -13,8 +82,8 @@ const ProductDetails = () => {
           <Row>
             <Col xs={6} md={4}>
               <Image
-                className="border"
-                src="https://titansupertools.com/wp-content/uploads/2019/08/Pipe-Tools.jpg"
+                className="border mx-auto"
+                src={oProduct.image}
                 rounded
                 width="100%"
                 height="300px"
@@ -22,16 +91,16 @@ const ProductDetails = () => {
             </Col>
             <Col xs={12} md={8}>
               <span>
-                <h3>Pipe Tools</h3>
+                <h3>{oProduct.product_name}</h3>
               </span>
               <span>
                 <h6>
-                  Category: <a href="">Pipe Tools</a>
+                  Category: <Link to="/">{oCategory.name}</Link>
                 </h6>
               </span>
               <hr />
               <h4>
-                ₱ <span>5000</span>
+                ₱ <span>{oProduct.price}</span>
               </h4>
               <Form className="mt-5">
                 <Form.Group as={Row} controlId="formPlaintextPassword">
@@ -39,7 +108,7 @@ const ProductDetails = () => {
                     Quantity
                   </Form.Label>
                   <Col sm="2">
-                    <Form.Control type="number" />
+                    <Form.Control type="number" value={iCount} onChange={handleCount}/>
                   </Col>
                 </Form.Group>
               </Form>
@@ -59,29 +128,7 @@ const ProductDetails = () => {
         <Container className="border border-black rounded p-5 mt-4">
           <h5>Pipe Tools Details</h5>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <Image
-            className="border"
-            src="https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg"
-            rounded
-            width="100%"
-            height="300px"
-          />
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {oProduct.description}
           </p>
         </Container>
       </Fragment>
@@ -104,6 +151,7 @@ const ProductDetails = () => {
       {showProductMain()}
       {showDetails()}
       {showRelatedProduct()}
+      {checkProduct(bProduct)}
     </Layout>
   );
 };
