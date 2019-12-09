@@ -39,7 +39,7 @@ const AddProduct = () => {
                 console.log(oCategories.error);
             } else {
                 setCategories(oCategories.data);
-                setValues({ ...values, formData: new FormData() });
+                setValues({ ...values, formData: new FormData(), category: oCategories.data[0]._id });
             }
         });
     };
@@ -77,6 +77,9 @@ const AddProduct = () => {
 
     const submitProduct = oEvent => {
         oEvent.preventDefault();
+        if (formData.get('category') === null) {
+            formData.set('category', category);
+        }
         createProduct(user._id, sToken, formData).then(oData => {
             if(oData.error) {
                 console.log(oData.error);
