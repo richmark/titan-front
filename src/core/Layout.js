@@ -1,10 +1,22 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
-import { Navbar, Nav, NavDropdown, Form, FormControl, Button, Col, Row} from 'react-bootstrap';
+import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row} from 'react-bootstrap';
+import { getTotalCount } from './client/cartHelpers';
 
-const Layout = ({ children }) => {
-
+const Layout = ({ run=undefined, children }) => {
+    console.log(getTotalCount());
     const { user } = isAuthenticated();
+    const [iCount, setCount] = useState(0);
+
+    useEffect(() => {
+        setCount(getTotalCount());
+    }, [run]);
+    
+    const showBadge = () => {
+        return (
+            <Badge variant="dark">{iCount}</Badge>
+        );
+    };
 
     const showUserGuest = () => {
         if (user) {
@@ -67,7 +79,7 @@ const Layout = ({ children }) => {
                     <Nav.Link className="text-white" href="/">Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link className="text-white" href="#">My Cart</Nav.Link>
+                <Nav.Link className="text-white" href="#">My Cart {showBadge()}</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link className="text-white" href="#">Orders</Nav.Link>
