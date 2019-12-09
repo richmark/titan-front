@@ -22,6 +22,7 @@ import Categories from "./core/admin/categories/Categories";
 import AddProduct from "./core/admin/products/AddProduct";
 import ProductDetails from "./user/ProductDetails";
 import Checkout from "./user/Checkout";
+import Forbidden from "./user/Forbidden";
 
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
@@ -42,6 +43,7 @@ const Routes = () => {
       <Route path="/resetPassword/:tokenId" exact component={ResetPassword} />
       <Route path="/product/details/:productId" exact component={ProductDetails} />
       <Route path="/checkout" exact component={Checkout} />
+      <Route path="/forbidden" exact component={Forbidden} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
