@@ -9,7 +9,8 @@ import { getCart } from '../core/client/cartHelpers';
 const Checkout = () => {
 
     const [aProduct, setProduct] = useState([]);
-
+    const [iTotal, setTotal] = useState(0);
+    
     const init = () => {
         setProduct(getCart());
     };
@@ -55,13 +56,75 @@ const Checkout = () => {
                 {aProduct.map((oProduct, iIndex) => {
                     return (
                         <Fragment key={iIndex}>
-                            {singleProduct(oProduct)}                               
+                            {singleProduct(oProduct)}                            
                         </Fragment>
                     );
                 })}
             </Fragment>
         );
     };
+
+    const showTotal = () => {
+        var iPrice = 0;
+        var iShipFee = 100;
+        aProduct !== [] && aProduct.map((oProduct, iIndex) => {
+            iPrice += (oProduct.price * oProduct.count);
+        });
+        var iTotal = iPrice + iShipFee;
+        return (
+            <div className="border rounded p-4 mt-2">
+                <Row>
+                    <Col xs={4} md={4}>
+                        <p className="font-weight-bold">Subtotal</p>
+                        <p className="font-weight-bold">Shipping Fee</p>
+                        <p className="font-weight-bold">Total</p>
+                    </Col>
+                    <Col xs={8} md={8} className="text-right">
+                        <p className="font-weight-bold "> ₱ <span>{iPrice}</span></p>
+                        <p className="font-weight-bold "> ₱ <span>{iShipFee}</span></p>
+                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{iTotal}</span></span></p>
+                    </Col>
+                </Row>
+            </div>
+        );
+    }
+
+    const showBilling = () => {
+        return (
+            <Fragment>
+                <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
+                <div id="basic-info" className="mt-4">
+                    <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">Juan Dela Cruz</span>
+                    <div id="address-info">
+                        <span className="font-weight-light">
+                        6F Suntree, 13 Meralco Avenue Ortigas Center San Antonio, Pasig City, Metro Manila~Pasig
+                        </span>
+                    </div>
+                </div>
+                <div id="billing-address" className="mt-2">
+                    <span className="font-weight-bold">
+                        <i className="fas fa-sticky-note"></i> Bill to the same address
+                    </span>
+                </div>
+                <div id="contact-number" className="mt-2">
+                    <span className="font-weight-bold">
+                        <i className="fas fa-phone-alt"></i> 09213609963
+                    </span>
+                </div>
+                <div id="email" className="mt-2">
+                    <span className="font-weight-bold">
+                        <i className="fas fa-at"></i> juandelacruz@gmail.com
+                    </span>
+                </div>
+
+                <div id="place-order" className="mt-4 text-center">
+                    <Button variant="outline-warning" size="lg" block>
+                        Place Order
+                    </Button>
+                </div>
+            </Fragment>
+        );
+    }
 
     const showProductMain = () => {
         console.log(aProduct);
@@ -71,52 +134,11 @@ const Checkout = () => {
                     {/* Stack the columns on mobile by making one full-width and the other half-width */}
                     <Row>
                         <Col xs={12} md={8}>
-                            {showProducts()}
-                            
-                            <div id="product-summary" className="border rounded p-4 mt-2">
-                                <Row>
-                                    <Col xs={4} md={4}>
-                                        <p className="font-weight-bold">Shipping Fee</p>
-                                        <p className="font-weight-bold">Total</p>
-                                    </Col>
-                                    <Col xs={8} md={8} className="text-right">
-                                        <p className="font-weight-bold "> ₱ <span>5000</span></p>
-                                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>5000</span></span></p>
-                                    </Col>
-                                </Row>
-                            </div>
+                            {showProducts()} 
+                            {showTotal()}
                         </Col>
                         <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                            <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
-                            <div id="basic-info" className="mt-4">
-                                <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">Juan Dela Cruz</span>
-                                <div id="address-info">
-                                    <span className="font-weight-light">
-                                    6F Suntree, 13 Meralco Avenue Ortigas Center San Antonio, Pasig City, Metro Manila~Pasig
-                                    </span>
-                                </div>
-                            </div>
-                            <div id="billing-address" className="mt-2">
-                                <span className="font-weight-bold">
-                                    <i className="fas fa-sticky-note"></i> Bill to the same address
-                                </span>
-                            </div>
-                            <div id="contact-number" className="mt-2">
-                                <span className="font-weight-bold">
-                                    <i className="fas fa-phone-alt"></i> 09213609963
-                                </span>
-                            </div>
-                            <div id="email" className="mt-2">
-                                <span className="font-weight-bold">
-                                    <i className="fas fa-at"></i> juandelacruz@gmail.com
-                                </span>
-                            </div>
-
-                            <div id="place-order" className="mt-4 text-center">
-                                <Button variant="outline-warning" size="lg" block>
-                                    Place Order
-                                </Button>
-                            </div>
+                            {showBilling()}
                         </Col>
                     </Row>
                 </Container>
@@ -125,10 +147,8 @@ const Checkout = () => {
     };
 
     return (
-        <Layout title='ProductDetails' description='Sign up here'>
+        <Layout>
             {showProductMain()}
-            {/* {showDetails()}
-            {showRelatedProduct()} */}
         </Layout>
     );
 };
