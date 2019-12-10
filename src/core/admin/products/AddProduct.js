@@ -126,25 +126,17 @@ const AddProduct = () => {
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
 
-    if (!oValidator.fieldValid("Product name")) {
-      setNameError(true);
-    }
+    oValidator.fieldValid("Product name")
+      ? setNameError(false)
+      : setNameError(true);
 
-    if (!oValidator.fieldValid("Price")) {
-      setPriceError(true);
-    }
+    oValidator.fieldValid("Price") ? setPriceError(false) : setPriceError(true);
+    oValidator.fieldValid("Stock") ? setStockError(false) : setStockError(true);
 
-    if (!oValidator.fieldValid("Stock")) {
-      setStockError(true);
-    }
-
-    if (!oValidator.fieldValid("Description")) {
-      setDescriptionError(true);
-    }
-
-    if (!oValidator.fieldValid("Image")) {
-      setImageError(true);
-    }
+    oValidator.fieldValid("Description")
+      ? setDescriptionError(false)
+      : setDescriptionError(true);
+    oValidator.fieldValid("Image") ? setImageError(false) : setImageError(true);
 
     return oValidator;
   };
@@ -300,7 +292,13 @@ const AddProduct = () => {
                 placeholder="Description"
                 defaultValue={""}
               />
-              <div className="border p-3 mb-4">
+              <div
+                className={
+                  image_error
+                    ? "border p-3 mb-4 border-danger"
+                    : "border p-3 mb-4"
+                }
+              >
                 <h6>Image Upload</h6>
                 <input
                   onChange={handleChange("image")}
