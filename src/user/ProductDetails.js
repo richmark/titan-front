@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import ProductCard from "./format/product/ProductCard";
+import ProductAdditionalInfo from "./format/product/ProductAdditionalInfo";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import { getProduct } from "../core/admin/products/productsApi";
@@ -17,6 +18,8 @@ const ProductDetails = ({match}) => {
     price: '',
     description: ''
   });
+
+  const [oInfo, setInfo] = useState(false);
 
   const [oCategory, setCategory] = useState({
     _id : '',
@@ -41,6 +44,7 @@ const ProductDetails = ({match}) => {
         console.log(oData.error);
         setBoolProduct(false);
       } else {
+		setInfo(oData.additional_info);
         setProduct({
           ...oProduct,
           image : `${IMAGE_API}/images/products/${oData.image}`,
@@ -78,7 +82,7 @@ const ProductDetails = ({match}) => {
   const checkProduct = bProduct => {
     if (bProduct === false) {
         return (
-            <Redirect to="/404"/>
+            <Redirect to="/forbidden"/>
         );
     }
 };
@@ -133,11 +137,24 @@ const ProductDetails = ({match}) => {
     );
   };
 
+  const showAdditionalInfo = () => {
+    return (
+      <Fragment>
+        <Container className="border border-black rounded p-5 mt-4">
+          <h5>Additional Information</h5>
+          <p>
+            {ProductAdditionalInfo(oInfo)}
+          </p>
+        </Container>
+      </Fragment>
+    );
+  };
+
   const showDetails = () => {
     return (
       <Fragment>
         <Container className="border border-black rounded p-5 mt-4">
-          <h5>Pipe Tools Details</h5>
+          <h5>{oProduct.product_name} Details</h5>
           <p>
             {oProduct.description}
           </p>
@@ -160,6 +177,7 @@ const ProductDetails = ({match}) => {
   return (
     <Layout run={iRun}>
       {showProductMain()}
+      {showAdditionalInfo()}
       {showDetails()}
       {showRelatedProduct()}
       {checkProduct(bProduct)}
