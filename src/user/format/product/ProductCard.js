@@ -1,9 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Card, Container, Image, Col, Row, Button } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
 
-const AdditionalInfo = (aData) => {
+
+const ProductCard = (aData, setRun = () => {}) => {
+    const [iCount, setCount] = useState(1);
+    
+    const addToCart = (oProduct) => oEvent => {
+        oEvent.preventDefault();
+        addItem(oProduct, iCount, () => {
+          alert('Item added!');
+          setRun(getTotalCount())
+        });
+    };
 
     const showCardBase = (oProduct) => {
         var sImage = (oProduct.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oProduct.image;
@@ -22,7 +33,7 @@ const AdditionalInfo = (aData) => {
                     <Card.Text style={{fontSize: "1.2vh"}}>
                         {`₱ ${oProduct.price}`}
                     </Card.Text>
-                    <Button variant="primary" style={{fontSize: "12px"}}>Add to Cart</Button>
+                    <Button variant="primary" style={{fontSize: "12px"}} onClick={addToCart(oProduct)}>Add to Cart</Button>
                 </Card.Body>
             </Card>
         );
@@ -56,4 +67,4 @@ const AdditionalInfo = (aData) => {
     );    
 };
 
-export default AdditionalInfo;
+export default ProductCard;

@@ -1,29 +1,42 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import ProductCard from "./format/product/ProductCard";
+import ProductAdditionalInfo from "./format/product/ProductAdditionalInfo";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import { getProduct } from "../core/admin/products/productsApi";
 import { getCategory } from "../core/admin/categories/categoriesApi";
 import { IMAGE_API } from "../config";
+import { addItem, getTotalCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
   
   const [oProduct, setProduct] = useState({
     image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
     product_name: "My Product",
+    _id: match.params.productId,
     price: '',
     description: ''
   });
+
+  const [oInfo, setInfo] = useState(false);
 
   const [oCategory, setCategory] = useState({
     _id : '',
     name: ''
   });
 
+  const [iRun, setRun] = useState(getTotalCount());
   const [iCount, setCount] = useState(1);
 
   const [bProduct, setBoolProduct] = useState(true);
+
+  const addToCart = () => {
+    addItem(oProduct, iCount, () => {
+      alert('Item added!');
+      setRun(getTotalCount())
+    });
+  };
 
   const init = () => {
     getProduct(match.params.productId).then(oData => {
@@ -31,7 +44,9 @@ const ProductDetails = ({match}) => {
         console.log(oData.error);
         setBoolProduct(false);
       } else {
+		setInfo(oData.additional_info);
         setProduct({
+          ...oProduct,
           image : `${IMAGE_API}/images/products/${oData.image}`,
           product_name: oData.product_name,
           price: oData.price,
@@ -61,7 +76,7 @@ const ProductDetails = ({match}) => {
   }, []);
 
   const handleCount = oEvent => {
-    setCount(oEvent.target.value < 1 ? 1 : oEvent.target.value);
+    setCount(oEvent.target.value < 1 ? 1 : parseInt(oEvent.target.value, 10));
   };
 
   const checkProduct = bProduct => {
@@ -114,7 +129,7 @@ const ProductDetails = ({match}) => {
               </Form>
               <hr />
               <Button variant="primary">Buy Now</Button>{" "}
-              <Button variant="primary">Add to Cart</Button>
+              <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
             </Col>
           </Row>
         </Container>
@@ -128,7 +143,7 @@ const ProductDetails = ({match}) => {
         <Container className="border border-black rounded p-5 mt-4">
           <h5>Additional Information</h5>
           <p>
-            {oProduct.additional_info}
+            {ProductAdditionalInfo(oInfo)}
           </p>
         </Container>
       </Fragment>
@@ -160,7 +175,7 @@ const ProductDetails = ({match}) => {
   };
 
   return (
-    <Layout title="ProductDetails" description="Sign up here">
+    <Layout run={iRun}>
       {showProductMain()}
       {showAdditionalInfo()}
       {showDetails()}
