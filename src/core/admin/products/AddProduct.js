@@ -8,6 +8,12 @@ import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
 const AddProduct = () => {
   const { sToken, user } = isAuthenticated();
   const [categories, setCategories] = useState([]);
+  const [name_error, setNameError] = useState(false);
+  const [price_error, setPriceError] = useState(false);
+  const [stock_error, setStockError] = useState(false);
+  const [image_error, setImageError] = useState(false);
+  const [description_error, setDescriptionError] = useState(false);
+
   const [values, setValues] = useState({
     product_name: "",
     price: "",
@@ -22,11 +28,6 @@ const AddProduct = () => {
     formData: ""
   });
 
-  const [name_error, setNameError] = useState(false);
-  const [price_error, setPriceError] = useState(false);
-  const [stock_error, setStockError] = useState(false);
-  const [image_error, setImageError] = useState(false);
-  const [description_error, setDescriptionError] = useState(false);
   const {
     product_name,
     price,
@@ -116,7 +117,6 @@ const AddProduct = () => {
 
   const initializeValidator = formData => {
     var oValidator = oValidatorLibrary();
-    var oData = {};
 
     oValidator.message("Product name", product_name, "required");
     oValidator.message("Price", price, "required");
@@ -129,10 +129,8 @@ const AddProduct = () => {
     oValidator.fieldValid("Product name")
       ? setNameError(false)
       : setNameError(true);
-
     oValidator.fieldValid("Price") ? setPriceError(false) : setPriceError(true);
     oValidator.fieldValid("Stock") ? setStockError(false) : setStockError(true);
-
     oValidator.fieldValid("Description")
       ? setDescriptionError(false)
       : setDescriptionError(true);
