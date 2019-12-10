@@ -22,6 +22,11 @@ const AddProduct = () => {
     formData: ""
   });
 
+  const [name_error, setNameError] = useState(false);
+  const [price_error, setPriceError] = useState(false);
+  const [stock_error, setStockError] = useState(false);
+  const [image_error, setImageError] = useState(false);
+  const [description_error, setDescriptionError] = useState(false);
   const {
     product_name,
     price,
@@ -120,6 +125,26 @@ const AddProduct = () => {
     oValidator.message("Description", description, "required|max:200");
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
+
+    if (!oValidator.fieldValid("Product name")) {
+      setNameError(true);
+    }
+
+    if (!oValidator.fieldValid("Price")) {
+      setPriceError(true);
+    }
+
+    if (!oValidator.fieldValid("Stock")) {
+      setStockError(true);
+    }
+
+    if (!oValidator.fieldValid("Description")) {
+      setDescriptionError(true);
+    }
+
+    if (!oValidator.fieldValid("Image")) {
+      setImageError(true);
+    }
 
     return oValidator;
   };
@@ -221,19 +246,31 @@ const AddProduct = () => {
               <input
                 onChange={handleChange("product_name")}
                 type="text"
-                className="form-control bg-light small mb-2"
+                className={
+                  name_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Product Name"
               />
               <input
                 onChange={handleChange("price")}
                 type="number"
-                className="form-control bg-light small mb-2"
+                className={
+                  price_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Price"
               />
               <input
                 onChange={handleChange("stock")}
                 type="number"
-                className="form-control bg-light small mb-2"
+                className={
+                  stock_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Stock"
               />
               <select
@@ -253,7 +290,11 @@ const AddProduct = () => {
               </select>
               <textarea
                 onChange={handleChange("description")}
-                className="form-control mb-2"
+                className={
+                  description_error
+                    ? "form-control mb-2 border-danger"
+                    : "form-control mb-2"
+                }
                 id="exampleFormControlTextarea1"
                 rows={3}
                 placeholder="Description"
