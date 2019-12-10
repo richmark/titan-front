@@ -6,9 +6,11 @@ import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col } from 'react-bootstrap';
 import { getAllCategories } from '../core/admin/categories/categoriesApi';
 import { getAllProducts } from '../core/admin/products/productsApi';
-
+import { getTotalCount } from '../core/client/cartHelpers'; 
 
 const HomePage = () => {
+
+    const [iRun, setRun] = useState(getTotalCount());
 
     const [aCategories, setCategories] = useState([]);
     const [aProducts, setProducts] = useState([]);
@@ -44,10 +46,10 @@ const HomePage = () => {
     };
     
 	return (
-        <Layout>
+        <Layout run={iRun}>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard(aProducts)}
+            {ProductCard(aProducts, setRun)}
         </Layout>
     );
 };
