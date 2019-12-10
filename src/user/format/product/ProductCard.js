@@ -3,7 +3,7 @@ import { Card, Container, Image, Col, Row, Button } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom'; 
 
-const ProductCard = (aData) => {
+const AdditionalInfo = (aData) => {
 
     const showCardBase = (oProduct) => {
         var sImage = (oProduct.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oProduct.image;
@@ -56,4 +56,4 @@ const ProductCard = (aData) => {
     );    
 };
 
-export default ProductCard;
+export default AdditionalInfo;

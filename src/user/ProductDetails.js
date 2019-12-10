@@ -67,7 +67,7 @@ const ProductDetails = ({match}) => {
   const checkProduct = bProduct => {
     if (bProduct === false) {
         return (
-            <Redirect to="/404"/>
+            <Redirect to="/forbidden"/>
         );
     }
 };
@@ -122,11 +122,24 @@ const ProductDetails = ({match}) => {
     );
   };
 
+  const showAdditionalInfo = () => {
+    return (
+      <Fragment>
+        <Container className="border border-black rounded p-5 mt-4">
+          <h5>Additional Information</h5>
+          <p>
+            {oProduct.additional_info}
+          </p>
+        </Container>
+      </Fragment>
+    );
+  };
+
   const showDetails = () => {
     return (
       <Fragment>
         <Container className="border border-black rounded p-5 mt-4">
-          <h5>Pipe Tools Details</h5>
+          <h5>{oProduct.product_name} Details</h5>
           <p>
             {oProduct.description}
           </p>
@@ -149,6 +162,7 @@ const ProductDetails = ({match}) => {
   return (
     <Layout title="ProductDetails" description="Sign up here">
       {showProductMain()}
+      {showAdditionalInfo()}
       {showDetails()}
       {showRelatedProduct()}
       {checkProduct(bProduct)}
