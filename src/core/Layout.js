@@ -4,7 +4,7 @@ import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row} f
 import { getTotalCount } from './client/cartHelpers';
 
 const Layout = ({ run=undefined, children }) => {
-    console.log(getTotalCount());
+
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
 
@@ -79,7 +79,7 @@ const Layout = ({ run=undefined, children }) => {
                     <Nav.Link className="text-white" href="/">Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                <Nav.Link className="text-white" href="#">My Cart {showBadge()}</Nav.Link>
+                <Nav.Link className="text-white" href="/checkout">My Cart {showBadge()}</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link className="text-white" href="#">Orders</Nav.Link>
