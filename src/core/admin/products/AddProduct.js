@@ -8,6 +8,12 @@ import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
 const AddProduct = () => {
   const { sToken, user } = isAuthenticated();
   const [categories, setCategories] = useState([]);
+  const [name_error, setNameError] = useState(false);
+  const [price_error, setPriceError] = useState(false);
+  const [stock_error, setStockError] = useState(false);
+  const [image_error, setImageError] = useState(false);
+  const [description_error, setDescriptionError] = useState(false);
+
   const [values, setValues] = useState({
     product_name: "",
     price: "",
@@ -111,7 +117,6 @@ const AddProduct = () => {
 
   const initializeValidator = formData => {
     var oValidator = oValidatorLibrary();
-    var oData = {};
 
     oValidator.message("Product name", product_name, "required");
     oValidator.message("Price", price, "required");
@@ -120,6 +125,16 @@ const AddProduct = () => {
     oValidator.message("Description", description, "required|max:200");
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
+
+    oValidator.fieldValid("Product name")
+      ? setNameError(false)
+      : setNameError(true);
+    oValidator.fieldValid("Price") ? setPriceError(false) : setPriceError(true);
+    oValidator.fieldValid("Stock") ? setStockError(false) : setStockError(true);
+    oValidator.fieldValid("Description")
+      ? setDescriptionError(false)
+      : setDescriptionError(true);
+    oValidator.fieldValid("Image") ? setImageError(false) : setImageError(true);
 
     return oValidator;
   };
@@ -221,19 +236,31 @@ const AddProduct = () => {
               <input
                 onChange={handleChange("product_name")}
                 type="text"
-                className="form-control bg-light small mb-2"
+                className={
+                  name_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Product Name"
               />
               <input
                 onChange={handleChange("price")}
                 type="number"
-                className="form-control bg-light small mb-2"
+                className={
+                  price_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Price"
               />
               <input
                 onChange={handleChange("stock")}
                 type="number"
-                className="form-control bg-light small mb-2"
+                className={
+                  stock_error
+                    ? "form-control bg-light small mb-2 border-danger"
+                    : "form-control bg-light small mb-2"
+                }
                 placeholder="Stock"
               />
               <select
@@ -253,13 +280,23 @@ const AddProduct = () => {
               </select>
               <textarea
                 onChange={handleChange("description")}
-                className="form-control mb-2"
+                className={
+                  description_error
+                    ? "form-control mb-2 border-danger"
+                    : "form-control mb-2"
+                }
                 id="exampleFormControlTextarea1"
                 rows={3}
                 placeholder="Description"
                 defaultValue={""}
               />
-              <div className="border p-3 mb-4">
+              <div
+                className={
+                  image_error
+                    ? "border p-3 mb-4 border-danger"
+                    : "border p-3 mb-4"
+                }
+              >
                 <h6>Image Upload</h6>
                 <input
                   onChange={handleChange("image")}

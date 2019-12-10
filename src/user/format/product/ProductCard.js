@@ -4,6 +4,7 @@ import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
 import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
 
+
 const ProductCard = (aData, setRun = () => {}) => {
     const iCount = 1;
     
