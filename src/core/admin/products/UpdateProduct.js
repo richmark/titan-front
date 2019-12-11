@@ -73,7 +73,6 @@ const UpdateProduct = ({ match }) => {
 
     const getParameters = () => {
         if (match.params.productId !== undefined) {
-            // get product by Id
             getProduct(match.params.productId).then(oData => {
                 if(oData.error) {
                     console.log(oData.error);
@@ -156,7 +155,7 @@ const UpdateProduct = ({ match }) => {
         );
     };
 
-    const showAddProductForm = () => {
+    const showUpdateProductForm = () => {
         return (
             <Fragment>
                 <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
@@ -203,7 +202,7 @@ const UpdateProduct = ({ match }) => {
         );
     };
 
-    const showAddProductDetail = () => {
+    const showUpdateProductDetail = () => {
         return (
             <Fragment>
                 <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
@@ -266,9 +265,9 @@ const UpdateProduct = ({ match }) => {
     };
     
     return (
-        <DashboardLayout name="Product Management" detail="Add Product">
-            {showAddProductForm()}
-            {showAddProductDetail()}
+        <DashboardLayout name="Product Management" detail="Update Product">
+            {showUpdateProductForm()}
+            {showUpdateProductDetail()}
             {showUpdate()}
         </DashboardLayout>
     );
