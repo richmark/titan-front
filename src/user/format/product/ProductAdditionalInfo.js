@@ -11,7 +11,6 @@ import {
 
 const AdditionalInfo = aData => {
     const showAdditionalInfo = aAdditionalInfo => {
-        console.log(aAdditionalInfo);
         return (
             <Container>
                 <Table responsive className='text-center'>

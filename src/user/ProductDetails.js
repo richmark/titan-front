@@ -139,14 +139,17 @@ const ProductDetails = ({match}) => {
   };
 
   const showAdditionalInfo = () => {
-    return (
-      <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
-          <h5>Additional Information</h5>
-            {ProductAdditionalInfo(oInfo)}
-        </Container>
-      </Fragment>
-    );
+    console.log(oInfo.length);
+    if (oInfo !== undefined && oInfo.length !== 0) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+            <h5>Additional Information</h5>
+              {ProductAdditionalInfo(oInfo)}
+          </Container>
+        </Fragment>
+      );
+    }
   };
 
   const showDetails = () => {
