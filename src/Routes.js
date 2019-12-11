@@ -20,6 +20,7 @@ import Profile from "./user/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
 import AddProduct from "./core/admin/products/AddProduct";
+import UpdateProduct from "./core/admin/products/UpdateProduct";
 import ProductDetails from "./user/ProductDetails";
 import Checkout from "./user/Checkout";
 import Forbidden from "./user/Forbidden";
@@ -62,6 +63,11 @@ const Routes = () => {
         path="/admin/wholesalers/:wholesalerId"
         exact
         component={ProcessWholesaler}
+      />
+      <AdminRoute
+        path="/admin/products/update/:productId"
+        exact
+        component={UpdateProduct}
       />
     </BrowserRouter>
   );

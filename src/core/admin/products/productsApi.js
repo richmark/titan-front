@@ -40,3 +40,19 @@ export const getProduct = (sId) => {
     })
     .catch(oError => console.log(oError));
 };
+
+export const updateProduct = (sId, sToken, oProduct, sProductId) => {
+    console.log(oProduct);
+    return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        },
+        body: oProduct
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
