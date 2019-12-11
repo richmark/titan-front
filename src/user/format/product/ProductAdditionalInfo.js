@@ -16,16 +16,20 @@ const AdditionalInfo = aData => {
             <Container>
                 <Table responsive className='text-center'>
                     <tbody>
-                    {aAdditionalInfo.length && aAdditionalInfo.map((aValue, iIndex) => (
-                        <tr key={iIndex}>
-                            <th>
-                            {aValue.key}
-                            </th>
-                            <td>
-                            {aValue.value}
-                            </td>
-                        </tr>
-                    ))}
+                    {aAdditionalInfo && aAdditionalInfo.map((aValue, iIndex) => {
+                        return (
+                            <Fragment key={iIndex}>
+                                <tr>
+                                    <th>
+                                    {aValue.key}
+                                    </th>
+                                    <td>
+                                    {aValue.value}
+                                    </td>
+                                </tr>
+                            </Fragment>
+                        );
+                    })}
                     </tbody>
                 </Table>
             </Container>

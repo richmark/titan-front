@@ -24,6 +24,7 @@ const Checkout = () => {
         var oTemp = {};
         aReal.length > 0 && aReal.map((oProduct, iIndex) => {
             getProduct(oProduct._id).then(oData => {
+                oData = oData.data;
                 oTemp[oData._id] = oData.price;
                 if (iLoop === aReal.length) {
                     setRealProduct(oTemp);
