@@ -1,15 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
-import ProductCard from './format/product/ProductCard';
-import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
-import { getCart } from '../core/client/cartHelpers';
+import { getCart, emptyCart } from '../core/client/cartHelpers';
+import { Redirect } from 'react-router-dom';
+import { getProduct } from '../core/admin/products/productsApi';
 
 
 const Checkout = () => {
 
     const [aProduct, setProduct] = useState([]);
-    const [iTotal, setTotal] = useState(0);
+    const [bForbidden, setForbidden] = useState(false);
     
     const init = () => {
         setProduct(getCart());
@@ -18,6 +18,12 @@ const Checkout = () => {
     useEffect(() => {
         init();
     }, []);
+
+    const redirectForbidden = () => {
+        if (bForbidden === true) {
+            return <Redirect to="/forbidden" />;
+        }   
+    }
 
     const singleProduct = (oProduct) => {
         return (
@@ -67,9 +73,15 @@ const Checkout = () => {
     const showTotal = () => {
         var iPrice = 0;
         var iShipFee = 100;
-        aProduct !== [] && aProduct.map((oProduct, iIndex) => {
+        aProduct.length > 0 && aProduct.map((oProduct, iIndex) => {
+            if (oProduct.count <= 0) {
+                setProduct([]);
+                setForbidden(true);
+                emptyCart();
+            }
             iPrice += (oProduct.price * oProduct.count);
         });
+        
         var iTotal = iPrice + iShipFee;
         return (
             <div className="border rounded p-4 mt-2">
@@ -128,18 +140,45 @@ const Checkout = () => {
 
     const showProductMain = () => {
         console.log(aProduct);
+       
+        const checkProduct = () => {
+            var oDisplay = (aProduct.length === 0) ? displayEmpty() : displayCheckout();
+            return (
+                <Fragment>
+                    {oDisplay}
+                </Fragment>
+            );
+        }
+
+        const displayEmpty = () => {
+            return (
+                <Fragment>
+                    <Col xs={12} className="border rounded border-left-dark p-4">
+                        Cart is Empty!
+                    </Col>
+                </Fragment>
+            );
+        }
+
+        const displayCheckout = () => {
+            return (
+                <Fragment>
+                    <Col xs={12} md={8}>
+                            {showProducts()} 
+                            {showTotal()}
+                    </Col>
+                    <Col xs={6} md={4} className="border rounded border-left-dark p-4">
+                        {showBilling()}
+                    </Col>
+                </Fragment>
+            );
+        }
+
         return (
             <Fragment>
                 <Container className='rounded p-5'>
-                    {/* Stack the columns on mobile by making one full-width and the other half-width */}
                     <Row>
-                        <Col xs={12} md={8}>
-                            {showProducts()} 
-                            {showTotal()}
-                        </Col>
-                        <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                            {showBilling()}
-                        </Col>
+                        {checkProduct()}
                     </Row>
                 </Container>
             </Fragment>
@@ -149,6 +188,7 @@ const Checkout = () => {
     return (
         <Layout>
             {showProductMain()}
+            {redirectForbidden()}
         </Layout>
     );
 };
