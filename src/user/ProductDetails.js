@@ -19,7 +19,7 @@ const ProductDetails = ({match}) => {
     description: ''
   });
 
-  const [oInfo, setInfo] = useState(false);
+  const [oInfo, setInfo] = useState([]);
 
   const [oCategory, setCategory] = useState({
     _id : '',
@@ -44,17 +44,18 @@ const ProductDetails = ({match}) => {
         console.log(oData.error);
         setBoolProduct(false);
       } else {
-		setInfo(oData.additional_info);
-        setProduct({
-          ...oProduct,
-          image : `${IMAGE_API}/images/products/${oData.image}`,
-          product_name: oData.product_name,
-          price: oData.price,
-          description: oData.description
-        });
-
-        fetchCategory(oData.category);
-      }
+        oData = oData.data;
+        setInfo(oData.additional_info);
+            setProduct({
+              ...oProduct,
+              image : `${IMAGE_API}/images/products/${oData.image}`,
+              product_name: oData.product_name,
+              price: oData.price,
+              description: oData.description
+            });
+            console.log(oData);
+            fetchCategory(oData.category);
+        }
     });
   };
 
@@ -142,9 +143,7 @@ const ProductDetails = ({match}) => {
       <Fragment>
         <Container className="border border-black rounded p-5 mt-4">
           <h5>Additional Information</h5>
-          <p>
             {ProductAdditionalInfo(oInfo)}
-          </p>
         </Container>
       </Fragment>
     );

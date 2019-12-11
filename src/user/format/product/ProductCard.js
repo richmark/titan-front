@@ -1,16 +1,23 @@
-import React, { Fragment, useState } from 'react';
-import { Card, Container, Image, Col, Row, Button } from 'react-bootstrap';
+import React from 'react';
+import { Card, Container, Col, Row, Button } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
 import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
 
 
 const ProductCard = (aData, setRun = () => {}) => {
-    const [iCount, setCount] = useState(1);
+    const iCount = 1;
     
     const addToCart = (oProduct) => oEvent => {
         oEvent.preventDefault();
-        addItem(oProduct, iCount, () => {
+        var oData = {
+            image : `${IMAGE_API}/images/products/${oProduct.image}`,
+            product_name: oProduct.product_name,
+            _id: oProduct._id,
+            price: oProduct.price,
+            description: oProduct.description
+        }
+        addItem(oData, iCount, () => {
           alert('Item added!');
           setRun(getTotalCount())
         });
