@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import { getAllProducts } from './productsApi';
 import { getAllCategories } from '../categories/categoriesApi';
@@ -145,7 +146,11 @@ const Products = () => {
                                                         style={{ width: '100%' }}
                                                     />
                                                 </td>
-                                                <td>{oProduct.product_name}</td>
+                                                <td>
+                                                    <Link to={`/admin/products/update/${oProduct._id}`}>
+                                                        {oProduct.product_name}
+                                                    </Link>
+                                                </td>
                                                 <td>{oProduct.stock}</td>
                                                 <td>{oProduct.price}</td>
                                                 <td>{oProduct.category.name}</td>
