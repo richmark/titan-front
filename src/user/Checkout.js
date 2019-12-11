@@ -4,16 +4,39 @@ import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { getCart, emptyCart } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
+import { isAuthenticated } from '../auth/authUtil';
 
 
 const Checkout = () => {
 
     const [aProduct, setProduct] = useState([]);
     const [bForbidden, setForbidden] = useState(false);
+    const [oRealProduct, setRealProduct] = useState(false);
     
     const init = () => {
-        setProduct(getCart());
+        var aCart = getCart();
+        setProduct(aCart);
+        getRealPrice(aCart);
     };
+
+    const getRealPrice = (aReal) => {
+        var iLoop = 1;
+        var oTemp = {};
+        aReal.length > 0 && aReal.map((oProduct, iIndex) => {
+            getProduct(oProduct._id).then(oData => {
+                oTemp[oData._id] = oData.price;
+                if (iLoop === aReal.length) {
+                    setRealProduct(oTemp);
+                }
+                iLoop++
+            });
+            ;
+        }); 
+    };
+
+    const getUserDetails = () => {
+
+    }
 
     useEffect(() => {
         init();
@@ -57,7 +80,7 @@ const Checkout = () => {
     }
 
     const showProducts = () => {
-        return aProduct !== [] && (
+        return aProduct.length > 0 && (
             <Fragment>
                 {aProduct.map((oProduct, iIndex) => {
                     return (
@@ -73,8 +96,8 @@ const Checkout = () => {
     const showTotal = () => {
         var iPrice = 0;
         var iShipFee = 100;
-        aProduct.length > 0 && aProduct.map((oProduct, iIndex) => {
-            if (oProduct.count <= 0) {
+        aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
+            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id]) {
                 setProduct([]);
                 setForbidden(true);
                 emptyCart();
@@ -140,7 +163,7 @@ const Checkout = () => {
 
     const showProductMain = () => {
         console.log(aProduct);
-       
+        console.log(oRealProduct);
         const checkProduct = () => {
             var oDisplay = (aProduct.length === 0) ? displayEmpty() : displayCheckout();
             return (
