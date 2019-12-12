@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { sendSignup } from '../core/client/clientApi';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 const Signup = ({ match }) => {
     const [result, setResult] = useState(false);
@@ -358,8 +358,19 @@ const Signup = ({ match }) => {
         );
     };
 
+    const verifyToken = () => {
+        if (localStorage['jwt'] !== undefined) {
+            var oUser = JSON.parse(localStorage['jwt'])['user'];
+            if (oUser['role'] === 1) {
+                return <Redirect to='/admin/dashboard' />;
+            }
+            return <Redirect to='/' />;
+        }
+    };
+
     return (
         <Layout title='Signup' description='Sign up here'>
+            {verifyToken()}
             {showSuccess()}
             {showForm()}
             {alertDuplicateUser()}
