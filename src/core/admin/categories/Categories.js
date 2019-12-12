@@ -3,6 +3,7 @@ import DashboardLayout from '../DashboardLayout';
 import { getAllCategories, createCategory } from './categoriesApi';
 import { isAuthenticated } from '../../../auth/authUtil';
 import { IMAGE_API } from '../../../config';
+import { Link } from 'react-router-dom';
 
 const Categories = () => {
   const { sToken, user } = isAuthenticated();
@@ -19,7 +20,7 @@ const Categories = () => {
         console.log(oData.error)
       } else {
         setCategories(oData.data);
-        setValues({ formData: new FormData() });
+        setValues({ ...values, formData: new FormData() });
       }
     });
   };
@@ -43,26 +44,56 @@ const Categories = () => {
   };
 
   const handleChange = (name) => (oEvent) => {
-    const value = name === 'category_image' ? oEvent.target.files[0] : oEvent.target.value;
-    formData.set(name, value);
+    if (name !== 'category_image') {
+      const value = oEvent.target.value;
+      formData.set(name, value);
+      setValues({ ...values, [name]: value });
+      return;
+    }
+    let oFile = oEvent.target.files[0];
+    if (oFile === undefined) {
+        formData.set(name, '');
+        setValues({
+            ...values,
+            image: ''
+        });
+        return;
+    }
+    let oReader = new FileReader();
+    oReader.onloadend = () => {
+        formData.set(name, oFile);
+        setValues({
+            ...values,
+            [name]: oReader.result
+        });
+    }
+    oReader.readAsDataURL(oFile);
   };
 
   const showCategories = () => {
       return (
           <Fragment>
-            <div className="col-md-4 col-sm-4 col-xl-4 mb-4">
+            <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
-                  <input value={name} onChange={handleChange('name')} type="text" className="form-control bg-light small mb-2" placeholder="Category Name" />
-                  <div className="border p-3 mb-4">
-                    <h6>Thumbnail</h6>
-                    <input value={category_image} onChange={handleChange('category_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                  <div className='row'>
+                    <div className='col-sm-4'>
+                        <p>Category name: </p>
+                        <p>Thumbnail: </p>
+                        <button onClick={submitCategory} className="btn btn-primary">Save</button>
+                    </div>
+                    <div className='col-sm-8'>
+                      <input value={name} onChange={handleChange('name')} type="text" className="form-control bg-light small mb-2" placeholder="Category Name" />
+                      <input onChange={handleChange('category_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                      <div style={{ width: '150px'}} className='mt-2'>
+                        <img src={category_image || "https://ctt.trains.com/sitefiles/images/no-preview-available.png"} style={{width: '100%'}} />
+                      </div>
+                    </div>
                   </div>
-                  <button onClick={submitCategory} className="btn btn-primary">Save</button>
                 </div>
               </div>
             </div>
-            <div className="col-md-8 col-sm-8 col-xl-8 mb-4">
+            <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
                   {/* <div className="float-left"><span>10</span> Items</div> */}
@@ -83,7 +114,11 @@ const Categories = () => {
                         <tr key={iIndex}>
                           <th scope="row"><input type="checkbox" /></th>
                           <td><img src={`${IMAGE_API}/images/categories/${oCategory.category_image}`} style={{width: '100%'}} /></td>
-                          <td>{oCategory.name}</td>
+                          <td>
+                            <Link to={`/admin/categories/update/${oCategory._id}`}>
+                              {oCategory.name}
+                            </Link>
+                          </td>
                           <td>{oCategory.createdAt}</td>
                         </tr>
                       ))}

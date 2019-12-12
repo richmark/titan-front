@@ -74,10 +74,9 @@ const UpdateProduct = ({ match }) => {
     const getParameters = () => {
         if (match.params.productId !== undefined) {
             getProduct(match.params.productId).then(oData => {
-                if(oData.error) {
+                if (oData.error) {
                     console.log(oData.error);
                 } else {
-                    console.log(oData.data);
                     setValues({
                         key: '',
                         value: '',
@@ -106,7 +105,6 @@ const UpdateProduct = ({ match }) => {
             if(oData.error) {
                 console.log(oData.error);
             } else {
-                console.log(oData.data);
                 alert('Product updated successfully');
             }
         });
@@ -129,6 +127,7 @@ const UpdateProduct = ({ match }) => {
 
     const handleDeleteAdditionalInfo = iIndex => oEvent => {
         additional_info.splice(iIndex, 1);
+        formData.set('additional_info', JSON.stringify(additional_info));
         setValues({
           ...values,
           additional_info: additional_info
