@@ -89,9 +89,6 @@ const Categories = () => {
                         <img src={category_image || "https://ctt.trains.com/sitefiles/images/no-preview-available.png"} style={{width: '100%'}} />
                       </div>
                     </div>
-                    {/* <div className='ml-2'>
-                      <button onClick={submitCategory} className="btn btn-primary">Save</button>
-                    </div> */}
                   </div>
                 </div>
               </div>

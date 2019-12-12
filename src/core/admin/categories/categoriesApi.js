@@ -31,7 +31,6 @@ export const createCategory = (sId, sToken, oCategory) => {
 }
 
 export const getCategory = (sId) => {
-  console.log(sId);
   return fetch(`${API_URL}/category/${sId}`, {
       method: 'GET',
       headers: {
