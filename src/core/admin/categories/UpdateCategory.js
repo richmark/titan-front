@@ -48,12 +48,6 @@ const Categories = ({ match }) => {
         if (oData.error) {
             console.log(oData);
         } else {
-            setValues({
-                _id: oData.data._id,
-                name: oData.data.name,
-                category_image: `${IMAGE_API}/images/categories/${oData.data.category_image}`,
-                formData: new FormData()
-            });
             alert('Product updated successfully');
         }
     })
