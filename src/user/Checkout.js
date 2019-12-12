@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
-import { getCart, emptyCart } from '../core/client/cartHelpers';
+import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
@@ -12,6 +12,8 @@ const Checkout = () => {
     const [aProduct, setProduct] = useState([]);
     const [bForbidden, setForbidden] = useState(false);
     const [oRealProduct, setRealProduct] = useState(false);
+    const [iRun, setRun] = useState(getCart());
+    const { user } = isAuthenticated();
     
     const init = () => {
         var aCart = getCart();
@@ -35,13 +37,9 @@ const Checkout = () => {
         }); 
     };
 
-    const getUserDetails = () => {
-
-    }
-
     useEffect(() => {
         init();
-    }, []);
+    }, [iRun]);
 
     const redirectForbidden = () => {
         if (bForbidden === true) {
@@ -49,12 +47,28 @@ const Checkout = () => {
         }   
     }
 
+    const deleteItem = (sId) => oEvent => {
+        oEvent.preventDefault();
+        if (window.confirm('Do you want to delete this item?') === true) {
+            removeItem(sId);
+            setRun(getCart());
+        }
+    };
+
+    const updateItem = (sId, bIncrease) => oEvent => {
+        oEvent.preventDefault();
+        updateCount(sId, bIncrease);
+        setRun(getCart());
+    };
+
     const singleProduct = (oProduct) => {
         return (
             <div className="border rounded p-4 mb-2">
                 <Row>
                     <Col xs={1} md={1} className="align-middle text-center">
-                        <i className="fas fa-trash-alt" style={{fontSize:'24px', marginTop:'35px'}}></i>
+                        <Button variant="light" style={{marginTop:'35px'}} onClick={deleteItem(oProduct._id)}>
+                            <i className="fas fa-trash-alt" style={{fontSize:'24px'}}></i>
+                        </Button>
                     </Col>
                     <Col xs={3} md={3} className="text-center">
                         <Image
@@ -68,8 +82,14 @@ const Checkout = () => {
                     <Col xs={6} md={6}>
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
-                            <div className="float-right font-weight-bold">
-                                Qty: <span>{oProduct.count}</span>
+                            <div className="float-right font-weight-bold">Qty: 
+                            <Button variant="light" style={{fontSize:'15px'}} onClick={updateItem(oProduct._id, false)}>
+                                <i className="far fa-minus-square" style={{fontSize:'15px'}}></i>
+                            </Button>
+                            <span>{oProduct.count}</span>
+                            <Button variant="light" style={{fontSize:'15px'}} onClick={updateItem(oProduct._id, true)}>
+                                <i className="far fa-plus-square" style={{fontSize:'15px'}}></i>
+                            </Button>
                             </div>
                             ₱ <span>{oProduct.price}</span>
                         </div>
@@ -130,10 +150,10 @@ const Checkout = () => {
             <Fragment>
                 <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
                 <div id="basic-info" className="mt-4">
-                    <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">Juan Dela Cruz</span>
+                    <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">{user.first_name} {user.last_name}</span>
                     <div id="address-info">
                         <span className="font-weight-light">
-                        6F Suntree, 13 Meralco Avenue Ortigas Center San Antonio, Pasig City, Metro Manila~Pasig
+                            {user.address}
                         </span>
                     </div>
                 </div>
@@ -144,12 +164,12 @@ const Checkout = () => {
                 </div>
                 <div id="contact-number" className="mt-2">
                     <span className="font-weight-bold">
-                        <i className="fas fa-phone-alt"></i> 09213609963
+                        <i className="fas fa-phone-alt"></i> {user.mobile_number}
                     </span>
                 </div>
                 <div id="email" className="mt-2">
                     <span className="font-weight-bold">
-                        <i className="fas fa-at"></i> juandelacruz@gmail.com
+                        <i className="fas fa-at"></i> {user.email}
                     </span>
                 </div>
 
@@ -210,7 +230,7 @@ const Checkout = () => {
     };
 
     return (
-        <Layout>
+        <Layout run={iRun}>
             {showProductMain()}
             {redirectForbidden()}
         </Layout>

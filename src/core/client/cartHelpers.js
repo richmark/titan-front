@@ -50,6 +50,27 @@ export const getCart = () => {
     return [];
 }
 
+export const updateCount = (sProductId, bIncrease = true) => {
+    let aCart = [];
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('cart')) {
+            aCart = JSON.parse(localStorage.getItem('cart'));
+        }
+
+        aCart.map((oProduct, iIndex) => {
+            if (oProduct._id === sProductId) {
+                if (bIncrease === true) {
+                    aCart[iIndex].count += 1;
+                } else {
+                    aCart[iIndex].count = (aCart[iIndex].count <= 1) ? 1 : aCart[iIndex].count - 1;
+                }
+            }
+        });
+
+        localStorage.setItem('cart', JSON.stringify(aCart));
+    }
+}
+
 export const updateItem = (sProductId, iCount) => {
     let aCart = [];
     if (typeof window !== 'undefined') {
