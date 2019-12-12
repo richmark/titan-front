@@ -139,7 +139,6 @@ const ProductDetails = ({match}) => {
   };
 
   const showAdditionalInfo = () => {
-    console.log(oInfo.length);
     if (oInfo !== undefined && oInfo.length !== 0) {
       return (
         <Fragment>
