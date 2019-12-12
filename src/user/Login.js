@@ -205,8 +205,19 @@ const Login = () => {
         }
     };
 
+    const verifyToken = () => {
+        if (localStorage['jwt'] !== undefined) {
+            var oUser = JSON.parse(localStorage['jwt'])['user'];
+            if (oUser['role'] === 1) {
+                return <Redirect to='/admin/dashboard' />;
+            }
+            return <Redirect to='/' />;
+        }
+    };
+
     return (
         <Layout title='Login' description='Login here'>
+            {verifyToken()}
             {showVerificationMessage()}
             <form>
                 {bootstrapLogin()}

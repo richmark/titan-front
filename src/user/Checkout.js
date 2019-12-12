@@ -83,13 +83,13 @@ const Checkout = () => {
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
                             <div className="float-right font-weight-bold">Qty: 
-                            <Button variant="light" style={{fontSize:'15px'}} onClick={updateItem(oProduct._id, false)}>
-                                <i className="far fa-minus-square" style={{fontSize:'15px'}}></i>
-                            </Button>
-                            <span>{oProduct.count}</span>
-                            <Button variant="light" style={{fontSize:'15px'}} onClick={updateItem(oProduct._id, true)}>
-                                <i className="far fa-plus-square" style={{fontSize:'15px'}}></i>
-                            </Button>
+                                <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false)}>
+                                    -
+                                </Button>
+                                <span>{oProduct.count}</span>
+                                <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true)}>
+                                    +
+                                </Button>
                             </div>
                             ₱ <span>{oProduct.price}</span>
                         </div>
