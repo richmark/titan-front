@@ -1,54 +1,70 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import DashboardLayout from '../DashboardLayout';
-import { getAllCategories, createCategory } from './categoriesApi';
+import { updateCategory, getCategory } from './categoriesApi';
 import { isAuthenticated } from '../../../auth/authUtil';
 import { IMAGE_API } from '../../../config';
-import { Link } from 'react-router-dom';
 
-const Categories = () => {
+const Categories = ({ match }) => {
   const { sToken, user } = isAuthenticated();
-  const [categories, setCategories] = useState([]);
   const [values, setValues] = useState({
-    name: '',
-    category_image: '',
-    formData: ''
+      _id: '',
+      name: '',
+      category_image: '',
+      formData: '',
   });
-  const [result, setResult] = useState(false);
   const init = () => {
-    getAllCategories().then(oData => {
-      if(oData.error) {
-        console.log(oData.error)
-      } else {
-        setCategories(oData.data);
-        setValues({ ...values, formData: new FormData() });
-      }
+    getCategory(match.params.categoryId).then(oData => {
+        if(oData.error) {
+            console.log(oData.error)
+        } else {
+            const {
+                _id,
+                name,
+                category_image
+            } = oData.data;
+            setValues({
+                _id: _id,
+                name: name,
+                category_image: `${IMAGE_API}/images/categories/${category_image}`,
+                formData: new FormData()
+            });
+        }
     });
   };
 
   useEffect(() => {
     init();
-  }, [result]);
+  }, []);
 
-  const { formData, name, category_image } = values;
+  const {
+    _id,
+    name,
+    category_image,
+    formData } = values;
 
   const submitCategory = (oEvent) => {
     oEvent.preventDefault();
-    createCategory(user._id, sToken, formData).then(oData => {
+    updateCategory(user._id, sToken, formData, _id).then(oData => {
         if (oData.error) {
             console.log(oData);
         } else {
-          setResult(!result);
-          setValues({ name: '', category_image: '' });
+            setValues({
+                _id: oData.data._id,
+                name: oData.data.name,
+                category_image: `${IMAGE_API}/images/categories/${oData.data.category_image}`,
+                formData: new FormData()
+            });
+            alert('Product updated successfully');
         }
     })
   };
 
   const handleChange = (name) => (oEvent) => {
     if (name !== 'category_image') {
-      const value = oEvent.target.value;
-      formData.set(name, value);
-      setValues({ ...values, [name]: value });
-      return;
+        const value = oEvent.target.value;
+        formData.set(name, value);
+        setValues({ ...values, [name]: value });
+        return;
     }
     let oFile = oEvent.target.files[0];
     if (oFile === undefined) {
@@ -70,36 +86,32 @@ const Categories = () => {
     oReader.readAsDataURL(oFile);
   };
 
-  const showCategories = () => {
+  const showUpdateCategory = () => {
       return (
           <Fragment>
-            <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
+            <div className="col-md-6 col-sm-6 col-xl-6 mb-6">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
-                  <div className='row'>
-                    <div className='col-sm-4'>
-                        <p>Category name: </p>
-                        <p>Thumbnail: </p>
-                        <button onClick={submitCategory} className="btn btn-primary">Save</button>
+                    <div className='row'>
+                        <div className='col-sm-4'>
+                            <p>Category name: </p>
+                            <p>Thumbnail: </p>
+                            <button onClick={submitCategory} className="btn btn-primary">Update</button>
+                        </div>
+                        <div className='col-sm-8'>
+                            <input value={name} onChange={handleChange('name')} type="text" className="form-control bg-light small mb-2" placeholder="Category Name" />
+                            <input onChange={handleChange('category_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                            <div style={{ width: '150px' }}>
+                                <img className='mt-2' src={category_image} style={{width: '100%'}} />
+                            </div>
+                        </div>
                     </div>
-                    <div className='col-sm-8'>
-                      <input value={name} onChange={handleChange('name')} type="text" className="form-control bg-light small mb-2" placeholder="Category Name" />
-                      <input onChange={handleChange('category_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
-                      <div style={{ width: '150px'}} className='mt-2'>
-                        <img src={category_image || "https://ctt.trains.com/sitefiles/images/no-preview-available.png"} style={{width: '100%'}} />
-                      </div>
-                    </div>
-                    {/* <div className='ml-2'>
-                      <button onClick={submitCategory} className="btn btn-primary">Save</button>
-                    </div> */}
-                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
+            {/* <div className="col-md-8 col-sm-8 col-xl-8 mb-4">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
-                  {/* <div className="float-left"><span>10</span> Items</div> */}
                   <div className="float-right mb-2">
                     <button className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                   </div>
@@ -117,11 +129,7 @@ const Categories = () => {
                         <tr key={iIndex}>
                           <th scope="row"><input type="checkbox" /></th>
                           <td><img src={`${IMAGE_API}/images/categories/${oCategory.category_image}`} style={{width: '100%'}} /></td>
-                          <td>
-                            <Link to={`/admin/categories/update/${oCategory._id}`}>
-                              {oCategory.name}
-                            </Link>
-                          </td>
+                          <td>{oCategory.name}</td>
                           <td>{oCategory.createdAt}</td>
                         </tr>
                       ))}
@@ -140,7 +148,7 @@ const Categories = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </Fragment>
         );
   };
@@ -148,9 +156,9 @@ const Categories = () => {
   return (
       <DashboardLayout
           name='Product Management'
-          detail='Categories'
+          detail='Update Category'
       >
-          {showCategories()}
+          {showUpdateCategory()}
       </DashboardLayout>
   );
 }
