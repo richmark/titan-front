@@ -5,6 +5,8 @@ import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cart
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
+import { getBraintreeClientToken, processPayment } from '../core/client/checkoutApi';
+import DropIn from 'braintree-web-drop-in-react';
 
 
 const Checkout = () => {
@@ -13,12 +15,25 @@ const Checkout = () => {
     const [bForbidden, setForbidden] = useState(false);
     const [oRealProduct, setRealProduct] = useState(false);
     const [iRun, setRun] = useState(getCart());
-    const { user } = isAuthenticated();
+    const [sClientToken, setClientToken] = useState(false);
+    const [oInstance, setInstance] = useState({});    
+    const { user, sToken } = isAuthenticated();
     
     const init = () => {
         var aCart = getCart();
         setProduct(aCart);
         getRealPrice(aCart);
+        getToken(user._id, sToken);
+    };
+
+    const getToken = (sUserId, sToken) => {
+        getBraintreeClientToken(sUserId, sToken).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setClientToken(oData.data.clientToken);
+            }
+        }); 
     };
 
     const getRealPrice = (aReal) => {
@@ -36,6 +51,62 @@ const Checkout = () => {
             ;
         }); 
     };
+
+    const showDropIn = () => {
+        console.log(sClientToken);
+        console.log(aProduct.length > 0);
+        return (
+            <div onBlur={() => {
+                
+            }}>
+                {sClientToken !== false && aProduct.length > 0 ? (
+                    <div>
+                        <div className="gorm-group mb-3">
+                            <label className="text-muted">Delivery Address:</label>
+                            <textarea 
+                                className="form-control"
+                                value={user.address}
+                                placeholder="Type your deivery address here ... "
+                            />   
+                        </div>
+                        <DropIn options={{
+                                    authorization: sClientToken,
+                                    paypal: {
+                                        flow: 'vault'
+                                    }
+                                }} 
+                                onInstance={instance => (oInstance.instance = instance)} 
+                        />
+                        <button className="btn btn-success btn-block">Pay</button>
+                    </div>
+                ) : null}
+            </div>
+        );
+    };
+
+    const buyCart = () => {
+        
+        // send the nonce to your server
+        // nonce = data.instance.requestPaymentMethod()
+        let oNonce;
+        let getNonce = oInstance.instance.requestPaymentMethod().then(oData => {
+            oNonce = oData.nonce;
+            // once you have nonce (card type, card number) send nonce as 'paymentMethodNonce'
+            // and also total to be charged
+            const oPaymentData = {
+                paymentMethodNonce: oNonce,
+                amount: 1000
+            }
+
+            processPayment(user._id, sToken, oPaymentData).then(oResponse => {
+                console.log(oResponse);
+            }).catch(oError => {
+                console.log('dropin error: ', oError);    
+            }); 
+                
+        });
+    };
+
 
     useEffect(() => {
         init();
@@ -213,6 +284,7 @@ const Checkout = () => {
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
                         {showBilling()}
+                        {showDropIn()}
                     </Col>
                 </Fragment>
             );
