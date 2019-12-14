@@ -57,7 +57,6 @@ export const updateProduct = (sId, sToken, oProduct, sProductId) => {
 };
 
 export const getProductByCategory = (sId, skip, order) => {
-    console.log(sId, skip, order);
     return fetch(`${API_URL}/products/category/${sId}?skip=${skip}&order=${order}`, {
         method: 'GET',
         headers: {
