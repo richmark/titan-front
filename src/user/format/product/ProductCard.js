@@ -68,7 +68,7 @@ const ProductCard = (aData, setRun = () => {}) => {
 
     return (
         <Container>
-             <p>Our Products</p>
+            <p>Our Products</p>
             {showLayout(aData)}
         </Container>
     );    
