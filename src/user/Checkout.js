@@ -16,7 +16,9 @@ const Checkout = () => {
     const [oRealProduct, setRealProduct] = useState(false);
     const [iRun, setRun] = useState(getCart());
     const [sClientToken, setClientToken] = useState(false);
-    const [oInstance, setInstance] = useState({});    
+    const [bPayment, setPayment] = useState(false);
+    const [oInstance, setInstance] = useState({});
+    const [iTotalPrice, setTotalPrice] = useState(0);    
     const { user, sToken } = isAuthenticated();
     
     const init = () => {
@@ -53,22 +55,12 @@ const Checkout = () => {
     };
 
     const showDropIn = () => {
-        console.log(sClientToken);
-        console.log(aProduct.length > 0);
         return (
             <div onBlur={() => {
                 
             }}>
                 {sClientToken !== false && aProduct.length > 0 ? (
                     <div>
-                        <div className="gorm-group mb-3">
-                            <label className="text-muted">Delivery Address:</label>
-                            <textarea 
-                                className="form-control"
-                                value={user.address}
-                                placeholder="Type your deivery address here ... "
-                            />   
-                        </div>
                         <DropIn options={{
                                     authorization: sClientToken,
                                     paypal: {
@@ -77,7 +69,8 @@ const Checkout = () => {
                                 }} 
                                 onInstance={instance => (oInstance.instance = instance)} 
                         />
-                        <button className="btn btn-success btn-block">Pay</button>
+                        <Button onClick={buyCart} variant="success" block>Pay</Button>
+                        <Button onClick={() => setPayment(false)} variant="secondary" block>Cancel</Button>
                     </div>
                 ) : null}
             </div>
@@ -85,7 +78,7 @@ const Checkout = () => {
     };
 
     const buyCart = () => {
-        
+        var oTotal = calculateTotal();
         // send the nonce to your server
         // nonce = data.instance.requestPaymentMethod()
         let oNonce;
@@ -95,7 +88,7 @@ const Checkout = () => {
             // and also total to be charged
             const oPaymentData = {
                 paymentMethodNonce: oNonce,
-                amount: 1000
+                amount: oTotal.total
             }
 
             processPayment(user._id, sToken, oPaymentData).then(oResponse => {
@@ -185,7 +178,8 @@ const Checkout = () => {
         );
     };
 
-    const showTotal = () => {
+    const calculateTotal = () => {
+        var oTotal = {};
         var iPrice = 0;
         var iShipFee = 100;
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
@@ -198,6 +192,16 @@ const Checkout = () => {
         });
         
         var iTotal = iPrice + iShipFee;
+        oTotal = {
+            price : iPrice,
+            fee   : iShipFee,
+            total : iTotal
+        }
+        return oTotal;
+    }
+
+    const showTotal = () => {
+        var oTotal = calculateTotal();
         return (
             <div className="border rounded p-4 mt-2">
                 <Row>
@@ -207,9 +211,9 @@ const Checkout = () => {
                         <p className="font-weight-bold">Total</p>
                     </Col>
                     <Col xs={8} md={8} className="text-right">
-                        <p className="font-weight-bold "> ₱ <span>{iPrice}</span></p>
-                        <p className="font-weight-bold "> ₱ <span>{iShipFee}</span></p>
-                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{iTotal}</span></span></p>
+                        <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
+                        <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
+                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
                 </Row>
             </div>
@@ -245,12 +249,19 @@ const Checkout = () => {
                 </div>
 
                 <div id="place-order" className="mt-4 text-center">
-                    <Button variant="outline-warning" size="lg" block>
+                    <Button variant="outline-warning" size="lg" block onClick={() => setPayment(true)}>
                         Place Order
                     </Button>
                 </div>
             </Fragment>
         );
+    }
+
+    const showPayment = () => {
+        if (bPayment === true) {
+            return showDropIn();
+        }
+        return showBilling();
     }
 
     const showProductMain = () => {
@@ -283,8 +294,7 @@ const Checkout = () => {
                             {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                        {showBilling()}
-                        {showDropIn()}
+                        {showPayment()}
                     </Col>
                 </Fragment>
             );
