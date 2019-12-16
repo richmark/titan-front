@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { getBraintreeClientToken, processPayment } from '../core/client/checkoutApi';
+import { sendOrderData } from '../core/client/orderApi';
 import DropIn from 'braintree-web-drop-in-react';
 
 
@@ -18,9 +19,8 @@ const Checkout = () => {
     const [sClientToken, setClientToken] = useState(false);
     const [bPayment, setPayment] = useState(false);
     const [oInstance, setInstance] = useState({});
-    const [iTotalPrice, setTotalPrice] = useState(0);    
     const { user, sToken } = isAuthenticated();
-    
+
     const init = () => {
         var aCart = getCart();
         setProduct(aCart);
@@ -92,13 +92,47 @@ const Checkout = () => {
             }
 
             processPayment(user._id, sToken, oPaymentData).then(oResponse => {
-                console.log(oResponse);
+                var oOrder = {
+                    user: user._id,
+                    order_address: user.address,
+                    transaction_id: oResponse.data.transaction.id,
+                    amount: oResponse.data.transaction.amount,
+                    shipping_fee: oTotal.fee,
+                    products: []
+                }
+
+                aProduct.map((oProduct, iIndex) => {
+                    var oSingleProduct = {
+                        product: oProduct._id,
+                        price: oProduct.price,
+                        count: oProduct.count
+                    };
+                    oOrder.products.push(oSingleProduct); 
+                });
+                sendOrder(oOrder);
+
             }).catch(oError => {
                 console.log('dropin error: ', oError);    
             }); 
                 
         });
     };
+
+    const sendOrder = (oOrder) => {
+        sendOrderData(user._id, sToken, oOrder).then(oData => {
+            console.log(oData);
+            if (oData.error) {
+                console.log(oData.error)
+            }
+
+            if (oData.data) {
+                alert('Order Success!');
+                setProduct([]);
+                emptyCart();
+                setRun(getCart());
+            }
+        });
+    }
 
 
     useEffect(() => {
@@ -265,8 +299,6 @@ const Checkout = () => {
     }
 
     const showProductMain = () => {
-        console.log(aProduct);
-        console.log(oRealProduct);
         const checkProduct = () => {
             var oDisplay = (aProduct.length === 0) ? displayEmpty() : displayCheckout();
             return (
