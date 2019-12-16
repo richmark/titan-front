@@ -50,7 +50,6 @@ export const getProduct = sId => {
 };
 
 export const updateProduct = (sId, sToken, oProduct, sProductId) => {
-  console.log(oProduct);
   return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
     method: "PUT",
     headers: {
@@ -72,6 +71,21 @@ export const getProductCount = () => {
       Accept: "application/json"
     }
   })
+    .then(oResponse => {
+      return oResponse.json();
+    })
+    .catch(oError => console.log(oError));
+};
+export const getProductByCategory = (sId, skip, order) => {
+  return fetch(
+    `${API_URL}/products/category/${sId}?skip=${skip}&order=${order}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    }
+  )
     .then(oResponse => {
       return oResponse.json();
     })
