@@ -5,6 +5,9 @@ import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cart
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
+import { getBraintreeClientToken, processPayment } from '../core/client/checkoutApi';
+import { sendOrderData } from '../core/client/orderApi';
+import DropIn from 'braintree-web-drop-in-react';
 
 
 const Checkout = () => {
@@ -13,12 +16,26 @@ const Checkout = () => {
     const [bForbidden, setForbidden] = useState(false);
     const [oRealProduct, setRealProduct] = useState(false);
     const [iRun, setRun] = useState(getCart());
-    const { user } = isAuthenticated();
-    
+    const [sClientToken, setClientToken] = useState(false);
+    const [bPayment, setPayment] = useState(false);
+    const [oInstance, setInstance] = useState({});
+    const { user, sToken } = isAuthenticated();
+
     const init = () => {
         var aCart = getCart();
         setProduct(aCart);
         getRealPrice(aCart);
+        getToken(user._id, sToken);
+    };
+
+    const getToken = (sUserId, sToken) => {
+        getBraintreeClientToken(sUserId, sToken).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setClientToken(oData.data.clientToken);
+            }
+        }); 
     };
 
     const getRealPrice = (aReal) => {
@@ -36,6 +53,86 @@ const Checkout = () => {
             ;
         }); 
     };
+
+    const showDropIn = () => {
+        return (
+            <div onBlur={() => {
+                
+            }}>
+                {sClientToken !== false && aProduct.length > 0 ? (
+                    <div>
+                        <DropIn options={{
+                                    authorization: sClientToken,
+                                    paypal: {
+                                        flow: 'vault'
+                                    }
+                                }} 
+                                onInstance={instance => (oInstance.instance = instance)} 
+                        />
+                        <Button onClick={buyCart} variant="success" block>Pay</Button>
+                        <Button onClick={() => setPayment(false)} variant="secondary" block>Cancel</Button>
+                    </div>
+                ) : null}
+            </div>
+        );
+    };
+
+    const buyCart = () => {
+        var oTotal = calculateTotal();
+        // send the nonce to your server
+        // nonce = data.instance.requestPaymentMethod()
+        let oNonce;
+        let getNonce = oInstance.instance.requestPaymentMethod().then(oData => {
+            oNonce = oData.nonce;
+            // once you have nonce (card type, card number) send nonce as 'paymentMethodNonce'
+            // and also total to be charged
+            const oPaymentData = {
+                paymentMethodNonce: oNonce,
+                amount: oTotal.total
+            }
+
+            processPayment(user._id, sToken, oPaymentData).then(oResponse => {
+                var oOrder = {
+                    user: user._id,
+                    order_address: user.address,
+                    transaction_id: oResponse.data.transaction.id,
+                    amount: oResponse.data.transaction.amount,
+                    shipping_fee: oTotal.fee,
+                    products: []
+                }
+
+                aProduct.map((oProduct, iIndex) => {
+                    var oSingleProduct = {
+                        product: oProduct._id,
+                        price: oProduct.price,
+                        count: oProduct.count
+                    };
+                    oOrder.products.push(oSingleProduct); 
+                });
+                sendOrder(oOrder);
+
+            }).catch(oError => {
+                console.log('dropin error: ', oError);    
+            }); 
+                
+        });
+    };
+
+    const sendOrder = (oOrder) => {
+        sendOrderData(user._id, sToken, oOrder).then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            }
+
+            if (oData.data) {
+                alert('Order Success!');
+                setProduct([]);
+                emptyCart();
+                setRun(getCart());
+            }
+        });
+    }
+
 
     useEffect(() => {
         init();
@@ -114,7 +211,8 @@ const Checkout = () => {
         );
     };
 
-    const showTotal = () => {
+    const calculateTotal = () => {
+        var oTotal = {};
         var iPrice = 0;
         var iShipFee = 100;
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
@@ -127,6 +225,16 @@ const Checkout = () => {
         });
         
         var iTotal = iPrice + iShipFee;
+        oTotal = {
+            price : iPrice,
+            fee   : iShipFee,
+            total : iTotal
+        }
+        return oTotal;
+    }
+
+    const showTotal = () => {
+        var oTotal = calculateTotal();
         return (
             <div className="border rounded p-4 mt-2">
                 <Row>
@@ -136,9 +244,9 @@ const Checkout = () => {
                         <p className="font-weight-bold">Total</p>
                     </Col>
                     <Col xs={8} md={8} className="text-right">
-                        <p className="font-weight-bold "> ₱ <span>{iPrice}</span></p>
-                        <p className="font-weight-bold "> ₱ <span>{iShipFee}</span></p>
-                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{iTotal}</span></span></p>
+                        <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
+                        <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
+                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
                 </Row>
             </div>
@@ -174,7 +282,7 @@ const Checkout = () => {
                 </div>
 
                 <div id="place-order" className="mt-4 text-center">
-                    <Button variant="outline-warning" size="lg" block>
+                    <Button variant="outline-warning" size="lg" block onClick={() => setPayment(true)}>
                         Place Order
                     </Button>
                 </div>
@@ -182,9 +290,14 @@ const Checkout = () => {
         );
     }
 
+    const showPayment = () => {
+        if (bPayment === true) {
+            return showDropIn();
+        }
+        return showBilling();
+    }
+
     const showProductMain = () => {
-        console.log(aProduct);
-        console.log(oRealProduct);
         const checkProduct = () => {
             var oDisplay = (aProduct.length === 0) ? displayEmpty() : displayCheckout();
             return (
@@ -212,7 +325,7 @@ const Checkout = () => {
                             {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                        {showBilling()}
+                        {showPayment()}
                     </Col>
                 </Fragment>
             );
