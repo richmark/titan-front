@@ -120,7 +120,6 @@ const Checkout = () => {
 
     const sendOrder = (oOrder) => {
         sendOrderData(user._id, sToken, oOrder).then(oData => {
-            console.log(oData);
             if (oData.error) {
                 console.log(oData.error)
             }
