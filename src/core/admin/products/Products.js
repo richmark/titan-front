@@ -5,12 +5,14 @@ import { getAllProducts, getProductCount } from "./productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
 import oMoment from "moment";
 import { IMAGE_API } from "../../../config";
+import { shallowEqual } from "@babel/types";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [count, setCount] = useState(0);
-  const [showCount, setShowCount] = useState(10);
+  const [paginationCount, setPaginationCount] = useState(0);
+  const [pageActive, setPageActive] = useState(1);
 
   const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
     getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
@@ -37,13 +39,26 @@ const Products = () => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setCount(oData.count);
+        setCount(oData.data.count);
+        setPaginationCount(Math.ceil(oData.data.count / 10));
       }
     });
   };
 
   const handleShowChange = oEvent => {
-    setShowCount(oEvent.target.value);
+    setPaginationCount(Math.ceil(count / oEvent.target.value));
+  };
+
+  const handleNextPagination = oEvent => {
+    if (paginationCount > pageActive) {
+      setPageActive(pageActive + 1);
+    }
+  };
+
+  const handlePrevPagination = oEvent => {
+    if (pageActive > 1) {
+      setPageActive(pageActive - 1);
+    }
   };
 
   useEffect(() => {
@@ -167,19 +182,36 @@ const Products = () => {
                     ))}
                 </tbody>
               </table>
-              <div className=" text-center">
+              <div className="text-center" style={{ float: "right" }}>
                 <nav aria-label="Page navigation example text-center">
                   <ul className="pagination">
                     <li className="page-item">
-                      <a className="page-link">Previous</a>
+                      <button
+                        className="page-link"
+                        onClick={handlePrevPagination}
+                      >
+                        Previous
+                      </button>
                     </li>
-                    {[...Array(2)].map((e, i) => (
-                      <li className="page-item" key={i}>
+                    {[...Array(paginationCount)].map((e, i) => (
+                      <li
+                        className={
+                          i + 1 === pageActive
+                            ? "page-item active"
+                            : "page-item"
+                        }
+                        key={i}
+                      >
                         <a className="page-link">{i + 1}</a>
                       </li>
                     ))}
                     <li className="page-item">
-                      <a className="page-link">Next</a>
+                      <button
+                        className="page-link"
+                        onClick={handleNextPagination}
+                      >
+                        Next
+                      </button>
                     </li>
                   </ul>
                 </nav>
