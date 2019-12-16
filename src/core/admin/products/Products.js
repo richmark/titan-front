@@ -12,7 +12,6 @@ const Products = () => {
 
     const loadProducts = () => {
         getAllProducts().then(oProducts => {
-            console.log(oProducts);
             if(oProducts.error) {
                 console.log(oProducts.error);
             } else {
@@ -23,7 +22,6 @@ const Products = () => {
 
     const loadCategories = () => {
         getAllCategories().then(oCategories => {
-            console.log(oCategories);
             if(oCategories.error) {
                 console.log(oCategories.error);
             } else {

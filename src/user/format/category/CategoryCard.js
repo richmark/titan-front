@@ -2,27 +2,30 @@ import React, { Fragment } from 'react';
 import { Card, Container, Image, Col, Row } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
 
 const CategoryCard = (aData) => {
 
     const showCardBase = (oCategories) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
-            <Card className="pt-3">
-                <Row>
-                    <Col>
-                        <Image className="ml-3" 
-                            src={`${IMAGE_API}/images/categories/${sImage}`}
-                            style={{width: "150px", height: "150px"}} 
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <p className="text-center">{oCategories.name}</p>
-                    </Col>
-                </Row>
-            </Card>
+            <Link to={`categories/${oCategories._id}`}>
+                <Card className="pt-3">
+                    <Row>
+                        <Col>
+                            <Image className="ml-3" 
+                                src={`${IMAGE_API}/images/categories/${sImage}`}
+                                style={{width: "150px", height: "150px"}} 
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <p className="text-center">{oCategories.name}</p>
+                        </Col>
+                    </Row>
+                </Card>
+            </Link>
         );
     };
 

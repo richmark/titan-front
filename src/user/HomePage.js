@@ -41,7 +41,7 @@ const HomePage = () => {
         return (
             <Container>
                 {CategoryCard(aCategories)}
-            </Container>            
+            </Container>
         );
     };
     
