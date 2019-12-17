@@ -11,18 +11,16 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [count, setCount] = useState(0);
+  const [showCount, setShowCount] = useState(5);
   const [paginationCount, setPaginationCount] = useState(0);
+  const [paginationStart, setPaginationStart] = useState(1);
+  const [paginationEnd, setPaginationEnd] = useState(10);
   const [pageActive, setPageActive] = useState(1);
 
-  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
-    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
-      if (oProducts.error) {
-        console.log(oProducts.error);
-      } else {
-        setProducts(oProducts.data);
-      }
-    });
-  };
+  useEffect(() => {
+    loadCategories();
+    loadProductCount();
+  }, []);
 
   const loadCategories = () => {
     getAllCategories().then(oCategories => {
@@ -34,39 +32,99 @@ const Products = () => {
     });
   };
 
+  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
+    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
+      if (oProducts.error) {
+        console.log(oProducts.error);
+      } else {
+        setProducts(oProducts.data);
+      }
+    });
+  };
+
   const loadProductCount = () => {
     getProductCount().then(oData => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setCount(oData.data.count);
-        setPaginationCount(Math.ceil(oData.data.count / 10));
+        var iCount = oData.data.count;
+        setCount(iCount);
+        initializePagination(iCount, 5);
       }
     });
   };
 
+  const initializePagination = (iCount, iShowCount) => {
+    var iPaginationCount = Math.ceil(iCount / iShowCount);
+    resetPagination();
+    setPaginationCount(iPaginationCount);
+    iPaginationCount > 9
+      ? setPaginationEnd(9)
+      : setPaginationEnd(iPaginationCount);
+
+    loadProducts(
+      iShowCount,
+      parseInt(iShowCount * (pageActive - 1), "asc", "_id")
+    );
+  };
+
   const handleShowChange = oEvent => {
-    setPaginationCount(Math.ceil(count / oEvent.target.value));
+    var newShowCount = oEvent.target.value;
+    setShowCount(newShowCount);
+    initializePagination(count, newShowCount);
   };
 
   const handleNextPagination = oEvent => {
+    var newPageActive = pageActive + 1;
+
     if (paginationCount > pageActive) {
-      setPageActive(pageActive + 1);
+      setPageActive(newPageActive);
+      loadProducts(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationEnd !== paginationCount
+      ) {
+        setPaginationEnd(paginationEnd + 1);
+        setPaginationStart(paginationStart + 1);
+      }
     }
   };
 
   const handlePrevPagination = oEvent => {
+    var newPageActive = pageActive - 1;
+
     if (pageActive > 1) {
-      setPageActive(pageActive - 1);
+      setPageActive(newPageActive);
+      loadProducts(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationStart !== 1 &&
+        pageActive <= paginationCount - 4
+      ) {
+        setPaginationEnd(paginationEnd - 1);
+        setPaginationStart(paginationStart - 1);
+      }
     }
   };
 
-  useEffect(() => {
-    // init();
-    loadCategories();
-    loadProducts(10, 0, "asc", "_id");
-    loadProductCount();
-  }, []);
+  const resetPagination = () => {
+    setPageActive(1);
+    setPaginationStart(1);
+    setPaginationEnd(10);
+    setPaginationCount(0);
+  };
 
   const showProducts = () => {
     return (
@@ -132,6 +190,7 @@ const Products = () => {
                   className="btn btn-primary dropdown-toggle mr-2"
                   onChange={handleShowChange}
                 >
+                  <option value="5"> Show 5 per page</option>
                   <option value="10"> Show 10 per page</option>
                   <option value="25"> Show 25 per page</option>
                   <option value="50"> Show 50 per page</option>
@@ -193,18 +252,20 @@ const Products = () => {
                         Previous
                       </button>
                     </li>
-                    {[...Array(paginationCount)].map((e, i) => (
-                      <li
-                        className={
-                          i + 1 === pageActive
-                            ? "page-item active"
-                            : "page-item"
-                        }
-                        key={i}
-                      >
-                        <a className="page-link">{i + 1}</a>
-                      </li>
-                    ))}
+                    {[...Array(paginationEnd - paginationStart + 1)].map(
+                      (e, i) => (
+                        <li
+                          className={
+                            i + paginationStart === pageActive
+                              ? "page-item active"
+                              : "page-item"
+                          }
+                          key={i}
+                        >
+                          <a className="page-link">{i + paginationStart}</a>
+                        </li>
+                      )
+                    )}
                     <li className="page-item">
                       <button
                         className="page-link"
