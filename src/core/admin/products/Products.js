@@ -16,6 +16,7 @@ const Products = () => {
   const [paginationStart, setPaginationStart] = useState(1);
   const [paginationEnd, setPaginationEnd] = useState(10);
   const [pageActive, setPageActive] = useState(1);
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     loadCategories();
@@ -119,11 +120,43 @@ const Products = () => {
     }
   };
 
+  const handleSelectToggle = oEvent => {
+    var productId = oEvent.target.value;
+    if (oEvent.target.checked) {
+      selectedProducts.push(productId);
+      setSelectedProducts(selectedProducts);
+      return;
+    }
+    var iIndex = selectedProducts.indexOf(productId);
+    selectedProducts.splice(iIndex, 1);
+    setSelectedProducts(selectedProducts);
+  };
+
+  const handleDelete = () => {
+    if (selectedProducts.length === 0) {
+      alert("No selected products!");
+      return;
+    }
+  };
+
+  const toggleSelectAll = bChecked => {
+    var eProductCheckbox = document.getElementsByName("productCheckbox");
+    var aTemp = [];
+
+    for (var iCount = 0; iCount < eProductCheckbox.length; iCount++) {
+      eProductCheckbox[iCount].checked = bChecked;
+      bChecked && iCount !== 0 && aTemp.push(eProductCheckbox[iCount].value);
+    }
+
+    setSelectedProducts(aTemp);
+  };
+
   const resetPagination = () => {
     setPageActive(1);
     setPaginationStart(1);
     setPaginationEnd(10);
     setPaginationCount(0);
+    toggleSelectAll(false);
   };
 
   const showProducts = () => {
@@ -195,7 +228,7 @@ const Products = () => {
                   <option value="25"> Show 25 per page</option>
                   <option value="50"> Show 50 per page</option>
                 </select>
-                <button className="btn btn-danger">
+                <button className="btn btn-danger" onClick={handleDelete}>
                   <i className="fa fa-trash" /> Delete
                 </button>
               </div>
@@ -203,7 +236,15 @@ const Products = () => {
                 <thead>
                   <tr>
                     <th scope="col" style={{ width: "3%" }}>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        name="productCheckbox"
+                        onChange={oEvent =>
+                          oEvent.target.checked
+                            ? toggleSelectAll(true)
+                            : toggleSelectAll(false)
+                        }
+                      />
                     </th>
                     <th scope="col" style={{ width: "10%" }}>
                       Thumbnail
@@ -220,7 +261,12 @@ const Products = () => {
                     products.map((oProduct, iIndex) => (
                       <tr key={iIndex}>
                         <th scope="row">
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            value={oProduct._id}
+                            name="productCheckbox"
+                            onChange={handleSelectToggle}
+                          />
                         </th>
                         <td>
                           <img
