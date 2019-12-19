@@ -28,7 +28,7 @@ const OrderDetails = () => {
                         Payment = 0,
                         Processing = 33,
                         Shipped = 63,
-                        Delivered = 100
+                        Delivered = 100.
                          */}
                         <ProgressBar variant="warning" now={63} />
                         <Row>
