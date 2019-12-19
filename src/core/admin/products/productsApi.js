@@ -64,6 +64,20 @@ export const updateProduct = (sId, sToken, oProduct, sProductId) => {
     .catch(err => console.log(err));
 };
 
+export const deleteProduct = (sId, sProductId, sToken) => {
+  return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    }
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
 export const getProductCount = () => {
   return fetch(`${API_URL}/products/count`, {
     method: "GET",

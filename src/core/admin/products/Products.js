@@ -4,7 +4,9 @@ import DashboardLayout from "../DashboardLayout";
 import { getAllProducts, getProductCount } from "./productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
 import oMoment from "moment";
+import { deleteProduct } from "./productsApi";
 import { IMAGE_API } from "../../../config";
+import { isAuthenticated } from "../../../auth/authUtil";
 import { shallowEqual } from "@babel/types";
 
 const Products = () => {
@@ -17,6 +19,7 @@ const Products = () => {
   const [paginationEnd, setPaginationEnd] = useState(10);
   const [pageActive, setPageActive] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const { sToken, user } = isAuthenticated();
 
   useEffect(() => {
     loadCategories();
@@ -137,6 +140,32 @@ const Products = () => {
       alert("No selected products!");
       return;
     }
+    startDeleteProducts();
+  };
+
+  const startDeleteProducts = () => {
+    deleteProducts(selectedProducts[0]);
+  };
+
+  const checkDelete = () => {
+    selectedProducts.splice(0, 1);
+    if (selectedProducts.length !== 0) {
+      setTimeout(function() {
+        startDeleteProducts();
+      }, 100);
+    } else {
+      alert("Finished Deleted Product(s)!");
+      window.location.reload();
+    }
+  };
+
+  const deleteProducts = iProductNo => {
+    deleteProduct(user._id, iProductNo, sToken).then(oData => {
+      if (oData.error) {
+      } else {
+        checkDelete();
+      }
+    });
   };
 
   const toggleSelectAll = bChecked => {
