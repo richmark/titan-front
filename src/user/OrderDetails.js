@@ -24,7 +24,35 @@ const OrderDetails = () => {
                     </Row>
                     <hr/>
                     <Container className="p-5">
-                        <ProgressBar variant="warning" now={80} />
+                        {/* 
+                        Payment = 0,
+                        Processing = 33,
+                        Shipped = 63,
+                        Delivered = 100
+                         */}
+                        <ProgressBar variant="warning" now={63} />
+                        <Row>
+                            <Col>
+                                <Container className="m-2">
+                                    <strong className="float-left">Payment</strong>
+                                </Container>
+                            </Col>
+                            <Col>
+                                <Container className="m-2">
+                                    <strong>Processing</strong>
+                                </Container>
+                            </Col>
+                            <Col>
+                                <Container className="m-2">
+                                    <strong className="ml-5">Shipped</strong>
+                                </Container>
+                            </Col>
+                            <Col>
+                                <Container className="m-2">
+                                    <strong className="float-right">Delivered</strong>
+                                </Container>
+                            </Col>
+                        </Row>
                     </Container>
                     <Container className="mt-2 mb-4">
                         <Table borderless responsive="sm" className="text-center">
