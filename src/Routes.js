@@ -14,6 +14,7 @@ import Orders from "./core/admin/orders/Orders";
 import Products from "./core/admin/products/Products";
 import Reviews from "./core/admin/reviews/Reviews";
 import Shippers from "./core/admin/shippers/Shippers";
+import UpdateShipper from "./core/admin/shippers/UpdateShipper";
 import Wholesalers from "./core/admin/wholesalers/Wholesalers";
 import VerifyEmail from "./user/VerifyEmail";
 import Profile from "./user/Profile";
@@ -54,6 +55,7 @@ const Routes = () => {
       {/* Menu Tabs */}
       <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
       <AdminRoute path="/admin/shippers" exact component={Shippers} />
+      <AdminRoute path="/admin/shippers/:shipperId" exact component={UpdateShipper} />
       <AdminRoute path="/admin/bundles" exact component={Bundles} />
       <AdminRoute path="/admin/coupons" exact component={Coupons} />
       <AdminRoute path="/admin/orders" exact component={Orders} />
