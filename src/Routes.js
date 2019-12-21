@@ -11,6 +11,7 @@ import PreRegister from "./user/PreRegister";
 import Bundles from "./core/admin/bundles/Bundles";
 import Coupons from "./core/admin/coupons/Coupons";
 import Orders from "./core/admin/orders/Orders";
+import UpdateOrders from "./core/admin/orders/UpdateOrders";
 import Products from "./core/admin/products/Products";
 import Reviews from "./core/admin/reviews/Reviews";
 import Shippers from "./core/admin/shippers/Shippers";
@@ -61,6 +62,7 @@ const Routes = () => {
       <AdminRoute path="/admin/bundles" exact component={Bundles} />
       <AdminRoute path="/admin/coupons" exact component={Coupons} />
       <AdminRoute path="/admin/orders" exact component={Orders} />
+      <AdminRoute path="/admin/orders/:orderId" exact component={UpdateOrders} />
       <AdminRoute path="/admin/products" exact component={Products} />
       <AdminRoute path="/admin/categories" exact component={Categories} />
       <AdminRoute path="/admin/categories/update/:categoryId" exact component={UpdateCategory} />
