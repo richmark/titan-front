@@ -17,6 +17,7 @@ const HomePage = () => {
 
     const init = () => {
         getAllCategories().then(oData => {
+            console.log(oData);
             if (oData.error) {
                 console.log(oData.error)
             } else {

@@ -1,7 +1,29 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import DashboardLayout from '../DashboardLayout';
+import { Link } from 'react-router-dom';
+import oMoment from 'moment';
+import { isAuthenticated } from "../../../auth/authUtil";
+import { getOrders } from './ordersApi';
 
 const Orders = () => {
+
+    const { sToken, user } = isAuthenticated();
+    const [orders, setOrders] = useState(false);
+
+    const loadAllOrders = () => {
+        getOrders(user._id, sToken).then(oOrders => {
+            if (oOrders.error) {
+                console.log(oOrders.error);
+            } else {
+                setOrders(oOrders.data);
+            }
+        });
+    };
+
+    useEffect(() => {
+        loadAllOrders();
+    }, []);
+
     const showOrders = () => {
         return (
             <Fragment>
@@ -57,24 +79,18 @@ const Orders = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1087334</td>
-                                        <td>Makr</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1024034</td>
-                                        <td>Joven</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1023124</td>
-                                        <td>John</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                    </tr>
+                                    {orders && orders.map((oOrders, iIndex) => (
+                                        <tr key={iIndex}>
+                                            <td>
+                                                <Link to={`/admin/orders/${oOrders._id}`}>
+                                                    {oOrders._id}
+                                                </Link>
+                                            </td>
+                                            <td>{oOrders.user.email}</td>
+                                            <td>{oOrders.status}</td>
+                                            <td>{oMoment(oOrders.createdAt).format('LLL')}</td>
+                                        </tr>    
+                                    ))}
                                 </tbody>
                             </table>
                             <div className=' text-center'>
