@@ -129,7 +129,7 @@ const Layout = ({ run=undefined, children }) => {
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-shopping-cart" style={{color: '#ffc044'}}></i> Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={`/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
                 </Nav.Item>
             </Nav>
         );
