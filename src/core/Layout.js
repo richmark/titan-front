@@ -63,27 +63,26 @@ const Layout = ({ run=undefined, children }) => {
     const showNavBarSecond = () => {
         return (
             <Navbar expand="lg" style={{borderBottom: '8px solid #ffc044', backgroundColor: 'black'}}>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav" className="mt-2 mb-2">
-                <Col xs={4} className="text-white text-right">
+            <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
+                <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
                     <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
                 </Col>
-                <Col xs={5}>
+                <Col xs={5} md={5} xl={5} sm={5}>
                     <Row>
-                        <Col className="col-2" style={{paddingRight: '0px', marginLeft: '5rem!important'}}>
+                        <Col  xs={2} md={2} xl={2} sm={4} style={{paddingRight: '0px', marginLeft: '5rem!important'}}>
                             <Dropdown>
                                 <Dropdown.Toggle id="dropdown-basic" className="rounded-pill float-left" style={{backgroundColor: 'white', border: '1px solid #ced4da', color: 'black'}}>
                                     All Categories
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
+                                <Dropdown.Menu style={{marginTop: '42px'}}>
                                     <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                                     <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                                     <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </Col>
-                        <Col xs={9}>
+                        <Col xs={9} md={9} xl={9} sm={4}>
                             <InputGroup className="ml-4">
                                 <FormControl
                                 placeholder="Search here"
@@ -98,7 +97,7 @@ const Layout = ({ run=undefined, children }) => {
                         </Col>
                     </Row>
                 </Col>
-                <Col xs={3}>
+                <Col xs={3} md={3} xl={3} sm={3}>
                     <Container>
                         <a href="/checkout" style={{textDecoration: 'none'}}>
                             <i className="fas fa-shopping-cart mt-3 ml-3" style={{color: 'white'}}></i>{showBadge()}
@@ -106,7 +105,7 @@ const Layout = ({ run=undefined, children }) => {
                         </a>
                     </Container>
                 </Col>
-            </Navbar.Collapse>
+            </Navbar>
             </Navbar>
         );
     };
@@ -129,20 +128,64 @@ const Layout = ({ run=undefined, children }) => {
 
     const showFooter = () => {
         return (
-            <footer className='text-center mt-5 mb-5'>
-                Titan Super Tools 2020 - titansupertools.com
+            <footer className='text-center p-5 text-white mt-5' style={{backgroundColor: 'black'}}>
+                <Container>
+                    <Row className="border-bottom pb-5 mb-1">
+                        <Col xs={4} md={4} xl={4} sm={4} className="text-left">
+                            <p style={{color: '#ffc044'}}>NAVIGATION</p>
+                            <a href="/" className="text-white">HOME</a><br></br>
+                            <a href="/" className="text-white">ABOUT US</a><br></br>
+                            <a href="/" className="text-white">SHOP</a><br></br>
+                            <a href="/" className="text-white">PRODUCTS</a><br></br>
+                            <a href="/" className="text-white">CONTACT US</a><br></br>            
+                        </Col>
+                        <Col className="text-left">
+                            <p style={{color: '#ffc044'}}>CATEGORIES</p>
+                            <a href="/" className="text-white">AUTOMOTIVE</a><br></br>
+                            <a href="/" className="text-white">POWER TOOLS</a><br></br>
+                            <a href="/" className="text-white">PIPE TOOLS</a><br></br>
+                            <a href="/" className="text-white">MATERIAL HANDLING</a><br></br>
+                            <a href="/" className="text-white">PIPE MACHINE</a><br></br> 
+                        </Col>
+                        <Col className="text-left" style={{paddingTop: '2.5rem'}}>
+                            <a href="/" className="text-white">CONSTRUCTION MACHINE</a><br></br>
+                            <a href="/" className="text-white">HAND TOOLS</a><br></br>
+                            <a href="/" className="text-white">ACCESSORIES</a><br></br>
+                            <a href="/" className="text-white">WELDING MACINE</a><br></br>
+                        </Col>
+                        <Col xs={3} md={3} xl={3} sm={3} className="text-left">
+                            <p style={{color: '#ffc044'}}>ABOUT US</p>
+                            <p>
+                                Tital Supertools Hardware is a company that carries multipe brands fot the assortment of the clients to choose from at an affordable price
+                            </p>
+
+                            <p style={{color: '#ffc044'}}>STORE INFORMATION</p>
+                            <p>273 Rizal Avenue Extension, Caloocan City</p>
+                            <p><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> (02)285-7337 0916-2927228</p>
+                            <p><i className="fas fa-paper-plane" style={{color: '#ffc044'}}></i> sales.tsthardware@gmail.com</p>
+                        </Col>
+                    </Row>
+                    <div className="float-left">
+                        © 2019 Titan. All rights reserved
+                    </div>
+                    <div className="float-right">
+                    <a href="/" style={{color: '#ffc044'}}>follow us<i class="ml-2 fab fa-facebook-f"></i></a>
+                    </div>
+                </Container>
             </footer>
         );
     };
 
     return (
         <Fragment>
+            <div style={{minWidth: '1871px'}}>
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
             <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
             <div style={{ minHeight: '60vh' }}>{children}</div>
             {showFooter()}
+            </div>
         </Fragment>
     );
 };
