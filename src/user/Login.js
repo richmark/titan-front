@@ -131,7 +131,7 @@ const Login = () => {
         return (
             <Col sm={{ offset: iOffset}}>
                 <Row>
-                    <Button variant="primary" className="px-4" onClick={sendSubmit}>Login</Button>
+                    <Button variant="dark" style={{backgroundColor: 'black'}} className="px-4" onClick={sendSubmit}>Login</Button>
                     {ResendButton()}
                 </Row>
             </Col>
@@ -162,15 +162,15 @@ const Login = () => {
             <Container className="px-3 py-2">
                 <Row>
                     <Col sm={{span: 6, offset:3}}>
-                        <Card className="mx-4 pt-2 pb-4 mt-2">
-                            <Card.Title className="text-center p-3 mt-3" style={{fontSize : "27px"}}>LOGIN</Card.Title>
+                        <Card className="mx-4 pt-2 pb-4 mt-2" style={{backgroundColor: '#ffc044'}}>
+                            <Card.Title className="text-center p-3 mt-3" style={{fontSize : "27px"}}>LOG IN</Card.Title>
                             <Card.Body>
                                 {BasicFormInput('Email', 'text', 'formEmail', handleChange('email'), aFormLabel, iFormLength, danger_email)}
                                 {BasicFormInput('Password', 'password', 'formPassword', handleChange('password'), aFormLabel, iFormLength, danger_password)}
                                 {showErrorMessage()}
                                 <Row>
                                     <Col sm={{span: 6, offset:3}}>
-                                        <Link to="/forgotPassword">
+                                        <Link style={{color: 'black'}} to="/forgotPassword">
                                             Forgot password
                                         </Link>
                                     </Col>
@@ -180,7 +180,7 @@ const Login = () => {
                                 </Row>
                                 <Row>
                                     <Col sm={{span: 7, offset:3}}>
-                                        <Link to="/signup">
+                                        <Link style={{color: 'black'}} to="/signup">
                                             Not yet a member? Register here
                                         </Link>
                                     </Col>

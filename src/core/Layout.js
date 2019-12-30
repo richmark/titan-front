@@ -191,7 +191,6 @@ const Layout = ({ run=undefined, children }) => {
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
-            <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
             <div style={{ minHeight: '60vh' }}>{children}</div>
             {showFooter()}
             </div>
