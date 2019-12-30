@@ -22,12 +22,21 @@ const Layout = ({ run=undefined, children }) => {
         if (user) {
             return (
                 <Fragment>
-                    <Nav.Item>
-                        <Nav.Link className="text-white" href={`/profile/${user._id}`}>My Profile</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link className="text-white" href="/signout">Logout</Nav.Link>
-                    </Nav.Item>
+                    <Col className="mt-2 mb-2 text-right">
+                        <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
+                    </Col>
+                    <Col xs={1} className="mt-2 mb-2">
+                        <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
+                    </Col>
+                    <Col className="mt-2 mb-2 text-left">
+                        <span className="text-white"><i className="fas fa-map-marker-alt" style={{color: '#ffc044'}}></i> 8th ave Caloocan City</span>
+                    </Col>
+                    <Col className="mt-2 mb-2 text-right">
+                        <a href={`/profile/${user._id}`} className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> My Profile</a>
+                    </Col>
+                    <Col className="mt-2 mb-2">
+                        <a href="/signout" className="text-white"><i className="fas fa-sign-out-alt" style={{color: '#ffc044'}}></i> Logout</a>
+                    </Col>
                 </Fragment>
             );  
         }
