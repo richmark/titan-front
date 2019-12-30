@@ -51,7 +51,7 @@ const Routes = () => {
       <Route path="/checkout" exact component={Checkout} />
       <Route path="/forbidden" exact component={Forbidden} />
       <Route path="/categories/:categoryId" exact component={ProductsByCategory} />
-      <Route path="/order/detail" exact component={OrderDetails} />
+      <Route path="/order/detail/:orderId" exact component={OrderDetails} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
