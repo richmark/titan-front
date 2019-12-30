@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth/authUtil';
 import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-bootstrap';
@@ -6,12 +7,28 @@ import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import { sendUpdateUserData, updateUserData, sendUpdateUserPassword } from '../core/client/clientApi';
+import { getOrderByUser } from '../core/admin/orders/ordersApi';
 
 const Profile = ({match}) => {
 
-    const { user, sToken } = isAuthenticated();
+    const { user,sToken } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
+    const [aOrder, setOrder] = useState(false);
+
+    useEffect(() => {
+        init();
+    }, []);
+
+    const init = () => {
+        getOrderByUser(user._id, sToken).then((oData) => {
+            if (oData.error) {
+                console.log(oData.error);
+                return;
+            }
+            setOrder(oData.data);
+        });
+    }
     
     const showProfileCard = () => {
         return (
@@ -67,42 +84,48 @@ const Profile = ({match}) => {
         );
     };
 
-    const showOrderCard = () => {
+    const showOrderTable = () => {
         return (
+            <Fragment>
+                <Table responsive>
+                    <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Date</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {aOrder.map((oOrder, iIndex) => {
+                            return (
+                                <Fragment key={iIndex}>
+                                    <tr>
+                                        <td>{oOrder._id}</td>
+                                        <td>{oOrder.createdAt}</td>
+                                        <td>₱ {oOrder.amount}</td>
+                                        <td>
+                                            <Link to={`/order/detail/${oOrder._id}`}>
+                                                Manage
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                </Fragment>
+                            );
+                        })}
+                    </tbody>
+                </Table>
+            </Fragment>
+        );
+    }
+
+    const showOrderCard = () => {
+        return aOrder && (
             <Card className="mt-3 px-3 py-2" style={{ fontSize: "16px"}}>
                 <Card.Body>
                     <Row>My Order</Row>
                     <Row className="mt-3">
-                        <Table responsive>
-                            <thead>
-                                <tr>
-                                    <th>Order No</th>
-                                    <th>Date</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Manage</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Manage</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Manage</td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                        {showOrderTable()}
                     </Row>
                 </Card.Body>
             </Card>

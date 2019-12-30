@@ -129,7 +129,7 @@ const Layout = ({ run=undefined, children }) => {
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-shopping-cart" style={{color: '#ffc044'}}></i> Shop</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="#"><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={`/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
                 </Nav.Item>
             </Nav>
         );
@@ -178,7 +178,7 @@ const Layout = ({ run=undefined, children }) => {
                         © 2019 Titan. All rights reserved
                     </div>
                     <div className="float-right">
-                    <a href="/" style={{color: '#ffc044'}}>follow us<i class="ml-2 fab fa-facebook-f"></i></a>
+                    <a href="/" style={{color: '#ffc044'}}>follow us<i className="ml-2 fab fa-facebook-f"></i></a>
                     </div>
                 </Container>
             </footer>
