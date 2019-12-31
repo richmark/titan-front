@@ -1,7 +1,59 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import DashboardLayout from '../DashboardLayout';
+import { getAllReviews, updateReview } from './reviewsApi';
+import { isAuthenticated } from '../../../auth/authUtil';
+import oMoment from 'moment';
+import _ from 'lodash';
 
 const Reviews = () => {
+
+    const {sToken, user} = isAuthenticated();
+    const [reviews, setReviews] = useState(false);
+
+    const loadReviews = () => {
+        getAllReviews(user._id, sToken).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setReviews(oData.data);
+            }
+        });
+    };
+
+    const getRating = (iRate) => {
+        const iCount = 5 - iRate;
+        let sCheckedStar = [];
+        _.times(iRate, (iIndex) => {
+            sCheckedStar.push(<span key={iIndex} className="fa fa-star checked" style={{ color: "orange" }} />);
+        });
+        
+        let sStar = [];
+        _.times(iCount, (iIndex) => {
+            sStar.push(<span key={iIndex} className="fa fa-star" />);
+        });
+
+        return (
+            <Fragment>
+                {sCheckedStar}
+                {sStar}
+            </Fragment>
+        );
+    };
+    
+    const submitReview = sId => oEvent => {
+        updateReview(user._id, sToken, { visibility: oEvent.target.checked }, sId).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                alert('Updated Successfully');
+            }
+        });
+    };
+
+    useEffect(() => {
+        loadReviews();
+    }, []);
+
     const showReviews = () => {
         return (
             <Fragment>
@@ -22,102 +74,31 @@ const Reviews = () => {
                         </div>
                         </div>
                         <div className="row">
-                        <div className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                            <div className="text-right mt-3 w-25 float-right">
-                            08/12/2019 3:00PM
-                            </div>
-                            <div className="text-left mt-3">
-                            John Doe
-                            </div>
-                            <div className="border rounded p-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna
-                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </div>
-                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star" />
-                            <span className="fa fa-star" />
-                            </div>
-                            <div id="rating" className="text-left mt-3">
-                            <input type="checkbox"/>Hide
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                            <div className="text-right mt-3 w-25 float-right">
-                            08/12/2019 3:00PM
-                            </div>
-                            <div className="text-left mt-3">
-                            John Doe
-                            </div>
-                            <div className="border rounded p-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna
-                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </div>
-                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star" />
-                            <span className="fa fa-star" />
-                            </div>
-                            <div id="rating" className="text-left mt-3">
-                            <input type="checkbox" name id />Hide
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                            <div className="text-right mt-3 w-25 float-right">
-                            08/12/2019 3:00PM
-                            </div>
-                            <div className="text-left mt-3">
-                            John Doe
-                            </div>
-                            <div className="border rounded p-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna
-                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </div>
-                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star" />
-                            <span className="fa fa-star" />
-                            </div>
-                            <div id="rating" className="text-left mt-3">
-                            <input type="checkbox" name id />Hide
-                            </div>
-                        </div>
-                        <div className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                            <div className="text-right mt-3 w-25 float-right">
-                            08/12/2019 3:00PM
-                            </div>
-                            <div className="text-left mt-3">
-                            John Doe
-                            </div>
-                            <div className="border rounded p-3">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna
-                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </div>
-                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star checked" />
-                            <span className="fa fa-star" />
-                            <span className="fa fa-star" />
-                            </div>
-                            <div id="rating" className="text-left mt-3">
-                            <input type="checkbox" name id />Hide
-                            </div>
-                        </div>
+                            {
+                                reviews && reviews.map((oData, iIndex) => {
+                                    return (
+                                        <div key={iIndex} className="col-sm-12 col-md-12 col-xl-12 mb-4">
+                                            <div className="text-right mt-3 w-25 float-right">
+                                            {oMoment(oData.createdAt).format('LLL')}
+                                            </div>
+                                            <div className="text-left mt-3">
+                                            {oData.user.email}
+                                            </div>
+                                            <div className="border rounded p-3">
+                                            {oData.comment}
+                                            </div>
+                                            <div id="rating" className="text-right mt-3 w-25 float-right">
+                                                {
+                                                    getRating(oData.rate)
+                                                }
+                                            </div>
+                                            <div id="rating" className="text-left mt-3">
+                                                <input type="checkbox" onChange={submitReview(oData._id)} defaultChecked={oData.visibility} />Visible
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
                         </div>
                         <div className=" text-center">
                         <nav aria-label="Page navigation example text-center">
@@ -137,7 +118,7 @@ const Reviews = () => {
         )
     };
     return (
-        <DashboardLayout name='Review Management' detail='All Reviews'>
+        <DashboardLayout name='Review Management' detail='All Reviews / Verify Reviews'>
             {showReviews()}
         </DashboardLayout>
     );
