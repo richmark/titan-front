@@ -29,6 +29,7 @@ import Checkout from "./user/Checkout";
 import Forbidden from "./user/Forbidden";
 import ProductsByCategory from './user/format/category/ProductsByCategory';
 import OrderDetails from './user/OrderDetails';
+import ReviewProduct from './user/ReviewProduct';
 
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
@@ -52,6 +53,7 @@ const Routes = () => {
       <Route path="/forbidden" exact component={Forbidden} />
       <Route path="/categories/:categoryId" exact component={ProductsByCategory} />
       <Route path="/order/detail/:orderId" exact component={OrderDetails} />
+      <Route path="/product/review" exact component={ReviewProduct} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
