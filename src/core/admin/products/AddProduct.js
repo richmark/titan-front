@@ -4,6 +4,7 @@ import { isAuthenticated } from "../../../auth/authUtil";
 import { getAllCategories } from "../../admin/categories/categoriesApi";
 import { createProduct } from "./productsApi";
 import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
+import { Redirect } from "react-router-dom";
 
 const AddProduct = () => {
   const { sToken, user } = isAuthenticated();
@@ -42,6 +43,7 @@ const AddProduct = () => {
     formData
   } = values;
 
+  const [bRedirect, setRedirect] = useState(false);
   const [sMessage, setMessage] = useState([]);
 
   const loadCategories = () => {
@@ -57,6 +59,12 @@ const AddProduct = () => {
         });
       }
     });
+  };
+
+  const redirectForbidden = () => {
+    if (bRedirect === true) {
+      return <Redirect to="/admin/products" />;
+    }
   };
 
   const handleChange = name => oEvent => {
@@ -157,7 +165,7 @@ const AddProduct = () => {
           alert("Product created successfully");
         }
       });
-      return;
+      setRedirect(true);
     }
     setValues({ ...values, error: true });
     setMessage(setErrorMessage(oValidator.getErrorMessages()));
@@ -421,6 +429,7 @@ const AddProduct = () => {
       {showAddProductForm()}
       {showAddProductDetail()}
       {showSave()}
+      {redirectForbidden()}
     </DashboardLayout>
   );
 };
