@@ -4,25 +4,27 @@ import DashboardLayout from "../DashboardLayout";
 import { getAllProducts, getProductCount } from "./productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
 import oMoment from "moment";
+import { deleteProduct } from "./productsApi";
 import { IMAGE_API } from "../../../config";
+import { isAuthenticated } from "../../../auth/authUtil";
 import { shallowEqual } from "@babel/types";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [count, setCount] = useState(0);
+  const [showCount, setShowCount] = useState(5);
   const [paginationCount, setPaginationCount] = useState(0);
+  const [paginationStart, setPaginationStart] = useState(1);
+  const [paginationEnd, setPaginationEnd] = useState(10);
   const [pageActive, setPageActive] = useState(1);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const { sToken, user } = isAuthenticated();
 
-  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
-    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
-      if (oProducts.error) {
-        console.log(oProducts.error);
-      } else {
-        setProducts(oProducts.data);
-      }
-    });
-  };
+  useEffect(() => {
+    loadCategories();
+    loadProductCount();
+  }, []);
 
   const loadCategories = () => {
     getAllCategories().then(oCategories => {
@@ -34,39 +36,157 @@ const Products = () => {
     });
   };
 
+  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
+    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
+      if (oProducts.error) {
+        console.log(oProducts.error);
+      } else {
+        setProducts(oProducts.data);
+      }
+    });
+  };
+
   const loadProductCount = () => {
     getProductCount().then(oData => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setCount(oData.data.count);
-        setPaginationCount(Math.ceil(oData.data.count / 10));
+        var iCount = oData.data.count;
+        setCount(iCount);
+        initializePagination(iCount, 5);
       }
     });
   };
 
+  const initializePagination = (iCount, iShowCount) => {
+    var iPaginationCount = Math.ceil(iCount / iShowCount);
+    resetPagination();
+    setPaginationCount(iPaginationCount);
+    iPaginationCount > 9
+      ? setPaginationEnd(9)
+      : setPaginationEnd(iPaginationCount);
+
+    loadProducts(
+      iShowCount,
+      parseInt(iShowCount * (pageActive - 1), "asc", "_id")
+    );
+  };
+
   const handleShowChange = oEvent => {
-    setPaginationCount(Math.ceil(count / oEvent.target.value));
+    var newShowCount = oEvent.target.value;
+    setShowCount(newShowCount);
+    initializePagination(count, newShowCount);
   };
 
   const handleNextPagination = oEvent => {
+    var newPageActive = pageActive + 1;
+
     if (paginationCount > pageActive) {
-      setPageActive(pageActive + 1);
+      setPageActive(newPageActive);
+      loadProducts(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationEnd !== paginationCount
+      ) {
+        setPaginationEnd(paginationEnd + 1);
+        setPaginationStart(paginationStart + 1);
+      }
     }
   };
 
   const handlePrevPagination = oEvent => {
+    var newPageActive = pageActive - 1;
+
     if (pageActive > 1) {
-      setPageActive(pageActive - 1);
+      setPageActive(newPageActive);
+      loadProducts(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationStart !== 1 &&
+        pageActive <= paginationCount - 4
+      ) {
+        setPaginationEnd(paginationEnd - 1);
+        setPaginationStart(paginationStart - 1);
+      }
     }
   };
 
-  useEffect(() => {
-    // init();
-    loadCategories();
-    loadProducts(10, 0, "asc", "_id");
-    loadProductCount();
-  }, []);
+  const handleSelectToggle = oEvent => {
+    var productId = oEvent.target.value;
+    if (oEvent.target.checked) {
+      selectedProducts.push(productId);
+      setSelectedProducts(selectedProducts);
+      return;
+    }
+    var iIndex = selectedProducts.indexOf(productId);
+    selectedProducts.splice(iIndex, 1);
+    setSelectedProducts(selectedProducts);
+  };
+
+  const handleDelete = () => {
+    if (selectedProducts.length === 0) {
+      alert("No selected products!");
+      return;
+    }
+    startDeleteProducts();
+  };
+
+  const startDeleteProducts = () => {
+    deleteProducts(selectedProducts[0]);
+  };
+
+  const checkDelete = () => {
+    selectedProducts.splice(0, 1);
+    if (selectedProducts.length !== 0) {
+      setTimeout(function() {
+        startDeleteProducts();
+      }, 100);
+    } else {
+      alert("Finished Deleted Product(s)!");
+      window.location.reload();
+    }
+  };
+
+  const deleteProducts = iProductNo => {
+    deleteProduct(user._id, iProductNo, sToken).then(oData => {
+      if (oData.error) {
+      } else {
+        checkDelete();
+      }
+    });
+  };
+
+  const toggleSelectAll = bChecked => {
+    var eProductCheckbox = document.getElementsByName("productCheckbox");
+    var aTemp = [];
+
+    for (var iCount = 0; iCount < eProductCheckbox.length; iCount++) {
+      eProductCheckbox[iCount].checked = bChecked;
+      bChecked && iCount !== 0 && aTemp.push(eProductCheckbox[iCount].value);
+    }
+
+    setSelectedProducts(aTemp);
+  };
+
+  const resetPagination = () => {
+    setPageActive(1);
+    setPaginationStart(1);
+    setPaginationEnd(10);
+    setPaginationCount(0);
+    toggleSelectAll(false);
+  };
 
   const showProducts = () => {
     return (
@@ -132,11 +252,12 @@ const Products = () => {
                   className="btn btn-primary dropdown-toggle mr-2"
                   onChange={handleShowChange}
                 >
+                  <option value="5"> Show 5 per page</option>
                   <option value="10"> Show 10 per page</option>
                   <option value="25"> Show 25 per page</option>
                   <option value="50"> Show 50 per page</option>
                 </select>
-                <button className="btn btn-danger">
+                <button className="btn btn-danger" onClick={handleDelete}>
                   <i className="fa fa-trash" /> Delete
                 </button>
               </div>
@@ -144,7 +265,15 @@ const Products = () => {
                 <thead>
                   <tr>
                     <th scope="col" style={{ width: "3%" }}>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        name="productCheckbox"
+                        onChange={oEvent =>
+                          oEvent.target.checked
+                            ? toggleSelectAll(true)
+                            : toggleSelectAll(false)
+                        }
+                      />
                     </th>
                     <th scope="col" style={{ width: "10%" }}>
                       Thumbnail
@@ -161,7 +290,12 @@ const Products = () => {
                     products.map((oProduct, iIndex) => (
                       <tr key={iIndex}>
                         <th scope="row">
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            value={oProduct._id}
+                            name="productCheckbox"
+                            onChange={handleSelectToggle}
+                          />
                         </th>
                         <td>
                           <img
@@ -193,18 +327,20 @@ const Products = () => {
                         Previous
                       </button>
                     </li>
-                    {[...Array(paginationCount)].map((e, i) => (
-                      <li
-                        className={
-                          i + 1 === pageActive
-                            ? "page-item active"
-                            : "page-item"
-                        }
-                        key={i}
-                      >
-                        <a className="page-link">{i + 1}</a>
-                      </li>
-                    ))}
+                    {[...Array(paginationEnd - paginationStart + 1)].map(
+                      (e, i) => (
+                        <li
+                          className={
+                            i + paginationStart === pageActive
+                              ? "page-item active"
+                              : "page-item"
+                          }
+                          key={i}
+                        >
+                          <a className="page-link">{i + paginationStart}</a>
+                        </li>
+                      )
+                    )}
                     <li className="page-item">
                       <button
                         className="page-link"
