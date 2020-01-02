@@ -17,6 +17,7 @@ const HomePage = () => {
 
     const init = () => {
         getAllCategories().then(oData => {
+            console.log(oData);
             if (oData.error) {
                 console.log(oData.error)
             } else {
@@ -47,6 +48,7 @@ const HomePage = () => {
     
 	return (
         <Layout run={iRun}>
+            <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
             {ProductCard(aProducts, setRun)}

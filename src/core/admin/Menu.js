@@ -86,7 +86,7 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <a className="collapse-item">All Order</a>
+              <Link to='/admin/orders' className="collapse-item">All Order</Link>
               <a className="collapse-item">Process Order</a>
             </div>
           </div>
@@ -133,7 +133,7 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <a className="collapse-item">All Products</a>
+              <Link to='/admin/reviews' className="collapse-item">All Reviews</Link>
             </div>
           </div>
         </li>
@@ -154,7 +154,9 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <a className="collapse-item">All Shipper</a>
+              <Link to="/admin/shippers" className="collapse-item">
+                All Shipper
+              </Link>
             </div>
           </div>
         </li>
