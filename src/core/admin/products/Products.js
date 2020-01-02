@@ -140,7 +140,9 @@ const Products = () => {
       alert("No selected products!");
       return;
     }
-    startDeleteProducts();
+    if (window.confirm("Are you sure you want to delete these product(s)?")) {
+      startDeleteProducts();
+    }
   };
 
   const startDeleteProducts = () => {
