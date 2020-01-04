@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import Layout from '../core/Layout';
+import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
 
 const PreRegister = () => {
     
@@ -8,59 +9,46 @@ const PreRegister = () => {
         return (
             <div className='container mt-5 text-center'>
                 <div className='row'>
-                    <div className='col-sm border-right'>
-                        <Link to="/signup/personal">
-                            <button className='btn btn-success mb-5'>
-                                Personal
-                            </button>
-                        </Link>
+                    <div className='col-sm border-right rounded mr-2' style={{backgroundColor: '#ffc044'}}>
+                        <h2 className="mt-3">Personal</h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
+                            For personal use (single orders).
                         </p>
+                        <Link to="/signup/personal" style={{ textDecoration: 'none'}}>
+                            <Button variant="primary" className="mb-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black', marginTop: '57%'}} block>CLICK HERE</Button>
+                        </Link>
                     </div>
-                    <div className='col-sm border-right'>
-                        <Link to="/signup/corporate">
-                            <button className='btn btn-success mb-5'>
-                                Corporate
-                            </button>
-                        </Link>
+                    <div className='col-sm border-right rounded mr-2' style={{backgroundColor: '#ffc044'}}>
+                        <h2 className="mt-3">Corporate</h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
+                            For corporations (bulk and single orders)
+
+                            Ready your requirements;
+                            <ol>
+                                <li>Sample</li>
+                                <li>Sample</li>
+                                <li>Sample</li>
+                            </ol>
                         </p>
+                        <Link to="/signup/corporate" style={{ textDecoration: 'none'}}>
+                            <Button variant="primary" className="mb-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black', marginTop: '30%'}} block>CLICK HERE</Button>
+                        </Link>
                     </div>
-                    <div className='col-sm'>
-                        <Link to="/signup/wholesaler">
-                            <button className='btn btn-success mb-5'>
-                                WholeSaler
-                            </button>
-                        </Link>
+                    <div className='col-sm rounded' style={{backgroundColor: '#ffc044'}}>
+                        <h2 className="mt-3">Whole Sale</h2>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt ut labore et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis
-                            nostrud exercitation ullamco laboris nisi ut aliquip
-                            ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore
-                            eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia
-                            deserunt mollit anim id est laborum.
+                            For Whole Sale account (whole sale and package orders)
+
+                            Ready your requirements;
+                            <ol>
+                                <li>Sample</li>
+                                <li>Sample</li>
+                                <li>Sample</li>
+                            </ol>
                         </p>
+                        <Link to="/signup/wholesaler" style={{ textDecoration: 'none'}}>
+                            <Button variant="primary" className="mb-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black', marginTop: '30%'}} block>CLICK HERE</Button>
+                        </Link>
                     </div>
                 </div>
             </div>
