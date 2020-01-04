@@ -175,7 +175,7 @@ const Layout = ({ run=undefined, children }) => {
                         </Col>
                     </Row>
                     <div className="float-left">
-                        © 2019 Titan. All rights reserved
+                        © 2020 Titan. All rights reserved
                     </div>
                     <div className="float-right">
                     <a href="/" style={{color: '#ffc044'}}>follow us<i className="ml-2 fab fa-facebook-f"></i></a>
