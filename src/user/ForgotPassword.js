@@ -46,7 +46,7 @@ const ForgotPassword = () => {
 	};
 
 	const showSuccessMessage = () => {
-		const sMessage = `A reset link has been sent to this email: ${success}`;
+		const sMessage = `A reset activation has been sent to your email: ${success}`;
 		return CardResponse(sMessage, 'Back to Login', '/login');
 	}
 
