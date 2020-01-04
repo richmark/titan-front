@@ -77,7 +77,6 @@ const ForgotPassword = () => {
 							{showErrorMessage()}
 							<Col sm={{span: 4, offset: 4}} className="p-2 mb-2">
 								<Button variant="primary" onClick={submitForm} className="mr-2  text-center" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>Send</Button>
-								{/* <Button variant="secondary" href="/login">Cancel</Button> */}
 							</Col>
 						</Form>
 					</Card>	
