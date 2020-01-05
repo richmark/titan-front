@@ -1,59 +1,60 @@
-import { API_URL } from '../../../config';
+import { API_URL } from "../../../config";
 
 export const getAllCategories = () => {
-    return fetch(`${API_URL}/category`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json'
-        }
+  return fetch(`${API_URL}/category`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  })
+    .then(response => {
+      console.log(response);
+      return response.json();
     })
-        .then(response => {
-            return response.json();
-        })
-        .catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
 
 export const createCategory = (sId, sToken, oCategory) => {
-    return fetch(`${API_URL}/category/create/${sId}`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${sToken}`
-        },
-        body: oCategory
-      })
-      .then(response => {
-        return response.json();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-}
+  return fetch(`${API_URL}/category/create/${sId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    },
+    body: oCategory
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
-export const getCategory = (sId) => {
+export const getCategory = sId => {
   return fetch(`${API_URL}/category/${sId}`, {
-      method: 'GET',
-      headers: {
-          Accept: 'application/json'
-      }
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
   })
-  .then(oResponse => {
+    .then(oResponse => {
       return oResponse.json();
-  })
-  .catch(oError => console.log(oError));
+    })
+    .catch(oError => console.log(oError));
 };
 
 export const updateCategory = (sId, sToken, oCategory, sCategoryId) => {
   return fetch(`${API_URL}/category/${sCategoryId}/${sId}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${sToken}`
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
     },
     body: oCategory
   })
-  .then(response => {
+    .then(response => {
       return response.json();
-  })
-  .catch(err => console.log(err));
-}
+    })
+    .catch(err => console.log(err));
+};

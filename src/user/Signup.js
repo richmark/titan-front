@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { sendSignup } from '../core/client/clientApi';
 import { Redirect, Link } from 'react-router-dom';
+import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
 
 const Signup = ({ match }) => {
     const [result, setResult] = useState(false);
@@ -144,12 +145,12 @@ const Signup = ({ match }) => {
 
     const showTitle = () => {
         const oTitle = {
-            'personal'  : 'Personal',
+            'personal'  : 'PERSONAL',
             'corporate' : 'Corporate',
-            'wholesaler': 'WholeSaler'
+            'wholesaler': 'Wholesale'
         };
         return (
-            <h3>{`REGISTER (${oTitle[match.params.roleId]})`}</h3>
+            <h3>{`Register / ${oTitle[match.params.roleId]}`}</h3>
         );
     };
 
@@ -322,13 +323,24 @@ const Signup = ({ match }) => {
             <div className='container text-center'>
                 <div className='row'>
                     <div className='col-sm'></div>
-                    <div className='col-sm-6 border m-5 p-5'>
+                    <div className='col-sm-6 border m-5 p-5 rounded'  style={{backgroundColor: '#ffc044'}}>
                         {showCommonForm()}
                         {showConditionalForm()}
+                        {/* <button
+                            onClick={clickSubmit}
+                            type='button'
+                            className='btn btn-success'
+
+                        >
+                            REGISTER
+                        </button> */}
+                        <Col sm={{span: 6, offset: 3}}>
+                            <Button onClick={clickSubmit} variant="primary" className="mt-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>REGISTER</Button>
+                        </Col>
                     </div>
                     <div className='col-sm'></div>
                 </div>
-                <button
+                {/* <button
                     onClick={clickSubmit}
                     type='button'
                     className='btn btn-success'
@@ -341,7 +353,7 @@ const Signup = ({ match }) => {
                     >
                         Cancel
                     </button>
-                </Link>
+                </Link> */}
             </div>
         );
 

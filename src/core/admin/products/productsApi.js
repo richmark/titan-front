@@ -1,70 +1,107 @@
-import { API_URL } from '../../../config';
+import { API_URL } from "../../../config";
 
-export const getAllProducts = () => {
-    return fetch(`${API_URL}/products`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json'
-        }
-    })
+export const getAllProducts = (
+  iLimit = 6,
+  iOffset = 0,
+  sOrder = "asc",
+  sSortBy = "_id"
+) => {
+  return fetch(
+    `${API_URL}/products?limit=${iLimit}&offset=${iOffset}&order=${sOrder}&sortBy=${sSortBy}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    }
+  )
     .then(response => {
-        return response.json();
+      return response.json();
     })
     .catch(err => console.log(err));
 };
 
 export const createProduct = (sId, sToken, oProduct) => {
-    return fetch(`${API_URL}/product/create/${sId}`, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${sToken}`
-        },
-        body: oProduct
-    })
+  return fetch(`${API_URL}/product/create/${sId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    },
+    body: oProduct
+  })
     .then(response => {
-        return response.json();
+      return response.json();
     })
     .catch(err => console.log(err));
 };
 
-export const getProduct = (sId) => {
-    return fetch(`${API_URL}/product/${sId}`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json'
-        }
-    })
+export const getProduct = sId => {
+  return fetch(`${API_URL}/product/${sId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  })
     .then(oResponse => {
-        return oResponse.json();
+      return oResponse.json();
     })
     .catch(oError => console.log(oError));
 };
 
 export const updateProduct = (sId, sToken, oProduct, sProductId) => {
-    return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
-        method: 'PUT',
-        headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${sToken}`
-        },
-        body: oProduct
-    })
+  return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    },
+    body: oProduct
+  })
     .then(response => {
-        return response.json();
+      return response.json();
     })
     .catch(err => console.log(err));
 };
 
-export const getProductByCategory = (sId, skip, order) => {
-    return fetch(`${API_URL}/products/category/${sId}?skip=${skip}&order=${order}`, {
-        method: 'GET',
-        headers: {
-            Accept: 'application/json'
-        }
+export const deleteProduct = (sId, sProductId, sToken) => {
+  return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    }
+  })
+    .then(response => {
+      return response.json();
     })
+    .catch(err => console.log(err));
+};
+
+export const getProductCount = () => {
+  return fetch(`${API_URL}/products/count`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json"
+    }
+  })
     .then(oResponse => {
-        return oResponse.json();
+      return oResponse.json();
+    })
+    .catch(oError => console.log(oError));
+};
+export const getProductByCategory = (sId, skip, order) => {
+  return fetch(
+    `${API_URL}/products/category/${sId}?skip=${skip}&order=${order}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    }
+  )
+    .then(oResponse => {
+      return oResponse.json();
     })
     .catch(oError => console.log(oError));
 };

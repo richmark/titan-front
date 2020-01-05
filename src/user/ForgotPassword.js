@@ -46,7 +46,7 @@ const ForgotPassword = () => {
 	};
 
 	const showSuccessMessage = () => {
-		const sMessage = `A reset link has been sent to this email: ${success}`;
+		const sMessage = `A reset activation has been sent to your email: ${success}`;
 		return CardResponse(sMessage, 'Back to Login', '/login');
 	}
 
@@ -68,16 +68,15 @@ const ForgotPassword = () => {
 		return (
 			<Row>
 				<Col sm={{span: 6, offset: 3}}>
-					<Card>
+					<Card style={{backgroundColor: '#f6f5f5'}}>
 					<Card.Title className="text-center mt-5">
 						<h2>Recover your account</h2>
 					</Card.Title>
-						<Form className="mt-3 align-content-center">
+						<Form className="mt-3 align-content-center  mb-5">
 							{BasicFormInput('Email', 'email', 'formEmail', handleChange(), [2,1], 7, danger)}
 							{showErrorMessage()}
-							<Col sm={{offset: 4}} className="p-2 mb-2">
-								<Button variant="primary" onClick={submitForm} className="mr-2" type="submit">Send</Button>
-								<Button variant="secondary" href="/login">Cancel</Button>
+							<Col sm={{span: 4, offset: 4}} className="p-2 mb-2">
+								<Button variant="primary" onClick={submitForm} className="mr-2  text-center" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>Send</Button>
 							</Col>
 						</Form>
 					</Card>	
