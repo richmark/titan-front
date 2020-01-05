@@ -69,8 +69,16 @@ const AddProduct = () => {
       setValues({ ...values, [name]: value });
       return;
     }
-    if (name === 'additional_images') {
-      let aImageFile = [];
+    if (name === 'image') {
+      let oFile = oEvent.target.files[0];
+      const bResult = validateImage(oFile, oEvent, name);
+      if (bResult === true) {
+        formData.set(name, oFile);
+        getImage([oFile], name);
+      }
+      return;
+    }
+    let aImageFile = [];
       for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
         let bResult = validateImage(oEvent.target.files[iCount], oEvent, name);
         if (bResult === true) {
@@ -78,15 +86,7 @@ const AddProduct = () => {
           aImageFile.push(oEvent.target.files[iCount]);
         }
       }
-      getImage(aImageFile, name);
-    } else { // image
-      let oFile = oEvent.target.files[0];
-      const bResult = validateImage(oFile, oEvent, name);
-      if (bResult === true) {
-        formData.set(name, oFile);
-        getImage([oFile], name);
-      }
-    }
+    return getImage(aImageFile, name);
   };
 
   const getImage = (aFile, name) => {
@@ -188,7 +188,6 @@ const AddProduct = () => {
         if (oData.error) {
           console.log(oData.error);
         } else {
-          console.log(oData.data);
           alert("Product created successfully");
         }
       });

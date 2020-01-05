@@ -46,33 +46,6 @@ const UpdateProduct = ({ match }) => {
         });
     };
 
-    // const handleChange = name => oEvent => {
-    //     if (name !== 'image') {
-    //         const value = oEvent.target.value;
-    //         formData.set(name, value);
-    //         setValues({ ...values, [name]: value });
-    //         return;
-    //     }
-    //     let oFile = oEvent.target.files[0];
-    //     if (oFile === undefined) {
-    //         formData.set(name, '');
-    //         setValues({
-    //             ...values,
-    //             image: ''
-    //         });
-    //         return;
-    //     }
-    //     let oReader = new FileReader();
-    //     oReader.onloadend = () => {
-    //         formData.set(name, oFile);
-    //         setValues({
-    //             ...values,
-    //             [name]: oReader.result
-    //         });
-    //     }
-    //     oReader.readAsDataURL(oFile);
-    // };
-
     const handleChange = name => oEvent => {
         if (name !== "image" && name !== "additional_images") {
           const value = oEvent.target.value;
@@ -80,28 +53,29 @@ const UpdateProduct = ({ match }) => {
           setValues({ ...values, [name]: value });
           return;
         }
-        if (name === 'additional_images') {
-          let aImageFile = [];
-          for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
+
+        if (name === 'image') {
+            let oFile = oEvent.target.files[0];
+            const bResult = validateImage(oFile, oEvent, name);
+            if (bResult === true) {
+                formData.set(name, oFile);
+                getImage([oFile], name);
+            }
+            return;
+        }
+        let aImageFile = [];
+        for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
             let bResult = validateImage(oEvent.target.files[iCount], oEvent, name);
             if (bResult === true) {
-              formData.append(name, oEvent.target.files[iCount]);
-              aImageFile.push(oEvent.target.files[iCount]);
+                formData.append(name, oEvent.target.files[iCount]);
+                aImageFile.push(oEvent.target.files[iCount]);
             }
-          }
-          setValues({
+        }
+        setValues({
             ...values,
             [name]: []
-            })
-          getImage(aImageFile, name);
-        } else { // image
-          let oFile = oEvent.target.files[0];
-          const bResult = validateImage(oFile, oEvent, name);
-          if (bResult === true) {
-            formData.set(name, oFile);
-            getImage([oFile], name);
-          }
-        }
+        });
+        return getImage(aImageFile, name);
     };
 
     const getImage = (aFile, name) => {
@@ -115,8 +89,8 @@ const UpdateProduct = ({ match }) => {
                 });
             } else {
                 setValues(oState => {
-                const additional_images = [...oState.additional_images, oReader.result];
-                return { ...oState, additional_images };
+                    const additional_images = [...oState.additional_images, oReader.result];
+                    return { ...oState, additional_images };
                 });
             }
             };
@@ -156,11 +130,9 @@ const UpdateProduct = ({ match }) => {
     const getParameters = () => {
         if (match.params.productId !== undefined) {
             getProduct(match.params.productId).then(oData => {
-                console.log(oData.data);
                 if (oData.error) {
                     console.log(oData.error);
                 } else {
-                    console.log(oData.data);
                     setValues({
                         key: '',
                         value: '',
