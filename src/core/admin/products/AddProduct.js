@@ -4,6 +4,7 @@ import { isAuthenticated } from "../../../auth/authUtil";
 import { getAllCategories } from "../../admin/categories/categoriesApi";
 import { createProduct } from "./productsApi";
 import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
+import _ from 'lodash';
 
 const AddProduct = () => {
   const { sToken, user } = isAuthenticated();
@@ -21,6 +22,7 @@ const AddProduct = () => {
     category: "",
     description: "",
     image: "",
+    additional_images: [],
     additional_info: [],
     key: "",
     value: "",
@@ -35,6 +37,7 @@ const AddProduct = () => {
     category,
     description,
     image,
+    additional_images,
     additional_info,
     key,
     value,
@@ -60,13 +63,53 @@ const AddProduct = () => {
   };
 
   const handleChange = name => oEvent => {
-    if (name !== "image") {
+    if (name !== "image" && name !== "additional_images") {
       const value = oEvent.target.value;
       formData.set(name, value);
       setValues({ ...values, [name]: value });
       return;
     }
-    let oFile = oEvent.target.files[0];
+    if (name === 'additional_images') {
+      let aImageFile = [];
+      for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
+        let bResult = validateImage(oEvent.target.files[iCount], oEvent, name);
+        if (bResult === true) {
+          formData.append(name, oEvent.target.files[iCount]);
+          aImageFile.push(oEvent.target.files[iCount]);
+        }
+      }
+      getImage(aImageFile, name);
+    } else { // image
+      let oFile = oEvent.target.files[0];
+      const bResult = validateImage(oFile, oEvent, name);
+      if (bResult === true) {
+        formData.set(name, oFile);
+        getImage([oFile], name);
+      }
+    }
+  };
+
+  const getImage = (aFile, name) => {
+    aFile.map((oFile, iIndex) => {
+      let oReader = new FileReader();
+      oReader.onloadend = () => {
+        if (name === 'image') {
+          setValues({
+            ...values,
+            [name]: oReader.result
+          });
+        } else {
+          setValues(oState => {
+            const additional_images = [...oState.additional_images, oReader.result];
+            return { ...oState, additional_images };
+          });
+        }
+      };
+      oReader.readAsDataURL(oFile);
+    });
+  }
+
+  const validateImage = (oFile, oEvent, name) => {
     let sFileType = oFile.type
       .split("/")
       .pop()
@@ -81,27 +124,19 @@ const AddProduct = () => {
     ) {
       alert("Please upload valid file!");
       oEvent.target.value = "";
-      return;
+      return false;
     }
 
     if (oFile === undefined) {
       formData.set(name, "");
       setValues({
         ...values,
-        image: ""
+        [name]: ""
       });
-      return;
+      return false;
     }
-    let oReader = new FileReader();
-    oReader.onloadend = () => {
-      formData.set(name, oFile);
-      setValues({
-        ...values,
-        [name]: oReader.result
-      });
-    };
-    oReader.readAsDataURL(oFile);
-  };
+    return true;
+  }
 
   useEffect(() => {
     loadCategories();
@@ -293,8 +328,8 @@ const AddProduct = () => {
               <div
                 className={
                   image_error
-                    ? "border p-3 mb-4 border-danger"
-                    : "border p-3 mb-4"
+                    ? "border p-3 mb-2 border-danger"
+                    : "border p-3 mb-2"
                 }
               >
                 <h6>Image Upload</h6>
@@ -303,6 +338,16 @@ const AddProduct = () => {
                   type="file"
                   className="form-control-file"
                   id="exampleFormControlFile1"
+                />
+              </div>
+              <div className="border p-3 mb-2">
+                <h6>Additional Images</h6>
+                <input
+                  onChange={handleChange("additional_images")}
+                  type="file"
+                  multiple
+                  className="form-control-file"
+                  id="additional_images"
                 />
               </div>
               <div className="border p-3">
@@ -343,6 +388,14 @@ const AddProduct = () => {
     );
   };
 
+  const getDefaultAdditionalImages = () => {
+      var aImages = [];
+      _.times(4, (iIndex) => {
+          aImages.push(<img key={iIndex} className='mr-2' src="https://ctt.trains.com/sitefiles/images/no-preview-available.png" style={{ width: "8vw", height: "10vh" }} />);
+      });
+      return aImages;
+  }
+
   const showAddProductDetail = () => {
     return (
       <Fragment>
@@ -375,6 +428,13 @@ const AddProduct = () => {
                                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
                                             nisi ut aliquip ex ea commodo consequat.`}
                   </p>
+                </div>
+                <div className="col-md-12 col-sm-12 mb-4 ml-4">
+                  {
+                    (additional_images.length > 0 && additional_images.map((oImage, iIndex) => {
+                      return (<img key={iIndex} style={{ width: "8vw", height: "10vh" }} className='mr-2' src={oImage} />);
+                    })) || (getDefaultAdditionalImages())
+                  }
                 </div>
                 <h4>Additional Information</h4>
                 <hr />
