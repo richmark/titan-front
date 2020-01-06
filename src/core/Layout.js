@@ -187,7 +187,7 @@ const Layout = ({ run=undefined, children }) => {
 
     return (
         <Fragment>
-            <div style={{minWidth: '1871px'}}>
+            <div>
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
