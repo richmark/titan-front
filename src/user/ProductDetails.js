@@ -10,9 +10,10 @@ import { IMAGE_API } from "../config";
 import { addItem, getTotalCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
-  
+  const [previewImage, setPreviewImage] = useState('');
   const [oProduct, setProduct] = useState({
     image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
+    additional_images: false,
     product_name: "My Product",
     _id: match.params.productId,
     price: '',
@@ -30,6 +31,8 @@ const ProductDetails = ({match}) => {
   const [iCount, setCount] = useState(1);
 
   const [bProduct, setBoolProduct] = useState(true);
+  
+  const { image, additional_images, product_name, price, description } = oProduct;
 
   const addToCart = () => {
     addItem(oProduct, iCount, () => {
@@ -49,11 +52,12 @@ const ProductDetails = ({match}) => {
             setProduct({
               ...oProduct,
               image : `${IMAGE_API}/images/products/${oData.image}`,
+              additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
               product_name: oData.product_name,
               price: oData.price,
               description: oData.description
             });
-            console.log(oData);
+            setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
             fetchCategory(oData.category);
         }
     });
@@ -86,11 +90,28 @@ const ProductDetails = ({match}) => {
             <Redirect to="/forbidden"/>
         );
     }
-};
+  };
 
-  
+  const changeImage = sImage => oEvent => {
+    setPreviewImage(sImage);
+  };
+
+  const setImageList = () => {
+    if (additional_images) {
+      const aImages = [image, ...additional_images];
+      const iLength = aImages.length;
+      const aColumn = [];
+      aImages.map((sImage, iIndex) => {
+        aColumn.push(iLength < 5 ?
+          (<Col onMouseEnter={changeImage(sImage)} key={iIndex} xs={3} md={3}><Image className="border mx-auto" src={sImage} rounded width="100%" height="100%" /></Col>) :
+          (<Col onMouseEnter={changeImage(sImage)} key={iIndex}><Image className="border mx-auto" src={sImage} rounded width="100%" height="100%" /></Col>));
+      });
+      return aColumn;
+    }
+    return (<Col><Image className="border mx-auto" src={image} rounded width="100%" height="100%" /></Col>);
+  };
+
   const showProductMain = () => {
-
     return (
       <Fragment>
         <Container className="border border-black rounded p-5">
@@ -99,15 +120,20 @@ const ProductDetails = ({match}) => {
             <Col xs={6} md={4}>
               <Image
                 className="border mx-auto"
-                src={oProduct.image}
+                src={previewImage}
                 rounded
                 width="100%"
                 height="300px"
               />
+              <div>
+                <Row className="mt-2">
+                  {setImageList()}
+                </Row>
+              </div>
             </Col>
             <Col xs={12} md={8}>
               <span>
-                <h3>{oProduct.product_name}</h3>
+                <h3>{product_name}</h3>
               </span>
               <span>
                 <h6>
@@ -116,7 +142,7 @@ const ProductDetails = ({match}) => {
               </span>
               <hr />
               <h4>
-                ₱ <span>{oProduct.price}</span>
+                ₱ <span>{price}</span>
               </h4>
               <Form className="mt-5">
                 <Form.Group as={Row} controlId="formPlaintextPassword">
@@ -155,9 +181,9 @@ const ProductDetails = ({match}) => {
     return (
       <Fragment>
         <Container className="border border-black rounded p-5 mt-4">
-          <h5>{oProduct.product_name} Details</h5>
+          <h5>{product_name} Details</h5>
           <p>
-            {oProduct.description}
+            {description}
           </p>
         </Container>
       </Fragment>
