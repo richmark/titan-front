@@ -19,3 +19,10 @@ span {
 .checked {
     color: yellow;
 }
+
+.ellipsis {
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+  }
