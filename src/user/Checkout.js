@@ -5,7 +5,7 @@ import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cart
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
-import { getBraintreeClientToken, processPayment } from '../core/client/checkoutApi';
+import { getBraintreeClientToken, processPayment, initiatePaymayaCheckout } from '../core/client/checkoutApi';
 import { sendOrderData } from '../core/client/orderApi';
 import DropIn from 'braintree-web-drop-in-react';
 
@@ -53,6 +53,22 @@ const Checkout = () => {
             ;
         }); 
     };
+
+    const showPaymaya = () => {
+        if (window.confirm('Do you want to checkout? You will be redirected to our payment merchant if yes.') === true) {
+            initiatePaymayaCheckout(user._id, sToken, {}).then((oData) => {
+                if (oData.error) {
+                    console.log(oData.error);
+                    return;
+                }
+                return (
+                    <Redirect to={`/test`}></Redirect>
+                );
+            });
+        } else {
+            setPayment(false);
+        }
+    }
 
     const showDropIn = () => {
         return (
@@ -117,6 +133,7 @@ const Checkout = () => {
                 
         });
     };
+
 
     const sendOrder = (oOrder) => {
         sendOrderData(user._id, sToken, oOrder).then(oData => {
@@ -292,7 +309,7 @@ const Checkout = () => {
 
     const showPayment = () => {
         if (bPayment === true) {
-            return showDropIn();
+            return showPaymaya();
         }
         return showBilling();
     }
