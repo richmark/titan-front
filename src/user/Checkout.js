@@ -56,14 +56,35 @@ const Checkout = () => {
 
     const showPaymaya = () => {
         if (window.confirm('Do you want to checkout? You will be redirected to our payment merchant if yes.') === true) {
-            initiatePaymayaCheckout(user._id, sToken, {}).then((oData) => {
+            var oTotal = calculateTotal();
+            var oOrder = {
+                customer: user,
+                order_address: user.address,
+                amount: oTotal.total,
+                shipping_fee: oTotal.fee,
+                products: []
+            }
+
+            aProduct.map((oProduct, iIndex) => {
+                console.log(oProduct);
+                var oSingleProduct = {
+                    id: oProduct._id,
+                    name: oProduct.product_name,
+                    description: oProduct.description,
+                    price: oProduct.price,
+                    count: oProduct.count
+                };
+                oOrder.products.push(oSingleProduct); 
+            });
+            initiatePaymayaCheckout(user._id, sToken, oOrder).then((oData) => {
                 if (oData.error) {
                     console.log(oData.error);
                     return;
                 }
-                return (
-                    <Redirect to={`/test`}></Redirect>
-                );
+                console.log(oData);
+                // return (
+                //     <Redirect to={`/test`}></Redirect>
+                // );
             });
         } else {
             setPayment(false);
