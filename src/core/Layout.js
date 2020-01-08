@@ -4,7 +4,6 @@ import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, I
 import { getTotalCount } from './client/cartHelpers';
 
 const Layout = ({ run=undefined, children }) => {
-    var oBackground = {backgroundColor: 'white'};
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
 
@@ -16,6 +15,13 @@ const Layout = ({ run=undefined, children }) => {
         return (
             <Badge variant="dark" style={{color: 'red'}}>{iCount}</Badge>
         );
+    };
+
+    const getStyle = () => {
+        if (window.location.pathname === '/') {
+            return {backgroundImage: 'url(http://localhost:8000/images/others/homepage.jpg)'};
+        }
+        return {backgroundColor: 'white'};
     };
 
     const showUserGuest = () => {
@@ -183,7 +189,7 @@ const Layout = ({ run=undefined, children }) => {
 
     return (
         <Fragment>
-            <div style={oBackground}>
+            <div style={getStyle()}>
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
