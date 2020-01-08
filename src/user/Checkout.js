@@ -20,6 +20,7 @@ const Checkout = () => {
     const [bPayment, setPayment] = useState(false);
     const [oInstance, setInstance] = useState({});
     const { user, sToken } = isAuthenticated();
+    const [mRedirect, setRedirect] = useState(false);
 
     const init = () => {
         var aCart = getCart();
@@ -81,15 +82,20 @@ const Checkout = () => {
                     console.log(oData.error);
                     return;
                 }
-                console.log(oData);
-                // return (
-                //     <Redirect to={`/test`}></Redirect>
-                // );
+                console.log(oData.data.redirectUrl);
+                setRedirect(oData.data.redirectUrl);
             });
         } else {
             setPayment(false);
         }
     }
+
+    const redirectUser = () => {
+        if (mRedirect !== false) {
+            window.location.href = mRedirect;
+            return;
+        }
+    };
 
     const showDropIn = () => {
         return (
@@ -384,6 +390,7 @@ const Checkout = () => {
         <Layout run={iRun}>
             {showProductMain()}
             {redirectForbidden()}
+            {redirectUser()}
         </Layout>
     );
 };
