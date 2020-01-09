@@ -36,6 +36,7 @@ const HomePage = () => {
 
     useEffect(() => {
         init();
+        // setColor('gray');
     }, []);
     
     const showCategoryLayout = () => {

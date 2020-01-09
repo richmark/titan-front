@@ -4,7 +4,6 @@ import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, I
 import { getTotalCount } from './client/cartHelpers';
 
 const Layout = ({ run=undefined, children }) => {
-
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
 
@@ -18,23 +17,30 @@ const Layout = ({ run=undefined, children }) => {
         );
     };
 
+    const getStyle = () => {
+        if (window.location.pathname === '/') {
+            return {backgroundImage: 'url(http://localhost:8000/images/others/homepage.jpg)'};
+        }
+        return {backgroundColor: 'white'};
+    };
+
     const showUserGuest = () => {
         if (user) {
             return (
                 <Fragment>
-                    <Col className="mt-2 mb-2 text-right">
+                    <Col className="mt-2 mb-2 text-right ellipsis">
                         <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
                     </Col>
-                    <Col xs={1} className="mt-2 mb-2">
+                    <Col xs={1} className="mt-2 mb-2 ellipsis">
                         <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
                     </Col>
-                    <Col className="mt-2 mb-2 text-left">
+                    <Col className="mt-2 mb-2 text-left ellipsis">
                         <span className="text-white"><i className="fas fa-map-marker-alt" style={{color: '#ffc044'}}></i> 8th ave Caloocan City</span>
                     </Col>
-                    <Col className="mt-2 mb-2 text-right">
+                    <Col className="mt-2 mb-2 text-right ellipsis">
                         <a href={`/profile/${user._id}`} className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> My Profile</a>
                     </Col>
-                    <Col className="mt-2 mb-2">
+                    <Col className="mt-2 mb-2 ellipsis">
                         <a href="/signout" className="text-white"><i className="fas fa-sign-out-alt" style={{color: '#ffc044'}}></i> Logout</a>
                     </Col>
                 </Fragment>
@@ -42,19 +48,19 @@ const Layout = ({ run=undefined, children }) => {
         }
         return (
             <Fragment>
-                    <Col className="mt-2 mb-2 text-right">
+                    <Col className="mt-2 mb-2 text-right ellipsis" style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
                     <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
                     </Col>
-                    <Col xs={1} className="mt-2 mb-2">
+                    <Col xs={1} className="mt-2 mb-2 ellipsis" style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
                     <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
                     </Col>
-                    <Col className="mt-2 mb-2 text-left">
+                    <Col className="mt-2 mb-2 text-left ellipsis">
                     <span className="text-white"><i className="fas fa-map-marker-alt" style={{color: '#ffc044'}}></i> 8th ave Caloocan City</span>
                     </Col>
-                    <Col className="mt-2 mb-2 text-right">
+                    <Col className="mt-2 mb-2 text-right ellipsis">
                     <a href="/login" className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> Login</a>
                     </Col>
-                    <Col className="mt-2 mb-2">
+                    <Col className="mt-2 mb-2 ellipsis">
                     <a href="/signup" className="text-white"><i className="fas fa-edit" style={{color: '#ffc044'}}></i> Register</a>
                     </Col>  
             </Fragment>
@@ -76,35 +82,31 @@ const Layout = ({ run=undefined, children }) => {
                 <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
                     <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
                 </Col>
-                <Col xs={5} md={5} xl={5} sm={5}>
-                    <Row>
-                        <Col  xs={2} md={2} xl={2} sm={4} style={{paddingRight: '0px', marginLeft: '5rem!important'}}>
-                            <Dropdown>
-                                <Dropdown.Toggle id="dropdown-basic" className="rounded-pill float-left" style={{backgroundColor: 'white', border: '1px solid #ced4da', color: 'black'}}>
-                                    All Categories
-                                </Dropdown.Toggle>
+                <Col xs={1} md={1} xl={1} sm={1}>
+                    <Dropdown style={{width: '100%'}}>
+                        <Dropdown.Toggle id="dropdown-basic" className="rounded-pill" style={{backgroundColor: 'white', border: '1px solid #ced4da', color: 'black', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
+                            Categories
+                        </Dropdown.Toggle>
 
-                                <Dropdown.Menu style={{marginTop: '42px'}}>
-                                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Col>
-                        <Col xs={9} md={9} xl={9} sm={4}>
-                            <InputGroup className="ml-4">
-                                <FormControl
-                                placeholder="Search here"
-                                aria-label="Search here"
-                                aria-describedby="basic-addon2"
-                                style={{borderTopLeftRadius: '50rem', borderBottomLeftRadius: '50rem'}}
-                                />
-                                <InputGroup.Append>
-                                    <Button style={{borderTopRightRadius: '50rem', borderBottomRightRadius: '50rem', backgroundColor: '#ffc044', border: '1px solid #ffc044 '}} className="text-white">Search</Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </Col>
-                    </Row>
+                        <Dropdown.Menu style={{marginTop: '42px'}}>
+                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Col>
+                <Col xs={4} md={4} xl={4} sm={4}>
+                    <InputGroup style={{width: '100%'}}>
+                        <FormControl
+                        placeholder="Search here"
+                        aria-label="Search here"
+                        aria-describedby="basic-addon2"
+                        style={{borderTopLeftRadius: '50rem', borderBottomLeftRadius: '50rem'}}
+                        />
+                        <InputGroup.Append>
+                            <Button style={{borderTopRightRadius: '50rem', borderBottomRightRadius: '50rem', backgroundColor: '#ffc044', border: '1px solid #ffc044 '}} className="text-white">Search</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
                 </Col>
                 <Col xs={3} md={3} xl={3} sm={3}>
                     <Container>
@@ -187,7 +189,7 @@ const Layout = ({ run=undefined, children }) => {
 
     return (
         <Fragment>
-            <div>
+            <div style={getStyle()}>
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
