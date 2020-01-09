@@ -31,6 +31,10 @@ const Checkout = () => {
         getToken(user._id, sToken);
     };
 
+    useEffect(() => {
+        init();
+    }, []);
+    
     const getToken = (sUserId, sToken) => {
         getBraintreeClientToken(sUserId, sToken).then(oData => {
             if (oData.error) {
@@ -202,9 +206,7 @@ const Checkout = () => {
     }
 
 
-    useEffect(() => {
-        init();
-    }, [iRun]);
+    
 
     const redirectForbidden = () => {
         if (bForbidden === true) {
@@ -216,14 +218,18 @@ const Checkout = () => {
         oEvent.preventDefault();
         if (window.confirm('Do you want to delete this item?') === true) {
             removeItem(sId);
-            setRun(getCart());
+            var aCart = getCart();
+            setRun(aCart);
+            setProduct(aCart);
         }
     };
 
     const updateItem = (sId, bIncrease) => oEvent => {
         oEvent.preventDefault();
         updateCount(sId, bIncrease);
-        setRun(getCart());
+        var aCart = getCart();
+        setRun(aCart);
+        setProduct(aCart);
     };
 
     const singleProduct = (oProduct) => {

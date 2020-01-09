@@ -46,3 +46,18 @@ export const initiatePaymayaCheckout = (sUserId, sToken, oPaymentData) => {
         console.log(oError)
     });
 }
+
+export const retrievePaymayaCheckout = (sUserId, sToken, sRequestId) => {
+    return fetch(`${API_URL}/paymaya/retrieveCheckout/${sUserId}?sRequestId=${sRequestId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sToken}`
+        }
+    }).then(oResponse => {
+        return oResponse.json();
+    }).catch(oError => {
+        console.log(oError)
+    });
+}
