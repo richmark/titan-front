@@ -31,7 +31,7 @@ import Forbidden from "./user/Forbidden";
 import ProductsByCategory from "./user/format/category/ProductsByCategory";
 import OrderDetails from "./user/OrderDetails";
 import ReviewProduct from "./user/ReviewProduct";
-
+import PaymayaStatus from "./user/PaymentStatus";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -63,6 +63,11 @@ const Routes = () => {
       />
       <Route path="/order/detail/:orderId" exact component={OrderDetails} />
       <Route path="/product/review" exact component={ReviewProduct} />
+      <Route
+        path="/payment/paymaya/:userId/:sRequestId/:status"
+        exact
+        component={PaymayaStatus}
+      />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
