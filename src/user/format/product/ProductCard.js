@@ -27,20 +27,21 @@ const ProductCard = (aData, setRun = () => {}) => {
         var sImage = (oProduct.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oProduct.image;
         var sName = (oProduct.product_name === undefined) ? "My Product" : oProduct.product_name;
         return (
-            <Card className="pt-3">
+            <Card className="pt-3" className="border-0" style={{background: 'transparent'}}>
                 <Link to={`/product/details/${oProduct._id}`} className="mx-auto">
                     <Card.Img 
                         variant="top" 
                         src={`${IMAGE_API}/images/products/${sImage}`}
-                        style={{width: "100px", height: "100px"}}
+                        style={{width: "200px", height: "200px"}}
                     />
                 </Link>
-                <Card.Body>
-                    <Card.Title style={{fontSize: "1.325vh"}}>{sName}</Card.Title>
-                    <Card.Text style={{fontSize: "1.2vh"}}>
-                        {`₱ ${oProduct.price}`}
-                    </Card.Text>
-                    <Button variant="primary" style={{fontSize: "12px"}} onClick={addToCart(oProduct)}>Add to Cart</Button>
+                <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
+                <Card.Body className="pt-2">
+                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white'}}>
+                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Category</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{`₱ ${oProduct.price}`}</p>
+                    </button>
                 </Card.Body>
             </Card>
         );
@@ -54,7 +55,7 @@ const ProductCard = (aData, setRun = () => {}) => {
                         <Row>
                             {aProducts && aProducts.map((oProduct, iIndex) => {
                                 return (
-                                    <Col sm={2} key={iIndex}>
+                                    <Col sm={3} key={iIndex}>
                                         {showCardBase(oProduct)}
                                     </Col>
                                 );
@@ -68,7 +69,7 @@ const ProductCard = (aData, setRun = () => {}) => {
 
     return (
         <Container>
-            <p>Our Products</p>
+            <div className="category-tab mt-5 mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Our Products</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    

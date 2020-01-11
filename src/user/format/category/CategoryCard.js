@@ -10,18 +10,20 @@ const CategoryCard = (aData) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Link to={`categories/${oCategories._id}`}>
-                <Card className="pt-3">
+                <Card className="pt-3"  style={{background: 'transparent'}}>
                     <Row>
                         <Col>
-                            <Image className="ml-3" 
+                            <Image 
                                 src={`${IMAGE_API}/images/categories/${sImage}`}
-                                style={{width: "150px", height: "150px"}} 
+                                style={{width: "200px", height: "200px"}} 
                             />
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className=" mt-2">
                         <Col>
-                            <p className="text-center">{oCategories.name}</p>
+                            <button className="default-button text-center" style={{color: 'white'}}>
+                                <p className="text-center ellipsis-button" style={{fontSize: "2.5vh"}}>{oCategories.name}</p>
+                            </button>
                         </Col>
                     </Row>
                 </Card>
@@ -62,7 +64,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <p>Categories</p>
+            <div className="category-tab mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Categories</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    

@@ -50,7 +50,7 @@ const ProductBundleCarousel = () => {
     
     return (
         <Container>
-            <p>Bundle Deals</p>
+            <div className="category-tab mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Bundle Deals</p></strong></div>
             {showCarousel(aData)}
         </Container>
     );
