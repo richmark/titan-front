@@ -5,8 +5,9 @@ import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cart
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
-import { getBraintreeClientToken, processPayment } from '../core/client/checkoutApi';
+import { getBraintreeClientToken, processPayment, initiatePaymayaCheckout } from '../core/client/checkoutApi';
 import { sendOrderData } from '../core/client/orderApi';
+import { Modal } from 'react-bootstrap';
 import DropIn from 'braintree-web-drop-in-react';
 
 
@@ -20,6 +21,8 @@ const Checkout = () => {
     const [bPayment, setPayment] = useState(false);
     const [oInstance, setInstance] = useState({});
     const { user, sToken } = isAuthenticated();
+    const [mRedirect, setRedirect] = useState(false);
+    const [modalPaymaya, setModalPaymaya] = useState(false);
 
     const init = () => {
         var aCart = getCart();
@@ -28,6 +31,10 @@ const Checkout = () => {
         getToken(user._id, sToken);
     };
 
+    useEffect(() => {
+        init();
+    }, []);
+    
     const getToken = (sUserId, sToken) => {
         getBraintreeClientToken(sUserId, sToken).then(oData => {
             if (oData.error) {
@@ -52,6 +59,70 @@ const Checkout = () => {
             });
             ;
         }); 
+    };
+
+    const LaunchModal = (props) => {
+        return (
+            <Modal
+              {...props}
+              size="lg"
+              aria-labelledby="contained-modal-title-vcenter"
+              centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                  Checkout
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p>
+                  Do you want to checkout? If yes, you will be redirected to our payment merchant.
+                </p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={runPaymaya(user, props)} className="m-1">Checkout</Button>
+                <Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+              </Modal.Footer>
+            </Modal>
+          );
+    }
+
+    const runPaymaya = (user, props) => oEvent => {
+        oEvent.preventDefault();
+        props.onHide();
+        var oTotal = calculateTotal();
+        var oOrder = {
+            customer: user,
+            order_address: user.address,
+            amount: oTotal.total,
+            shipping_fee: oTotal.fee,
+            products: []
+        }
+
+        aProduct.map((oProduct, iIndex) => {
+            var oSingleProduct = {
+                id: oProduct._id,
+                name: oProduct.product_name,
+                description: oProduct.description,
+                price: oProduct.price,
+                count: oProduct.count
+            };
+            oOrder.products.push(oSingleProduct); 
+        });
+        initiatePaymayaCheckout(user._id, sToken, oOrder).then((oData) => {
+            if (oData.error) {
+                console.log(oData.error);
+                return;
+            }
+            setRedirect(oData.data.redirectUrl);
+        });
+    }
+
+    const redirectUser = () => {
+        if (mRedirect !== false) {
+            window.location.href = mRedirect;
+            return;
+        }
     };
 
     const showDropIn = () => {
@@ -118,6 +189,7 @@ const Checkout = () => {
         });
     };
 
+
     const sendOrder = (oOrder) => {
         sendOrderData(user._id, sToken, oOrder).then(oData => {
             if (oData.error) {
@@ -134,9 +206,7 @@ const Checkout = () => {
     }
 
 
-    useEffect(() => {
-        init();
-    }, [iRun]);
+    
 
     const redirectForbidden = () => {
         if (bForbidden === true) {
@@ -148,14 +218,18 @@ const Checkout = () => {
         oEvent.preventDefault();
         if (window.confirm('Do you want to delete this item?') === true) {
             removeItem(sId);
-            setRun(getCart());
+            var aCart = getCart();
+            setRun(aCart);
+            setProduct(aCart);
         }
     };
 
     const updateItem = (sId, bIncrease) => oEvent => {
         oEvent.preventDefault();
         updateCount(sId, bIncrease);
-        setRun(getCart());
+        var aCart = getCart();
+        setRun(aCart);
+        setProduct(aCart);
     };
 
     const singleProduct = (oProduct) => {
@@ -282,19 +356,12 @@ const Checkout = () => {
                 </div>
 
                 <div id="place-order" className="mt-4 text-center">
-                    <Button variant="outline-warning" size="lg" block onClick={() => setPayment(true)}>
+                    <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
                         Place Order
                     </Button>
                 </div>
             </Fragment>
         );
-    }
-
-    const showPayment = () => {
-        if (bPayment === true) {
-            return showDropIn();
-        }
-        return showBilling();
     }
 
     const showProductMain = () => {
@@ -325,7 +392,7 @@ const Checkout = () => {
                             {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                        {showPayment()}
+                        {showBilling()}
                     </Col>
                 </Fragment>
             );
@@ -346,6 +413,11 @@ const Checkout = () => {
         <Layout run={iRun}>
             {showProductMain()}
             {redirectForbidden()}
+            {redirectUser()}
+            <LaunchModal 
+                show={modalPaymaya}
+                onHide={() => setModalPaymaya(false)}
+            />
         </Layout>
     );
 };
