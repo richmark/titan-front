@@ -37,6 +37,7 @@ const Products = () => {
   };
 
   const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
+    console.log(iLimit, iOffset, sOrder, sSortBy);
     getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
       if (oProducts.error) {
         console.log(oProducts.error);

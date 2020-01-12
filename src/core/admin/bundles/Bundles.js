@@ -1,7 +1,29 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from "react";
 import DashboardLayout from '../DashboardLayout';
+import oMoment from 'moment';
+import { IMAGE_API } from "../../../config";
+import { isAuthenticated } from "../../../auth/authUtil";
+import { getAllBundles } from './bundlesApi';
 
 const Bundles = () => {
+
+    const { sToken, user } = isAuthenticated();
+    const [bundles, setBundles] = useState(false);
+
+    const loadBundles = () => {
+        getAllBundles(user._id, sToken).then(oBundles => {
+            if (oBundles.error) {
+                console.log(oBundles.error);
+            } else {
+                setBundles(oBundles.data);
+            }
+        });
+    };
+
+    useEffect(() => {
+        loadBundles();
+    }, []);
+
     const showBundles = () => {
         return (
             <Fragment>
@@ -74,33 +96,19 @@ const Bundles = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>Otto</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>Otto</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>Thornton</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>Otto</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope='row'>
-                                            <input type='checkbox' />
-                                        </th>
-                                        <td>Name</td>
-                                        <td>12</td>
-                                        <td>1000</td>
-                                        <td>@mdo</td>
-                                    </tr>
+                                    {bundles && bundles.map((oBundle, iIndex) => {
+                                        return (
+                                            <tr key={iIndex}>
+                                                <th scope='row'>
+                                                    <input type='checkbox' />
+                                                </th>
+                                                <td>{oBundle.bundle_name}</td>
+                                                <td>{oBundle.discount_type}</td>
+                                                <td>{oBundle.discount_value}</td>
+                                                <td>{oMoment(oBundle.createdAt).format('DD-MM-YYYY')}</td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                             <div className=' text-center'>
