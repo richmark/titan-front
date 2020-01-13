@@ -4,7 +4,7 @@ import { isAuthenticated } from "../../../auth/authUtil";
 import { getAllCategories } from "../../admin/categories/categoriesApi";
 import { createProduct } from "./productsApi";
 import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
-import _ from 'lodash';
+import _ from "lodash";
 import { Redirect } from "react-router-dom";
 
 const AddProduct = () => {
@@ -77,7 +77,7 @@ const AddProduct = () => {
       setValues({ ...values, [name]: value });
       return;
     }
-    if (name === 'image') {
+    if (name === "image") {
       let oFile = oEvent.target.files[0];
       const bResult = validateImage(oFile, oEvent, name);
       if (bResult === true) {
@@ -87,13 +87,13 @@ const AddProduct = () => {
       return;
     }
     let aImageFile = [];
-      for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
-        let bResult = validateImage(oEvent.target.files[iCount], oEvent, name);
-        if (bResult === true) {
-          formData.append(name, oEvent.target.files[iCount]);
-          aImageFile.push(oEvent.target.files[iCount]);
-        }
+    for (var iCount = 0; iCount < oEvent.target.files.length; iCount++) {
+      let bResult = validateImage(oEvent.target.files[iCount], oEvent, name);
+      if (bResult === true) {
+        formData.append(name, oEvent.target.files[iCount]);
+        aImageFile.push(oEvent.target.files[iCount]);
       }
+    }
     return getImage(aImageFile, name);
   };
 
@@ -101,21 +101,24 @@ const AddProduct = () => {
     aFile.map((oFile, iIndex) => {
       let oReader = new FileReader();
       oReader.onloadend = () => {
-        if (name === 'image') {
+        if (name === "image") {
           setValues({
             ...values,
             [name]: oReader.result
           });
         } else {
           setValues(oState => {
-            const additional_images = [...oState.additional_images, oReader.result];
+            const additional_images = [
+              ...oState.additional_images,
+              oReader.result
+            ];
             return { ...oState, additional_images };
           });
         }
       };
       oReader.readAsDataURL(oFile);
     });
-  }
+  };
 
   const validateImage = (oFile, oEvent, name) => {
     let sFileType = oFile.type
@@ -144,7 +147,7 @@ const AddProduct = () => {
       return false;
     }
     return true;
-  }
+  };
 
   useEffect(() => {
     loadCategories();
@@ -396,12 +399,19 @@ const AddProduct = () => {
   };
 
   const getDefaultAdditionalImages = () => {
-      var aImages = [];
-      _.times(4, (iIndex) => {
-          aImages.push(<img key={iIndex} className='mr-2' src="https://ctt.trains.com/sitefiles/images/no-preview-available.png" style={{ width: "8vw", height: "10vh" }} />);
-      });
-      return aImages;
-  }
+    var aImages = [];
+    _.times(4, iIndex => {
+      aImages.push(
+        <img
+          key={iIndex}
+          className="mr-2"
+          src="https://ctt.trains.com/sitefiles/images/no-preview-available.png"
+          style={{ width: "8vw", height: "10vh" }}
+        />
+      );
+    });
+    return aImages;
+  };
 
   const showAddProductDetail = () => {
     return (
@@ -437,11 +447,18 @@ const AddProduct = () => {
                   </p>
                 </div>
                 <div className="col-md-12 col-sm-12 mb-4 ml-4">
-                  {
-                    (additional_images.length > 0 && additional_images.map((oImage, iIndex) => {
-                      return (<img key={iIndex} style={{ width: "8vw", height: "10vh" }} className='mr-2' src={oImage} />);
-                    })) || (getDefaultAdditionalImages())
-                  }
+                  {(additional_images.length > 0 &&
+                    additional_images.map((oImage, iIndex) => {
+                      return (
+                        <img
+                          key={iIndex}
+                          style={{ width: "8vw", height: "10vh" }}
+                          className="mr-2"
+                          src={oImage}
+                        />
+                      );
+                    })) ||
+                    getDefaultAdditionalImages()}
                 </div>
                 <h4>Additional Information</h4>
                 <hr />
