@@ -149,7 +149,6 @@ const AddBundle = () => {
         if (bResult === true) {
             formData.set(name, oFile);
             let oReader = new FileReader();
-            const oValue = oEvent.target.value;
             oReader.onloadend = () => {
                 setBundles({
                     ...bundles,
