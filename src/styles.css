@@ -25,4 +25,62 @@ span {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.ellipsis-button {
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.default-button {
+    background: url('http://localhost:8000/images/others/Button.png');
+    width: 200px;
+    background-size: cover;
+    border: none;
+    height: 76px;
+}
+
+.category-tab {
+    background: url('http://localhost:8000/images/others/CategoryTab.png') no-repeat 0 0;
+    width: 100%;
+    background-size: cover;
+    border: none;
+    height: 76px;
+}
+
+@keyframes ldio-o8fa4n59lro {
+    0% { transform: translate(-50%,-50%) rotate(0deg); }
+    100% { transform: translate(-50%,-50%) rotate(360deg); }
   }
+  .ldio-o8fa4n59lro div {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #ffc20c;
+    border-top-color: transparent;
+    border-radius: 50%;
+  }
+  .ldio-o8fa4n59lro div {
+    animation: ldio-o8fa4n59lro 1s linear infinite;
+    top: 50px;
+    left: 50px
+  }
+  .loadingio-spinner-rolling-9vq94p0gkx5 {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    overflow: hidden;
+    background: rgba(NaN, NaN, NaN, 0);
+  }
+  .ldio-o8fa4n59lro {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0; /* see note above */
+  }
+  .ldio-o8fa4n59lro div { box-sizing: content-box; }
+

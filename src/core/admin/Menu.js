@@ -42,8 +42,8 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <a className="collapse-item">All bundles</a>
-              <a className="collapse-item">Make bundle</a>
+              <Link to='/admin/bundles' className="collapse-item">All bundles</Link>
+              <Link to='/admin/bundles/add' className="collapse-item">Make bundle</Link>
             </div>
           </div>
         </li>
