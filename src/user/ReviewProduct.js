@@ -3,10 +3,26 @@ import { Link } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { Container, Row, Col, Card, ProgressBar, Table, Image, Form, Button  } from 'react-bootstrap';
 import { IMAGE_API } from '../config';
+import { getProduct } from '../core/admin/products/productsApi';
+import { isAuthenticated } from '../auth/authUtil';
 
-const ProductReview = () => {
+const ProductReview = ({ match }) => {
 
     const [iStar, setStar] = useState(5);
+    const [oProduct, setProduct] = useState(false);
+
+    const { sToken, user } = isAuthenticated();
+
+    useEffect(() => {
+        getProduct(match.params.productId).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                console.log(oData.data);
+                setProduct(oData.data);
+            }
+        });
+    }, []);
 
     const showStar = () => {
         const iRating = 5;
@@ -14,7 +30,7 @@ const ProductReview = () => {
         var aItems = [];
         for (var iLoop = 1; iLoop <= iRating; iLoop++) {
             sCheck = (iLoop <= iStar) ? 'checked' : '';
-            aItems.push(<span key={iLoop} className={`fa fa-star ${sCheck}`} onClick={testFunction(iLoop)}></span>);
+            aItems.push(<span key={iLoop} className={`fa fa-star ${sCheck}`} onClick={runStar(iLoop)}></span>);
         }
         return (
             <Fragment>
@@ -33,9 +49,8 @@ const ProductReview = () => {
         );
     }
 
-    const testFunction = iRating => oEvent => {
+    const runStar = iRating => oEvent => {
         oEvent.preventDefault();
-        console.log(iRating, iStar);
         setStar(iRating);
     }
 
@@ -57,10 +72,10 @@ const ProductReview = () => {
                         <div>
                             <Row>
                                 <Col className="text-right">
-                                    <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" rounded style={{height: "200px", width: "200px"}}></Image>
+                                    <Image src={`${IMAGE_API}/images/products/${oProduct.image}`} rounded style={{height: "200px", width: "200px"}}></Image>
                                 </Col>
                                 <Col className="text-left">
-                                    <p style={{position: "relative", top: "50%", transform: "translateY(-50%)"}}>Product Name</p>
+                                    <p style={{position: "relative", top: "50%", transform: "translateY(-50%)"}}>{oProduct.product_name}</p>
                                 </Col>
                             </Row> 
                         </div>
