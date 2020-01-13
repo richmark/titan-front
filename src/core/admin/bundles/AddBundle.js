@@ -61,7 +61,7 @@ const AddBundle = () => {
                 console.log(oProducts.error);
             } else {
                 setProducts(oProducts.data);
-                setBundles({ ...bundles, formData: new FormData() });
+                setBundles({ ...bundles, formData: new FormData(), discount_type: 'fix'});
             }
         });
     };
@@ -149,10 +149,11 @@ const AddBundle = () => {
         if (bResult === true) {
             formData.set(name, oFile);
             let oReader = new FileReader();
+            const oValue = oEvent.target.value;
             oReader.onloadend = () => {
                 setBundles({
                     ...bundles,
-                    [name]: oReader.result
+                    [name]: oReader.result,
                 });
             };
             oReader.readAsDataURL(oFile);
@@ -172,6 +173,30 @@ const AddBundle = () => {
             } else {
                 alert('Bundle created successfully');
             }
+        });
+    };
+
+    const getDiscountedPrice = () => {
+        if (discount_type && discount_value) {
+            var iTotal = getTotalPrice();
+            return discount_type === 'fix' ? iTotal -= discount_value : iTotal - (iTotal * (discount_value / 100));
+        }
+        return 0;
+    };
+
+    const resetBundle = () => {
+        setSelectedProducts([]);
+        document.getElementById('image').value = '';
+        document.getElementById('discount_type').value = 'fix';
+        var oForm = new FormData();
+        oForm.set('discount_type', 'fix');
+        setBundles({
+            bundle_name: '',
+            bundle_description: '',
+            bundle_thumbnail: '',
+            discount_type: 'fix',
+            discount_value: '',
+            formData: oForm
         });
     };
 
@@ -207,8 +232,8 @@ const AddBundle = () => {
                     <div className="mt-5">
                         <div className="float-left"><span>10</span> Items</div>
                         <div className="float-right mb-2">
-                        <button className="btn btn-primary"> Apply Bundle</button>
-                        <button className="btn btn-primary"> Reset Bundle</button>
+                        {/* <button className="btn btn-primary"> Apply Bundle</button> */}
+                        <button onClick={resetBundle} className="btn btn-primary"> Reset Bundle</button>
                         </div>
                         <table className="table table-bordered">
                         <thead>
@@ -261,10 +286,10 @@ const AddBundle = () => {
                         <div className="form-group row">
                             <label htmlFor="inputPassword" className="col-sm-4 col-form-label">Bundle Name</label>
                             <div className="col-sm">
-                            <input type="text" onChange={handleChange("bundle_name")} className="form-control" id="inputPassword" placeholder="Name" />
+                            <input value={bundle_name} type="text" onChange={handleChange("bundle_name")} className="form-control" id="inputPassword" placeholder="Name" />
                             </div>
                             <div className="col-sm">
-                            <select defaultValue={'default'} onChange={handleChange('discount_type')} id="category" className="btn btn-light border mr-2">
+                            <select defaultValue={'fix'} onChange={handleChange('discount_type')} id="discount_type" className="btn btn-light border mr-2">
                                 <option value='default' disabled>Discount type</option>
                                 <option value='fix'>Fix Value</option>
                                 <option value='percentage'>Percentage</option>
@@ -274,13 +299,13 @@ const AddBundle = () => {
                         <div className="form-group row">
                             <label htmlFor="inputPassword" className="col-sm-4 col-form-label">Discount Value</label>
                             <div className="col-sm">
-                            <input min={1} onChange={handleChange('discount_value')} type="number" className="form-control" id="inputPassword" placeholder="Value" />
+                            <input value={discount_value} min={1} onChange={handleChange('discount_value')} type="number" className="form-control" id="inputPassword" placeholder="Value" />
                             </div>
                         </div>
-                        <textarea onChange={handleChange('bundle_description')} className="form-control" id="exampleFormControlTextarea1" defaultValue={""} />
+                        <textarea value={bundle_description} onChange={handleChange('bundle_description')} className="form-control" id="exampleFormControlTextarea1" />
                         <div className="border p-3 mb-4 mt-3">
                             <h6>Image Upload</h6>
-                            <input onChange={handleChange('bundle_thumbnail')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                            <input onChange={handleChange('bundle_thumbnail')} type="file" className="form-control-file" id="image" />
                         </div>
                         <table className="table table-bordered">
                             <thead>
@@ -310,7 +335,7 @@ const AddBundle = () => {
                         </table>
                         <div className="float-right mb-2 w-100">
                         <p>Total: <span className="float-right">{selectedProducts.length > 0 && getTotalPrice()}</span></p>
-                            <p>Discounted Price: <span className="float-right"> 30000</span></p>
+                        <p>Discounted Price: <span className="float-right"> {selectedProducts.length > 0 && getDiscountedPrice()}</span></p>
                         </div>
                         </div>
                     </div>        
