@@ -6,6 +6,39 @@ import { IMAGE_API } from '../config';
 
 const ProductReview = () => {
 
+    const [iStar, setStar] = useState(5);
+
+    const showStar = () => {
+        const iRating = 5;
+        var sCheck = 'checked';
+        var aItems = [];
+        for (var iLoop = 1; iLoop <= iRating; iLoop++) {
+            sCheck = (iLoop <= iStar) ? 'checked' : '';
+            aItems.push(<span key={iLoop} className={`fa fa-star ${sCheck}`} onClick={testFunction(iLoop)}></span>);
+        }
+        return (
+            <Fragment>
+                {aItems}
+            </Fragment>
+        );
+    }
+
+    const showRating = () => {
+        return (
+            <Fragment>
+                <div id="rating" className="text-center mt-3">
+                    {showStar()}
+                </div>
+            </Fragment>
+        );
+    }
+
+    const testFunction = iRating => oEvent => {
+        oEvent.preventDefault();
+        console.log(iRating, iStar);
+        setStar(iRating);
+    }
+
     const showProductReview = () => {
         return (
             <Container className="mt-5">
@@ -31,13 +64,7 @@ const ProductReview = () => {
                                 </Col>
                             </Row> 
                         </div>
-                        <div id="rating" class="text-center mt-3">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
+                        {showRating()}
                         <div className="mt-4">
                             <Form.Group controlId="exampleForm.ControlTextarea1">
                                 <Form.Control as="textarea" rows="3" />
