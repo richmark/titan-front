@@ -339,7 +339,7 @@ const Profile = ({match}) => {
         var oValidator = oValidatorLibrary();
         const oData = {
             current_password    : getValue('formCurrentPassword'),
-            password        : getValue('formNewPassword'),
+            password            : getValue('formNewPassword'),
             confirm_password    : getValue('formConfirmPassword'),
         }
 

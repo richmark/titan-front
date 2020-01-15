@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
 import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, InputGroup, DropdownButton, Dropdown, Container, Image} from 'react-bootstrap';
 import { getTotalCount } from './client/cartHelpers';
+import { Link } from 'react-router-dom';
 
 const Layout = ({ run=undefined, children }) => {
     const { user } = isAuthenticated();
@@ -80,7 +81,9 @@ const Layout = ({ run=undefined, children }) => {
             <Navbar expand="lg" style={{borderBottom: '8px solid #ffc044', backgroundColor: 'black'}}>
             <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
                 <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
-                    <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                    <Link to='/'>
+                        <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                    </Link>
                 </Col>
                 <Col xs={1} md={1} xl={1} sm={1}>
                     <Dropdown style={{width: '100%'}}>
