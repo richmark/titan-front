@@ -2,14 +2,20 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
 import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, InputGroup, DropdownButton, Dropdown, Container, Image} from 'react-bootstrap';
 import { getTotalCount } from './client/cartHelpers';
+import { Link } from 'react-router-dom';
 
-const Layout = ({ run=undefined, children }) => {
+const Layout = ({ loader='none', run=undefined, children }) => {
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
+    const [mLoader, setLoader] = useState(loader);
 
     useEffect(() => {
         setCount(getTotalCount());
     }, [run]);
+
+    useEffect(() => {
+        setLoader(loader);
+    }, [loader]);
     
     const showBadge = () => {
         return (
@@ -80,7 +86,9 @@ const Layout = ({ run=undefined, children }) => {
             <Navbar expand="lg" style={{borderBottom: '8px solid #ffc044', backgroundColor: 'black'}}>
             <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
                 <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
-                    <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                    <Link to='/'>
+                        <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                    </Link>
                 </Col>
                 <Col xs={1} md={1} xl={1} sm={1}>
                     <Dropdown style={{width: '100%'}}>
@@ -187,8 +195,26 @@ const Layout = ({ run=undefined, children }) => {
         );
     };
 
+    const showLoader = () => {
+        return (
+            <Fragment>
+                <div style={{position: 'absolute', zIndex: 99999, backgroundColor: 'rgba(99, 99, 99, 0.6)', width: '100%', height: '100%', display: mLoader}}>
+                    <div style={{width: '20%', position: 'fixed', textAlign: 'center', height: '10%', left: '40%', top: '45%'}}>
+                        <div className="loadingio-spinner-rolling-9vq94p0gkx5">
+                            <div className="ldio-o8fa4n59lro">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div>Loading...</div>
+                    </div>
+                </div>
+            </Fragment>
+        );
+    }
+
     return (
         <Fragment>
+            {showLoader()}
             <div style={getStyle()}>
             {showNavFirst()}
             {showNavBarSecond()}

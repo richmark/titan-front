@@ -9,7 +9,7 @@ import HomePage from "./user/HomePage";
 import Menu from "./core/admin/Menu";
 import PreRegister from "./user/PreRegister";
 import Bundles from "./core/admin/bundles/Bundles";
-import AddBundle from './core/admin/bundles/AddBundle';
+import AddBundle from "./core/admin/bundles/AddBundle";
 import Coupons from "./core/admin/coupons/Coupons";
 import AddCoupons from "./core/admin/coupons/AddCoupons";
 import Orders from "./core/admin/orders/Orders";
@@ -63,7 +63,11 @@ const Routes = () => {
         component={ProductsByCategory}
       />
       <Route path="/order/detail/:orderId" exact component={OrderDetails} />
-      <Route path="/product/review" exact component={ReviewProduct} />
+      <Route
+        path="/product/review/:orderId/:productId"
+        exact
+        component={ReviewProduct}
+      />
       <Route
         path="/payment/paymaya/:userId/:sRequestId/:status"
         exact

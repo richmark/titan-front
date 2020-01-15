@@ -85,36 +85,43 @@ const Profile = ({match}) => {
     };
 
     const showOrderTable = () => {
+        if (aOrder.length > 0) {
+            return (
+                <Fragment>
+                    <Table responsive>
+                        <thead>
+                            <tr>
+                                <th>Order Id</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {aOrder.map((oOrder, iIndex) => {
+                                return (
+                                    <Fragment key={iIndex}>
+                                        <tr>
+                                            <td>{oOrder._id}</td>
+                                            <td>{oOrder.createdAt}</td>
+                                            <td>₱ {oOrder.amount}</td>
+                                            <td>
+                                                <Link to={`/order/detail/${oOrder._id}`}>
+                                                    Manage
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    </Fragment>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                </Fragment>
+            );
+        }
         return (
             <Fragment>
-                <Table responsive>
-                    <thead>
-                        <tr>
-                            <th>Order Id</th>
-                            <th>Date</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {aOrder.map((oOrder, iIndex) => {
-                            return (
-                                <Fragment key={iIndex}>
-                                    <tr>
-                                        <td>{oOrder._id}</td>
-                                        <td>{oOrder.createdAt}</td>
-                                        <td>₱ {oOrder.amount}</td>
-                                        <td>
-                                            <Link to={`/order/detail/${oOrder._id}`}>
-                                                Manage
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                </Fragment>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+                No Orders
             </Fragment>
         );
     }

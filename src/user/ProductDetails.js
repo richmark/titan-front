@@ -69,8 +69,8 @@ const ProductDetails = ({match}) => {
         console.log(oData.error);
       } else {
         setCategory({
-          _id : oData._id,
-          name: oData.name
+          _id : oData.data._id,
+          name: oData.data.name
         });
       }
     });
@@ -137,7 +137,7 @@ const ProductDetails = ({match}) => {
               </span>
               <span>
                 <h6>
-                  Category: <Link to="/">{oCategory.name}</Link>
+                  Category: <Link to={`/categories/${oCategory._id}`}>{oCategory.name}</Link>
                 </h6>
               </span>
               <hr />

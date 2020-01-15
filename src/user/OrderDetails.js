@@ -22,6 +22,7 @@ const OrderDetails = ({match}) => {
                 console.log(oData.error);
                 return;
             }
+            console.log(oData.data);
             setOrder(oData.data);
         });
     }
@@ -29,6 +30,17 @@ const OrderDetails = ({match}) => {
     useEffect(() => {
         init();
     }, []);
+
+    const showReview = (oProduct) => {
+        if (oProduct.reviewed === false) {
+            return (
+                <Fragment>
+                    <Link to={`/product/review/${oOrder._id}/${oProduct._id}`}>Write Review</Link>
+                </Fragment>
+            );
+        }
+        return <Fragment>Review Submitted</Fragment>
+    }
 
     const showProductRow = (aProduct) => {
         return aProduct.length > 0 && aProduct.map((oProduct, iIndex) => {
@@ -44,7 +56,7 @@ const OrderDetails = ({match}) => {
                     <td className="align-middle"><strong>Qty:</strong> <span>{oProduct.count}</span></td>
                     <td className="align-middle">₱ <span>{oProduct.price * oProduct.count}</span></td>
                     <td className="align-middle">
-                        <Link to={`/product/review/${oProduct._id}`}>Write Review</Link>
+                        {showReview(oProduct)}
                     </td>
                 </tr>
                 </Fragment>
