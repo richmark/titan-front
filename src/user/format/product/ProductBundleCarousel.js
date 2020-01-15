@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Carousel, Container, Image } from 'react-bootstrap';
+import { IMAGE_API } from '../../../config';
 
 const ProductBundleCarousel = () => {
     const aData = [
@@ -50,7 +51,7 @@ const ProductBundleCarousel = () => {
     
     return (
         <Container>
-            <div className="category-tab mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Bundle Deals</p></strong></div>
+            <div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Bundle Deals</p></strong></div>
             {showCarousel(aData)}
         </Container>
     );

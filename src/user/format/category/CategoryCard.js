@@ -21,7 +21,7 @@ const CategoryCard = (aData) => {
                     </Row>
                     <Row className=" mt-2">
                         <Col>
-                            <button className="default-button text-center" style={{color: 'white'}}>
+                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png)`}}>
                                 <p className="text-center ellipsis-button" style={{fontSize: "2.5vh"}}>{oCategories.name}</p>
                             </button>
                         </Col>
@@ -64,7 +64,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Categories</p></strong></div>
+            <div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Categories</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    
