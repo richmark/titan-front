@@ -3,6 +3,7 @@ import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
 import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, InputGroup, DropdownButton, Dropdown, Container, Image} from 'react-bootstrap';
 import { getTotalCount } from './client/cartHelpers';
 import { Link } from 'react-router-dom';
+import { IMAGE_API } from '../config';
 
 const Layout = ({ loader='none', run=undefined, children }) => {
     const { user } = isAuthenticated();
@@ -25,7 +26,7 @@ const Layout = ({ loader='none', run=undefined, children }) => {
 
     const getStyle = () => {
         if (window.location.pathname === '/') {
-            return {backgroundImage: 'url(http://localhost:8000/images/others/homepage.jpg)'};
+            return {backgroundImage: `url(${IMAGE_API}/images/others/homepage.jpg)`};
         }
         return {backgroundColor: 'white'};
     };
@@ -87,7 +88,7 @@ const Layout = ({ loader='none', run=undefined, children }) => {
             <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
                 <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
                     <Link to='/'>
-                        <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                        <Image src={`${IMAGE_API}/images/others/titan-supertools-logo.png`} alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
                     </Link>
                 </Col>
                 <Col xs={1} md={1} xl={1} sm={1}>
