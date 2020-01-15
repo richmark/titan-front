@@ -23,12 +23,13 @@ const Checkout = () => {
     const { user, sToken } = isAuthenticated();
     const [mRedirect, setRedirect] = useState(false);
     const [modalPaymaya, setModalPaymaya] = useState(false);
+    const [mLoader, setLoader] = useState('none');
 
     const init = () => {
         var aCart = getCart();
         setProduct(aCart);
         getRealPrice(aCart);
-        getToken(user._id, sToken);
+        // getToken(user._id, sToken);
     };
 
     useEffect(() => {
@@ -89,6 +90,7 @@ const Checkout = () => {
 
     const runPaymaya = (user, props) => oEvent => {
         oEvent.preventDefault();
+        setLoader(true);
         props.onHide();
         var oTotal = calculateTotal();
         var oOrder = {
@@ -328,37 +330,51 @@ const Checkout = () => {
     }
 
     const showBilling = () => {
-        return (
-            <Fragment>
-                <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
-                <div id="basic-info" className="mt-4">
-                    <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">{user.first_name} {user.last_name}</span>
-                    <div id="address-info">
-                        <span className="font-weight-light">
-                            {user.address}
+        if (user) {
+            return (
+                <Fragment>
+                    <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
+                    <div id="basic-info" className="mt-4">
+                        <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">{user.first_name} {user.last_name}</span>
+                        <div id="address-info">
+                            <span className="font-weight-light">
+                                {user.address}
+                            </span>
+                        </div>
+                    </div>
+                    <div id="billing-address" className="mt-2">
+                        <span className="font-weight-bold">
+                            <i className="fas fa-sticky-note"></i> Bill to the same address
                         </span>
                     </div>
-                </div>
-                <div id="billing-address" className="mt-2">
-                    <span className="font-weight-bold">
-                        <i className="fas fa-sticky-note"></i> Bill to the same address
-                    </span>
-                </div>
-                <div id="contact-number" className="mt-2">
-                    <span className="font-weight-bold">
-                        <i className="fas fa-phone-alt"></i> {user.mobile_number}
-                    </span>
-                </div>
-                <div id="email" className="mt-2">
-                    <span className="font-weight-bold">
-                        <i className="fas fa-at"></i> {user.email}
-                    </span>
-                </div>
+                    <div id="contact-number" className="mt-2">
+                        <span className="font-weight-bold">
+                            <i className="fas fa-phone-alt"></i> {user.mobile_number}
+                        </span>
+                    </div>
+                    <div id="email" className="mt-2">
+                        <span className="font-weight-bold">
+                            <i className="fas fa-at"></i> {user.email}
+                        </span>
+                    </div>
+    
+                    <div id="place-order" className="mt-4 text-center">
+                        <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
+                            Place Order
+                        </Button>
+                    </div>
+                </Fragment>
+            );
+        }
+        return showLoginButton();    
+    }
 
-                <div id="place-order" className="mt-4 text-center">
-                    <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
-                        Place Order
-                    </Button>
+    const showLoginButton = () => {
+        return (
+            <Fragment>
+                <div className='text-center mt-5'>
+                    <h5>Do you want to checkout?</h5>
+                    <Button variant='warning' className='mt-3' href='/login'>Please Log In</Button>
                 </div>
             </Fragment>
         );
@@ -410,7 +426,7 @@ const Checkout = () => {
     };
 
     return (
-        <Layout run={iRun}>
+        <Layout run={iRun} loader={mLoader}>
             {showProductMain()}
             {redirectForbidden()}
             {redirectUser()}

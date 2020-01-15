@@ -10,6 +10,7 @@ const PaymentStatus = ({ match }) => {
     const oData = match.params;
     const { user, sToken } = isAuthenticated();
     const [mSuccess, setSuccess] = useState(false);
+    const [bCheckout, setCheckout] = useState(false); 
 
     useEffect(() => {
         if (oData.status === 'success' && user._id === oData.userId) {
@@ -22,8 +23,17 @@ const PaymentStatus = ({ match }) => {
                     setSuccess(oRetrieve.data._id);
                 }
             });
+        } else {
+            alert('Processing Failed! Please try again');
+            setCheckout(true);
         }
     }, []);
+
+    const redirectCheckout = () => {
+        if (bCheckout !== false) {
+            return <Redirect to={`/checkout`} />
+        }
+    }
 
     const redirectOrderDetail = () => {
         if (mSuccess !== false) {
@@ -43,9 +53,10 @@ const PaymentStatus = ({ match }) => {
     };
     
 	return (
-        <Layout>
-            {showPaymentStatus()}
+        <Layout loader={true}>
+            {/* {showPaymentStatus()} */}
             {redirectOrderDetail()}
+            {redirectCheckout()}
         </Layout>
     );
 };
