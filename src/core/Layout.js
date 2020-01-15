@@ -4,13 +4,18 @@ import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, I
 import { getTotalCount } from './client/cartHelpers';
 import { Link } from 'react-router-dom';
 
-const Layout = ({ run=undefined, children }) => {
+const Layout = ({ loader='none', run=undefined, children }) => {
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
+    const [mLoader, setLoader] = useState(loader);
 
     useEffect(() => {
         setCount(getTotalCount());
     }, [run]);
+
+    useEffect(() => {
+        setLoader(loader);
+    }, [loader]);
     
     const showBadge = () => {
         return (
@@ -190,8 +195,26 @@ const Layout = ({ run=undefined, children }) => {
         );
     };
 
+    const showLoader = () => {
+        return (
+            <Fragment>
+                <div style={{position: 'absolute', zIndex: 99999, backgroundColor: 'rgba(99, 99, 99, 0.6)', width: '100%', height: '100%', display: mLoader}}>
+                    <div style={{width: '20%', position: 'fixed', textAlign: 'center', height: '10%', left: '40%', top: '45%'}}>
+                        <div className="loadingio-spinner-rolling-9vq94p0gkx5">
+                            <div className="ldio-o8fa4n59lro">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div>Loading...</div>
+                    </div>
+                </div>
+            </Fragment>
+        );
+    }
+
     return (
         <Fragment>
+            {showLoader()}
             <div style={getStyle()}>
             {showNavFirst()}
             {showNavBarSecond()}
