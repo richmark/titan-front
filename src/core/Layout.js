@@ -26,7 +26,7 @@ const Layout = ({ loader='none', run=undefined, children }) => {
 
     const getStyle = () => {
         if (window.location.pathname === '/') {
-            return {backgroundImage: `url(${IMAGE_API}/images/others/homepage.jpg)`};
+            return {backgroundImage: `url(${IMAGE_API}/images/others/background.png)`};
         }
         return {backgroundColor: 'white'};
     };
