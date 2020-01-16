@@ -10,7 +10,7 @@ const CategoryCard = (aData) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Link to={`categories/${oCategories._id}`}>
-                <Card className="pt-3"  style={{background: 'transparent'}}>
+                <Card className="pt-3 border-0"  style={{background: 'transparent'}}>
                     <Row>
                         <Col>
                             <Image 
