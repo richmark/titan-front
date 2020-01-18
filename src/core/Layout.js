@@ -68,7 +68,17 @@ const Layout = ({ loader='none', run=undefined, children }) => {
                     <a href="/login" className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> Login</a>
                     </Col>
                     <Col className="mt-2 mb-2 ellipsis">
-                    <a href="/signup" className="text-white"><i className="fas fa-edit" style={{color: '#ffc044'}}></i> Register</a>
+                    <a href="/signup" className="text-white"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '75px -67px',
+                        backgroundSize: '47px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                    }}>Register</span></a>
                     </Col>  
             </Fragment>
         );
@@ -134,10 +144,31 @@ const Layout = ({ loader='none', run=undefined, children }) => {
         return (
             <Nav activeKey="/home" style={{marginLeft: '20%'}}>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-home" style={{color: '#ffc044'}}></i> Home</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '125px -152px',
+                        backgroundSize: '60px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                        }}>Home
+                    </span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-shopping-cart" style={{color: '#ffc044'}}></i> Shop</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '125px -123px',
+                        backgroundSize: '60px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                    }}>Shop</span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
