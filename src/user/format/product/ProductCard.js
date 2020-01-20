@@ -28,13 +28,13 @@ const ProductCard = (aData, setRun = () => {}) => {
         var sName = (oProduct.product_name === undefined) ? "My Product" : oProduct.product_name;
         return (
             <Card className="pt-3" className="border-0" style={{background: 'transparent'}}>
-                <Link to={`/product/details/${oProduct._id}`} className="mx-auto">
+                <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                     <Card.Img 
                         variant="top" 
                         src={`${IMAGE_API}/images/products/${sImage}`}
                         style={{width: "200px", height: "200px"}}
                     />
-                </Link>
+                </a>
                 <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
                 <Card.Body className="pt-2">
                     <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png)`}}>

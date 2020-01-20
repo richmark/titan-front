@@ -10,6 +10,7 @@ import { IMAGE_API } from "../config";
 import { addItem, getTotalCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
+  const [iRun, setRun] = useState(getTotalCount());
   const [previewImage, setPreviewImage] = useState('');
   const [oRelatedProducts, setRelatedProducts] = useState([]);
   const [oProduct, setProduct] = useState({
@@ -27,8 +28,6 @@ const ProductDetails = ({match}) => {
     _id : '',
     name: ''
   });
-
-  const [iRun, setRun] = useState(getTotalCount());
   const [iCount, setCount] = useState(1);
 
   const [bProduct, setBoolProduct] = useState(true);
@@ -213,7 +212,7 @@ const ProductDetails = ({match}) => {
         <Fragment>
           <Container className="border border-black rounded p-5 mt-4">
             <h5>Related Product</h5>
-            {ProductCard(oRelatedProducts.data)}
+            {ProductCard(oRelatedProducts.data, setRun)}
           </Container>
         </Fragment>
       );
