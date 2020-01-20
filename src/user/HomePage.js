@@ -4,7 +4,6 @@ import CategoryCard from './format/category/CategoryCard';
 import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col } from 'react-bootstrap';
-import { getAllCategories } from '../core/admin/categories/categoriesApi';
 import { getAllProducts } from '../core/admin/products/productsApi';
 import { getTotalCount } from '../core/client/cartHelpers'; 
 
@@ -16,15 +15,6 @@ const HomePage = () => {
     const [aProducts, setProducts] = useState([]);
 
     const init = () => {
-        getAllCategories().then(oData => {
-            console.log(oData);
-            if (oData.error) {
-                console.log(oData.error)
-            } else {
-                setCategories(oData.data);
-            }
-        });
-
         getAllProducts().then(oData => {
             if (oData.error) {
                 console.log(oData.error)
@@ -45,9 +35,13 @@ const HomePage = () => {
             </Container>
         );
     };
+
+    const getCategory = (aData) => {
+        setCategories(aData);
+    }
     
 	return (
-        <Layout run={iRun}>
+        <Layout oGetCategory={getCategory} run={iRun}>
             <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
