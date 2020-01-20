@@ -50,16 +50,16 @@ const ProductDetails = ({match}) => {
       } else {
         oData = oData.data;
         setInfo(oData.additional_info);
-            setProduct({
-              ...oProduct,
-              image : `${IMAGE_API}/images/products/${oData.image}`,
-              additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
-              product_name: oData.product_name,
-              price: oData.price,
-              description: oData.description
-            });
-            setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
-            fetchCategory(oData.category);
+        setProduct({
+          ...oProduct,
+          image : `${IMAGE_API}/images/products/${oData.image}`,
+          additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
+          product_name: oData.product_name,
+          price: oData.price,
+          description: oData.description
+        });
+        setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
+        fetchCategory(oData.category);
         }
     });
   };
@@ -124,7 +124,7 @@ const ProductDetails = ({match}) => {
   };
 
   const showProductMain = () => {
-    return (
+    return oCategory._id !== '' && (
       <Fragment>
         <Container className="border border-black rounded p-5">
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
@@ -167,7 +167,7 @@ const ProductDetails = ({match}) => {
                 </Form.Group>
               </Form>
               <hr />
-              <Button variant="primary">Buy Now</Button>{" "}
+              <Button variant="primary" href={`/checkout?sType=buyNow&id=${encodeData(oProduct)}`}>Buy Now</Button>{" "}
               <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
             </Col>
           </Row>
@@ -175,6 +175,11 @@ const ProductDetails = ({match}) => {
       </Fragment>
     );
   };
+
+  const encodeData = (oData) => {
+    oData.count = 1;
+    return btoa(JSON.stringify(oData));
+  }
 
   const showAdditionalInfo = () => {
     if (oInfo !== undefined && oInfo.length !== 0) {

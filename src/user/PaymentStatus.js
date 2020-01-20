@@ -5,23 +5,26 @@ import { Container, Row, Col, Card, ProgressBar, Table, Image, Form, Button  } f
 import { retrievePaymayaCheckout } from '../core/client/checkoutApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { emptyCart } from '../core/client/cartHelpers';
+import oQuery from 'query-string';
 
-const PaymentStatus = ({ match }) => {
+const PaymentStatus = ({ match, location }) => {
     const oData = match.params;
     const { user, sToken } = isAuthenticated();
     const [mSuccess, setSuccess] = useState(false);
-    const [bCheckout, setCheckout] = useState(false); 
+    const [bCheckout, setCheckout] = useState(false);
+    const oNotBuyNow = oQuery.parse(location.search); 
 
     useEffect(() => {
         if (oData.status === 'success' && user._id === oData.userId) {
             retrievePaymayaCheckout(oData.userId, sToken, oData.sRequestId).then((oRetrieve) => {
                 if (oRetrieve.error) {
                     console.log(oRetrieve.error);
+                    return;
                 }
-                if (oRetrieve.data._id) {
+                if (oRetrieve.data._id && oNotBuyNow.bData === 'true') {
                     emptyCart();
-                    setSuccess(oRetrieve.data._id);
                 }
+                setSuccess(oRetrieve.data._id);
             });
         } else {
             alert('Processing Failed! Please try again');
