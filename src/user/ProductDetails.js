@@ -4,13 +4,14 @@ import ProductCard from "./format/product/ProductCard";
 import ProductAdditionalInfo from "./format/product/ProductAdditionalInfo";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
-import { getProduct } from "../core/admin/products/productsApi";
+import { getProduct, getRelatedProduct } from "../core/admin/products/productsApi";
 import { getCategory } from "../core/admin/categories/categoriesApi";
 import { IMAGE_API } from "../config";
 import { addItem, getTotalCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
   const [previewImage, setPreviewImage] = useState('');
+  const [oRelatedProducts, setRelatedProducts] = useState([]);
   const [oProduct, setProduct] = useState({
     image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
     additional_images: false,
@@ -32,7 +33,7 @@ const ProductDetails = ({match}) => {
 
   const [bProduct, setBoolProduct] = useState(true);
   
-  const { image, additional_images, product_name, price, description } = oProduct;
+  const { image, additional_images, product_name, price, description, _id } = oProduct;
 
   const addToCart = () => {
     addItem(oProduct, iCount, () => {
@@ -72,9 +73,20 @@ const ProductDetails = ({match}) => {
           _id : oData.data._id,
           name: oData.data.name
         });
+        fetchRelatedProducts();
       }
     });
   };
+
+  const fetchRelatedProducts = () => {
+    getRelatedProduct(_id).then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+      } else {
+        setRelatedProducts(oData);
+      }
+    });
+  }
   
   useEffect(() => {
     init();
@@ -191,14 +203,16 @@ const ProductDetails = ({match}) => {
   };
 
   const showRelatedProduct = () => {
-    return (
-      <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
-          <h5>Related Product</h5>
-          {ProductCard()}
-        </Container>
-      </Fragment>
-    );
+    if (oRelatedProducts.data && oRelatedProducts.data.length > 0) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+            <h5>Related Product</h5>
+            {ProductCard(oRelatedProducts.data)}
+          </Container>
+        </Fragment>
+      );
+    }
   };
 
   return (

@@ -90,9 +90,26 @@ export const getProductCount = () => {
     })
     .catch(oError => console.log(oError));
 };
+
 export const getProductByCategory = (sId, skip, order) => {
   return fetch(
     `${API_URL}/products/category/${sId}?skip=${skip}&order=${order}`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    }
+  )
+    .then(oResponse => {
+      return oResponse.json();
+    })
+    .catch(oError => console.log(oError));
+};
+
+export const getRelatedProduct = (sId) => {
+  return fetch(
+    `${API_URL}/products/related/${sId}`,
     {
       method: "GET",
       headers: {
