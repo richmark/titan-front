@@ -64,8 +64,12 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <Link to='/admin/products' className="collapse-item">All Products</Link>
-              <a className="collapse-item">Add Coupons</a>
+              <Link to="/admin/coupons" className="collapse-item">
+                All Coupons
+              </Link>
+              <Link to="/admin/coupons/add" className="collapse-item">
+                Add Coupons
+              </Link>
             </div>
           </div>
         </li>
@@ -86,7 +90,9 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <Link to='/admin/orders' className="collapse-item">All Order</Link>
+              <Link to="/admin/orders" className="collapse-item">
+                All Order
+              </Link>
               <a className="collapse-item">Process Order</a>
             </div>
           </div>
@@ -111,8 +117,12 @@ const Menu = () => {
               <Link to="/admin/products/add" className="collapse-item">
                 Add Products
               </Link>
-              <Link to='/admin/products' className="collapse-item">All Products</Link>
-              <Link to='/admin/categories' className="collapse-item">Categories</Link>
+              <Link to="/admin/products" className="collapse-item">
+                All Products
+              </Link>
+              <Link to="/admin/categories" className="collapse-item">
+                Categories
+              </Link>
             </div>
           </div>
         </li>
@@ -133,7 +143,9 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <Link to='/admin/reviews' className="collapse-item">All Reviews</Link>
+              <Link to="/admin/reviews" className="collapse-item">
+                All Reviews
+              </Link>
             </div>
           </div>
         </li>

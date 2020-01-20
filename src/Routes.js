@@ -9,8 +9,9 @@ import HomePage from "./user/HomePage";
 import Menu from "./core/admin/Menu";
 import PreRegister from "./user/PreRegister";
 import Bundles from "./core/admin/bundles/Bundles";
-import AddBundle from './core/admin/bundles/AddBundle';
+import AddBundle from "./core/admin/bundles/AddBundle";
 import Coupons from "./core/admin/coupons/Coupons";
+import AddCoupons from "./core/admin/coupons/AddCoupons";
 import Orders from "./core/admin/orders/Orders";
 import UpdateOrders from "./core/admin/orders/UpdateOrders";
 import Products from "./core/admin/products/Products";
@@ -28,10 +29,10 @@ import UpdateProduct from "./core/admin/products/UpdateProduct";
 import ProductDetails from "./user/ProductDetails";
 import Checkout from "./user/Checkout";
 import Forbidden from "./user/Forbidden";
-import ProductsByCategory from './user/format/category/ProductsByCategory';
-import OrderDetails from './user/OrderDetails';
-import ReviewProduct from './user/ReviewProduct';
-import PaymayaStatus from './user/PaymentStatus'
+import ProductsByCategory from "./user/format/category/ProductsByCategory";
+import OrderDetails from "./user/OrderDetails";
+import ReviewProduct from "./user/ReviewProduct";
+import PaymayaStatus from "./user/PaymentStatus";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -49,28 +50,57 @@ const Routes = () => {
       <Route path="/verify/:sToken" exact component={VerifyEmail} />
       <Route path="/" exact component={HomePage} />
       <Route path="/resetPassword/:tokenId" exact component={ResetPassword} />
-      <Route path="/product/details/:productId" exact component={ProductDetails} />
+      <Route
+        path="/product/details/:productId"
+        exact
+        component={ProductDetails}
+      />
       <Route path="/checkout" exact component={Checkout} />
       <Route path="/forbidden" exact component={Forbidden} />
-      <Route path="/categories/:categoryId" exact component={ProductsByCategory} />
+      <Route
+        path="/categories/:categoryId"
+        exact
+        component={ProductsByCategory}
+      />
       <Route path="/order/detail/:orderId" exact component={OrderDetails} />
-      <Route path="/product/review/:orderId/:productId" exact component={ReviewProduct} />
-      <Route path="/payment/paymaya/:userId/:sRequestId/:status" exact component={PaymayaStatus} />
+      <Route
+        path="/product/review/:orderId/:productId"
+        exact
+        component={ReviewProduct}
+      />
+      <Route
+        path="/payment/paymaya/:userId/:sRequestId/:status"
+        exact
+        component={PaymayaStatus}
+      />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
       {/* Menu Tabs */}
       <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
       <AdminRoute path="/admin/shippers" exact component={Shippers} />
-      <AdminRoute path="/admin/shippers/:shipperId" exact component={UpdateShipper} />
+      <AdminRoute
+        path="/admin/shippers/:shipperId"
+        exact
+        component={UpdateShipper}
+      />
       <AdminRoute path="/admin/bundles" exact component={Bundles} />
       <AdminRoute path="/admin/bundles/add" exact component={AddBundle} />
       <AdminRoute path="/admin/coupons" exact component={Coupons} />
+      <AdminRoute path="/admin/coupons/add" exact component={AddCoupons} />
       <AdminRoute path="/admin/orders" exact component={Orders} />
-      <AdminRoute path="/admin/orders/:orderId" exact component={UpdateOrders} />
+      <AdminRoute
+        path="/admin/orders/:orderId"
+        exact
+        component={UpdateOrders}
+      />
       <AdminRoute path="/admin/products" exact component={Products} />
       <AdminRoute path="/admin/categories" exact component={Categories} />
-      <AdminRoute path="/admin/categories/update/:categoryId" exact component={UpdateCategory} />
+      <AdminRoute
+        path="/admin/categories/update/:categoryId"
+        exact
+        component={UpdateCategory}
+      />
       <AdminRoute path="/admin/reviews" exact component={Reviews} />
       <AdminRoute path="/admin/products/add" exact component={AddProduct} />
       <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
