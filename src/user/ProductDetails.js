@@ -4,13 +4,15 @@ import ProductCard from "./format/product/ProductCard";
 import ProductAdditionalInfo from "./format/product/ProductAdditionalInfo";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
-import { getProduct } from "../core/admin/products/productsApi";
+import { getProduct, getRelatedProduct } from "../core/admin/products/productsApi";
 import { getCategory } from "../core/admin/categories/categoriesApi";
 import { IMAGE_API } from "../config";
 import { addItem, getTotalCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
+  const [iRun, setRun] = useState(getTotalCount());
   const [previewImage, setPreviewImage] = useState('');
+  const [oRelatedProducts, setRelatedProducts] = useState([]);
   const [oProduct, setProduct] = useState({
     image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
     additional_images: false,
@@ -26,13 +28,11 @@ const ProductDetails = ({match}) => {
     _id : '',
     name: ''
   });
-
-  const [iRun, setRun] = useState(getTotalCount());
   const [iCount, setCount] = useState(1);
 
   const [bProduct, setBoolProduct] = useState(true);
   
-  const { image, additional_images, product_name, price, description } = oProduct;
+  const { image, additional_images, product_name, price, description, _id } = oProduct;
 
   const addToCart = () => {
     addItem(oProduct, iCount, () => {
@@ -49,16 +49,16 @@ const ProductDetails = ({match}) => {
       } else {
         oData = oData.data;
         setInfo(oData.additional_info);
-            setProduct({
-              ...oProduct,
-              image : `${IMAGE_API}/images/products/${oData.image}`,
-              additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
-              product_name: oData.product_name,
-              price: oData.price,
-              description: oData.description
-            });
-            setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
-            fetchCategory(oData.category);
+        setProduct({
+          ...oProduct,
+          image : `${IMAGE_API}/images/products/${oData.image}`,
+          additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
+          product_name: oData.product_name,
+          price: oData.price,
+          description: oData.description
+        });
+        setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
+        fetchCategory(oData.category);
         }
     });
   };
@@ -72,9 +72,20 @@ const ProductDetails = ({match}) => {
           _id : oData.data._id,
           name: oData.data.name
         });
+        fetchRelatedProducts();
       }
     });
   };
+
+  const fetchRelatedProducts = () => {
+    getRelatedProduct(_id).then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+      } else {
+        setRelatedProducts(oData);
+      }
+    });
+  }
   
   useEffect(() => {
     init();
@@ -112,7 +123,7 @@ const ProductDetails = ({match}) => {
   };
 
   const showProductMain = () => {
-    return (
+    return oCategory._id !== '' && (
       <Fragment>
         <Container className="border border-black rounded p-5">
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
@@ -155,7 +166,7 @@ const ProductDetails = ({match}) => {
                 </Form.Group>
               </Form>
               <hr />
-              <Button variant="primary">Buy Now</Button>{" "}
+              <Button variant="primary" href={`/checkout?sType=buyNow&id=${encodeData(oProduct)}`}>Buy Now</Button>{" "}
               <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
             </Col>
           </Row>
@@ -163,6 +174,11 @@ const ProductDetails = ({match}) => {
       </Fragment>
     );
   };
+
+  const encodeData = (oData) => {
+    oData.count = 1;
+    return btoa(JSON.stringify(oData));
+  }
 
   const showAdditionalInfo = () => {
     if (oInfo !== undefined && oInfo.length !== 0) {
@@ -191,14 +207,16 @@ const ProductDetails = ({match}) => {
   };
 
   const showRelatedProduct = () => {
-    return (
-      <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
-          <h5>Related Product</h5>
-          {ProductCard()}
-        </Container>
-      </Fragment>
-    );
+    if (oRelatedProducts.data && oRelatedProducts.data.length > 0) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+            <h5>Related Product</h5>
+            {ProductCard(oRelatedProducts.data, setRun)}
+          </Container>
+        </Fragment>
+      );
+    }
   };
 
   return (
