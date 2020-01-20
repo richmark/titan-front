@@ -37,8 +37,8 @@ const ProductCard = (aData, setRun = () => {}) => {
                 </Link>
                 <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
                 <Card.Body className="pt-2">
-                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white'}}>
-                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Category</p>
+                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png)`}}>
+                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Add to Cart</p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{sName}</p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
@@ -69,7 +69,7 @@ const ProductCard = (aData, setRun = () => {}) => {
 
     return (
         <Container>
-            <div className="category-tab mt-5 mb-5"><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Our Products</p></strong></div>
+            <div className="category-tab mt-5 mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Our Products</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    

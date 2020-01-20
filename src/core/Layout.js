@@ -3,6 +3,7 @@ import { signin, authenticateUser, isAuthenticated } from '../auth/authUtil';
 import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, InputGroup, DropdownButton, Dropdown, Container, Image} from 'react-bootstrap';
 import { getTotalCount } from './client/cartHelpers';
 import { Link } from 'react-router-dom';
+import { IMAGE_API } from '../config';
 
 const Layout = ({ loader='none', run=undefined, children }) => {
     const { user } = isAuthenticated();
@@ -25,7 +26,7 @@ const Layout = ({ loader='none', run=undefined, children }) => {
 
     const getStyle = () => {
         if (window.location.pathname === '/') {
-            return {backgroundImage: 'url(http://localhost:8000/images/others/homepage.jpg)'};
+            return {backgroundImage: `url(${IMAGE_API}/images/others/background.png)`};
         }
         return {backgroundColor: 'white'};
     };
@@ -67,7 +68,17 @@ const Layout = ({ loader='none', run=undefined, children }) => {
                     <a href="/login" className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> Login</a>
                     </Col>
                     <Col className="mt-2 mb-2 ellipsis">
-                    <a href="/signup" className="text-white"><i className="fas fa-edit" style={{color: '#ffc044'}}></i> Register</a>
+                    <a href="/signup" className="text-white"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '75px -67px',
+                        backgroundSize: '47px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                    }}>Register</span></a>
                     </Col>  
             </Fragment>
         );
@@ -87,7 +98,7 @@ const Layout = ({ loader='none', run=undefined, children }) => {
             <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
                 <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
                     <Link to='/'>
-                        <Image src="http://localhost:8000/images/others/titan-supertools-logo.png" alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
+                        <Image src={`${IMAGE_API}/images/others/titan-supertools-logo.png`} alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
                     </Link>
                 </Col>
                 <Col xs={1} md={1} xl={1} sm={1}>
@@ -133,10 +144,31 @@ const Layout = ({ loader='none', run=undefined, children }) => {
         return (
             <Nav activeKey="/home" style={{marginLeft: '20%'}}>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-home" style={{color: '#ffc044'}}></i> Home</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '125px -152px',
+                        backgroundSize: '60px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                        }}>Home
+                    </span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><i className="fas fa-shopping-cart" style={{color: '#ffc044'}}></i> Shop</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '125px -123px',
+                        backgroundSize: '60px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                    }}>Shop</span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>

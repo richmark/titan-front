@@ -35,7 +35,7 @@ span {
 }
 
 .default-button {
-    background: url('http://localhost:8000/images/others/Button.png');
+    /* background: url('http://localhost:8000/images/others/Button.png'); */
     width: 200px;
     background-size: cover;
     border: none;
@@ -43,7 +43,7 @@ span {
 }
 
 .category-tab {
-    background: url('http://localhost:8000/images/others/CategoryTab.png') no-repeat 0 0;
+    /* background: url('http://localhost:8000/images/others/CategoryTab.png') no-repeat 0 0; */
     width: 100%;
     background-size: cover;
     border: none;
