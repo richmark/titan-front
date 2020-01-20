@@ -14,6 +14,8 @@ const ProductsByCategory = ({ match }) => {
         size: 0,
         data: false
     });
+    const sId = match.params.categoryId;
+    const [mCategory, setCategory] = useState(false);
     const {
         size,
         data
@@ -27,8 +29,9 @@ const ProductsByCategory = ({ match }) => {
         return (
             <Fragment>
                 <Container className="border border-black rounded p-5 mt-4">
-                {data && ProductCard(data, setRun)}
-                {loadMoreButton()}
+                    {mCategory && <h3>{mCategory}</h3>}
+                    {data && ProductCard(data, setRun)}
+                    {loadMoreButton()}
                 </Container>
             </Fragment>
         );
@@ -69,8 +72,17 @@ const ProductsByCategory = ({ match }) => {
         );
     };
 
+    const getCategoryName = (aCategory) => {
+        aCategory.map((oCategory, iIndex) => {
+            if (oCategory._id === sId) {
+                setCategory(oCategory.name);
+                return;
+            }
+        });
+    }   
+
     return (
-        <Layout run={iRun}>
+        <Layout oGetCategory={getCategoryName} run={iRun}>
             {showProductsByCategory()}
         </Layout>
     );    

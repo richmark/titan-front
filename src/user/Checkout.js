@@ -8,44 +8,45 @@ import { isAuthenticated } from '../auth/authUtil';
 import { getBraintreeClientToken, processPayment, initiatePaymayaCheckout } from '../core/client/checkoutApi';
 import { sendOrderData } from '../core/client/orderApi';
 import { Modal } from 'react-bootstrap';
-import DropIn from 'braintree-web-drop-in-react';
+import oQuery from 'query-string';
 
 
-const Checkout = () => {
-
+const Checkout = ({location}) => {
     const [aProduct, setProduct] = useState([]);
     const [bForbidden, setForbidden] = useState(false);
     const [oRealProduct, setRealProduct] = useState(false);
     const [iRun, setRun] = useState(getCart());
-    const [sClientToken, setClientToken] = useState(false);
-    const [bPayment, setPayment] = useState(false);
-    const [oInstance, setInstance] = useState({});
     const { user, sToken } = isAuthenticated();
     const [mRedirect, setRedirect] = useState(false);
     const [modalPaymaya, setModalPaymaya] = useState(false);
     const [mLoader, setLoader] = useState('none');
+    const [bEnable, setEnable] = useState(true);
+    const oBuyNow = oQuery.parse(location.search);
 
     const init = () => {
         var aCart = getCart();
+        initializeCheckout(aCart);
+    };
+
+    const initializeCheckout = (aCart) => {
         setProduct(aCart);
         getRealPrice(aCart);
-        // getToken(user._id, sToken);
-    };
+    }
 
     useEffect(() => {
-        init();
+        if (oBuyNow.sType !== 'buyNow') {
+            init();
+            return;
+        }
+        setEnable(false);
+        var aCart = [decodeData(oBuyNow.id)];
+        initializeCheckout(aCart);
     }, []);
-    
-    const getToken = (sUserId, sToken) => {
-        getBraintreeClientToken(sUserId, sToken).then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else {
-                setClientToken(oData.data.clientToken);
-            }
-        }); 
-    };
 
+    const decodeData = (sData) => {
+        return JSON.parse(atob(sData));
+    }
+    
     const getRealPrice = (aReal) => {
         var iLoop = 1;
         var oTemp = {};
@@ -98,7 +99,8 @@ const Checkout = () => {
             order_address: user.address,
             amount: oTotal.total,
             shipping_fee: oTotal.fee,
-            products: []
+            products: [],
+            bBuyNow: bEnable
         }
 
         aProduct.map((oProduct, iIndex) => {
@@ -126,89 +128,6 @@ const Checkout = () => {
             return;
         }
     };
-
-    const showDropIn = () => {
-        return (
-            <div onBlur={() => {
-                
-            }}>
-                {sClientToken !== false && aProduct.length > 0 ? (
-                    <div>
-                        <DropIn options={{
-                                    authorization: sClientToken,
-                                    paypal: {
-                                        flow: 'vault'
-                                    }
-                                }} 
-                                onInstance={instance => (oInstance.instance = instance)} 
-                        />
-                        <Button onClick={buyCart} variant="success" block>Pay</Button>
-                        <Button onClick={() => setPayment(false)} variant="secondary" block>Cancel</Button>
-                    </div>
-                ) : null}
-            </div>
-        );
-    };
-
-    const buyCart = () => {
-        var oTotal = calculateTotal();
-        // send the nonce to your server
-        // nonce = data.instance.requestPaymentMethod()
-        let oNonce;
-        let getNonce = oInstance.instance.requestPaymentMethod().then(oData => {
-            oNonce = oData.nonce;
-            // once you have nonce (card type, card number) send nonce as 'paymentMethodNonce'
-            // and also total to be charged
-            const oPaymentData = {
-                paymentMethodNonce: oNonce,
-                amount: oTotal.total
-            }
-
-            processPayment(user._id, sToken, oPaymentData).then(oResponse => {
-                var oOrder = {
-                    user: user._id,
-                    order_address: user.address,
-                    transaction_id: oResponse.data.transaction.id,
-                    amount: oResponse.data.transaction.amount,
-                    shipping_fee: oTotal.fee,
-                    products: []
-                }
-
-                aProduct.map((oProduct, iIndex) => {
-                    var oSingleProduct = {
-                        product: oProduct._id,
-                        price: oProduct.price,
-                        count: oProduct.count
-                    };
-                    oOrder.products.push(oSingleProduct); 
-                });
-                sendOrder(oOrder);
-
-            }).catch(oError => {
-                console.log('dropin error: ', oError);    
-            }); 
-                
-        });
-    };
-
-
-    const sendOrder = (oOrder) => {
-        sendOrderData(user._id, sToken, oOrder).then(oData => {
-            if (oData.error) {
-                console.log(oData.error)
-            }
-
-            if (oData.data) {
-                alert('Order Success!');
-                setProduct([]);
-                emptyCart();
-                setRun(getCart());
-            }
-        });
-    }
-
-
-    
 
     const redirectForbidden = () => {
         if (bForbidden === true) {
@@ -239,9 +158,9 @@ const Checkout = () => {
             <div className="border rounded p-4 mb-2">
                 <Row>
                     <Col xs={1} md={1} className="align-middle text-center">
-                        <Button variant="light" style={{marginTop:'35px'}} onClick={deleteItem(oProduct._id)}>
+                        {bEnable && <Button variant="light" style={{marginTop:'35px'}} onClick={deleteItem(oProduct._id)}>
                             <i className="fas fa-trash-alt" style={{fontSize:'24px'}}></i>
-                        </Button>
+                        </Button>}
                     </Col>
                     <Col xs={3} md={3} className="text-center">
                         <Image
@@ -256,13 +175,13 @@ const Checkout = () => {
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
                             <div className="float-right font-weight-bold">Qty: 
-                                <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false)}>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false)}>
                                     -
-                                </Button>
+                                </Button>}
                                 <span>{oProduct.count}</span>
-                                <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true)}>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true)}>
                                     +
-                                </Button>
+                                </Button>}
                             </div>
                             ₱ <span>{oProduct.price}</span>
                         </div>

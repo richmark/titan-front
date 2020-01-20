@@ -220,7 +220,15 @@ const AddBundle = () => {
                         </div>
                     </div>
                     <select id="category" className="btn btn-light border mr-2">
-                        <option value="null" disabled >Select a Category</option>
+                        <option disabled defaultValue>
+                        No category
+                        </option>
+                        {categories &&
+                        categories.map((oCategory, iIndex) => (
+                            <option key={iIndex} value={oCategory._id}>
+                            {oCategory.name}
+                            </option>
+                        ))}
                     </select>
                     <select id="category" className="btn btn-light border mr-2">
                         <option value="null" disabled >Filter by stock</option>
