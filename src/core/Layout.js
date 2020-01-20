@@ -4,11 +4,13 @@ import { Navbar, Nav, Badge, NavDropdown, Form, FormControl, Button, Col, Row, I
 import { getTotalCount } from './client/cartHelpers';
 import { Link } from 'react-router-dom';
 import { IMAGE_API } from '../config';
+import { getAllCategories } from '../core/admin/categories/categoriesApi';
 
-const Layout = ({ loader='none', run=undefined, children }) => {
+const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, children }) => {
     const { user } = isAuthenticated();
     const [iCount, setCount] = useState(0);
     const [mLoader, setLoader] = useState(loader);
+    const [oCategories, setCategories] = useState(false);
 
     useEffect(() => {
         setCount(getTotalCount());
@@ -17,6 +19,17 @@ const Layout = ({ loader='none', run=undefined, children }) => {
     useEffect(() => {
         setLoader(loader);
     }, [loader]);
+
+    useEffect(() => {
+        getAllCategories().then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setCategories(oData.data);
+                oGetCategory(oData.data);
+            }
+        });
+    }, []);
     
     const showBadge = () => {
         return (
@@ -84,6 +97,20 @@ const Layout = ({ loader='none', run=undefined, children }) => {
         );
     }
 
+    const showNavCategories = () => {
+        if (oCategories) {
+            return (
+                <Dropdown.Menu style={{marginTop: '42px'}}>
+                    {oCategories.map((oCategory, iIndex) => {
+                        return (
+                        <Dropdown.Item key={iIndex} href={`/categories/${oCategory._id}`}>{oCategory.name}</Dropdown.Item>
+                        );
+                    })}
+                </Dropdown.Menu>
+            );
+        }
+    }
+
     const showNavFirst = () => {
         return (
             <Nav style={{backgroundColor: '#4c4847'}} activeKey="/home">
@@ -107,11 +134,12 @@ const Layout = ({ loader='none', run=undefined, children }) => {
                             Categories
                         </Dropdown.Toggle>
 
-                        <Dropdown.Menu style={{marginTop: '42px'}}>
+                        {showNavCategories()}
+                        {/* <Dropdown.Menu style={{marginTop: '42px'}}>
                             <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
                             <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                             <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                        </Dropdown.Menu>
+                        </Dropdown.Menu> */}
                     </Dropdown>
                 </Col>
                 <Col xs={4} md={4} xl={4} sm={4}>
