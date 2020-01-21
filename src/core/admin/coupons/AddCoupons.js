@@ -2,12 +2,19 @@ import React, { Component, useState, useEffect, Fragment } from "react";
 import DashboardLayout from "../DashboardLayout";
 import { isAuthenticated } from "../../../auth/authUtil";
 import { createCoupon, checkCouponCode } from "./couponsApi";
+import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
 
 import { Redirect } from "react-router-dom";
 
 const AddCoupons = () => {
   const { sToken, user } = isAuthenticated();
-  const [aMessages, setMessages] = useState([]);
+  const [coupon_name_error, setCouponNameError] = useState(false);
+  const [coupon_code_error, setCouponCodeError] = useState(false);
+  const [description_error, setDescriptionError] = useState(false);
+  const [discount_error, setDiscountError] = useState(false);
+  const [start_date_error, setStartDateError] = useState(false);
+  const [end_date_error, setEndDateError] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const [values, setValues] = useState({
     coupon_name: "",
@@ -17,10 +24,19 @@ const AddCoupons = () => {
     discount: "",
     start_date: "",
     end_date: "",
+    error: false,
     status: true
   });
 
-  const { coupon_code } = values;
+  const {
+    coupon_name,
+    coupon_code,
+    description,
+    discount,
+    start_date,
+    end_date,
+    error
+  } = values;
 
   const generateCode = iLength => {
     var sResult = "";
@@ -35,88 +51,29 @@ const AddCoupons = () => {
     return sResult;
   };
 
-  const validateData = aData => {
-    if (aData.coupon_name === "") {
-      alert("Coupon name is required.");
-      return false;
-    }
-
-    if (aData.coupon_name.length > 32) {
-      alert("Coupon name can only contain 32 characters.");
-      return false;
-    }
-
-    if (aData.coupon_code.length > 24) {
-      alert("Coupon code can only contain 24 characters");
-      return false;
-    }
-
-    if (aData.coupon_code === "") {
-      alert("Coupon code is required.");
-      return false;
-    }
-
-    if (aData.description === "") {
-      alert("Description is required.");
-      return false;
-    }
-
-    if (aData.description.length > 50) {
-      alert("Description can only contain 50 characters.");
-      return false;
-    }
-
-    if (aData.discount < 0) {
-      alert("Discount can not be a negative value.");
-      return false;
-    }
-
-    if (aData.discount === "") {
-      alert("Discount is required.");
-      return false;
-    }
-
-    if (
-      new Date(aData.start_date).getTime() > new Date(aData.end_date).getTime()
-    ) {
-      alert("End date can not be earlier than start date.");
-      return false;
-    }
-
-    if (aData.start_date === "") {
-      alert("Start date is required.");
-      return false;
-    }
-
-    if (aData.end_date === "") {
-      alert("End date is required.");
-      return false;
-    }
-
-    return true;
-  };
   const handleChange = sName => oEvent => {
     const value = oEvent.target.value;
     setValues({ ...values, [sName]: value });
   };
 
   const handleSave = oEvent => {
-    if (validateData(values)) {
-      checkCouponCode(values.coupon_code).then(oData => {
-        if (oData.data.length !== 0) {
-          alert("Coupon code already exists.");
-          return false;
+    oEvent.preventDefault();
+
+    var oValidator = initializeValidator();
+
+    if (oValidator.allValid()) {
+      createCoupon(user._id, sToken, values).then(oData => {
+        if (oData.error) {
+          alert("Something went wrong. Please try again");
+        } else {
+          alert("Coupon created successfully");
+          window.location.reload();
         }
-        createCoupon(user._id, sToken, values).then(oData => {
-          if (oData.error) {
-            alert("Something went wrong. Please try again");
-          } else {
-            alert("Coupon created successfully");
-            window.location.reload();
-          }
-        });
       });
+      return;
     }
+    setErrorMessages(setErrorMessage(oValidator.getErrorMessages()));
+    setValues({ ...values, error: true });
   };
 
   const handleGenerateCode = oEvent => {
@@ -124,6 +81,62 @@ const AddCoupons = () => {
       ...values,
       coupon_code: generateCode(8)
     });
+  };
+
+  const initializeValidator = () => {
+    var oValidator = oValidatorLibrary();
+
+    oValidator.message("coupon name", coupon_name, "required|max:32");
+    oValidator.message("coupon code", coupon_code, "required|max:24");
+    oValidator.message("description", description, "required|max:50");
+    oValidator.message("discount", discount, "required|numeric|min:0,num");
+    oValidator.message("start date", start_date, "required");
+    oValidator.message("end date", end_date, "required");
+    oValidator.message("dates", [start_date, end_date], "date_difference");
+
+    oValidator.fieldValid("coupon name")
+      ? setCouponNameError(false)
+      : setCouponNameError(true);
+
+    oValidator.fieldValid("coupon code")
+      ? setCouponCodeError(false)
+      : setCouponCodeError(true);
+
+    oValidator.fieldValid("description")
+      ? setDescriptionError(false)
+      : setDescriptionError(true);
+
+    oValidator.fieldValid("discount")
+      ? setDiscountError(false)
+      : setDiscountError(true);
+
+    oValidator.fieldValid("start date") && oValidator.fieldValid("dates")
+      ? setStartDateError(false)
+      : setStartDateError(true);
+
+    oValidator.fieldValid("end date") && oValidator.fieldValid("dates")
+      ? setEndDateError(false)
+      : setEndDateError(true);
+
+    return oValidator;
+  };
+
+  const setErrorMessage = oError => {
+    var aMessage = [];
+    Object.keys(oError).map(mKey => {
+      aMessage.push(typeof oError[mKey] === "object" ? "" : oError[mKey]);
+    });
+    return aMessage;
+  };
+
+  const showErrorDiv = aMessages => {
+    return (
+      <div className="alert alert-danger">
+        {aMessages.map((message, i) => (
+          <h6 key={i}>{message}</h6>
+        ))}
+      </div>
+    );
   };
 
   const showAddCouponForm = () => {
@@ -134,10 +147,15 @@ const AddCoupons = () => {
             <div className="col-md-6 col-sm-6 col-xl-6 mb-4">
               <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
+                  {error && showErrorDiv(errorMessages)}
                   <input
                     type="text"
                     onChange={handleChange("coupon_name")}
-                    className="form-control bg-light small mb-2"
+                    className={
+                      coupon_name_error
+                        ? "form-control bg-light small mb-2 border-danger"
+                        : "form-control bg-light small mb-2"
+                    }
                     placeholder="Coupon Name"
                     maxLength="32"
                   />
@@ -145,7 +163,11 @@ const AddCoupons = () => {
                     <input
                       type="text"
                       onChange={handleChange("coupon_code")}
-                      className="form-control bg-light w-50 small mr-2"
+                      className={
+                        coupon_code_error
+                          ? "form-control bg-light w-50 small mr-2 border-danger"
+                          : "form-control bg-light w-50 small mr-2"
+                      }
                       placeholder="Coupon Code"
                       value={coupon_code}
                       maxLength="24"
@@ -158,7 +180,11 @@ const AddCoupons = () => {
                     </button>
                   </div>
                   <textarea
-                    className="form-control mb-2"
+                    className={
+                      description_error
+                        ? "form-control mb-2 border-danger"
+                        : "form-control mb-2"
+                    }
                     id="exampleFormControlTextarea1"
                     rows={3}
                     placeholder="Description"
@@ -179,7 +205,11 @@ const AddCoupons = () => {
                     <label>Discount Value:</label>
                     <input
                       type="number"
-                      className="form-control bg-light small mb-2 ml-2"
+                      className={
+                        description_error
+                          ? "form-control bg-light small mb-2 ml-2 border-danger"
+                          : "form-control bg-light small mb-2 ml-2"
+                      }
                       placeholder="Value"
                       min="0"
                       onChange={handleChange("discount")}
@@ -192,7 +222,11 @@ const AddCoupons = () => {
                       <div className="input-group">
                         <input
                           type="date"
-                          className="form-control"
+                          className={
+                            start_date_error
+                              ? "form-control border-danger"
+                              : "form-control"
+                          }
                           id="validationDefaultUsername"
                           aria-describedby="inputGroupPrepend2"
                           onChange={handleChange("start_date")}
@@ -213,7 +247,11 @@ const AddCoupons = () => {
                       <div className="input-group">
                         <input
                           type="date"
-                          className="form-control"
+                          className={
+                            end_date_error
+                              ? "form-control border-danger"
+                              : "form-control"
+                          }
                           id="validationDefaultUsername"
                           aria-describedby="inputGroupPrepend2"
                           onChange={handleChange("end_date")}
