@@ -21,8 +21,8 @@ const CategoryCard = (aData) => {
                     </Row>
                     <Row className=" mt-2">
                         <Col>
-                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png)`}}>
-                                <p className="text-center ellipsis-button" style={{fontSize: "2.5vh"}}>{oCategories.name}</p>
+                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
+                                <p className="text-center ellipsis-button" style={{fontSize: "2vh"}}>{oCategories.name}</p>
                             </button>
                         </Col>
                     </Row>
