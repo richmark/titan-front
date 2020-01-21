@@ -24,12 +24,12 @@ const PreRegister = () => {
                             For corporations (bulk and single orders)
 
                             Ready your requirements;
-                            <ol>
-                                <li>Sample</li>
-                                <li>Sample</li>
-                                <li>Sample</li>
-                            </ol>
                         </p>
+                        <ol>
+                            <li>Sample</li>
+                            <li>Sample</li>
+                            <li>Sample</li>
+                        </ol>
                         <Link to="/signup/corporate" style={{ textDecoration: 'none'}}>
                             <Button variant="primary" className="mb-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black', marginTop: '30%'}} block>CLICK HERE</Button>
                         </Link>
@@ -37,15 +37,15 @@ const PreRegister = () => {
                     <div className='col-sm rounded' style={{backgroundColor: '#ffc044'}}>
                         <h2 className="mt-3">Whole Sale</h2>
                         <p>
-                            For Whole Sale account (whole sale and package orders)
+                            For Whole Saler account (whole sale and package orders)
 
                             Ready your requirements;
-                            <ol>
-                                <li>Sample</li>
-                                <li>Sample</li>
-                                <li>Sample</li>
-                            </ol>
                         </p>
+                        <ol>
+                            <li>Sample</li>
+                            <li>Sample</li>
+                            <li>Sample</li>
+                        </ol>
                         <Link to="/signup/wholesaler" style={{ textDecoration: 'none'}}>
                             <Button variant="primary" className="mb-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black', marginTop: '30%'}} block>CLICK HERE</Button>
                         </Link>
