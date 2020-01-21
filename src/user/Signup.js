@@ -118,14 +118,17 @@ const Signup = ({ match }) => {
             setDanger(oDanger);
             return alert(sMessage);
         }
-
-        let role = match.params.roleId !== 'personal' ? 3 : 2;
+        const oRole = {
+            'personal'  : 2,
+            'corporate' : 3,
+            'wholesaler': 4
+        };
+        let role = oRole[match.params.roleId];
         sendSignup({ ...values, role: role }).then(oData => {
             if (oData.error) {
                 console.log(oData);
                 setError(oData.error);
             } else {
-                console.log(oData);
                 setResult(true);
                 setMessage(oData.message);
             }

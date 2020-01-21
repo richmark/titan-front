@@ -25,6 +25,15 @@ export const oValidatorLibrary = () => {
             ) && oParams.indexOf(oVal) === -1
           );
         }
+      },
+      date_difference: {
+        message: "End date can not be earlier than start date.",
+        rule: (oVal, oParams, oValidator) => {
+          if (oVal[0] === "" || oVal[1] === "") {
+            return true;
+          }
+          return new Date(oVal[0]).getTime() < new Date(oVal[1]).getTime();
+        }
       }
     }
   };
