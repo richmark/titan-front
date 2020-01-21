@@ -11,11 +11,19 @@ import { getOrderByUser } from '../core/admin/orders/ordersApi';
 
 const Profile = ({match}) => {
 
-    const { user,sToken } = isAuthenticated();
+    const { user, sToken } = isAuthenticated();
     const [modalEdit, setModalEdit] = useState(false);
     const [modalPassword, setModalPassword] = useState(false);
     const [aOrder, setOrder] = useState(false);
-
+    const oUserType = {
+        1 : 'Admin',
+        2 : 'Personal',
+        3 : 'Corporate',
+        4 : 'Wholesaler',
+        5 : 'SubAdmin' 
+    }
+    const sUserType = oUserType[user.role];
+    const bWholesaler = (user.role < 5 && user.role > 2);
     useEffect(() => {
         init();
     }, []);
@@ -29,48 +37,77 @@ const Profile = ({match}) => {
             setOrder(oData.data);
         });
     }
+
+    const showPersonal = () => {
+        return (
+            <Fragment>
+                <Row className="mt-3">
+                    {showColHelper('Email:', user.email)}
+                    {showColHelper('Mobile No:', user.mobile_number)}
+                </Row>
+                <Row className="mt-3">
+                    {showColHelper('First Name:', user.first_name)}
+                    {showColHelper('Address:', user.address)}
+                </Row>
+                <Row className="mt-3">
+                    <Col sm={{ span: 6}}>
+                        <Row>
+                            <Col sm={3} className="p-0">Last Name:</Col>
+                            <Col className="text-left">{user.last_name}</Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Fragment>
+        );
+    }
+
+    /**
+     * Same for both wholesaler and corporate
+     */
+    const showWholeSaler = () => {
+        return (
+            <Fragment>
+                {showRowHelper('Email:', user.email)}
+                {showRowHelper('First Name:', user.first_name)}
+                {showRowHelper('Last Name:', user.last_name)}
+                {showRowHelper('Contact:', user.mobile_number)}
+                {showRowHelper('Address:', user.address)}
+                {showRowHelper('TIN:', user.tin)}
+                {showRowHelper('Company Name:', user.company_name)}
+                {showRowHelper('Company Address:', user.company_address)}
+            </Fragment>
+        );
+    }
+
+    const showRowHelper = (sName, sData) => {
+        return (
+            <Fragment>
+                <Row className="mt-3">
+                    {showColHelper(sName, sData)}
+                </Row>
+            </Fragment>
+        );
+    }
+
+    const showColHelper = (sName, sData) => {
+        return (
+            <Fragment>
+                <Col>
+                    <Row>
+                        <Col sm={3} className="p-0">{sName}</Col>
+                        <Col className="text-left">{sData}</Col>
+                    </Row>
+                </Col>
+            </Fragment>
+        );
+    }
     
     const showProfileCard = () => {
         return (
             <Card className="px-3 py-2" style={{ fontSize: "16px"}}>
                 <Container>
-                    <Row className="mt-3">Personal Profile</Row>
-                        <Row className="mt-3">
-                            <Col>
-                                <Row>
-                                    <Col sm={3} className="p-0">Email:</Col>
-                                    <Col className="text-left">{user.email}</Col>
-                                </Row>
-                            </Col>
-                            <Col>
-                                <Row>
-                                    <Col sm={3} className="p-0">Mobile No:</Col>
-                                    <Col className="text-left">{user.mobile_number}</Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <Row className="mt-3">
-                            <Col>
-                                <Row>
-                                    <Col sm={3} className="p-0">First Name:</Col>
-                                    <Col className="text-left">{user.first_name}</Col>
-                                </Row>
-                            </Col>
-                            <Col>
-                                <Row>
-                                    <Col sm={3} className="p-0">Address:</Col>
-                                    <Col className="text-left">{user.address}</Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <Row className="mt-3">
-                            <Col sm={{ span: 6}}>
-                                <Row>
-                                    <Col sm={3} className="p-0">Last Name:</Col>
-                                    <Col className="text-left">{user.last_name}</Col>
-                                </Row>
-                            </Col>
-                        </Row>
+                    <Row className="mt-3">{sUserType} Profile</Row>
+                        {bWholesaler === true ? showWholeSaler() : showPersonal()}
                     <Row className="my-3">
                         <Col sm={{ offset: 7}}>
                             <Row>
@@ -147,7 +184,7 @@ const Profile = ({match}) => {
                         <Card className="mt-3 px-3 py-2">
                             <Card.Body>
                                 <Card.Title>
-                                    <h4>Manage My Account (Personal)</h4>
+                                    <h4>Manage My Account ({sUserType})</h4>
                                     {showProfileCard()}
                                     {showOrderCard()}
                                 </Card.Title>
@@ -167,7 +204,8 @@ const Profile = ({match}) => {
             first_name : '',
             last_name : '',
             mobile_number : '',
-            address : ''
+            address : '',
+            company_address: ''
         }
         const [danger, setDanger] = useState(oData);
         const [message, setMessage] = useState('');
