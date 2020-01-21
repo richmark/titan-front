@@ -11,6 +11,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
     const [iCount, setCount] = useState(0);
     const [mLoader, setLoader] = useState(loader);
     const [oCategories, setCategories] = useState(false);
+    const [oCategoriesFooter, spliceCategories] = useState(false);
 
     useEffect(() => {
         setCount(getTotalCount());
@@ -27,9 +28,21 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
             } else {
                 setCategories(oData.data);
                 oGetCategory(oData.data);
+                spliceCategories(splice(oData.data));
             }
         });
     }, []);
+
+    const splice = (aCategories) => {
+        if (aCategories.length > 10) {
+            var aTempCatA = JSON.parse(JSON.stringify(aCategories));
+            var aTempCatB = JSON.parse(JSON.stringify(aCategories));
+            var aFirstHalf = aTempCatA.splice(0, aTempCatA.length / 2);
+            var aSecondHalf = aTempCatB.splice(aTempCatB.length / 2, aTempCatB.length);
+            return { 'aFirst' : aFirstHalf, 'aSecond' : aSecondHalf};
+        }
+        return aCategories;
+    };
     
     const showBadge = () => {
         return (
@@ -100,13 +113,52 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
     const showNavCategories = () => {
         if (oCategories) {
             return (
-                <Dropdown.Menu style={{marginTop: '42px'}}>
+                <Dropdown.Menu>
                     {oCategories.map((oCategory, iIndex) => {
                         return (
                         <Dropdown.Item key={iIndex} href={`/categories/${oCategory._id}`}>{oCategory.name}</Dropdown.Item>
                         );
                     })}
                 </Dropdown.Menu>
+            );
+        }
+    }
+
+    const showFooterCategories = () => {
+        if (oCategoriesFooter && oCategoriesFooter['aFirst'] !== undefined) {
+            return (
+                <Fragment>
+                    <Col className="text-left">
+                        <p style={{color: '#ffc044'}}>CATEGORIES</p>
+                        {oCategoriesFooter['aFirst'].map((oCategory, iIndex) => {
+                            return (
+                                <p className="mb-0" key={iIndex}><a href={`/categories/${oCategory._id}`} className="text-white text-uppercase">{oCategory.name}</a></p>
+                            );
+                        })}
+                    </Col>
+                    <Col className="text-left" style={{paddingTop: '2.5rem'}}>
+                        {oCategoriesFooter['aSecond'].map((oCategory, iIndex) => {
+                            return (
+                                <p className="mb-0" key={iIndex}><a href={`/categories/${oCategory._id}`} className="text-white text-uppercase">{oCategory.name}</a></p>
+                            );
+                        })}
+                    </Col>
+                </Fragment>
+            );
+        }
+
+        if (oCategoriesFooter) {
+            return (
+                <Fragment>
+                    <Col className="text-left">
+                        <p style={{color: '#ffc044'}}>CATEGORIES</p>
+                        {oCategoriesFooter.map((oCategory, iIndex) => {
+                            return (
+                                <p className="mb-0" key={iIndex}><a href={`/categories/${oCategory._id}`} className="text-white text-uppercase">{oCategory.name}</a></p>
+                            );
+                        })}
+                    </Col>
+                </Fragment>
             );
         }
     }
@@ -135,11 +187,6 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         </Dropdown.Toggle>
 
                         {showNavCategories()}
-                        {/* <Dropdown.Menu style={{marginTop: '42px'}}>
-                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                        </Dropdown.Menu> */}
                     </Dropdown>
                 </Col>
                 <Col xs={4} md={4} xl={4} sm={4}>
@@ -206,7 +253,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
     };
 
     const showFooter = () => {
-        return (
+        return oCategories && (
             <footer className='text-center p-5 text-white mt-5' style={{backgroundColor: 'black'}}>
                 <Container>
                     <Row className="border-bottom pb-5 mb-1">
@@ -218,20 +265,13 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                             <a href="/" className="text-white">PRODUCTS</a><br></br>
                             <a href="/" className="text-white">CONTACT US</a><br></br>            
                         </Col>
-                        <Col className="text-left">
-                            <p style={{color: '#ffc044'}}>CATEGORIES</p>
-                            <a href="/" className="text-white">AUTOMOTIVE</a><br></br>
-                            <a href="/" className="text-white">POWER TOOLS</a><br></br>
-                            <a href="/" className="text-white">PIPE TOOLS</a><br></br>
-                            <a href="/" className="text-white">MATERIAL HANDLING</a><br></br>
-                            <a href="/" className="text-white">PIPE MACHINE</a><br></br> 
-                        </Col>
-                        <Col className="text-left" style={{paddingTop: '2.5rem'}}>
+                        {showFooterCategories()}
+                        {/* <Col className="text-left" style={{paddingTop: '2.5rem'}}>
                             <a href="/" className="text-white">CONSTRUCTION MACHINE</a><br></br>
                             <a href="/" className="text-white">HAND TOOLS</a><br></br>
                             <a href="/" className="text-white">ACCESSORIES</a><br></br>
                             <a href="/" className="text-white">WELDING MACINE</a><br></br>
-                        </Col>
+                        </Col> */}
                         <Col xs={3} md={3} xl={3} sm={3} className="text-left">
                             <p style={{color: '#ffc044'}}>ABOUT US</p>
                             <p>
@@ -280,7 +320,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
             {showNavBarSecond()}
             {showNavBarThird()}
             <div style={{ minHeight: '60vh' }}>{children}</div>
-            {showFooter()}
+            {oCategories && showFooter()}
             </div>
         </Fragment>
     );

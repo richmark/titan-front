@@ -37,7 +37,7 @@ const ProductCard = (aData, setRun = () => {}) => {
                 </a>
                 <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
                 <Card.Body className="pt-2">
-                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png)`}}>
+                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Add to Cart</p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{sName}</p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{`₱ ${oProduct.price}`}</p>
