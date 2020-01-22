@@ -1,19 +1,31 @@
 import React, { useState, useEffect, Fragment } from "react";
 import DashboardLayout from "../DashboardLayout";
-import { getAllCoupons, deleteCoupon } from "./couponsApi";
+import { getAllCoupons, deleteCoupon, countCoupon } from "./couponsApi";
 import { isAuthenticated } from "../../../auth/authUtil";
 import { Link } from "react-router-dom";
 
 const Coupons = () => {
   const { sToken, user } = isAuthenticated();
   const [oCouponData, setCouponData] = useState([]);
+  const [iCouponCount, setCouponCount] = useState(0);
+  const [iShowCount, setShowCount] = useState(5);
 
-  const loadCoupons = () => {
-    getAllCoupons().then(oData => {
+  const loadCoupons = (iLimit, iOffset, sOrder, sSortBy) => {
+    getAllCoupons(iLimit, iOffset, sOrder, sSortBy).then(oData => {
       if (oData.error) {
         console.log(oData.error);
       } else {
         setCouponData(oData.data);
+      }
+    });
+  };
+
+  const getCouponCount = () => {
+    countCoupon().then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+      } else {
+        setCouponCount(oData.data.count);
       }
     });
   };
@@ -31,6 +43,10 @@ const Coupons = () => {
         }
       });
     }
+  };
+
+  const handleShowChange = oEvent => {
+    loadCoupons(oEvent.target.value);
   };
 
   const formatDate = dDate => {
@@ -57,6 +73,7 @@ const Coupons = () => {
   };
   useEffect(() => {
     loadCoupons();
+    getCouponCount();
   }, []);
 
   const showFilters = () => {
@@ -130,8 +147,19 @@ const Coupons = () => {
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <div className="float-right">
-                <span>10</span> Items
+              <div className="float-left mb-2">
+                <span>{iCouponCount}</span> Total
+              </div>
+              <div className="float-right mb-2">
+                <select
+                  className="btn btn-primary dropdown-toggle mr-2"
+                  onChange={handleShowChange}
+                >
+                  <option value="5"> Show 5 per page</option>
+                  <option value="10"> Show 10 per page</option>
+                  <option value="25"> Show 25 per page</option>
+                  <option value="50"> Show 50 per page</option>
+                </select>
               </div>
               <table className="table table-bordered">
                 <thead>
@@ -202,6 +230,18 @@ const Coupons = () => {
                     ))}
                 </tbody>
               </table>
+              <div className="text-center" style={{ float: "right" }}>
+                <nav aria-label="Page navigation example text-center">
+                  <ul className="pagination">
+                    <li className="page-item">
+                      <button className="page-link">Previous</button>
+                    </li>
+                    <li className="page-item">
+                      <button className="page-link">Next</button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>

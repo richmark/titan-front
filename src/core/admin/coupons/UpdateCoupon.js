@@ -100,6 +100,10 @@ const UpdateCoupon = ({ match }) => {
     });
   };
 
+  const handleCancel = oEvent => {
+    setRedirect(true);
+  };
+
   const initializeValidator = () => {
     var oValidator = oValidatorLibrary();
 
@@ -334,6 +338,9 @@ const UpdateCoupon = ({ match }) => {
                       onClick={handleSave}
                     >
                       Save
+                    </button>
+                    <button className="btn btn-danger" onClick={handleCancel}>
+                      Cancel
                     </button>
                   </div>
                 </div>

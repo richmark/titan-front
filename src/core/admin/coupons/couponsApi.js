@@ -28,8 +28,29 @@ export const checkCouponCode = sCouponCode => {
     .catch(err => console.log(err));
 };
 
-export const getAllCoupons = () => {
-  return fetch(`${API_URL}/coupon`, {
+export const getAllCoupons = (
+  iLimit = 6,
+  iOffset = 0,
+  sOrder = "asc",
+  sSortBy = "_id"
+) => {
+  return fetch(
+    `${API_URL}/coupon?limit=${iLimit}&offset=${iOffset}&order=${sOrder}&sortBy=${sSortBy}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  )
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const getCoupon = sCouponId => {
+  return fetch(`${API_URL}/coupon/${sCouponId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -41,8 +62,8 @@ export const getAllCoupons = () => {
     .catch(err => console.log(err));
 };
 
-export const getCoupon = sCouponId => {
-  return fetch(`${API_URL}/coupon/${sCouponId}`, {
+export const countCoupon = () => {
+  return fetch(`${API_URL}/coupons/count`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
