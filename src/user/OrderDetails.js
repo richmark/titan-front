@@ -8,6 +8,8 @@ import { IMAGE_API } from '../config';
 
 const OrderDetails = ({match}) => {
     const [oOrder, setOrder] = useState(false);
+    const [oBilling, setBilling] = useState(false);
+    const [oShipping, setShipping] = useState(false);
     const { sToken, user } = isAuthenticated();
     const oProgressBar = {
         'Not Processed' : 5,
@@ -22,8 +24,10 @@ const OrderDetails = ({match}) => {
                 console.log(oData.error);
                 return;
             }
-            console.log(oData.data);
-            setOrder(oData.data);
+            const oDetail = oData.data;
+            setOrder(oDetail);
+            setBilling(oDetail.billing[0]);
+            setShipping(oDetail.shipping[0]);
         });
     }
 
@@ -126,18 +130,17 @@ const OrderDetails = ({match}) => {
                             <Col sm={{span: 6}}>
                                 <Container className="m-2">
                                     <h5>Billing Details</h5>
-                                    <strong>Name:</strong> <span>{user.first_name} {user.last_name}</span><br/>
-                                    <strong>E-mail:</strong> <span>{user.email}</span><br/>
-                                    <strong>Phone:</strong> <span>{user.mobile_number}</span><br/>
-                                    <strong>Address:</strong> <span>{user.address}</span>
+                                    <strong>Name:</strong> <span>{oBilling.name}</span><br/>
+                                    <strong>Phone:</strong> <span>{oBilling.contact}</span><br/>
+                                    <strong>Address:</strong> <span>{oBilling.address}</span>
                                 </Container>
                             </Col>
                             <Col sm={{span: 6}}>
                                 <Container className="m-2">
-                                    <h5>Shipper Details</h5>
-                                    <strong>Name:</strong> <span>Delivery Company</span><br/>
-                                    <strong>Address:</strong> <span>Cubao, Quezon City</span><br/>
-                                    <strong>Tracking No. :</strong> <span>123456778</span>
+                                    <h5>Shipping Details</h5>
+                                    <strong>Name:</strong> <span>{oShipping.name}</span><br/>
+                                    <strong>Phone:</strong> <span>{oShipping.contact}</span><br/>
+                                    <strong>Address:</strong> <span>{oShipping.address}</span>
                                 </Container>
                             </Col>
                             <Col sm={{span: 6}}>
