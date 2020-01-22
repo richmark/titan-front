@@ -15,6 +15,7 @@ const AddCoupons = () => {
   const [start_date_error, setStartDateError] = useState(false);
   const [end_date_error, setEndDateError] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [bRedirect, setRedirect] = useState(false);
 
   const [values, setValues] = useState({
     coupon_name: "",
@@ -37,6 +38,12 @@ const AddCoupons = () => {
     end_date,
     error
   } = values;
+
+  const redirectForbidden = () => {
+    if (bRedirect === true) {
+      return <Redirect to="/admin/coupons" />;
+    }
+  };
 
   const generateCode = iLength => {
     var sResult = "";
@@ -62,14 +69,21 @@ const AddCoupons = () => {
     var oValidator = initializeValidator();
 
     if (oValidator.allValid()) {
-      createCoupon(user._id, sToken, values).then(oData => {
-        if (oData.error) {
-          alert("Something went wrong. Please try again");
-        } else {
-          alert("Coupon created successfully");
-          window.location.reload();
+      checkCouponCode(values.coupon_code).then(oData => {
+        if (oData.data.length !== 0) {
+          alert("Coupon code already exists.");
+          return;
         }
+        createCoupon(user._id, sToken, values).then(oData => {
+          if (oData.error) {
+            alert("Something went wrong. Please try again");
+          } else {
+            alert("Coupon created successfully");
+            setRedirect(true);
+          }
+        });
       });
+
       return;
     }
     setErrorMessages(setErrorMessage(oValidator.getErrorMessages()));
@@ -287,6 +301,7 @@ const AddCoupons = () => {
   return (
     <DashboardLayout name="Coupon Management" detail="Add Coupons">
       {showAddCouponForm()}
+      {redirectForbidden()}
     </DashboardLayout>
   );
 };
