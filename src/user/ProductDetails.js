@@ -176,7 +176,7 @@ const ProductDetails = ({match}) => {
   };
 
   const encodeData = (oData) => {
-    oData.count = 1;
+    oData.count = iCount;
     return btoa(JSON.stringify(oData));
   }
 

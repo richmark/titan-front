@@ -26,11 +26,15 @@ const Checkout = ({location}) => {
     const oBuyNow = oQuery.parse(location.search);
 
     // For Shipping and Billing Details Init
-    const oDetail = {
-        name   : `${user.first_name} ${user.last_name}`,
-        address: user.address,
-        contact: user.mobile_number
+    var oDetail = false;
+    if (user) {
+        oDetail = {
+            name   : `${user.first_name} ${user.last_name}`,
+            address: user.address,
+            contact: user.mobile_number
+        }
     }
+
     const [oBilling, setBilling] = useState(oDetail);
     const [oShipping, setShipping] = useState(oDetail);
 
