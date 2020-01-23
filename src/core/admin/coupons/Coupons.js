@@ -7,8 +7,12 @@ import { Link } from "react-router-dom";
 const Coupons = () => {
   const { sToken, user } = isAuthenticated();
   const [oCouponData, setCouponData] = useState([]);
-  const [iCouponCount, setCouponCount] = useState(0);
-  const [iShowCount, setShowCount] = useState(5);
+  const [count, setCount] = useState(0);
+  const [showCount, setShowCount] = useState(5);
+  const [paginationCount, setPaginationCount] = useState(0);
+  const [paginationStart, setPaginationStart] = useState(1);
+  const [paginationEnd, setPaginationEnd] = useState(10);
+  const [pageActive, setPageActive] = useState(1);
 
   const loadCoupons = (iLimit, iOffset, sOrder, sSortBy) => {
     getAllCoupons(iLimit, iOffset, sOrder, sSortBy).then(oData => {
@@ -25,28 +29,94 @@ const Coupons = () => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setCouponCount(oData.data.count);
+        var iCount = oData.data.count;
+        setCount(iCount);
+        initializePagination(iCount, 5);
       }
     });
   };
 
+  const initializePagination = (iCount, iShowCount) => {
+    var iPaginationCount = Math.ceil(iCount / iShowCount);
+    resetPagination();
+    setPaginationCount(iPaginationCount);
+    iPaginationCount > 9
+      ? setPaginationEnd(9)
+      : setPaginationEnd(iPaginationCount);
+
+    loadCoupons(iShowCount, 0, "asc", "_id");
+  };
+
+  const handleNextPagination = oEvent => {
+    var newPageActive = pageActive + 1;
+
+    if (paginationCount > pageActive) {
+      setPageActive(newPageActive);
+      loadCoupons(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationEnd !== paginationCount
+      ) {
+        setPaginationEnd(paginationEnd + 1);
+        setPaginationStart(paginationStart + 1);
+      }
+    }
+  };
+
+  const handlePrevPagination = oEvent => {
+    var newPageActive = pageActive - 1;
+
+    if (pageActive > 1) {
+      setPageActive(newPageActive);
+      loadCoupons(
+        showCount,
+        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+      );
+    }
+
+    if (paginationEnd >= 9) {
+      if (
+        pageActive >= Math.ceil(paginationEnd / 2) &&
+        paginationStart !== 1 &&
+        pageActive <= paginationCount - 4
+      ) {
+        setPaginationEnd(paginationEnd - 1);
+        setPaginationStart(paginationStart - 1);
+      }
+    }
+  };
+
+  const resetPagination = () => {
+    setPageActive(1);
+    setPaginationStart(1);
+    setPaginationEnd(10);
+    setPaginationCount(0);
+  };
+
   const handleDelete = iCouponId => oEvent => {
     oEvent.preventDefault();
-    console.log(iCouponId);
     if (window.confirm("Are you sure you want to delete this coupon?")) {
       deleteCoupon(user._id, sToken, iCouponId).then(oData => {
         if (oData.error) {
           alert("Something went wrong.");
         } else {
           alert("Coupon Successfully Deleted!");
-          loadCoupons();
+          window.location.reload();
         }
       });
     }
   };
 
   const handleShowChange = oEvent => {
-    loadCoupons(oEvent.target.value);
+    var newShowCount = oEvent.target.value;
+    setShowCount(newShowCount);
+    initializePagination(count, newShowCount);
   };
 
   const formatDate = dDate => {
@@ -148,7 +218,7 @@ const Coupons = () => {
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
               <div className="float-left mb-2">
-                <span>{iCouponCount}</span> Total
+                <span>{count}</span> Total
               </div>
               <div className="float-right mb-2">
                 <select
@@ -234,10 +304,34 @@ const Coupons = () => {
                 <nav aria-label="Page navigation example text-center">
                   <ul className="pagination">
                     <li className="page-item">
-                      <button className="page-link">Previous</button>
+                      <button
+                        className="page-link"
+                        onClick={handlePrevPagination}
+                      >
+                        Previous
+                      </button>
                     </li>
+                    {[...Array(paginationEnd - paginationStart + 1)].map(
+                      (e, i) => (
+                        <li
+                          className={
+                            i + paginationStart === pageActive
+                              ? "page-item active"
+                              : "page-item"
+                          }
+                          key={i}
+                        >
+                          <a className="page-link">{i + paginationStart}</a>
+                        </li>
+                      )
+                    )}
                     <li className="page-item">
-                      <button className="page-link">Next</button>
+                      <button
+                        className="page-link"
+                        onClick={handleNextPagination}
+                      >
+                        Next
+                      </button>
                     </li>
                   </ul>
                 </nav>
