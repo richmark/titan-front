@@ -1,6 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import DashboardLayout from "../DashboardLayout";
-import { getAllCoupons, deleteCoupon, countCoupon } from "./couponsApi";
+import {
+  getAllCoupons,
+  deleteCoupon,
+  countCoupon,
+  searchCoupon
+} from "./couponsApi";
 import { isAuthenticated } from "../../../auth/authUtil";
 import { Link } from "react-router-dom";
 
@@ -9,6 +14,8 @@ const Coupons = () => {
   const [oCouponData, setCouponData] = useState([]);
   const [count, setCount] = useState(0);
   const [showCount, setShowCount] = useState(5);
+  const [searchFilter, setSearchFilter] = useState("");
+  const [paginationHide, setPaginationHide] = useState(false);
   const [paginationCount, setPaginationCount] = useState(0);
   const [paginationStart, setPaginationStart] = useState(1);
   const [paginationEnd, setPaginationEnd] = useState(10);
@@ -119,6 +126,44 @@ const Coupons = () => {
     initializePagination(count, newShowCount);
   };
 
+  const handleChangeQuery = oEvent => {
+    if (oEvent.target.value !== "") {
+      searchCoupon(oEvent.target.value).then(oData => {
+        if (oData.error) {
+          console.log(oData.error);
+        } else {
+          setCouponData(oData.data);
+          setPaginationHide(true);
+        }
+      });
+    } else {
+      loadCoupons();
+      getCouponCount();
+      setPaginationHide(false);
+    }
+  };
+
+  const handleChangeFilter = oEvent => {
+    setSearchFilter(oEvent.target.value);
+  };
+
+  const handleSearchFilter = oEvent => {
+    if (searchFilter !== "") {
+      searchCoupon(searchFilter).then(oData => {
+        if (oData.error) {
+          console.log(oData.error);
+        } else {
+          setCouponData(oData.data);
+          setPaginationHide(true);
+        }
+      });
+    } else {
+      loadCoupons();
+      getCouponCount();
+      setPaginationHide(false);
+    }
+  };
+
   const formatDate = dDate => {
     var monthNames = [
       "January",
@@ -152,59 +197,40 @@ const Coupons = () => {
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <p>Period of Use</p>
-              <div className="form-row">
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="validationDefaultUsername">Start</label>
+              <h4 className="mb-2">Search and filter</h4>
+              <div className="form-group row">
+                <div className="col-sm-5">
                   <div className="input-group">
                     <input
                       type="text"
-                      className="form-control"
-                      id="validationDefaultUsername"
-                      placeholder="YYYY/MM/DD"
-                      aria-describedby="inputGroupPrepend2"
-                      required
+                      className="form-control bg-light border-0 small"
+                      placeholder="Search Coupon"
+                      aria-label="Search"
+                      aria-describedby="basic-addon2"
+                      onChange={handleChangeQuery}
                     />
                     <div className="input-group-append">
-                      <span
-                        className="input-group-text"
-                        id="inputGroupPrepend2"
-                      >
-                        <i className="fa fa-calendar-alt" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <label htmlFor="validationDefaultUsername">End</label>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="validationDefaultUsername"
-                      placeholder="YYYY/MM/DD"
-                      aria-describedby="inputGroupPrepend2"
-                      required
-                    />
-                    <div className="input-group-append">
-                      <span
-                        className="input-group-text"
-                        id="inputGroupPrepend2"
-                      >
-                        <i className="fa fa-calendar-alt" />
+                      <span className="btn btn-primary">
+                        <i className="fas fa-search fa-sm" />
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <select id="category" className="btn btn-light border mr-2">
-                <option disabled defaultValue>
-                  Filter by Discount Type
+              <select
+                id="category"
+                className="btn btn-light border mr-2"
+                onChange={handleChangeFilter}
+              >
+                <option value="Select an option" selected disabled>
+                  Select an option
                 </option>
-                <option>All</option>
-                <option>Percentage</option>
-                <option>Fix Value</option>
+                <option value="Discount Rate">Discount Rate</option>
+                <option value="Fixed Price">Fixed Price</option>
               </select>
+              <button className="btn btn-primary" onClick={handleSearchFilter}>
+                Filter
+              </button>
             </div>
           </div>
         </div>
@@ -217,10 +243,22 @@ const Coupons = () => {
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <div className="float-left mb-2">
+              <div
+                className={
+                  paginationHide
+                    ? "float-left mb-2 d-none"
+                    : "float-left mb-2 d-block"
+                }
+              >
                 <span>{count}</span> Total
               </div>
-              <div className="float-right mb-2">
+              <div
+                className={
+                  paginationHide
+                    ? "float-right mb-2 d-none"
+                    : "float-right mb-2 d-block"
+                }
+              >
                 <select
                   className="btn btn-primary dropdown-toggle mr-2"
                   onChange={handleShowChange}
@@ -300,7 +338,12 @@ const Coupons = () => {
                     ))}
                 </tbody>
               </table>
-              <div className="text-center" style={{ float: "right" }}>
+              <div
+                className={
+                  paginationHide ? "text-center d-none" : "text-center d-block"
+                }
+                style={{ float: "right" }}
+              >
                 <nav aria-label="Page navigation example text-center">
                   <ul className="pagination">
                     <li className="page-item">

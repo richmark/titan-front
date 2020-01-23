@@ -15,6 +15,21 @@ export const createCoupon = (sId, sToken, oCoupon) => {
     .catch(err => console.log(err));
 };
 
+export const searchCoupon = sQuery => {
+  var aQuery = { query: sQuery };
+  return fetch(`${API_URL}/coupon/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(aQuery)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
 export const checkCouponCode = sCouponCode => {
   return fetch(`${API_URL}/coupon/code/${sCouponCode}`, {
     method: "GET",
@@ -29,7 +44,7 @@ export const checkCouponCode = sCouponCode => {
 };
 
 export const getAllCoupons = (
-  iLimit = 6,
+  iLimit = 5,
   iOffset = 0,
   sOrder = "asc",
   sSortBy = "_id"

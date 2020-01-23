@@ -11,7 +11,9 @@ const Menu = () => {
       >
         {/* Sidebar - Brand */}
         <a className="sidebar-brand d-flex align-items-center justify-content-center">
-          <div className="sidebar-brand-text mx-3">TITAN SUPER TOOLS</div>
+          <div className="sidebar-brand-text mx-3" style={{ color: "white" }}>
+            TITAN SUPER TOOLS
+          </div>
         </a>
         {/* Divider */}
         <hr className="sidebar-divider my-0" />
@@ -42,8 +44,12 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <Link to='/admin/bundles' className="collapse-item">All bundles</Link>
-              <Link to='/admin/bundles/add' className="collapse-item">Make bundle</Link>
+              <Link to="/admin/bundles" className="collapse-item">
+                All bundles
+              </Link>
+              <Link to="/admin/bundles/add" className="collapse-item">
+                Make bundle
+              </Link>
             </div>
           </div>
         </li>
