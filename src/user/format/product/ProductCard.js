@@ -6,6 +6,10 @@ import { addItem, getTotalCount } from '../../../core/client/cartHelpers';
 
 
 const ProductCard = (aData, setRun = () => {}) => {
+    var sHeader = 'Our Products';
+    if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
+        sHeader = 'Result';
+    }
     const iCount = 1;
     
     const addToCart = (oProduct) => oEvent => {
@@ -26,6 +30,14 @@ const ProductCard = (aData, setRun = () => {}) => {
     const showCardBase = (oProduct) => {
         var sImage = (oProduct.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oProduct.image;
         var sName = (oProduct.product_name === undefined) ? "My Product" : oProduct.product_name;
+        var sStyle = '';
+        if (window.location.pathname.split('/')[1] === 'categories') {
+            sStyle =  'pl-1';
+        }
+
+        if ( sHeader === 'Result') {
+            sStyle =  'pl-2';
+        }
         return (
             <Card className="pt-3" className="border-0" style={{background: 'transparent'}}>
                 <a href={`/product/details/${oProduct._id}`} className="mx-auto">
@@ -36,7 +48,7 @@ const ProductCard = (aData, setRun = () => {}) => {
                     />
                 </a>
                 <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
-                <Card.Body className="pt-2">
+                <Card.Body className={`pt-2 ${sStyle}`}>
                     <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Add to Cart</p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{sName}</p>
@@ -48,6 +60,10 @@ const ProductCard = (aData, setRun = () => {}) => {
     };
 
     const showLayout = (aProducts) => {
+        var iSize = 3;
+        if (sHeader === 'Result') {
+            iSize = 4;
+        }
         return (
             <Container>
                 <Row className="mt-2 ml-3 mr-2">
@@ -55,7 +71,7 @@ const ProductCard = (aData, setRun = () => {}) => {
                         <Row>
                             {aProducts && aProducts.map((oProduct, iIndex) => {
                                 return (
-                                    <Col sm={3} key={iIndex}>
+                                    <Col sm={iSize} key={iIndex}>
                                         {showCardBase(oProduct)}
                                     </Col>
                                 );
@@ -69,7 +85,7 @@ const ProductCard = (aData, setRun = () => {}) => {
 
     return (
         <Container>
-            <div className="category-tab mt-5 mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Our Products</p></strong></div>
+<div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    
