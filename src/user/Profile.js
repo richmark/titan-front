@@ -282,13 +282,14 @@ const Profile = ({match}) => {
             address       : getValue('formAddress'),
         }
         if (checkSameUserData(oData, oProfile.profile) === true) {
+            oSuccess(true);
             return;
         }
         var oValidator = oValidatorLibrary();
         oValidator.message('first_name', oData.first_name, 'required|alpha_space');
         oValidator.message('last_name', oData.last_name, 'required|alpha_space');
         oValidator.message('mobile_number', oData.mobile_number, 'required|contact_number');
-        oValidator.message('address', oData.address, 'required|alpha_num_dash_space|max:500');
+        oValidator.message('address', oData.address, 'required|alpha_num_dash_space|max:254');
         if (oValidator.allValid()) {
             // fetch call goes here
             const oForm = new FormData();
@@ -384,7 +385,7 @@ const Profile = ({match}) => {
         var oValidator = oValidatorLibrary();
         const oData = {
             current_password    : getValue('formCurrentPassword'),
-            password        : getValue('formNewPassword'),
+            password            : getValue('formNewPassword'),
             confirm_password    : getValue('formConfirmPassword'),
         }
 

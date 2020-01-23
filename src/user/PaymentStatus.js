@@ -16,7 +16,11 @@ const PaymentStatus = ({ match, location }) => {
 
     useEffect(() => {
         if (oData.status === 'success' && user._id === oData.userId) {
-            retrievePaymayaCheckout(oData.userId, sToken, oData.sRequestId).then((oRetrieve) => {
+            const oDetails = {
+                oBilling  : JSON.parse(atob(oNotBuyNow.oBilling)),
+                oShipping : JSON.parse(atob(oNotBuyNow.oShipping))
+            }
+            retrievePaymayaCheckout(oData.userId, sToken, oData.sRequestId, oDetails).then((oRetrieve) => {
                 if (oRetrieve.error) {
                     console.log(oRetrieve.error);
                     return;

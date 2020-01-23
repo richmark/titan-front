@@ -83,10 +83,7 @@ const Products = () => {
 
     if (paginationCount > pageActive) {
       setPageActive(newPageActive);
-      loadProducts(
-        showCount,
-        parseInt(showCount * (newPageActive - 1), "asc", "_id")
-      );
+      loadProducts(showCount, 0, "asc", "_id");
     }
 
     if (paginationEnd >= 9) {

@@ -12,6 +12,7 @@ import Bundles from "./core/admin/bundles/Bundles";
 import AddBundle from "./core/admin/bundles/AddBundle";
 import Coupons from "./core/admin/coupons/Coupons";
 import AddCoupons from "./core/admin/coupons/AddCoupons";
+import UpdateCoupon from "./core/admin/coupons/UpdateCoupon";
 import Orders from "./core/admin/orders/Orders";
 import UpdateOrders from "./core/admin/orders/UpdateOrders";
 import Products from "./core/admin/products/Products";
@@ -89,6 +90,11 @@ const Routes = () => {
       <AdminRoute path="/admin/bundles" exact component={Bundles} />
       <AdminRoute path="/admin/bundles/add" exact component={AddBundle} />
       <AdminRoute path="/admin/coupons" exact component={Coupons} />
+      <AdminRoute
+        path="/admin/coupons/update/:couponId"
+        exact
+        component={UpdateCoupon}
+      />
       <AdminRoute path="/admin/coupons/add" exact component={AddCoupons} />
       <AdminRoute path="/admin/orders" exact component={Orders} />
       <AdminRoute
