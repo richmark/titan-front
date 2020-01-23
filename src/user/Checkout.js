@@ -26,7 +26,7 @@ const Checkout = ({location}) => {
     const oBuyNow = oQuery.parse(location.search);
 
     // For Shipping and Billing Details Init
-    const oDetail = false;
+    var oDetail = false;
     if (user) {
         oDetail = {
             name   : `${user.first_name} ${user.last_name}`,
