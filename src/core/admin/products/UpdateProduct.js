@@ -221,7 +221,7 @@ const UpdateProduct = ({ match }) => {
                             <input value={price} onChange={handleChange('price')} type="text" className="form-control bg-light small mb-2" placeholder="Price" />
                             <input value={stock} onChange={handleChange('stock')} type="text" className="form-control bg-light small mb-2" placeholder="Stock" />
                             <select value={category} onChange={handleChange('category')} id="category" className="btn btn-light w-100 border mb-2">
-                                <option disabled defaultValue>
+                                <option  disabled defaultValue>
                                     No category
                                 </option>
                                 {

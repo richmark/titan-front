@@ -1,50 +1,37 @@
 import React, { useEffect, useState, Fragment } from "react";
-import DashboardLayout from "../DashboardLayout";
-import { getAllProducts, getProductCount } from "../products/productsApi";
-import { getAllCategories } from "../categories/categoriesApi";
-import oMoment from "moment";
-import { IMAGE_API } from "../../../config";
-import { createBundle } from "./bundlesApi";
+import { Redirect, NavLink } from "react-router-dom";
 import { isAuthenticated } from "../../../auth/authUtil";
+import { getBundle, updateBundle } from "./bundlesApi";
+import DashboardLayout from "../DashboardLayout";
+import { IMAGE_API } from "../../../config";
+import { getAllProducts, getProductCount } from "../products/productsApi";
+import oMoment from "moment";
 
-const AddBundle = () => {
+const UpdateBundle = ({ match }) => {
   const [products, setProducts] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const { sToken, user } = isAuthenticated();
+  const [cancel, setCancel] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [bundles, setBundles] = useState({
+    _id: "",
     bundle_name: "",
+    discount_value: "",
     bundle_description: "",
+    discount_type: "",
     bundle_thumbnail:
       "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
-    discount_type: "",
-    discount_value: "",
+    products: [],
     formData: ""
   });
-
   const {
+    _id,
     bundle_name,
-    bundle_description,
-    bundle_thumbnail,
-    discount_type,
     discount_value,
+    bundle_description,
+    discount_type,
+    bundle_thumbnail,
     formData
   } = bundles;
-
-  useEffect(() => {
-    loadCategories();
-    loadProductCount();
-  }, []);
-
-  const loadCategories = () => {
-    getAllCategories().then(oCategories => {
-      if (oCategories.error) {
-        console.log(oCategories.error);
-      } else {
-        setCategories(oCategories.data);
-      }
-    });
-  };
 
   const loadProductCount = () => {
     getProductCount().then(oData => {
@@ -62,62 +49,33 @@ const AddBundle = () => {
         console.log(oProducts.error);
       } else {
         setProducts(oProducts.data);
-        setBundles({
-          ...bundles,
-          formData: new FormData(),
-          discount_type: "fix"
-        });
+        loadBundle();
       }
     });
   };
 
-  const handleSelectToggle = oEvent => {
-    var productId = oEvent.target.value;
-    if (oEvent.target.checked) {
-      var oSelectedData = products.find(oItem => oItem._id === productId);
-      oSelectedData.count = "1";
-      selectedProducts.push(oSelectedData);
-      setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-      return;
-    }
-    var iIndex = selectedProducts.findIndex(oItem => oItem._id === productId);
-    selectedProducts.splice(iIndex, 1);
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-  };
-
-  const handleProductCount = sProductId => oEvent => {
-    if (oEvent.target.value === "") {
-      oEvent.target.value = 1;
-    }
-    const iIndex = selectedProducts.findIndex(
-      oProduct => oProduct._id === sProductId
-    );
-    selectedProducts[iIndex].count = oEvent.target.value;
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-  };
-
-  const getTotalPrice = () => {
-    var iTotal = 0;
-    selectedProducts.forEach(oElement => {
-      iTotal += oElement.count
-        ? oElement.count * oElement.price
-        : oElement.price;
+  const loadBundle = () => {
+    getBundle(user._id, sToken, match.params.bundleId).then(oBundle => {
+      if (oBundle.error) {
+        console.log(oBundle.error);
+      } else {
+        setBundles({
+          ...oBundle.data,
+          formData: new FormData(),
+          bundle_thumbnail: `${IMAGE_API}/images/bundles/${oBundle.data.bundle_thumbnail}`
+        });
+        var aProduct = [];
+        oBundle.data.products.map(oItem => {
+          aProduct.push({...oItem.product, count: oItem.count});
+        })
+        setSelectedProducts(aProduct);
+      }
     });
-    return iTotal;
   };
 
-  const isProductSelected = sProductId => {
-    let oData = selectedProducts.find(oProduct => oProduct._id === sProductId);
-    return oData === undefined ? false : true;
-  };
-
-  const removeSelectedProduct = sProductId => oEvent => {
-    const iIndex = selectedProducts.findIndex(
-      oProduct => oProduct._id === sProductId
-    );
-    selectedProducts.splice(iIndex, 1);
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-  };
+  useEffect(() => {
+    loadProductCount();
+  }, []);
 
   const validateImage = (oFile, oEvent, name) => {
     let sFileType = oFile.type
@@ -170,20 +128,33 @@ const AddBundle = () => {
     }
   };
 
-  const submitBundle = oEvent => {
-    oEvent.preventDefault();
-    let aData = selectedProducts.map(oProduct => {
-      const { _id, count } = oProduct;
-      return { product: _id, count };
+  const removeSelectedProduct = sProductId => oEvent => {
+    const iIndex = selectedProducts.findIndex(
+      oProduct => oProduct._id === sProductId
+    );
+    selectedProducts.splice(iIndex, 1);
+    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
+  };
+
+  const handleProductCount = sProductId => oEvent => {
+    if (oEvent.target.value === "") {
+      oEvent.target.value = 1;
+    }
+    const iIndex = selectedProducts.findIndex(
+      oProduct => oProduct._id === sProductId
+    );
+    selectedProducts[iIndex].count = oEvent.target.value;
+    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
+  };
+
+  const getTotalPrice = () => {
+    var iTotal = 0;
+    selectedProducts.forEach(oElement => {
+      iTotal += oElement.count
+        ? oElement.count * oElement.price
+        : oElement.price;
     });
-    formData.set("products", JSON.stringify(aData));
-    createBundle(user._id, sToken, formData).then(oData => {
-      if (oData.error) {
-        console.log(oData.error);
-      } else {
-        alert("Bundle created successfully");
-      }
-    });
+    return iTotal;
   };
 
   const getDiscountedPrice = () => {
@@ -205,14 +176,63 @@ const AddBundle = () => {
     setBundles({
       bundle_name: "",
       bundle_description: "",
-      bundle_thumbnail: "",
+      bundle_thumbnail:
+        "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
       discount_type: "fix",
       discount_value: "",
       formData: oForm
     });
   };
 
-  const showAddBundle = () => {
+  const cancelUpdate = oEvent => {
+    oEvent.preventDefault();
+    if (window.confirm("Are you sure you want to cancel?") === true) {
+      setCancel(true);
+    }
+  };
+
+  const redirectPage = () => {
+    if (cancel === true) {
+      return <Redirect to="/admin/bundles" />;
+    }
+  };
+
+  const isProductSelected = sProductId => {
+    let oData = selectedProducts.find(oProduct => oProduct._id === sProductId);
+    return oData === undefined ? false : true;
+  };
+
+  const handleSelectToggle = oEvent => {
+    var productId = oEvent.target.value;
+    if (oEvent.target.checked) {
+      var oSelectedData = products.find(oItem => oItem._id === productId);
+      oSelectedData.count = "1";
+      selectedProducts.push(oSelectedData);
+      setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
+      return;
+    }
+    var iIndex = selectedProducts.findIndex(oItem => oItem._id === productId);
+    selectedProducts.splice(iIndex, 1);
+    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
+  };
+
+  const submitBundle = oEvent => {
+    oEvent.preventDefault();
+    let aData = selectedProducts.map(oProduct => {
+      const { _id, count } = oProduct;
+      return { product: _id, count };
+    });
+    formData.set("products", JSON.stringify(aData));
+    updateBundle(user._id, sToken, formData, match.params.bundleId).then(oData => {
+      if (oData.error) {
+        console.log(oData.error);
+      } else {
+        alert(oData.msg);
+      }
+    });
+  };
+
+  const showBundle = () => {
     return (
       <Fragment>
         <div className="col-md-7 col-sm-7 col-xl-7 mb-4">
@@ -229,7 +249,6 @@ const AddBundle = () => {
                 <div className="col-sm-5">
                   <div className="input-group">
                     <input
-                      onChange={handleChange("bundle_name")}
                       type="text"
                       className="form-control bg-light border-0 small"
                       placeholder="Search"
@@ -245,15 +264,9 @@ const AddBundle = () => {
                 </div>
               </div>
               <select id="category" className="btn btn-light border mr-2">
-                <option disabled defaultValue>
-                  No category
+                <option value="null" disabled>
+                  Select a Category
                 </option>
-                {categories &&
-                  categories.map((oCategory, iIndex) => (
-                    <option key={iIndex} value={oCategory._id}>
-                      {oCategory.name}
-                    </option>
-                  ))}
               </select>
               <select id="category" className="btn btn-light border mr-2">
                 <option value="null" disabled>
@@ -268,7 +281,10 @@ const AddBundle = () => {
                   <span>10</span> Items
                 </div>
                 <div className="float-right mb-2">
-                  {/* <button className="btn btn-primary"> Apply Bundle</button> */}
+                  <button onClick={cancelUpdate} className="btn btn-danger">
+                    {" "}
+                    Cancel
+                  </button>
                   <button onClick={resetBundle} className="btn btn-primary">
                     {" "}
                     Reset Bundle
@@ -291,7 +307,7 @@ const AddBundle = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {products &&
+                  {products &&
                       products.map((oProduct, iIndex) => {
                         return (
                           <tr key={iIndex}>
@@ -373,17 +389,17 @@ const AddBundle = () => {
                     </label>
                     <div className="col-sm">
                       <input
+                        onChange={handleChange("bundle_name")}
                         value={bundle_name}
                         type="text"
-                        onChange={handleChange("bundle_name")}
                         className="form-control"
-                        id="inputPassword"
+                        id="image"
                         placeholder="Name"
                       />
                     </div>
                     <div className="col-sm">
                       <select
-                        defaultValue={"fix"}
+                        value={discount_type}
                         onChange={handleChange("discount_type")}
                         id="discount_type"
                         className="btn btn-light border mr-2"
@@ -406,9 +422,8 @@ const AddBundle = () => {
                     <div className="col-sm">
                       <input
                         value={discount_value}
-                        min={1}
                         onChange={handleChange("discount_value")}
-                        type="number"
+                        type="text"
                         className="form-control"
                         id="inputPassword"
                         placeholder="Value"
@@ -427,16 +442,13 @@ const AddBundle = () => {
                       onChange={handleChange("bundle_thumbnail")}
                       type="file"
                       className="form-control-file"
-                      id="image"
+                      id="exampleFormControlFile1"
                     />
                   </div>
                   <div className="border p-3 mb-4 mt-3">
                     <img
                       src={bundle_thumbnail}
-                      style={{
-                        width: "28vw",
-                        height: "25vh"
-                      }}
+                      style={{ width: "28vw", height: "25vh" }}
                     />
                   </div>
                   <table className="table table-bordered">
@@ -472,9 +484,7 @@ const AddBundle = () => {
                               <td className="text-center">
                                 <img
                                   src={`${IMAGE_API}/images/products/${oProduct.image}`}
-                                  style={{
-                                    width: "50%"
-                                  }}
+                                  style={{ width: "50%" }}
                                 />
                               </td>
                               <td>{oProduct.product_name}</td>
@@ -487,10 +497,7 @@ const AddBundle = () => {
                                   type="number"
                                   className="form-control bg-light border-0 small"
                                   placeholder="Qty"
-                                  style={{
-                                    paddingRight: "6px",
-                                    width: "70px"
-                                  }}
+                                  style={{ paddingRight: "6px", width: "70px" }}
                                 />
                               </td>
                               <td>
@@ -521,9 +528,7 @@ const AddBundle = () => {
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-xl-12">
-                <button onClick={submitBundle} className="btn btn-primary">
-                  Save Bundle
-                </button>
+                <button onClick={submitBundle} className="btn btn-primary">Update Bundle</button>
                 <button className="btn btn-primary">View Bundle Details</button>
               </div>
             </div>
@@ -532,11 +537,13 @@ const AddBundle = () => {
       </Fragment>
     );
   };
+
   return (
-    <DashboardLayout name="Bundle Deals Management" detail="Make Bundle">
-      {showAddBundle()}
+    <DashboardLayout name="Bundle Management" detail="Update Bundle">
+      {showBundle()}
+      {redirectPage()}
     </DashboardLayout>
   );
 };
 
-export default AddBundle;
+export default UpdateBundle;
