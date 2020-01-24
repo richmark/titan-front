@@ -47,14 +47,15 @@ export const initiatePaymayaCheckout = (sUserId, sToken, oPaymentData) => {
     });
 }
 
-export const retrievePaymayaCheckout = (sUserId, sToken, sRequestId) => {
+export const retrievePaymayaCheckout = (sUserId, sToken, sRequestId, oDetails) => {
     return fetch(`${API_URL}/paymaya/retrieveCheckout/${sUserId}?sRequestId=${sRequestId}`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sToken}`
-        }
+        },
+        body: JSON.stringify(oDetails)
     }).then(oResponse => {
         return oResponse.json();
     }).catch(oError => {

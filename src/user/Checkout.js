@@ -1,14 +1,16 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
-import { Container, Row, Col, Image, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
 import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { getBraintreeClientToken, processPayment, initiatePaymayaCheckout } from '../core/client/checkoutApi';
 import { sendOrderData } from '../core/client/orderApi';
-import { Modal } from 'react-bootstrap';
 import oQuery from 'query-string';
+import BasicFormInput from './format/BasicFormInput';
+import BasicAlert from './format/BasicAlert';
+import { oValidatorLibrary } from '../libraries/validatorLibrary';
 
 
 const Checkout = ({location}) => {
@@ -22,6 +24,23 @@ const Checkout = ({location}) => {
     const [mLoader, setLoader] = useState('none');
     const [bEnable, setEnable] = useState(true);
     const oBuyNow = oQuery.parse(location.search);
+
+    // For Shipping and Billing Details Init
+    var oDetail = false;
+    if (user) {
+        oDetail = {
+            name   : `${user.first_name} ${user.last_name}`,
+            address: user.address,
+            contact: user.mobile_number
+        }
+    }
+
+    const [oBilling, setBilling] = useState(oDetail);
+    const [oShipping, setShipping] = useState(oDetail);
+
+    // Modals
+    const [modalBilling, setModalBilling] = useState(false);
+    const [modalShipping, setModalShipping] = useState(false);
 
     const init = () => {
         var aCart = getCart();
@@ -91,12 +110,17 @@ const Checkout = ({location}) => {
 
     const runPaymaya = (user, props) => oEvent => {
         oEvent.preventDefault();
+        console.log(oBilling);
+        console.log(oShipping);
         setLoader(true);
         props.onHide();
         var oTotal = calculateTotal();
         var oOrder = {
             customer: user,
-            order_address: user.address,
+            billing_address: oBilling.address,
+            shipping_address: oShipping.address,
+            billing: btoa(JSON.stringify(oBilling)),
+            shipping: btoa(JSON.stringify(oShipping)),
             amount: oTotal.total,
             shipping_fee: oTotal.fee,
             products: [],
@@ -248,44 +272,183 @@ const Checkout = ({location}) => {
         );
     }
 
-    const showBilling = () => {
+    const showDeliveryDetails = () => {
         if (user) {
             return (
                 <Fragment>
-                    <h5>Shipping & Billing <span className="float-right"><a href="">Edit</a></span></h5>
-                    <div id="basic-info" className="mt-4">
-                        <i className="fas fa-map-marker-alt"></i> <span className="font-weight-bold">{user.first_name} {user.last_name}</span>
-                        <div id="address-info">
-                            <span className="font-weight-light">
-                                {user.address}
-                            </span>
-                        </div>
-                    </div>
-                    <div id="billing-address" className="mt-2">
-                        <span className="font-weight-bold">
-                            <i className="fas fa-sticky-note"></i> Bill to the same address
-                        </span>
-                    </div>
-                    <div id="contact-number" className="mt-2">
-                        <span className="font-weight-bold">
-                            <i className="fas fa-phone-alt"></i> {user.mobile_number}
-                        </span>
-                    </div>
-                    <div id="email" className="mt-2">
-                        <span className="font-weight-bold">
-                            <i className="fas fa-at"></i> {user.email}
-                        </span>
-                    </div>
-    
-                    <div id="place-order" className="mt-4 text-center">
-                        <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
-                            Place Order
-                        </Button>
-                    </div>
+                    {showDetails('Billing', oBilling, setModalBilling)}
+                    <br />
+                    {showDetails('Shipping', oShipping, setModalShipping)}
+                    {showPlaceOrder()}
                 </Fragment>
             );
         }
         return showLoginButton();    
+    }
+
+    const showDetails = (sName, oParam, oFunction) => {
+        return (
+            <Fragment>
+                <h5>{sName} Details<span className="float-right"><Button onClick={() => oFunction(true)}>Edit</Button></span></h5>
+                <div id={`name-${sName}`} className="mt-4">
+                    <i className="fa fa-user-circle"></i> <span className="font-weight-bold">{oParam.name}</span>
+                </div>
+                <div id={`address-${sName}`} className="mt-2">
+                    <span className="font-weight-bold">
+                        <i className="fas fa-map-marker-alt"></i> {oParam.address}
+                    </span>
+                </div>
+                <div id={`contact-${sName}`} className="mt-2">
+                    <span className="font-weight-bold">
+                        <i className="fas fa-phone-alt"></i> {oParam.contact}
+                    </span>
+                </div>
+            </Fragment>
+        );
+    }
+
+    const EditModal = (oProps) => {
+        const oSetState = {
+            'Billing'  : setBilling,
+            'Shipping' : setShipping
+        }
+        const oState = oProps.data;
+        const sType = oProps.type;
+        const aFormLabel = [3,0];
+        const iFormLength = 8;
+        const oEmpty = () => {};
+        const oData = {
+            name : '',
+            address : '',
+            contact : ''
+        }
+        const [danger, setDanger] = useState(oData);
+        const [message, setMessage] = useState('');
+        const [success, setSuccess] = useState(false);
+
+        const [detail, setDetail] = useState({
+            name: oState.name,
+            address: oState.address,
+            contact: oState.contact
+        });
+
+        const oUseState = {
+            detail,
+            oSetDetail : setDetail
+        }
+
+        const closeModal = (props) => {
+            if (success !== false) {
+                setTimeout(() => {
+                    props.onHide();
+                    oSetState[sType](detail);
+                }, 1000);
+                return BasicAlert('success', 'Update Successful!');
+            }
+        };
+
+        return (
+            <Modal
+                {...oProps}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        {`${oProps.type} Details`}
+                    </Modal.Title>
+                </Modal.Header>
+                <Form onSubmit={submitDetails(setDanger, setMessage, oData, oUseState, setSuccess, sType)}>
+                <Modal.Body>
+                    <Fragment>
+                        {BasicFormInput('Full Name', 'text', `formName-${sType}`, oEmpty, aFormLabel, iFormLength, danger.name, oState.name)}
+                        {BasicFormInput('Address', 'text', `formAddress-${sType}`, oEmpty, aFormLabel, iFormLength, danger.address, oState.address)}
+                        {BasicFormInput('Mobile Number', 'text', `formContact-${sType}`, oEmpty, aFormLabel, iFormLength, danger.contact, oState.contact)}
+                        {message !== '' ? BasicAlert('danger', message) : ''}
+                        {closeModal(oProps)}
+                    </Fragment>            
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" className="m-1" type="submit">Save</Button>
+                    <Button variant="secondary" onClick={oProps.onHide}>Close</Button>
+                </Modal.Footer>
+                </Form>
+            </Modal>
+        );
+    };
+
+    const submitDetails = (oDanger, oMessage, oInitial, oUseState, oSuccess, sId) => (oEvent) => {
+        oEvent.preventDefault();
+        oDanger(oInitial);
+        oMessage('');
+        const oData = {
+            name    : getValue(`formName-${sId}`),
+            address : getValue(`formAddress-${sId}`),
+            contact : getValue(`formContact-${sId}`)
+        }
+        if (checkSameData(oData, oUseState.detail) === true) {
+            oSuccess(true);
+            return;
+        }
+        var oValidator = oValidatorLibrary();
+        oValidator.message('name', oData.name, 'required|alpha_space');
+        oValidator.message('address', oData.address, 'required|alpha_num_dash_space|max:254');
+        oValidator.message('contact', oData.contact, 'required|contact_number');
+        if (oValidator.allValid()) {
+            oUseState.oSetDetail(oData);
+            oSuccess(true);
+            return;
+        }
+        // error messages goes here
+        var oError = oValidator.getErrorMessages();
+        var sMessage = setErrorMessage(oError);
+        oMessage(sMessage);
+        oDanger({
+            name    : setErrorBorder(oError.name),
+            address : setErrorBorder(oError.address),
+            contact : setErrorBorder(oError.contact)
+        });
+    };
+
+    const getValue = (sValue) => {
+        return document.getElementById(sValue).value.trim()
+    }
+
+    const setErrorBorder = (sName) => {
+        return (sName === null) ? '' : 'border-danger';
+    };
+
+    const setErrorMessage = (oError) => {
+        var aMessage = [];
+        Object.keys(oError).map(mKey => {
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
+        });
+        return aMessage;
+    };
+
+    const checkSameData = (oCheck, oParam) => {
+        const oData = {
+            name : oParam.name,
+            address : oParam.address,
+            contact : oParam.contact
+        }
+        if (JSON.stringify(oData) === JSON.stringify(oCheck)) {
+            return true;
+        }
+        return false;
+    }
+
+    const showPlaceOrder = () => {
+        return (
+            <Fragment>
+                <div id="place-order" className="mt-4 text-center">
+                    <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
+                        Place Order
+                    </Button>
+                </div>
+            </Fragment>
+        );
     }
 
     const showLoginButton = () => {
@@ -327,7 +490,7 @@ const Checkout = ({location}) => {
                             {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
-                        {showBilling()}
+                        {showDeliveryDetails()}
                     </Col>
                 </Fragment>
             );
@@ -352,6 +515,18 @@ const Checkout = ({location}) => {
             <LaunchModal 
                 show={modalPaymaya}
                 onHide={() => setModalPaymaya(false)}
+            />
+            <EditModal 
+                show={modalBilling}
+                onHide={() => setModalBilling(false)}
+                data={oBilling}
+                type='Billing'
+            />
+            <EditModal 
+                show={modalShipping}
+                onHide={() => setModalShipping(false)}
+                data={oShipping}
+                type='Shipping'
             />
         </Layout>
     );
