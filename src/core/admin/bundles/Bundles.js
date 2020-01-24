@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
+import { Link } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import oMoment from 'moment';
 import { IMAGE_API } from "../../../config";
@@ -102,7 +103,11 @@ const Bundles = () => {
                                                 <th scope='row'>
                                                     <input type='checkbox' />
                                                 </th>
-                                                <td>{oBundle.bundle_name}</td>
+                                                <td>
+                                                    <Link to={`/admin/bundles/update/${oBundle._id}`}>
+                                                        {oBundle.bundle_name}
+                                                    </Link>
+                                                </td>
                                                 <td>{oBundle.discount_type}</td>
                                                 <td>{oBundle.discount_value}</td>
                                                 <td>{oMoment(oBundle.createdAt).format('DD-MM-YYYY')}</td>
