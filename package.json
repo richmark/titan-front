@@ -10,10 +10,12 @@
 		"query-string": "^6.10.1",
 		"react": "^16.11.0",
 		"react-bootstrap": "^1.0.0-beta.16",
+		"react-data-table-component": "^6.2.1",
 		"react-dom": "^16.11.0",
 		"react-router-dom": "^5.1.2",
 		"react-scripts": "^3.3.0",
-		"simple-react-validator": "^1.2.4"
+		"simple-react-validator": "^1.2.4",
+		"styled-components": "^5.0.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
