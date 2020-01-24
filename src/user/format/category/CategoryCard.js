@@ -10,7 +10,7 @@ const CategoryCard = (aData) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Link to={`categories/${oCategories._id}`}>
-                <Card className="pt-3 border-0"  style={{background: 'transparent'}}>
+                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
                     <Row>
                         <Col>
                             <Image 
@@ -22,7 +22,9 @@ const CategoryCard = (aData) => {
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="text-center ellipsis-button" style={{fontSize: "2vh"}}>{oCategories.name}</p>
+                                <div style={{display : 'inline-block'}}>
+                                    <p className="text-center ellipsis-button" style={{fontSize: "16px", marginTop: '22px', textTransform: 'uppercase'}}>{oCategories.name}</p>
+                                </div>
                             </button>
                         </Col>
                     </Row>
@@ -34,12 +36,12 @@ const CategoryCard = (aData) => {
     const showLayout = (aCategories) => {
         return (
             <Container>
-                <Row className="mt-2">
-                    <Col sm={{offset:1, span: 9}}>
+                <Row className="mt-2 ml-3 mr-2">
+                    <Col sm={{offset:0, span: 12}}>
                         <Row className="mb-2">
                             {aCategories.map((oCategories, iIndex) => {
                                 return (
-                                    <Col sm={3} key={iIndex}>
+                                    <Col sm={3} key={iIndex} className="pl-0">
                                         {showCardBase(oCategories)}
                                     </Col>
                                 );
@@ -64,7 +66,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>Categories</p></strong></div>
+            <div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '37px', left: '35px'}}>Categories</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    
