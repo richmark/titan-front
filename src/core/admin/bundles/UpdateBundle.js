@@ -78,6 +78,15 @@ const UpdateBundle = ({ match }) => {
   }, []);
 
   const validateImage = (oFile, oEvent, name) => {
+    if (oFile === undefined) {
+      formData.set(name, "");
+      setBundles({
+        ...bundles,
+        [name]: ""
+      });
+      return false;
+    }
+    
     let sFileType = oFile.type
       .split("/")
       .pop()
@@ -95,14 +104,6 @@ const UpdateBundle = ({ match }) => {
       return false;
     }
 
-    if (oFile === undefined) {
-      formData.set(name, "");
-      setBundles({
-        ...bundles,
-        [name]: ""
-      });
-      return false;
-    }
     return true;
   };
 

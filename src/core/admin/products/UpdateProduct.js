@@ -102,6 +102,14 @@ const UpdateProduct = ({ match }) => {
   };
 
   const validateImage = (oFile, oEvent, name) => {
+    if (oFile === undefined) {
+      formData.set(name, "");
+      setValues({
+        ...values,
+        [name]: ""
+      });
+      return false;
+    }
     let sFileType = oFile.type
       .split("/")
       .pop()
@@ -119,14 +127,6 @@ const UpdateProduct = ({ match }) => {
       return false;
     }
 
-    if (oFile === undefined) {
-      formData.set(name, "");
-      setValues({
-        ...values,
-        [name]: ""
-      });
-      return false;
-    }
     return true;
   };
 

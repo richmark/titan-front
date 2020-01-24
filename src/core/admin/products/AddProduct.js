@@ -28,7 +28,9 @@ const AddProduct = () => {
     key: "",
     value: "",
     error: false,
-    formData: ""
+    formData: "",
+    display: 'T',
+    sold_out: 'F'
   });
 
   const {
@@ -43,7 +45,9 @@ const AddProduct = () => {
     key,
     value,
     error,
-    formData
+    formData,
+    display,
+    sold_out
   } = values;
 
   const [bRedirect, setRedirect] = useState(false);
@@ -71,6 +75,7 @@ const AddProduct = () => {
   };
 
   const handleChange = name => oEvent => {
+    console.log(oEvent.target.value);
     if (name !== "image" && name !== "additional_images") {
       const value = oEvent.target.value;
       formData.set(name, value);
@@ -121,6 +126,15 @@ const AddProduct = () => {
   };
 
   const validateImage = (oFile, oEvent, name) => {
+    if (oFile === undefined) {
+      formData.set(name, "");
+      setValues({
+        ...values,
+        [name]: ""
+      });
+      return false;
+    }
+
     let sFileType = oFile.type
       .split("/")
       .pop()
@@ -138,14 +152,6 @@ const AddProduct = () => {
       return false;
     }
 
-    if (oFile === undefined) {
-      formData.set(name, "");
-      setValues({
-        ...values,
-        [name]: ""
-      });
-      return false;
-    }
     return true;
   };
 
@@ -309,6 +315,22 @@ const AddProduct = () => {
                 placeholder="Stock"
               />
               <select
+                onChange={handleChange("brand")}
+                id="brand"
+                className="btn btn-light w-100 border mb-2"
+                defaultValue={'Titan'}
+              >
+                <option disabled defaultValue>
+                  Select brand
+                </option>
+                <option value={'Yojimbo'}>
+                  Yojimbo
+                </option>
+                <option value={'Titan'}>
+                  Titan
+                </option>
+              </select>
+              <select
                 onChange={handleChange("category")}
                 id="category"
                 className="btn btn-light w-100 border mb-2"
@@ -390,6 +412,12 @@ const AddProduct = () => {
                   </button>
                 </div>
                 {additional_info.map(showAdditionalInfoForm)}
+              </div>
+              <div className="checkbox">
+                <label><input checked={display === 'T' ? true : false} value={display ? 'F' : 'T'} onChange={handleChange("display")} type="checkbox" />Display </label>
+              </div>
+              <div className="checkbox">
+                <label><input checked={sold_out === 'F' ? false : true} value={sold_out ? 'T' : 'F'} onChange={handleChange("sold_out")} type="checkbox" />Sold out </label>
               </div>
             </div>
           </div>
