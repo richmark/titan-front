@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Container, Col, Row, Button } from 'react-bootstrap';
+import { Card, Container, Col, Row, Button, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
 import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
@@ -39,22 +39,27 @@ const ProductCard = (aData, setRun = () => {}) => {
             sStyle =  'pl-2';
         }
         return (
-            <Card className="pt-3" className="border-0" style={{background: 'transparent'}}>
-                <a href={`/product/details/${oProduct._id}`} className="mx-auto">
-                    <Card.Img 
-                        variant="top" 
-                        src={`${IMAGE_API}/images/products/${sImage}`}
-                        style={{width: "200px", height: "200px"}}
-                    />
-                </a>
-                <div className="border-bottom border-white mt-2 ml-5 mr-5 boder"></div>
-                <Card.Body className={`pt-2 ${sStyle}`}>
-                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "1.2vh"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{sName}</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "1.5vh"}}>{`₱ ${oProduct.price}`}</p>
-                    </button>
-                </Card.Body>
+            <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+                <Row>
+                    <Col>
+                        <a href={`/product/details/${oProduct._id}`} className="mx-auto">
+                            <Image 
+                                src={`${IMAGE_API}/images/products/${sImage}`}
+                                style={{width: "200px", height: "200px"}} 
+                            />
+                        </a>
+                    </Col>
+                </Row>
+                <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
+                <Row className=" mt-2">
+                    <Col>
+                        <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
+                            <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
+                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
+                        </button>
+                    </Col>
+                </Row>
             </Card>
         );
     };
@@ -68,10 +73,10 @@ const ProductCard = (aData, setRun = () => {}) => {
             <Container>
                 <Row className="mt-2 ml-3 mr-2">
                     <Col sm={{offset:0, span: 12}}>
-                        <Row>
+                        <Row className="mb-2">
                             {aProducts && aProducts.map((oProduct, iIndex) => {
                                 return (
-                                    <Col sm={iSize} key={iIndex}>
+                                    <Col sm={iSize} key={iIndex} className="pl-0">
                                         {showCardBase(oProduct)}
                                     </Col>
                                 );
@@ -85,7 +90,7 @@ const ProductCard = (aData, setRun = () => {}) => {
 
     return (
         <Container>
-<div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '43px', left: '50px'}}>{sHeader}</p></strong></div>
+<div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '37px', left: '35px'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    

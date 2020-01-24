@@ -42,7 +42,6 @@ const HomePage = () => {
     
 	return (
         <Layout oGetCategory={getCategory} run={iRun}>
-            <h1 className='text-center mt-5'>TITAN SUPERTOOLS</h1>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
             {ProductCard(aProducts, setRun)}
