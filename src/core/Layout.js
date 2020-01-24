@@ -61,40 +61,37 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
         if (user) {
             return (
                 <Fragment>
-                    <Col className="mt-2 mb-2 text-right ellipsis">
-                        <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
-                    </Col>
-                    <Col xs={1} className="mt-2 mb-2 ellipsis">
-                        <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
-                    </Col>
-                    <Col className="mt-2 mb-2 text-left ellipsis">
-                        <span className="text-white"><i className="fas fa-map-marker-alt" style={{color: '#ffc044'}}></i> 8th ave Caloocan City</span>
-                    </Col>
-                    <Col className="mt-2 mb-2 text-right ellipsis">
-                        <a href={`/profile/${user._id}`} className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> My Profile</a>
-                    </Col>
-                    <Col className="mt-2 mb-2 ellipsis">
-                        <a href="/signout" className="text-white"><i className="fas fa-sign-out-alt" style={{color: '#ffc044'}}></i> Logout</a>
-                    </Col>
+                    <div className="container" style={{display: 'flex', flexWrap : 'wrap'}}>
+                        <Col className="mt-2 mb-2 ellipsis pl-0 pr-0" style={{maxWidth: '170px'}}>
+                            <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
+                        </Col>
+                        <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
+                            <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
+                        </Col>
+                        <Col xs={6} md={6} xl={6} sm={6} className="mt-2 mb-2 text-right ellipsis">
+                            <a href={`/profile/${user._id}`} className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> My Profile</a>
+                        </Col>
+                        <Col xs={1} md={1} xl={1} sm={1} className="mt-2 mb-2 text-right ellipsis pr-0">
+                            <a href="/signout" className="text-white"><i className="fas fa-sign-out-alt" style={{color: '#ffc044'}}></i> Logout</a>
+                        </Col>
+                    </div>
                 </Fragment>
             );  
         }
         return (
             <Fragment>
-                    <Col className="mt-2 mb-2 text-right ellipsis" style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
-                    <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
+                <div className="container" style={{display: 'flex', flexWrap : 'wrap'}}>
+                    <Col className="mt-2 mb-2 ellipsis pl-0 pr-0" style={{maxWidth: '170px'}}>
+                        <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
                     </Col>
-                    <Col xs={1} className="mt-2 mb-2 ellipsis" style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
-                    <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
+                    <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
+                        <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
                     </Col>
-                    <Col className="mt-2 mb-2 text-left ellipsis">
-                    <span className="text-white"><i className="fas fa-map-marker-alt" style={{color: '#ffc044'}}></i> 8th ave Caloocan City</span>
-                    </Col>
-                    <Col className="mt-2 mb-2 text-right ellipsis">
+                    <Col xs={6} md={6} xl={6} sm={6} className="mt-2 mb-2 text-right ellipsis">
                     <a href="/login" className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> Login</a>
                     </Col>
-                    <Col className="mt-2 mb-2 ellipsis">
-                    <a href="/signup" className="text-white"><span style={{
+                    <Col xs={2} md={2} xl={2} sm={2} className="mt-2 mb-2 ellipsis pr-0" style={{maxWidth: '102px'}}>
+                    <a href="/signup" className="text-white" style={{right: '0'}}><span style={{
                         backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
                         backgroundPosition: '75px -67px',
                         backgroundSize: '47px',
@@ -106,6 +103,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         marginRight: '30px'
                     }}>Register</span></a>
                     </Col>  
+                </div>
             </Fragment>
         );
     }
@@ -165,7 +163,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
 
     const showNavFirst = () => {
         return (
-            <Nav style={{backgroundColor: '#4c4847'}} activeKey="/home">
+            <Nav style={{backgroundColor: '#4c4847', marginRight: 'auto', marginLeft: 'auto'}} activeKey="/home" >
                 {showUserGuest()}
             </Nav>
         );
@@ -174,13 +172,13 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
     const showNavBarSecond = () => {
         return (
             <Navbar expand="lg" style={{borderBottom: '8px solid #ffc044', backgroundColor: 'black'}}>
-            <Navbar id="basic-navbar-nav" className="mt-2 mb-2" style={{width : '100%'}}>
-                <Col xs={4} md={4} xl={4} sm={4} className="text-white text-right">
+            <Navbar id="basic-navbar-nav" className="mt-2 mb-2 container" style={{width : '100%'}}>
+                <Col xs={3} md={3} xl={3} sm={3} className="text-white pl-0">
                     <Link to='/'>
                         <Image src={`${IMAGE_API}/images/others/titan-supertools-logo.png`} alt="Titan Super Tools" style={{width: '250px', height: 'auto'}}></Image>
                     </Link>
                 </Col>
-                <Col xs={1} md={1} xl={1} sm={1}>
+                <Col xs={2} md={2} xl={2} sm={2}>
                     <Dropdown style={{width: '100%'}}>
                         <Dropdown.Toggle id="dropdown-basic" className="rounded-pill" style={{backgroundColor: 'white', border: '1px solid #ced4da', color: 'black', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%'}}>
                             Categories
@@ -189,7 +187,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         {showNavCategories()}
                     </Dropdown>
                 </Col>
-                <Col xs={4} md={4} xl={4} sm={4}>
+                <Col xs={5} md={5} xl={5} sm={5}>
                     <InputGroup style={{width: '100%'}}>
                         <FormControl
                         placeholder="Search here"
@@ -202,7 +200,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         </InputGroup.Append>
                     </InputGroup>
                 </Col>
-                <Col xs={3} md={3} xl={3} sm={3}>
+                <Col xs={2} md={2} xl={2} sm={2} className="text-center">
                     <Container>
                         <a href="/checkout" style={{textDecoration: 'none'}}>
                             <i className="fas fa-shopping-cart mt-3 ml-3" style={{color: 'white'}}></i>{showBadge()}
@@ -217,7 +215,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
 
     const showNavBarThird = () => {
         return (
-            <Nav activeKey="/home" style={{marginLeft: '20%'}}>
+            <Nav activeKey="/home" className="container">
                 <Nav.Item>
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
                         backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
@@ -235,8 +233,8 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                 <Nav.Item>
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
                         backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                        backgroundPosition: '125px -123px',
-                        backgroundSize: '60px',
+                        backgroundPosition: '132px -134px',
+                        backgroundSize: '65px',
                         height: '22px',
                         width: '24px',
                         display: 'block',
@@ -246,7 +244,19 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                     }}>Shop</span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}><i className="fas fa-gift" style={{color: '#ffc044'}}></i> Your Orders</Nav.Link>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}>
+                        <Row className="ml-1">
+                        <span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '100px -74px',
+                        backgroundSize: '50px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px'
+                        }}></span>Your Order</Row>
+                    </Nav.Link>
                 </Nav.Item>
             </Nav>
         );
@@ -266,12 +276,6 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                             <a href="/" className="text-white">CONTACT US</a><br></br>            
                         </Col>
                         {showFooterCategories()}
-                        {/* <Col className="text-left" style={{paddingTop: '2.5rem'}}>
-                            <a href="/" className="text-white">CONSTRUCTION MACHINE</a><br></br>
-                            <a href="/" className="text-white">HAND TOOLS</a><br></br>
-                            <a href="/" className="text-white">ACCESSORIES</a><br></br>
-                            <a href="/" className="text-white">WELDING MACINE</a><br></br>
-                        </Col> */}
                         <Col xs={3} md={3} xl={3} sm={3} className="text-left">
                             <p style={{color: '#ffc044'}}>ABOUT US</p>
                             <p>
@@ -288,7 +292,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         © 2020 Titan. All rights reserved
                     </div>
                     <div className="float-right">
-                    <a href="/" style={{color: '#ffc044'}}>follow us<i className="ml-2 fab fa-facebook-f"></i></a>
+                    <a href="/" style={{color: 'white'}}>follow us<i className="ml-2 fab fa-facebook-square"></i></a>
                     </div>
                 </Container>
             </footer>
@@ -319,7 +323,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
             {showNavFirst()}
             {showNavBarSecond()}
             {showNavBarThird()}
-            <div style={{ minHeight: '60vh' }}>{children}</div>
+            <div style={{ minHeight: '60vh' }} className="mt-5">{children}</div>
             {oCategories && showFooter()}
             </div>
         </Fragment>

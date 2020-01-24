@@ -17,7 +17,7 @@ span {
 }
 
 .checked {
-    color: yellow;
+    color: #fbad17;
 }
 
 .ellipsis {
@@ -58,7 +58,7 @@ span {
     position: absolute;
     width: 60px;
     height: 60px;
-    border: 10px solid #ffc20c;
+    border: 10px solid #fbad17;
     border-top-color: transparent;
     border-radius: 50%;
   }

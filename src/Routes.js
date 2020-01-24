@@ -35,6 +35,7 @@ import ProductsByCategory from "./user/format/category/ProductsByCategory";
 import OrderDetails from "./user/OrderDetails";
 import ReviewProduct from "./user/ReviewProduct";
 import PaymayaStatus from "./user/PaymentStatus";
+import SearchResult from "./user/SearchResult";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -75,6 +76,7 @@ const Routes = () => {
         exact
         component={PaymayaStatus}
       />
+      <Route path="/search/result" exact component={SearchResult} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
