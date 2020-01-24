@@ -8,6 +8,7 @@ import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import { sendUpdateUserData, updateUserData, sendUpdateUserPassword } from '../core/client/clientApi';
 import { getOrderByUser } from '../core/admin/orders/ordersApi';
+import DataTable from 'react-data-table-component';
 
 const Profile = ({match}) => {
 
@@ -121,40 +122,51 @@ const Profile = ({match}) => {
         );
     };
 
+    const showDataTable = (bCount) => {
+
+        const oData = aOrder;
+        const oColumns = [
+            {
+                name: 'Order Id',
+                selector: '_id',
+                sortable: true,
+            },
+            {
+                name: 'Date',
+                selector: 'createdAt',
+                sortable: true,
+            },
+            {
+                name: 'Price',
+                selector: 'amount',
+                sortable: true,
+            },
+            {
+                name: 'Action',
+                cell: oRow => {
+                    return (
+                        <Link to={`/order/detail/${oRow._id}`}>
+                            Manage
+                        </Link>
+                    );
+                },
+                sortable: true,
+            },
+        ];
+        return (
+            <DataTable
+                columns={oColumns}
+                data={oData}
+                pagination={bCount}
+                paginationPerPage={5}
+                paginationRowsPerPageOptions={[5,10]}
+            />
+        );
+    }
+
     const showOrderTable = () => {
         if (aOrder.length > 0) {
-            return (
-                <Fragment>
-                    <Table responsive>
-                        <thead>
-                            <tr>
-                                <th>Order Id</th>
-                                <th>Date</th>
-                                <th>Price</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {aOrder.map((oOrder, iIndex) => {
-                                return (
-                                    <Fragment key={iIndex}>
-                                        <tr>
-                                            <td>{oOrder._id}</td>
-                                            <td>{oOrder.createdAt}</td>
-                                            <td>₱ {oOrder.amount}</td>
-                                            <td>
-                                                <Link to={`/order/detail/${oOrder._id}`}>
-                                                    Manage
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    </Fragment>
-                                );
-                            })}
-                        </tbody>
-                    </Table>
-                </Fragment>
-            );
+            return showDataTable(aOrder.length > 5);
         }
         return (
             <Fragment>
