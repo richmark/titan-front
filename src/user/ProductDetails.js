@@ -66,7 +66,9 @@ const ProductDetails = ({match}) => {
           product_name: oData.product_name,
           price: oData.price,
           description: oData.description,
-          stock: oData.stock
+          stock: oData.stock,
+          sold_out : oData.sold_out,
+          display: oData.display
         });
         calculateCartStock(oData._id, oData.stock);
         setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
@@ -77,7 +79,7 @@ const ProductDetails = ({match}) => {
 
   const calculateCartStock = (sProductId, iValue) => {
     var oCount = getProductCount(sProductId, iValue);
-    var iCart = iValue - oCount.iCount;
+    var iCart = iValue - (oCount.iCount === undefined ? 0 : oCount.iCount);
     setStock(iCart < 0 ? 0 : iCart);
   }
 
@@ -179,28 +181,45 @@ const ProductDetails = ({match}) => {
               <h4>
                 ₱ <span>{price}</span>
               </h4>
-              <Form className="mt-5">
-                <Form.Group as={Row} controlId="formPlaintextPassword">
-                  <Form.Label column sm="2">
-                    Quantity
-                  </Form.Label>
-                  <Col sm="2">
-                    <Form.Control type="number" value={iCount} onChange={handleCount}/>
-                  </Col>
-                  <Form.Label column sm="6">
-                    {showStock()}
-                  </Form.Label>
-                </Form.Group>
-              </Form>
-              <hr />
-              <Button variant="primary" onClick={runBuyNow}>Buy Now</Button>{" "}
-              <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+              {showAddCartButton()}
             </Col>
           </Row>
         </Container>
       </Fragment>
     );
   };
+
+  const showAddCartButton = () => {
+    if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+      return (
+        <Fragment>
+          ITEM IS SOLD OUT
+        </Fragment>
+      );
+    } else {
+      return (
+        <Fragment>
+          <Form className="mt-5">
+            <Form.Group as={Row} controlId="formPlaintextPassword">
+              <Form.Label column sm="2">
+                Quantity
+              </Form.Label>
+              <Col sm="2">
+                <Form.Control type="number" value={iCount} onChange={handleCount}/>
+              </Col>
+              <Form.Label column sm="6">
+                {showStock()}
+              </Form.Label>
+            </Form.Group>
+          </Form>
+          <hr />
+          <Button variant="primary" onClick={runBuyNow}>Buy Now</Button>{" "}
+          <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+        </Fragment>
+      );
+    }
+    
+  }
 
   const runBuyNow = () => {
     if (iStock > 0) {

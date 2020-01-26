@@ -42,6 +42,9 @@ const Checkout = ({location}) => {
     const [modalBilling, setModalBilling] = useState(false);
     const [modalShipping, setModalShipping] = useState(false);
 
+    // Product Stock Adjustment
+    var bOnlyOnce = false;
+
     const init = () => {
         var aCart = getCart();
         initializeCheckout(aCart);
@@ -74,7 +77,9 @@ const Checkout = ({location}) => {
                 oData = oData.data;
                 oTemp[oData._id] = {
                     price : oData.price,
-                    stock : oData.stock
+                    stock : oData.stock,
+                    sold_out : oData.sold_out,
+                    display  : oData.display
                 };
                 if (iLoop === aReal.length) {
                     setRealProduct(oTemp);
@@ -172,6 +177,20 @@ const Checkout = ({location}) => {
         }
     };
 
+    const adjustCart = () => {
+        if (bOnlyOnce === false) {
+            bOnlyOnce = true;
+            aProduct.map((oProduct) => {
+                if (oRealProduct[oProduct._id].stock < oProduct.count || oRealProduct[oProduct._id].sold_out === 'T' || oRealProduct[oProduct._id].display === 'F') {
+                    removeItem(oProduct._id);
+                    var aCart = getCart();
+                    setRun(aCart);
+                    setProduct(aCart);
+                }
+            });
+        }
+    }
+
     const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
         var oCount = getProductCount(sId, iProductCount);
@@ -186,6 +205,7 @@ const Checkout = ({location}) => {
     };
 
     const singleProduct = (oProduct) => {
+        oRealProduct && adjustCart();
         return oRealProduct && (
             <div className="border rounded p-4 mb-2">
                 <Row>
