@@ -413,11 +413,16 @@ const AddProduct = () => {
                 </div>
                 {additional_info.map(showAdditionalInfoForm)}
               </div>
-              <div className="checkbox">
-                <label><input checked={display === 'T' ? true : false} value={display ? 'F' : 'T'} onChange={handleChange("display")} type="checkbox" />Display </label>
-              </div>
-              <div className="checkbox">
-                <label><input checked={sold_out === 'F' ? false : true} value={sold_out ? 'T' : 'F'} onChange={handleChange("sold_out")} type="checkbox" />Sold out </label>
+              <div className="border p-3 mt-2">
+                <h6>Product Display</h6>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" onChange={handleChange("display")} value={display ? 'F' : 'T'} checked={display === 'T' ? true : false}></input>
+                  <label class="form-check-label" for="inlineCheckbox1">Display</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
+                  <label class="form-check-label" for="inlineCheckbox2">Sold Out</label>
+                </div>  
               </div>
             </div>
           </div>
