@@ -84,3 +84,10 @@ span {
   }
   .ldio-o8fa4n59lro div { box-sizing: content-box; }
 
+  .category-side-list:hover {
+    font-weight: bold;
+  }
+
+  .active {
+    font-weight: bold;
+  }

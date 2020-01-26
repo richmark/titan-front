@@ -10,7 +10,7 @@ const CategoryCard = (aData) => {
         return aData.map((aCategories, iIndex) => {
             return (
                 <Fragment key={iIndex}>
-                    <p className="mb-0" key={iIndex}><input type="checkbox" className="mr-2"></input>{aCategories.name}</p>
+                    <p className="mb-0 category-side-list" key={iIndex}><input type="checkbox" className="mr-2"></input>{aCategories.name}</p>
                 </Fragment>
             );
         });
