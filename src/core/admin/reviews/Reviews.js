@@ -33,26 +33,6 @@ const Reviews = () => {
         });
     };
 
-    const getRating = (iRate) => {
-        const iCount = 5 - iRate;
-        let sCheckedStar = [];
-        _.times(iRate, (iIndex) => {
-            sCheckedStar.push(<span key={iIndex} className="fa fa-star checked" style={{ color: "orange" }} />);
-        });
-        
-        let sStar = [];
-        _.times(iCount, (iIndex) => {
-            sStar.push(<span key={iIndex} className="fa fa-star" />);
-        });
-
-        return (
-            <Fragment>
-                {sCheckedStar}
-                {sStar}
-            </Fragment>
-        );
-    };
-
     useEffect(() => {
         getListReviewCount();
     }, []);
@@ -76,33 +56,6 @@ const Reviews = () => {
                             </div>
                         </div>
                         </div>
-                        {/* <div className="row">
-                            {
-                                reviews && reviews.map((oData, iIndex) => {
-                                    return (
-                                        <div key={iIndex} className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                                            <div className="text-right mt-3 w-25 float-right">
-                                            {oMoment(oData.createdAt).format('LLL')}
-                                            </div>
-                                            <div className="text-left mt-3">
-                                            {oData.user.email}
-                                            </div>
-                                            <div className="border rounded p-3">
-                                            {oData.comment}
-                                            </div>
-                                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                                                {
-                                                    getRating(oData.rate)
-                                                }
-                                            </div>
-                                            <div id="rating" className="text-left mt-3">
-                                                <input type="checkbox" onChange={submitReview(oData._id)} defaultChecked={oData.visibility} />Visible
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            }
-                        </div> */}
                         <div className="float-left"><span>{review_count}</span> Items</div>
                         <div className="float-right mb-2">
                             <button className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
