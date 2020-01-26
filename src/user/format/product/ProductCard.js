@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Container, Col, Row, Button, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
-import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
+import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
 const ProductCard = (aData, setRun = () => {}) => {
@@ -14,6 +14,11 @@ const ProductCard = (aData, setRun = () => {}) => {
     
     const addToCart = (oProduct) => oEvent => {
         oEvent.preventDefault();
+        var oCount = getProductCount(oProduct._id, oProduct.stock);
+        if (oCount.bCount === false) {
+            alert('Cannot add product, item is out of stock or item stock is added in cart');
+            return;
+        }
         var oData = {
             image : `${IMAGE_API}/images/products/${oProduct.image}`,
             product_name: oProduct.product_name,

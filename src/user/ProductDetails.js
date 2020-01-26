@@ -7,7 +7,7 @@ import { Container, Row, Col, Image, Form, Button } from "react-bootstrap";
 import { getProduct, getRelatedProduct } from "../core/admin/products/productsApi";
 import { getCategory } from "../core/admin/categories/categoriesApi";
 import { IMAGE_API } from "../config";
-import { addItem, getTotalCount } from '../core/client/cartHelpers';
+import { addItem, getTotalCount, getProductCount } from '../core/client/cartHelpers';
 
 const ProductDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
@@ -34,7 +34,17 @@ const ProductDetails = ({match}) => {
   
   const { image, additional_images, product_name, price, description, _id } = oProduct;
 
+  // Product Stock and Redirect
+  const [iStock, setStock] = useState(false);
+  const [bRedirect, setRedirect] = useState(false);
+
   const addToCart = () => {
+    var oCount = getProductCount(oProduct._id, oProduct.stock);
+    if (oCount.bCount === false) {
+        alert('Cannot add product, item is out of stock or item stock is added in cart');
+        return;
+    }
+    setStock(iStock - iCount < 0 ? 0 : iStock - iCount);
     addItem(oProduct, iCount, () => {
       alert('Item added!');
       setRun(getTotalCount())
@@ -55,13 +65,21 @@ const ProductDetails = ({match}) => {
           additional_images: oData.additional_images && oData.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
           product_name: oData.product_name,
           price: oData.price,
-          description: oData.description
+          description: oData.description,
+          stock: oData.stock
         });
+        calculateCartStock(oData._id, oData.stock);
         setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
         fetchCategory(oData.category);
         }
     });
   };
+
+  const calculateCartStock = (sProductId, iValue) => {
+    var oCount = getProductCount(sProductId, iValue);
+    var iCart = iValue - oCount.iCount;
+    setStock(iCart < 0 ? 0 : iCart);
+  }
 
   const fetchCategory = sId => {
     getCategory(sId).then(oData => {
@@ -92,7 +110,13 @@ const ProductDetails = ({match}) => {
   }, []);
 
   const handleCount = oEvent => {
-    setCount(oEvent.target.value < 1 ? 1 : parseInt(oEvent.target.value, 10));
+    if (oEvent.target.value > iStock) {
+      alert(`This product only has ${iStock} stock/s left. Please check your cart`);
+      oEvent.target.value = iStock;
+      return;
+    }
+    var iValue = oEvent.target.value < 1 ? 1 : parseInt(oEvent.target.value, 10);
+    setCount(iValue);
   };
 
   const checkProduct = bProduct => {
@@ -163,10 +187,13 @@ const ProductDetails = ({match}) => {
                   <Col sm="2">
                     <Form.Control type="number" value={iCount} onChange={handleCount}/>
                   </Col>
+                  <Form.Label column sm="6">
+                    {showStock()}
+                  </Form.Label>
                 </Form.Group>
               </Form>
               <hr />
-              <Button variant="primary" href={`/checkout?sType=buyNow&id=${encodeData(oProduct)}`}>Buy Now</Button>{" "}
+              <Button variant="primary" onClick={runBuyNow}>Buy Now</Button>{" "}
               <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
             </Col>
           </Row>
@@ -174,6 +201,32 @@ const ProductDetails = ({match}) => {
       </Fragment>
     );
   };
+
+  const runBuyNow = () => {
+    if (iStock > 0) {
+      setRedirect(true);
+    } else {
+      alert('Cannot buy product, item is out of stock or item stock is added in cart');
+    }
+  }
+
+  const redirectBuyNow = () => {
+    if (bRedirect === true) {
+      return (
+        <Redirect to={`/checkout?sType=buyNow&id=${encodeData(oProduct)}`}/>
+      );
+    }
+  }
+
+  const showStock = () => {
+    return iStock >= 0 && (
+      <Fragment>
+        <p style={{fontSize: '10px'}}>
+          This product only has {iStock} stock/s left
+        </p>
+      </Fragment>
+    );
+  }
 
   const encodeData = (oData) => {
     oData.count = iCount;
@@ -226,6 +279,7 @@ const ProductDetails = ({match}) => {
       {showDetails()}
       {showRelatedProduct()}
       {checkProduct(bProduct)}
+      {redirectBuyNow()}
     </Layout>
   );
 };
