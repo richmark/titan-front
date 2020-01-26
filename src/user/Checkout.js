@@ -11,6 +11,7 @@ import oQuery from 'query-string';
 import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
+import { APP_URL } from '../config';
 
 
 const Checkout = ({location}) => {
@@ -118,8 +119,6 @@ const Checkout = ({location}) => {
 
     const runPaymaya = (user, props) => oEvent => {
         oEvent.preventDefault();
-        console.log(oBilling);
-        console.log(oShipping);
         setLoader(true);
         props.onHide();
         var oTotal = calculateTotal();
@@ -147,7 +146,12 @@ const Checkout = ({location}) => {
         });
         initiatePaymayaCheckout(user._id, sToken, oOrder).then((oData) => {
             if (oData.error) {
-                console.log(oData.error);
+                if (oData.error = 'insufficient_stock') {
+                    alert('There was an error on stock count. Please try again');
+                    setRedirect(`${APP_URL}/checkout`);
+                } else {
+                    console.log(oData.error);
+                }
                 return;
             }
             setRedirect(oData.data.redirectUrl);
