@@ -1,7 +1,47 @@
 import { API_URL } from '../../../config';
 
+export const getReviewsByProductIdCount = (sProductId) => {
+    return fetch(`${API_URL}/reviews/product/${sProductId}/count`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json'
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const getReviewsByProductId = (sProductId) => {
+    return fetch(`${API_URL}/reviews/product/${sProductId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json'
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
 export const getAllReviews = (sId, sToken) => {
-    return fetch(`${API_URL}/reviews/${sId}`, {
+    return fetch(`${API_URL}/reviews/admin/${sId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const getReviewsPerProductCount = (sId, sToken) => {
+    return fetch(`${API_URL}/reviews/admin/${sId}/count`, {
         method: 'GET',
         headers: {
             Accept: 'application/json',

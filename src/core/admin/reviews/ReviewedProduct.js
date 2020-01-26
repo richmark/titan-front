@@ -1,30 +1,30 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
-import { getAllReviews, updateReview, getReviewsPerProductCount  } from './reviewsApi';
+import { getReviewsByProductId, updateReview, getReviewsByProductIdCount } from './reviewsApi';
 import { isAuthenticated } from '../../../auth/authUtil';
-import { IMAGE_API } from "../../../config";
 import _ from 'lodash';
+import oMoment from 'moment';
 
-const Reviews = () => {
+const ReviewedProduct = ({ match }) => {
 
     const {sToken, user} = isAuthenticated();
     const [review_count, setReviewCount] = useState(false);
     const [reviews, setReviews] = useState(false);
 
     const getListReviewCount = () => {
-        getReviewsPerProductCount(user._id, sToken).then(oData => {
+        getReviewsByProductIdCount(match.params.productId).then(oData => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                setReviewCount(oData.data[0].count);
+                setReviewCount(oData.data.count);
                 loadReviews();
             }
         });
     };
     
     const loadReviews = () => {
-        getAllReviews(user._id, sToken).then(oData => {
+        getReviewsByProductId(match.params.productId).then(oData => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
@@ -52,6 +52,16 @@ const Reviews = () => {
             </Fragment>
         );
     };
+    
+    const submitReview = sId => oEvent => {
+        updateReview(user._id, sToken, { visibility: oEvent.target.checked }, sId).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                alert('Updated Successfully');
+            }
+        });
+    };
 
     useEffect(() => {
         getListReviewCount();
@@ -76,7 +86,8 @@ const Reviews = () => {
                             </div>
                         </div>
                         </div>
-                        {/* <div className="row">
+                        <div className="row">
+                        <div className="float-left col-sm-12 col-md-12 col-xl-12 mb-4"><span>{review_count}</span> Items</div>
                             {
                                 reviews && reviews.map((oData, iIndex) => {
                                     return (
@@ -102,40 +113,7 @@ const Reviews = () => {
                                     );
                                 })
                             }
-                        </div> */}
-                        <div className="float-left"><span>{review_count}</span> Items</div>
-                        <div className="float-right mb-2">
-                            <button className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                         </div>
-                        <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                            <th scope="col" style={{width: '3%'}}><input type="checkbox" /></th>
-                            <th scope="col" style={{width: '10%'}}>Thumbnail</th>
-                            <th scope="col">Product Name</th>
-                            <th scope="col">Reviews</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                reviews &&
-                                reviews.map((oItem, iIndex) => {
-                                    return (
-                                        <tr key={iIndex}>
-                                            <th scope="row"><input type="checkbox" /></th>
-                                            <td><img src={`${IMAGE_API}/images/products/${oItem.image}`} style={{width: '100%'}} /></td>
-                                            <td>
-                                                <Link to={`/admin/reviews/${oItem._id}`}>
-                                                    {oItem.product_name}
-                                                </Link>
-                                            </td>
-                                            <td>{oItem.count}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                        </table>
                         <div className=" text-center">
                         <nav aria-label="Page navigation example text-center">
                             <ul className="pagination">
@@ -160,4 +138,4 @@ const Reviews = () => {
     );
 }
 
-export default Reviews;
+export default ReviewedProduct;
