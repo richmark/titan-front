@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
-import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cartHelpers';
+import { getCart, emptyCart, removeItem, updateCount, getProductCount } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
@@ -72,7 +72,10 @@ const Checkout = ({location}) => {
         aReal.length > 0 && aReal.map((oProduct, iIndex) => {
             getProduct(oProduct._id).then(oData => {
                 oData = oData.data;
-                oTemp[oData._id] = oData.price;
+                oTemp[oData._id] = {
+                    price : oData.price,
+                    stock : oData.stock
+                };
                 if (iLoop === aReal.length) {
                     setRealProduct(oTemp);
                 }
@@ -169,8 +172,13 @@ const Checkout = ({location}) => {
         }
     };
 
-    const updateItem = (sId, bIncrease) => oEvent => {
+    const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
+        var oCount = getProductCount(sId, iProductCount);
+        if (bIncrease === true && oCount.bCount === false) {
+            alert('Cannot add product anymore, product has reach stock limit');
+            return;
+        }
         updateCount(sId, bIncrease);
         var aCart = getCart();
         setRun(aCart);
@@ -178,7 +186,7 @@ const Checkout = ({location}) => {
     };
 
     const singleProduct = (oProduct) => {
-        return (
+        return oRealProduct && (
             <div className="border rounded p-4 mb-2">
                 <Row>
                     <Col xs={1} md={1} className="align-middle text-center">
@@ -199,11 +207,11 @@ const Checkout = ({location}) => {
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
                             <div className="float-right font-weight-bold">Qty: 
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false)}>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false, oRealProduct[oProduct._id].stock)}>
                                     -
                                 </Button>}
-                                <span>{oProduct.count}</span>
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true)}>
+                                <span> {oProduct.count}</span>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true, oRealProduct[oProduct._id].stock)}>
                                     +
                                 </Button>}
                             </div>
@@ -235,7 +243,7 @@ const Checkout = ({location}) => {
         var iPrice = 0;
         var iShipFee = 100;
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
-            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id]) {
+            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
                 setProduct([]);
                 setForbidden(true);
                 emptyCart();
