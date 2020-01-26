@@ -41,6 +41,7 @@ import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
 import ProcessWholesaler from "./core/admin/wholesalers/ProcessWholesaler";
 import UploadImage from "./user/UploadImage";
+import ReviewedProduct from "./core/admin/reviews/ReviewedProduct";
 
 const Routes = () => {
   return (
@@ -112,6 +113,7 @@ const Routes = () => {
         component={UpdateCategory}
       />
       <AdminRoute path="/admin/reviews" exact component={Reviews} />
+      <AdminRoute path="/admin/reviews/:productId" exact component={ReviewedProduct} />
       <AdminRoute path="/admin/products/add" exact component={AddProduct} />
       <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
       <AdminRoute
