@@ -8,6 +8,7 @@ import { getProduct, getRelatedProduct } from "../core/admin/products/productsAp
 import { getCategory } from "../core/admin/categories/categoriesApi";
 import { IMAGE_API } from "../config";
 import { addItem, getTotalCount, getProductCount } from '../core/client/cartHelpers';
+import CommentCard from "./format/comment/CommentCard";
 
 const ProductDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
@@ -299,6 +300,7 @@ const ProductDetails = ({match}) => {
       {showRelatedProduct()}
       {checkProduct(bProduct)}
       {redirectBuyNow()}
+      {CommentCard()}
     </Layout>
   );
 };
