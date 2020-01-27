@@ -1,9 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
-import CategoryCard from './format/category/CategoryCard';
 import CategorySideList from './format/category/CategorySideList';
 import ProductCard from './format/product/ProductCard';
-import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col, DropdownButton, Dropdown } from 'react-bootstrap';
 import { getAllProducts } from '../core/admin/products/productsApi';
 import { getTotalCount } from '../core/client/cartHelpers'; 
@@ -17,7 +15,6 @@ const SearchResult = () => {
 
     const init = () => {
         getAllProducts().then(oData => {
-            console.log(oData);
             if (oData.error) {
                 console.log(oData.error)
             } else {
@@ -41,7 +38,7 @@ const SearchResult = () => {
                     <Col sm={3}>
                         <div>
                             <div className="border-bottom border-black mt-5 border"></div>
-                            <p style={{color: 'black'}} className="mt-1">Categories</p>
+                            <p style={{color: 'black'}} className="mt-1 font-weight-bold">Categories</p>
                             {CategorySideList(aCategories)}
                             <div className="border-bottom border-black mt-5 border"></div>
                         </div>

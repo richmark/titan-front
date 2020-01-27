@@ -1,8 +1,5 @@
 import React, { Fragment } from 'react';
-import { Card, Container, Image, Col, Row } from 'react-bootstrap';
-import { IMAGE_API } from '../../../config';
-import _ from 'lodash';
-import { Link } from 'react-router-dom';
+import { Card, Container, Image, Col, Row, Form } from 'react-bootstrap';
 
 const CategoryCard = (aData) => {
 
@@ -10,7 +7,9 @@ const CategoryCard = (aData) => {
         return aData.map((aCategories, iIndex) => {
             return (
                 <Fragment key={iIndex}>
-                    <p className="mb-0 category-side-list" key={iIndex}><input type="checkbox" className="mr-2"></input>{aCategories.name}</p>
+                    <Form.Group className="category-side-list mb-0" controlId={iIndex}>
+                        <Form.Check type="checkbox" className="text-uppercase" label={aCategories.name} />
+                    </Form.Group>
                 </Fragment>
             );
         });
