@@ -1,7 +1,12 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 import DashboardLayout from "../DashboardLayout";
-import { getAllProducts, getProductCount } from "./productsApi";
+import {
+  getAllProducts,
+  getProductCount,
+  searchProduct,
+  searchProductByCategory
+} from "./productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
 import oMoment from "moment";
 import { deleteProduct } from "./productsApi";
@@ -14,7 +19,9 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [count, setCount] = useState(0);
   const [showCount, setShowCount] = useState(5);
+  const [filter, setFilter] = useState("All");
   const [paginationCount, setPaginationCount] = useState(0);
+  const [paginationHide, setPaginationHide] = useState(false);
   const [paginationStart, setPaginationStart] = useState(1);
   const [paginationEnd, setPaginationEnd] = useState(10);
   const [pageActive, setPageActive] = useState(1);
@@ -83,7 +90,12 @@ const Products = () => {
 
     if (paginationCount > pageActive) {
       setPageActive(newPageActive);
-      loadProducts(showCount, 0, "asc", "_id");
+      loadProducts(
+        showCount,
+        parseInt(showCount * (newPageActive - 1)),
+        "asc",
+        "_id"
+      );
     }
 
     if (paginationEnd >= 9) {
@@ -104,7 +116,9 @@ const Products = () => {
       setPageActive(newPageActive);
       loadProducts(
         showCount,
-        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+        parseInt(showCount * (newPageActive - 1)),
+        "asc",
+        "_id"
       );
     }
 
@@ -130,6 +144,44 @@ const Products = () => {
     var iIndex = selectedProducts.indexOf(productId);
     selectedProducts.splice(iIndex, 1);
     setSelectedProducts(selectedProducts);
+  };
+
+  const handleChangeQuery = oEvent => {
+    if (oEvent.target.value !== "") {
+      searchProduct(oEvent.target.value).then(oData => {
+        if (oData.error) {
+          console.log(oData.error);
+        } else {
+          setProducts(oData.data);
+          setPaginationHide(true);
+        }
+      });
+    } else {
+      loadCategories();
+      loadProductCount();
+      setPaginationHide(false);
+    }
+  };
+
+  const handleFilterChange = oEvent => {
+    setFilter(oEvent.target.value);
+  };
+
+  const handleFilterClick = oEvent => {
+    if (filter != "All") {
+      searchProductByCategory(filter).then(oData => {
+        if (oData.error) {
+          console.log(oData.error);
+        } else {
+          setProducts(oData.data);
+          setPaginationHide(true);
+        }
+      });
+    } else {
+      loadCategories();
+      loadProductCount();
+      setPaginationHide(false);
+    }
   };
 
   const handleDelete = () => {
@@ -195,12 +247,6 @@ const Products = () => {
             <div className="card-body">
               <h4>Search and filter</h4>
               <div className="form-group row">
-                <label
-                  htmlFor="product-name"
-                  className="col-sm-2 col-form-label"
-                >
-                  Product Name
-                </label>
                 <div className="col-sm-5">
                   <div className="input-group">
                     <input
@@ -209,6 +255,7 @@ const Products = () => {
                       placeholder="Search"
                       aria-label="Search"
                       aria-describedby="basic-addon2"
+                      onChange={handleChangeQuery}
                     />
                     <div className="input-group-append">
                       <button className="btn btn-primary" type="button">
@@ -218,10 +265,12 @@ const Products = () => {
                   </div>
                 </div>
               </div>
-              <select id="category" className="btn btn-light border mr-2">
-                <option disabled defaultValue>
-                  Select a Category
-                </option>
+              <select
+                id="category"
+                className="btn btn-light border mr-2"
+                onChange={handleFilterChange}
+              >
+                <option value="All">All categories</option>
                 {categories &&
                   categories.map((oCategory, iIndex) => (
                     <option key={iIndex} value={oCategory._id}>
@@ -229,24 +278,31 @@ const Products = () => {
                     </option>
                   ))}
               </select>
-              <select id="category" className="btn btn-light border mr-2">
-                <option disabled defaultValue>
-                  Filter by stock
-                </option>
-                <option>In stock</option>
-                <option>Out of stock</option>
-              </select>
-              <button className="btn btn-primary">Filter</button>
+              <button className="btn btn-primary" onClick={handleFilterClick}>
+                Filter
+              </button>
             </div>
           </div>
         </div>
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <div className="float-left">
+              <div
+                className={
+                  paginationHide
+                    ? "float-left mb-2 d-none"
+                    : "float-left mb-2 d-block"
+                }
+              >
                 <span>{count}</span> Total
               </div>
-              <div className="float-right mb-2">
+              <div
+                className={
+                  paginationHide
+                    ? "float-right mb-2 d-none"
+                    : "float-right mb-2 d-block"
+                }
+              >
                 <select
                   className="btn btn-primary dropdown-toggle mr-2"
                   onChange={handleShowChange}
@@ -315,7 +371,14 @@ const Products = () => {
                     ))}
                 </tbody>
               </table>
-              <div className="text-center" style={{ float: "right" }}>
+              <div
+                style={{ float: "right" }}
+                className={
+                  paginationHide
+                    ? "text-center d-none"
+                    : "text-center mb-2 d-block"
+                }
+              >
                 <nav aria-label="Page navigation example text-center">
                   <ul className="pagination">
                     <li className="page-item">

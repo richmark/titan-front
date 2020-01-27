@@ -61,7 +61,9 @@ const Coupons = () => {
       setPageActive(newPageActive);
       loadCoupons(
         showCount,
-        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+        parseInt(showCount * (newPageActive - 1)),
+        "asc",
+        "_id"
       );
     }
 
@@ -83,7 +85,9 @@ const Coupons = () => {
       setPageActive(newPageActive);
       loadCoupons(
         showCount,
-        parseInt(showCount * (newPageActive - 1), "asc", "_id")
+        parseInt(showCount * (newPageActive - 1)),
+        "asc",
+        "_id"
       );
     }
 
@@ -148,7 +152,7 @@ const Coupons = () => {
   };
 
   const handleSearchFilter = oEvent => {
-    if (searchFilter !== "") {
+    if (searchFilter !== "All") {
       searchCoupon(searchFilter).then(oData => {
         if (oData.error) {
           console.log(oData.error);
@@ -222,8 +226,8 @@ const Coupons = () => {
                 className="btn btn-light border mr-2"
                 onChange={handleChangeFilter}
               >
-                <option value="Select an option" selected disabled>
-                  Select an option
+                <option value="All" selected>
+                  All Coupon Types
                 </option>
                 <option value="Discount Rate">Discount Rate</option>
                 <option value="Fixed Price">Fixed Price</option>
