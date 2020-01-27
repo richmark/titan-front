@@ -22,9 +22,7 @@ const CategoryCard = (aData) => {
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <div style={{display : 'inline-block'}}>
-                                    <p className="text-center ellipsis-button" style={{fontSize: "16px", marginTop: '22px', textTransform: 'uppercase'}}>{oCategories.name}</p>
-                                </div>
+                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '22px', textTransform: 'uppercase'}}>{oCategories.name}</p>
                             </button>
                         </Col>
                     </Row>

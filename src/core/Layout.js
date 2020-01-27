@@ -227,7 +227,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         cursor: 'pointer',
                         paddingLeft: '28px',
                         marginRight: '30px'
-                        }}>Home
+                        }}><strong>Home</strong>
                     </span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -241,7 +241,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         cursor: 'pointer',
                         paddingLeft: '28px',
                         marginRight: '30px'
-                    }}>Shop</span></Nav.Link>
+                    }}><strong>Shop</strong></span></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}>
@@ -255,7 +255,7 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                         display: 'block',
                         cursor: 'pointer',
                         paddingLeft: '28px'
-                        }}></span>Your Order</Row>
+                        }}></span><strong>Your Order</strong></Row>
                     </Nav.Link>
                 </Nav.Item>
             </Nav>
