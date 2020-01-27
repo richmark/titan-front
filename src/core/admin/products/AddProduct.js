@@ -75,7 +75,6 @@ const AddProduct = () => {
   };
 
   const handleChange = name => oEvent => {
-    console.log(oEvent.target.value);
     if (name !== "image" && name !== "additional_images") {
       const value = oEvent.target.value;
       formData.set(name, value);
@@ -415,13 +414,13 @@ const AddProduct = () => {
               </div>
               <div className="border p-3 mt-2">
                 <h6>Product Display</h6>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" onChange={handleChange("display")} value={display ? 'F' : 'T'} checked={display === 'T' ? true : false}></input>
-                  <label class="form-check-label" for="inlineCheckbox1">Display</label>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" id="inlineCheckbox1" onChange={handleChange("display")} value={display === 'T' ? 'F' : 'T'} checked={display === 'T' ? true : false}></input>
+                  <label className="form-check-label">Display</label>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
-                  <label class="form-check-label" for="inlineCheckbox2">Sold Out</label>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out === 'F' ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
+                  <label className="form-check-label">Sold Out</label>
                 </div>  
               </div>
             </div>

@@ -19,7 +19,10 @@ const UpdateProduct = ({ match }) => {
     additional_info: [],
     key: "",
     value: "",
-    formData: ""
+    formData: "",
+    display: 'T',
+    sold_out: 'F',
+    brand: ''
   });
 
   const {
@@ -33,7 +36,10 @@ const UpdateProduct = ({ match }) => {
     additional_info,
     key,
     value,
-    formData
+    formData,
+    display,
+    sold_out,
+    brand
   } = values;
 
   const loadCategories = () => {
@@ -152,7 +158,10 @@ const UpdateProduct = ({ match }) => {
                 )) ||
               [],
             additional_info: oData.data.additional_info,
-            formData: new FormData()
+            formData: new FormData(),
+            display: oData.data.display,
+            sold_out: oData.data.sold_out,
+            brand: oData.data.brand,
           });
           loadCategories();
         }
@@ -259,6 +268,23 @@ const UpdateProduct = ({ match }) => {
                 placeholder="Stock"
               />
               <select
+                value={brand}
+                onChange={handleChange("brand")}
+                id="brand"
+                className="btn btn-light w-100 border mb-2"
+                defaultValue={'Titan'}
+              >
+                <option disabled defaultValue>
+                  Select brand
+                </option>
+                <option value={'Yojimbo'}>
+                  Yojimbo
+                </option>
+                <option value={'Titan'}>
+                  Titan
+                </option>
+              </select>
+              <select
                 value={category}
                 onChange={handleChange("category")}
                 id="category"
@@ -331,6 +357,17 @@ const UpdateProduct = ({ match }) => {
                   </button>
                 </div>
                 {additional_info.map(showAdditionalInfoForm)}
+              </div>
+              <div className="border p-3 mt-2">
+                <h6>Product Display</h6>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" id="inlineCheckbox1" onChange={handleChange("display")} value={display === 'T' ? 'F' : 'T'} checked={display === 'T' ? true : false}></input>
+                  <label className="form-check-label" >Display</label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out === 'F' ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
+                  <label className="form-check-label" >Sold Out</label>
+                </div>  
               </div>
             </div>
           </div>
