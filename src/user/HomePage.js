@@ -13,16 +13,44 @@ const HomePage = () => {
 
     const [aCategories, setCategories] = useState([]);
     const [aProducts, setProducts] = useState([]);
+    const [aNewArrivals, setNewArrivals] = useState();
+    const [aBestSellers, setBestSellers] = useState();
 
     const init = () => {
-        getAllProducts().then(oData => {
+        getOurProducts();
+        getNewArrivals();
+        getBestSellers();
+    };
+
+    const getOurProducts = () => {
+        getAllProducts(8).then(oData => {
             if (oData.error) {
                 console.log(oData.error)
             } else {
                 setProducts(oData.data);
             }
         });
-    };
+    }
+
+    const getNewArrivals = () => {
+        getAllProducts(4, 0, 'desc', 'createdAt').then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            } else {
+                setNewArrivals(oData.data);
+            }
+        });
+    }
+
+    const getBestSellers = () => {
+        getAllProducts(4, 0, 'desc', 'sold').then(oData => {
+            if (oData.error) {
+                console.log(oData.error)
+            } else {
+                setBestSellers(oData.data);
+            }
+        });
+    }
 
     useEffect(() => {
         init();
@@ -44,6 +72,8 @@ const HomePage = () => {
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
+            {ProductCard(aNewArrivals, setRun, 'New Arrivals')}
+            {ProductCard(aBestSellers, setRun, 'Best Sellers')}
             {ProductCard(aProducts, setRun)}
         </Layout>
     );
