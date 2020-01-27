@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
-import { getCart, emptyCart, removeItem, updateCount } from '../core/client/cartHelpers';
+import { getCart, emptyCart, removeItem, updateCount, getProductCount } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
@@ -11,6 +11,7 @@ import oQuery from 'query-string';
 import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
+import { APP_URL } from '../config';
 
 
 const Checkout = ({location}) => {
@@ -42,6 +43,9 @@ const Checkout = ({location}) => {
     const [modalBilling, setModalBilling] = useState(false);
     const [modalShipping, setModalShipping] = useState(false);
 
+    // Product Stock Adjustment
+    var bOnlyOnce = false;
+
     const init = () => {
         var aCart = getCart();
         initializeCheckout(aCart);
@@ -72,7 +76,12 @@ const Checkout = ({location}) => {
         aReal.length > 0 && aReal.map((oProduct, iIndex) => {
             getProduct(oProduct._id).then(oData => {
                 oData = oData.data;
-                oTemp[oData._id] = oData.price;
+                oTemp[oData._id] = {
+                    price : oData.price,
+                    stock : oData.stock,
+                    sold_out : oData.sold_out,
+                    display  : oData.display
+                };
                 if (iLoop === aReal.length) {
                     setRealProduct(oTemp);
                 }
@@ -110,8 +119,6 @@ const Checkout = ({location}) => {
 
     const runPaymaya = (user, props) => oEvent => {
         oEvent.preventDefault();
-        console.log(oBilling);
-        console.log(oShipping);
         setLoader(true);
         props.onHide();
         var oTotal = calculateTotal();
@@ -139,7 +146,12 @@ const Checkout = ({location}) => {
         });
         initiatePaymayaCheckout(user._id, sToken, oOrder).then((oData) => {
             if (oData.error) {
-                console.log(oData.error);
+                if (oData.error = 'insufficient_stock') {
+                    alert('There was an error on stock count. Please try again');
+                    setRedirect(`${APP_URL}/checkout`);
+                } else {
+                    console.log(oData.error);
+                }
                 return;
             }
             setRedirect(oData.data.redirectUrl);
@@ -169,8 +181,27 @@ const Checkout = ({location}) => {
         }
     };
 
-    const updateItem = (sId, bIncrease) => oEvent => {
+    const adjustCart = () => {
+        if (bOnlyOnce === false) {
+            bOnlyOnce = true;
+            aProduct.map((oProduct) => {
+                if (oRealProduct[oProduct._id].stock < oProduct.count || oRealProduct[oProduct._id].sold_out === 'T' || oRealProduct[oProduct._id].display === 'F') {
+                    removeItem(oProduct._id);
+                    var aCart = getCart();
+                    setRun(aCart);
+                    setProduct(aCart);
+                }
+            });
+        }
+    }
+
+    const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
+        var oCount = getProductCount(sId, iProductCount);
+        if (bIncrease === true && oCount.bCount === false) {
+            alert('Cannot add product anymore, product has reach stock limit');
+            return;
+        }
         updateCount(sId, bIncrease);
         var aCart = getCart();
         setRun(aCart);
@@ -178,7 +209,8 @@ const Checkout = ({location}) => {
     };
 
     const singleProduct = (oProduct) => {
-        return (
+        oRealProduct && adjustCart();
+        return oRealProduct && (
             <div className="border rounded p-4 mb-2">
                 <Row>
                     <Col xs={1} md={1} className="align-middle text-center">
@@ -199,11 +231,11 @@ const Checkout = ({location}) => {
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
                             <div className="float-right font-weight-bold">Qty: 
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false)}>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false, oRealProduct[oProduct._id].stock)}>
                                     -
                                 </Button>}
-                                <span>{oProduct.count}</span>
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true)}>
+                                <span> {oProduct.count}</span>
+                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true, oRealProduct[oProduct._id].stock)}>
                                     +
                                 </Button>}
                             </div>
@@ -235,7 +267,7 @@ const Checkout = ({location}) => {
         var iPrice = 0;
         var iShipFee = 100;
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
-            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id]) {
+            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
                 setProduct([]);
                 setForbidden(true);
                 emptyCart();

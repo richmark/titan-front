@@ -112,3 +112,22 @@ export const emptyCart = (oNext = () => {}) => {
         oNext();
     }
 };
+
+export const getProductCount = (sProductId, iCount) => {
+    let aCart = [];
+    var oCount = {
+        bCount : true
+    }
+    if (typeof window !== 'undefined') {
+        aCart = JSON.parse(localStorage.getItem('cart'));
+        aCart && aCart.map((oProduct, iIndex) => {
+            if (oProduct._id === sProductId) {
+                if (oProduct.count >= iCount) {
+                    oCount.bCount = false;
+                }
+                oCount.iCount = oProduct.count;
+            }
+        });    
+    }
+    return oCount;
+};

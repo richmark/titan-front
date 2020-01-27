@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Card, Container, Col, Row, Button, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
-import { addItem, getTotalCount } from '../../../core/client/cartHelpers'; 
+import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
 const ProductCard = (aData, setRun = () => {}) => {
@@ -14,6 +14,11 @@ const ProductCard = (aData, setRun = () => {}) => {
     
     const addToCart = (oProduct) => oEvent => {
         oEvent.preventDefault();
+        var oCount = getProductCount(oProduct._id, oProduct.stock);
+        if (oCount.bCount === false) {
+            alert('Cannot add product, item is out of stock or item stock is added in cart');
+            return;
+        }
         var oData = {
             image : `${IMAGE_API}/images/products/${oProduct.image}`,
             product_name: oProduct.product_name,
@@ -53,16 +58,38 @@ const ProductCard = (aData, setRun = () => {}) => {
                 <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
                 <Row className=" mt-2">
                     <Col>
-                        <button className="default-button  text-center" onClick={addToCart(oProduct)} style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                            <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
-                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
-                        </button>
+                        {showAddCartButton(oProduct, sName)}
                     </Col>
                 </Row>
             </Card>
         );
     };
+
+    const showAddCartButton = (oProduct, sName) => {
+        const oStyle = {
+            color: 'white', 
+            background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
+        }
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            return (
+                <Fragment>
+                    <button className="default-button  text-center" style={oStyle}>
+                        SOLD OUT
+                    </button>
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={oStyle}>
+                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
+                    </button>
+                </Fragment>
+            );
+        } 
+    }
 
     const showLayout = (aProducts) => {
         var iSize = 3;
