@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
-const ProductCard = (aData, setRun = () => {}) => {
-    var sHeader = 'Our Products';
+const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
+    var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
         sHeader = 'Result';
     }
