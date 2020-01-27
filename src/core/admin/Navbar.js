@@ -27,11 +27,12 @@ const Navbar = () => {
                             aria-expanded='false'
                         >
                             <span className='mr-2 d-none d-lg-inline text-gray-600 small'>
-                                Valerie Luna
+                                Admin
                             </span>
                             <img
                                 className='img-profile rounded-circle'
-                                src='https://source.unsplash.com/QAB-WJcbgJk/60x60'
+                                src='https://ibcces.org/wp-content/uploads/2019/03/blank-profile-picture.jpg'
+                                style={{ width: '32px', height: '32px'}}
                             />
                         </a>
                         {/* Dropdown - User Information */}
