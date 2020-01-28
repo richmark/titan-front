@@ -20,7 +20,7 @@ const HomePage = () => {
     const [iOffset, setOffset] = useState(0);
 
     const iLimit = parseInt(PRODUCT_LIMIT, 10);
-    
+
     const init = () => {
         getOurProducts(iLimit, iOffset);
         getNewArrivals();
@@ -28,7 +28,7 @@ const HomePage = () => {
     };
 
     const populateOurProducts = (aData) => {
-        if (aData.length % iLimit > 0) {
+        if (aData.length % iLimit > 0 || aData.length === 0) {
             setLoadButton(false);
         } 
         setProducts(aProducts.concat(aData));  
