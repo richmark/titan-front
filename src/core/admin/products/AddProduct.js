@@ -436,7 +436,7 @@ const AddProduct = () => {
       aImages.push(
         <img
           key={iIndex}
-          className="mr-2"
+          className="mr-2 mt-2"
           src="https://ctt.trains.com/sitefiles/images/no-preview-available.png"
           style={{ width: "8vw", height: "10vh" }}
         />
@@ -478,21 +478,21 @@ const AddProduct = () => {
                                             nisi ut aliquip ex ea commodo consequat.`}
                   </p>
                 </div>
-                <div className="col-md-12 col-sm-12 mb-4 ml-4">
+                <div className="col-md-12 col-sm-12 mb-4 ml-3 pl-0">
                   {(additional_images.length > 0 &&
                     additional_images.map((oImage, iIndex) => {
                       return (
                         <img
                           key={iIndex}
                           style={{ width: "8vw", height: "10vh" }}
-                          className="mr-2"
+                          className="mr-2 mt-2"
                           src={oImage}
                         />
                       );
                     })) ||
                     getDefaultAdditionalImages()}
                 </div>
-                <h4>Additional Information</h4>
+                <h4 className="ml-3">Additional Information</h4>
                 <hr />
                 <table className="table text-center">
                   <tbody>
