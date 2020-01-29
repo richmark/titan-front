@@ -521,7 +521,7 @@ const AddBundle = () => {
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-xl-12">
-                <button onClick={submitBundle} className="btn btn-primary">
+                <button onClick={submitBundle} className="btn btn-primary mr-2">
                   Save Bundle
                 </button>
                 <button className="btn btn-primary">View Bundle Details</button>

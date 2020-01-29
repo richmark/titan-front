@@ -196,7 +196,7 @@ const Login = () => {
     const redirectUser = () => {
         if (redirectToReferrer) {
             if (user && user.role === 1) {
-                return <Redirect to='/admin/dashboard' />;
+                return <Redirect to='/admin/products' />;
             }
             if (user.verified_admin === false && user.role > 2) {
                 return <Redirect to='/upload' />;
