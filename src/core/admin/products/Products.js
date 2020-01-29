@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import DashboardLayout from "../DashboardLayout";
 import {
   getAllProducts,
@@ -27,6 +27,7 @@ const Products = () => {
   const [pageActive, setPageActive] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const { sToken, user } = isAuthenticated();
+  const [redirectAddProduct, setRedirectAddProduct] = useState(false);
 
   useEffect(() => {
     loadCategories();
@@ -239,6 +240,12 @@ const Products = () => {
     toggleSelectAll(false);
   };
 
+  const redirectToAddProductPage = () => {
+    if (redirectAddProduct === true) {
+      return <Redirect to='/admin/products/add'></Redirect>
+    }
+  }
+
   const showProducts = () => {
     return (
       <Fragment>
@@ -281,6 +288,7 @@ const Products = () => {
               <button className="btn btn-primary" onClick={handleFilterClick}>
                 Filter
               </button>
+              <button className="btn btn-primary mr-2" style={{float: "right"}} onClick={()=>{setRedirectAddProduct(true)}}>Add Product</button>
             </div>
           </div>
         </div>
@@ -423,6 +431,7 @@ const Products = () => {
   return (
     <DashboardLayout name="Product Management" detail="All Products">
       {showProducts()}
+      {redirectToAddProductPage()}
     </DashboardLayout>
   );
 };
