@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Layout from '../core/Layout';
-import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Image, Form, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import { getCart, emptyCart, removeItem, updateCount, getProductCount } from '../core/client/cartHelpers';
 import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
@@ -321,7 +321,7 @@ const Checkout = ({location}) => {
     const showDetails = (sName, oParam, oFunction) => {
         return (
             <Fragment>
-                <h5>{sName} Details<span className="float-right"><Button onClick={() => oFunction(true)}>Edit</Button></span></h5>
+                <h5>{sName} Details<span className="float-right"><Button variant="outline-warning" onClick={() => oFunction(true)}>Edit</Button></span></h5>
                 <div id={`name-${sName}`} className="mt-4">
                     <i className="fa fa-user-circle"></i> <span className="font-weight-bold">{oParam.name}</span>
                 </div>
@@ -330,7 +330,7 @@ const Checkout = ({location}) => {
                         <i className="fas fa-map-marker-alt"></i> {oParam.address}
                     </span>
                 </div>
-                <div id={`contact-${sName}`} className="mt-2">
+                <div id={`contact-${sName}`} className="mt-2 mb-2">
                     <span className="font-weight-bold">
                         <i className="fas fa-phone-alt"></i> {oParam.contact}
                     </span>
@@ -474,6 +474,16 @@ const Checkout = ({location}) => {
     const showPlaceOrder = () => {
         return (
             <Fragment>
+                <InputGroup className="mb-2 mt-5" >
+                    <FormControl
+                    placeholder="Coupon Code"
+                    aria-label="Coupon Code"
+                    aria-describedby="basic-addon2"
+                    />
+                    <InputGroup.Append>
+                        <Button variant="outline-warning">Apply</Button>
+                    </InputGroup.Append>
+                </InputGroup>
                 <div id="place-order" className="mt-4 text-center">
                     <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
                         Place Order
