@@ -83,7 +83,7 @@ const HomePage = () => {
                 <Fragment>
                     <Row>
                         <Col className="text-center">
-                            <Button variant="primary" onClick={addMoreProducts}>Load More</Button>
+                            <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
                         </Col>
                     </Row>
                 </Fragment>

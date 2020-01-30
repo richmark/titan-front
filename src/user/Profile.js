@@ -111,9 +111,9 @@ const Profile = ({match}) => {
                         {bWholesaler === true ? showWholeSaler() : showPersonal()}
                     <Row className="my-3">
                         <Col sm={{ offset: 7}}>
-                            <Row>
-                                <Button variant="primary" className="m-1" onClick={() => setModalEdit(true)}>Edit</Button>
-                                <Button variant="primary" className="m-1" onClick={() => setModalPassword(true)}>Change Password</Button>
+                            <Row className="float-right">
+                                <Button variant="outline-warning" className="m-1" onClick={() => setModalEdit(true)}>Edit</Button>
+                                <Button variant="outline-warning" className="m-1" onClick={() => setModalPassword(true)}>Change Password</Button>
                             </Row>
                         </Col>
                     </Row>       
