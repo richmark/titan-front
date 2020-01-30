@@ -29,8 +29,8 @@ const AddProduct = () => {
     value: "",
     error: false,
     formData: "",
-    display: 'T',
-    sold_out: 'F'
+    display: "T",
+    sold_out: "F"
   });
 
   const {
@@ -51,6 +51,7 @@ const AddProduct = () => {
   } = values;
 
   const [bRedirect, setRedirect] = useState(false);
+  const [bCategoryRedirect, setCategoryRedirect] = useState(false);
   const [sMessage, setMessage] = useState([]);
 
   const loadCategories = () => {
@@ -58,12 +59,17 @@ const AddProduct = () => {
       if (oCategories.error) {
         console.log(oCategories.error);
       } else {
-        setCategories(oCategories.data);
-        setValues({
-          ...values,
-          formData: new FormData(),
-          category: oCategories.data[0]._id
-        });
+        if (oCategories.data.length !== 0) {
+          setCategories(oCategories.data);
+          setValues({
+            ...values,
+            formData: new FormData(),
+            category: oCategories.data[0]._id
+          });
+          return;
+        }
+        alert("No categories found.");
+        setCategoryRedirect(true);
       }
     });
   };
@@ -71,6 +77,12 @@ const AddProduct = () => {
   const redirectForbidden = () => {
     if (bRedirect === true) {
       return <Redirect to="/admin/products" />;
+    }
+  };
+
+  const redirectCategory = () => {
+    if (bCategoryRedirect === true) {
+      return <Redirect to="/admin/categories" />;
     }
   };
 
@@ -317,17 +329,13 @@ const AddProduct = () => {
                 onChange={handleChange("brand")}
                 id="brand"
                 className="btn btn-light w-100 border mb-2"
-                defaultValue={'Titan'}
+                defaultValue={"Titan"}
               >
                 <option disabled defaultValue>
                   Select brand
                 </option>
-                <option value={'Yojimbo'}>
-                  Yojimbo
-                </option>
-                <option value={'Titan'}>
-                  Titan
-                </option>
+                <option value={"Yojimbo"}>Yojimbo</option>
+                <option value={"Titan"}>Titan</option>
               </select>
               <select
                 onChange={handleChange("category")}
@@ -415,13 +423,27 @@ const AddProduct = () => {
               <div className="border p-3 mt-2">
                 <h6>Product Display</h6>
                 <div className="form-check form-check-inline">
-                  <input className="form-check-input" type="checkbox" id="inlineCheckbox1" onChange={handleChange("display")} value={display === 'T' ? 'F' : 'T'} checked={display === 'T' ? true : false}></input>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="inlineCheckbox1"
+                    onChange={handleChange("display")}
+                    value={display === "T" ? "F" : "T"}
+                    checked={display === "T" ? true : false}
+                  ></input>
                   <label className="form-check-label">Display</label>
                 </div>
                 <div className="form-check form-check-inline">
-                  <input className="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out === 'F' ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="inlineCheckbox2"
+                    onChange={handleChange("sold_out")}
+                    value={sold_out === "F" ? "T" : "F"}
+                    checked={sold_out === "F" ? false : true}
+                  ></input>
                   <label className="form-check-label">Sold Out</label>
-                </div>  
+                </div>
               </div>
             </div>
           </div>
@@ -538,6 +560,7 @@ const AddProduct = () => {
       {showAddProductDetail()}
       {showSave()}
       {redirectForbidden()}
+      {redirectCategory()};
     </DashboardLayout>
   );
 };
