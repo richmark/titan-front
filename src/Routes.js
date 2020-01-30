@@ -77,7 +77,11 @@ const Routes = () => {
         exact
         component={PaymayaStatus}
       />
-      <Route path="/search/result" exact component={SearchResult} />
+      <Route
+        path="/search/result/:queryString"
+        exact
+        component={SearchResult}
+      />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
@@ -91,7 +95,11 @@ const Routes = () => {
       />
       <AdminRoute path="/admin/bundles" exact component={Bundles} />
       <AdminRoute path="/admin/bundles/add" exact component={AddBundle} />
-      <AdminRoute path="/admin/bundles/update/:bundleId" exact component={UpdateBundle} />
+      <AdminRoute
+        path="/admin/bundles/update/:bundleId"
+        exact
+        component={UpdateBundle}
+      />
       <AdminRoute path="/admin/coupons" exact component={Coupons} />
       <AdminRoute
         path="/admin/coupons/update/:couponId"
@@ -113,7 +121,11 @@ const Routes = () => {
         component={UpdateCategory}
       />
       <AdminRoute path="/admin/reviews" exact component={Reviews} />
-      <AdminRoute path="/admin/reviews/:productId" exact component={ReviewedProduct} />
+      <AdminRoute
+        path="/admin/reviews/:productId"
+        exact
+        component={ReviewedProduct}
+      />
       <AdminRoute path="/admin/products/add" exact component={AddProduct} />
       <AdminRoute path="/admin/wholesalers" exact component={Wholesalers} />
       <AdminRoute
