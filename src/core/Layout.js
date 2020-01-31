@@ -64,6 +64,7 @@ const Layout = ({
     window.location.replace(searchUrl);
   };
 
+
   const splice = aCategories => {
     if (aCategories.length > 10) {
       var aTempCatA = JSON.parse(JSON.stringify(aCategories));
@@ -72,8 +73,58 @@ const Layout = ({
       var aSecondHalf = aTempCatB.splice(
         aTempCatB.length / 2,
         aTempCatB.length
-      );
+      ); 
       return { aFirst: aFirstHalf, aSecond: aSecondHalf };
+
+    const showUserGuest = () => {
+        if (user) {
+            return (
+                <Fragment>
+                    <div className="container" style={{display: 'flex', flexWrap : 'wrap'}}>
+                        <Col className="mt-2 mb-2 ellipsis pl-0 pr-0" style={{maxWidth: '170px'}}>
+                            <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
+                        </Col>
+                        <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
+                            <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
+                        </Col>
+                        <Col xs={6} md={6} xl={6} sm={6} className="mt-2 mb-2 text-right ellipsis">
+                            <a href={`/profile/${user._id}`} className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> My Profile</a>
+                        </Col>
+                        <Col xs={1} md={1} xl={1} sm={1} className="mt-2 mb-2 text-right ellipsis pr-0">
+                            <a href="/signout" className="text-white"><i className="fas fa-sign-out-alt" style={{color: '#ffc044'}}></i> Logout</a>
+                        </Col>
+                    </div>
+                </Fragment>
+            );  
+        }
+        return (
+            <Fragment>
+                <div className="container" style={{display: 'flex', flexWrap : 'wrap'}}>
+                    <Col className="mt-2 mb-2 ellipsis pl-0 pr-0" style={{maxWidth: '170px'}}>
+                        <span className="text-white"><i className="far fa-envelope" style={{color: '#ffc044'}}></i> admin@titan.com</span>
+                    </Col>
+                    <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
+                        <span className="text-white"><i className="fas fa-phone-alt" style={{color: '#ffc044'}}></i> 028-00000</span>
+                    </Col>
+                    <Col xs={6} md={6} xl={6} sm={6} className="mt-2 mb-2 text-right ellipsis">
+                    <a href="/login" className="text-white"><i className="fas fa-user" style={{color: '#ffc044'}}></i> Login</a>
+                    </Col>
+                    <Col xs={2} md={2} xl={2} sm={2} className="mt-2 mb-2 ellipsis pr-0" style={{maxWidth: '102px'}}>
+                    <a href="/signup" className="text-white" style={{right: '0'}}><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
+                        backgroundPosition: '6px -2px',
+                        backgroundSize: '20px',
+                        backgroundRepeat: 'no-repeat',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px'
+                    }}>Register</span></a>
+                    </Col>  
+                </div>
+            </Fragment>
+        );
     }
     return aCategories;
   };
@@ -344,6 +395,7 @@ const Layout = ({
                 Categories
               </Dropdown.Toggle>
 
+<<<<<<< HEAD
               {showNavCategories()}
             </Dropdown>
           </Col>
@@ -391,6 +443,57 @@ const Layout = ({
       </Navbar>
     );
   };
+=======
+    const showNavBarThird = () => {
+        return (
+            <Nav activeKey="/home" className="container">
+                <Nav.Item>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '125px -152px',
+                        backgroundSize: '60px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                        }}><strong>Home</strong>
+                    </span></Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href="/"><span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
+                        backgroundPosition: '132px -134px',
+                        backgroundSize: '65px',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px',
+                        marginRight: '30px'
+                    }}><strong>Shop</strong></span></Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}>
+                        <Row className="ml-1">
+                        <span style={{
+                        backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
+                        backgroundPosition: '6px 0px',
+                        backgroundSize: '18px',
+                        backgroundRepeat: 'no-repeat',
+                        height: '22px',
+                        width: '24px',
+                        display: 'block',
+                        cursor: 'pointer',
+                        paddingLeft: '28px'
+                        }}></span><strong>Your Order</strong></Row>
+                    </Nav.Link>
+                </Nav.Item>
+            </Nav>
+        );
+    };
+>>>>>>> master
 
   const showNavBarThird = () => {
     return (
