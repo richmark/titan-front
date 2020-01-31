@@ -3,39 +3,35 @@ import { Carousel, Container, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 
 const ProductBundleCarousel = () => {
+    console.log(`${IMAGE_API}/images/others/Banner_Ads.png`);
     const aData = [
         {
-            name : "Pipe Tools",
-            image: "https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg"
+            name: 'Pipe Tools',
+            image: `${IMAGE_API}/images/others/Banner123.png`
         },
         {
-            name : "PowerTools",
-            image: "https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg"
+            name: 'PowerTools',
+            image: `${IMAGE_API}/images/others/Bundle_Ads.jpg`
         },
         {
             name : "Welding Machine",
-            image: "https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg"
-        },
-        {
-            name : "Accessories",
-            image: "https://titansupertools.com/wp-content/uploads/2018/09/YJ-26RH3-WEB-BANNER-Rotary-Hammer-Drill-052519.jpg"
-        },
-        
+            image: `${IMAGE_API}/images/others/Sale Ads.png`
+        }
     ];
 
-    const showCarouselItem = (oBundle) => {
-        var sImage = (oBundle.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundle.image;
+    const showCarouselItem = oBundle => {
+        var sImage =
+            oBundle.image === undefined
+                ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
+                : oBundle.image;
         return (
             <Fragment>
-                <Image
-                    className="d-block w-100"
-                    src={sImage}
-                />
+                <Image className='d-block w-100' src={sImage} />
             </Fragment>
         );
-    }
+    };
 
-    const showCarousel = (aBundle) => {
+    const showCarousel = aBundle => {
         return (
             <Carousel>
                 {aBundle.map((oBundle, iIndex) => {
@@ -48,12 +44,8 @@ const ProductBundleCarousel = () => {
             </Carousel>
         );
     };
-    
-    return (
-        <Container>
-            {showCarousel(aData)}
-        </Container>
-    );
-}
+
+    return <Container>{showCarousel(aData)}</Container>;
+};
 
 export default ProductBundleCarousel;

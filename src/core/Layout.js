@@ -92,15 +92,15 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                     </Col>
                     <Col xs={2} md={2} xl={2} sm={2} className="mt-2 mb-2 ellipsis pr-0" style={{maxWidth: '102px'}}>
                     <a href="/signup" className="text-white" style={{right: '0'}}><span style={{
-                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                        backgroundPosition: '75px -67px',
-                        backgroundSize: '47px',
+                        backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
+                        backgroundPosition: '6px -2px',
+                        backgroundSize: '20px',
+                        backgroundRepeat: 'no-repeat',
                         height: '22px',
                         width: '24px',
                         display: 'block',
                         cursor: 'pointer',
-                        paddingLeft: '28px',
-                        marginRight: '30px'
+                        paddingLeft: '28px'
                     }}>Register</span></a>
                     </Col>  
                 </div>
@@ -247,9 +247,10 @@ const Layout = ({ loader='none', run=undefined, oGetCategory = () => {}, childre
                     <Nav.Link style={{textDecoration: 'none', color: 'black'}} href={user && `/profile/${user._id}`}>
                         <Row className="ml-1">
                         <span style={{
-                        backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                        backgroundPosition: '100px -74px',
-                        backgroundSize: '50px',
+                        backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
+                        backgroundPosition: '6px 0px',
+                        backgroundSize: '18px',
+                        backgroundRepeat: 'no-repeat',
                         height: '22px',
                         width: '24px',
                         display: 'block',
