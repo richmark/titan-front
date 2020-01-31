@@ -435,7 +435,8 @@ const AddBundle = () => {
                       src={bundle_thumbnail}
                       style={{
                         width: "28vw",
-                        height: "25vh"
+                        height: "25vh",
+                        maxWidth: '250px'
                       }}
                     />
                   </div>
