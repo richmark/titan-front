@@ -19,6 +19,21 @@ span {
 .checked {
     color: #fbad17;
 }
+.titan-link {
+    color: #fbad17;
+}
+
+.titan-link {
+    color: #fbad17;
+}
+
+.titan-link :hover {
+    color: #c08414;
+}
+
+.titan-link :link {
+    color: #fbad17;
+}
 
 .ellipsis {
     text-overflow: ellipsis;
