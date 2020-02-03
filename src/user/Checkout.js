@@ -12,6 +12,7 @@ import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import { APP_URL } from '../config';
+import { checkCouponCode } from '../core/admin/coupons/couponsApi';
 
 
 const Checkout = ({location}) => {
@@ -474,16 +475,7 @@ const Checkout = ({location}) => {
     const showPlaceOrder = () => {
         return (
             <Fragment>
-                <InputGroup className="mb-2 mt-5" >
-                    <FormControl
-                    placeholder="Coupon Code"
-                    aria-label="Coupon Code"
-                    aria-describedby="basic-addon2"
-                    />
-                    <InputGroup.Append>
-                        <Button variant="outline-warning">Apply</Button>
-                    </InputGroup.Append>
-                </InputGroup>
+                {showCoupon()}
                 <div id="place-order" className="mt-4 text-center">
                     <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
                         Place Order
@@ -491,6 +483,53 @@ const Checkout = ({location}) => {
                 </div>
             </Fragment>
         );
+    }
+
+    const showCoupon = () => {
+        return (
+            <InputGroup className="mb-2 mt-5" >
+                <FormControl
+                    id="coupon_code"
+                    placeholder="Coupon Code"
+                    aria-label="Coupon Code"
+                    aria-describedby="basic-addon2"
+                />
+                <InputGroup.Append>
+                    <Button variant="outline-warning" onClick={useCoupon}>Apply</Button>
+                </InputGroup.Append>
+            </InputGroup>
+        );
+    }
+
+    const useCoupon = () => {
+        var oData = {
+            coupon_code : getValue('coupon_code')
+        }
+        var oValidator = oValidatorLibrary();
+        oValidator.message('coupon_code', oData.coupon_code, 'required');
+        if (oValidator.allValid()) {
+            checkCouponCode(oData.coupon_code).then(oData => {
+                if (oData.data.length === 0) {
+                    alert('Coupon code does not exist');
+                } else {
+                    implementDiscount(oData.data[0]);
+                }   
+            });
+            return;
+        }
+        alert('Please input coupon code to apply');
+    }
+
+    const implementDiscount = (oCoupon) => {        
+        if (oCoupon.status === true) {
+            var oDiscount = {
+                'Discount Rate'  : 'multiply',
+                'Discount Value' : 'minus'
+            }
+            console.log(oDiscount[oCoupon.coupon_type]);
+        } else {
+            alert('Invalid Coupon!');
+        }
     }
 
     const showLoginButton = () => {
@@ -528,8 +567,8 @@ const Checkout = ({location}) => {
             return (
                 <Fragment>
                     <Col xs={12} md={8}>
-                            {showProducts()} 
-                            {showTotal()}
+                        {showProducts()} 
+                        {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
                         {showDeliveryDetails()}
