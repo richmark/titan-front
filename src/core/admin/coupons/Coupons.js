@@ -256,6 +256,15 @@ const Coupons = () => {
               >
                 <span>{count}</span> Total
               </div>
+              <Link to="/admin/coupons/add">
+                <button
+                  className="btn btn-success float-right mb-2"
+                  onClick={handleSearchFilter}
+                >
+                  Add New Coupon
+                </button>
+              </Link>
+
               <div
                 className={
                   paginationHide

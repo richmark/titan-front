@@ -82,6 +82,8 @@ const Routes = () => {
         exact
         component={SearchResult}
       />
+
+      <Route path="/search/result" exact component={SearchResult} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
