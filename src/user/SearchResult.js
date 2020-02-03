@@ -12,7 +12,6 @@ const SearchResult = ({ match }) => {
   const [aCategories, setCategories] = useState([]);
   const [aProducts, setProducts] = useState([]);
   const sId = match.params.queryString;
-
   const init = () => {
     searchProduct(sId).then(oData => {
       if (oData.error) {
