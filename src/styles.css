@@ -19,6 +19,21 @@ span {
 .checked {
     color: #fbad17;
 }
+.titan-link {
+    color: #fbad17;
+}
+
+.titan-link {
+    color: #fbad17;
+}
+
+.titan-link :hover {
+    color: #c08414;
+}
+
+.titan-link :link {
+    color: #fbad17;
+}
 
 .ellipsis {
     text-overflow: ellipsis;
@@ -90,4 +105,22 @@ span {
 
   .active {
     font-weight: bold;
+  }
+
+  .carousel-indicators > li {
+    border-radius: 50% !important;
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .carousel-indicators {
+    top: 100%;
+  }
+
+  .carousel-control-prev:hover {
+    background-image: linear-gradient(to right, #00000070 , transparent);
+  }
+
+  .carousel-control-next:hover {
+    background-image: linear-gradient(to right, transparent , #00000070);
   }

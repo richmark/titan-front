@@ -175,7 +175,7 @@ const ProductDetails = ({match}) => {
               </span>
               <span>
                 <h6>
-                  Category: <Link to={`/categories/${oCategory._id}`}>{oCategory.name}</Link>
+                  Category: <Link to={`/categories/${oCategory._id}`} className="titan-link" style={{textDecoration: 'none'}}>{oCategory.name}</Link>
                 </h6>
               </span>
               <hr />
@@ -214,8 +214,8 @@ const ProductDetails = ({match}) => {
             </Form.Group>
           </Form>
           <hr />
-          <Button variant="primary" onClick={runBuyNow}>Buy Now</Button>{" "}
-          <Button variant="primary" onClick={addToCart}>Add to Cart</Button>
+          <Button variant="outline-warning" onClick={runBuyNow}>Buy Now</Button>{" "}
+          <Button variant="outline-warning" onClick={addToCart}>Add to Cart</Button>
         </Fragment>
       );
     }
@@ -241,7 +241,7 @@ const ProductDetails = ({match}) => {
   const showStock = () => {
     return iStock >= 0 && (
       <Fragment>
-        <p style={{fontSize: '10px'}}>
+        <p style={{fontSize: '14px'}}>
           This product only has {iStock} stock/s left
         </p>
       </Fragment>
