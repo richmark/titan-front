@@ -480,7 +480,7 @@ const AddProduct = () => {
                       (image && image) ||
                       "https://ctt.trains.com/sitefiles/images/no-preview-available.png"
                     }
-                    style={{ width: "18vw", height: "30vh" }}
+                    style={{ width: "100%", height: "auto" }}
                   />
                 </div>
                 <div className="col-md-6 col-sm-6 mb-4">

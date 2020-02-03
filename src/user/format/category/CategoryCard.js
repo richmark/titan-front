@@ -64,7 +64,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '40px', left: '23px', fontSize : '20px'}}>Categories</p></strong></div>
+            <div className="category-tab mb-5 mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '40px', left: '23px', fontSize : '20px'}}>Categories</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    

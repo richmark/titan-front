@@ -382,8 +382,8 @@ const Profile = ({match}) => {
                     {closeModal(props, success.message)}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" className="m-1" type="submit">Save</Button>
-                    <Button variant="secondary" onClick={props.onHide}>Close</Button>
+                    <Button variant="warning" className="m-1" type="submit">Save</Button>
+                    <Button variant="outline-warning" onClick={props.onHide}>Close</Button>
                 </Modal.Footer>
                 </Form>
             </Modal>
