@@ -36,6 +36,7 @@ import OrderDetails from "./user/OrderDetails";
 import ReviewProduct from "./user/ReviewProduct";
 import PaymayaStatus from "./user/PaymentStatus";
 import SearchResult from "./user/SearchResult";
+import CategoryList from "./user/CategoryList";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -84,6 +85,7 @@ const Routes = () => {
       />
 
       <Route path="/search/result" exact component={SearchResult} />
+      <Route path="/categories/list/show" exact component={CategoryList} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
