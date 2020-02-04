@@ -110,8 +110,8 @@ const Checkout = ({location}) => {
                 </p>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={runPaymaya(user, props)} className="m-1">Checkout</Button>
-                <Button variant="secondary" onClick={props.onHide}>Cancel</Button>
+                <Button variant="warning" onClick={runPaymaya(user, props)} className="m-1">Checkout</Button>
+                <Button variant="outline-warning" onClick={props.onHide}>Cancel</Button>
               </Modal.Footer>
             </Modal>
           );
