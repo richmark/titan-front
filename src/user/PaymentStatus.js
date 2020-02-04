@@ -17,8 +17,9 @@ const PaymentStatus = ({ match, location }) => {
     useEffect(() => {
         if (oData.status === 'success' && user._id === oData.userId) {
             const oDetails = {
-                oBilling  : JSON.parse(atob(oNotBuyNow.oBilling)),
-                oShipping : JSON.parse(atob(oNotBuyNow.oShipping))
+                oBilling    : JSON.parse(atob(oNotBuyNow.oBilling)),
+                oShipping   : JSON.parse(atob(oNotBuyNow.oShipping)),
+                coupon_code : oNotBuyNow.coupon_code 
             }
             retrievePaymayaCheckout(oData.userId, sToken, oData.sRequestId, oDetails).then((oRetrieve) => {
                 if (oRetrieve.error) {

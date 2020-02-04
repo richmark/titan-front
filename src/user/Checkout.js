@@ -12,6 +12,7 @@ import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import { APP_URL } from '../config';
+import { checkCouponCode } from '../core/admin/coupons/couponsApi';
 
 
 const Checkout = ({location}) => {
@@ -25,6 +26,11 @@ const Checkout = ({location}) => {
     const [mLoader, setLoader] = useState('none');
     const [bEnable, setEnable] = useState(true);
     const oBuyNow = oQuery.parse(location.search);
+
+    // For Discount
+    const [iDiscount, setDiscount] = useState(0);
+    const [sCouponCode, setCouponCode] = useState(false);
+    const sCouponMessage = 'Coupon Discount Applied!';
 
     // For Shipping and Billing Details Init
     var oDetail = false;
@@ -130,6 +136,8 @@ const Checkout = ({location}) => {
             shipping: btoa(JSON.stringify(oShipping)),
             amount: oTotal.total,
             shipping_fee: oTotal.fee,
+            discount: iDiscount,
+            coupon_code: sCouponCode,
             products: [],
             bBuyNow: bEnable
         }
@@ -178,6 +186,7 @@ const Checkout = ({location}) => {
             var aCart = getCart();
             setRun(aCart);
             setProduct(aCart);
+            checkDiscount();
         }
     };
 
@@ -197,6 +206,7 @@ const Checkout = ({location}) => {
 
     const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
+        checkDiscount();
         var oCount = getProductCount(sId, iProductCount);
         if (bIncrease === true && oCount.bCount === false) {
             alert('Cannot add product anymore, product has reach stock limit');
@@ -275,11 +285,12 @@ const Checkout = ({location}) => {
             iPrice += (oProduct.price * oProduct.count);
         });
         
-        var iTotal = iPrice + iShipFee;
+        var iTotal = iPrice + iShipFee - iDiscount;
         oTotal = {
-            price : iPrice,
-            fee   : iShipFee,
-            total : iTotal
+            price   : iPrice,
+            fee     : iShipFee,
+            discount: iDiscount,
+            total   : iTotal
         }
         return oTotal;
     }
@@ -291,11 +302,13 @@ const Checkout = ({location}) => {
                 <Row>
                     <Col xs={4} md={4}>
                         <p className="font-weight-bold">Subtotal</p>
+                        {oTotal.discount > 0 && <p className="font-weight-bold">Discount</p>}
                         <p className="font-weight-bold">Shipping Fee</p>
                         <p className="font-weight-bold">Total</p>
                     </Col>
                     <Col xs={8} md={8} className="text-right">
                         <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
+                        {oTotal.discount > 0 && <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>}
                         <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
                         <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
@@ -474,16 +487,7 @@ const Checkout = ({location}) => {
     const showPlaceOrder = () => {
         return (
             <Fragment>
-                <InputGroup className="mb-2 mt-5" >
-                    <FormControl
-                    placeholder="Coupon Code"
-                    aria-label="Coupon Code"
-                    aria-describedby="basic-addon2"
-                    />
-                    <InputGroup.Append>
-                        <Button variant="outline-warning">Apply</Button>
-                    </InputGroup.Append>
-                </InputGroup>
+                {showCoupon()}
                 <div id="place-order" className="mt-4 text-center">
                     <Button variant="outline-warning" size="lg" block onClick={() => setModalPaymaya(true)}>
                         Place Order
@@ -491,6 +495,81 @@ const Checkout = ({location}) => {
                 </div>
             </Fragment>
         );
+    }
+
+    const showCoupon = () => {
+        return (
+            <InputGroup className="mb-2 mt-5" >
+                <FormControl
+                    id="coupon_code"
+                    placeholder="Coupon Code"
+                    aria-label="Coupon Code"
+                    aria-describedby="basic-addon2"
+                />
+                <InputGroup.Append>
+                    <Button variant="outline-warning" onClick={useCoupon}>Apply</Button>
+                </InputGroup.Append>
+            </InputGroup>
+        );
+    }
+
+    const useCoupon = () => {
+        var oData = {
+            coupon_code : getValue('coupon_code')
+        }
+        var oValidator = oValidatorLibrary();
+        oValidator.message('coupon_code', oData.coupon_code, 'required');
+        if (oValidator.allValid()) {
+            checkCouponCode(oData.coupon_code).then(oData => {
+                if (oData.data.length === 0) {
+                    disableDiscount();
+                    alert('Coupon code does not exist');
+                } else {
+                    implementDiscount(oData.data[0]);
+                }   
+            });
+            return;
+        }
+        disableDiscount();
+        alert('Please input coupon code to apply');
+    }
+
+    const checkDiscount = () => {
+        if (iDiscount > 0) {
+            alert('Please apply coupon again');
+            disableDiscount();
+        }
+    }
+
+    const implementDiscount = (oCoupon) => {    
+        if (oCoupon.status === true) {
+            var oDiscount = {
+                'Discount Rate'  : calculateDiscountRate,
+                'Discount Value' : calculateDiscountValue
+            }
+            setCouponCode(oCoupon.coupon_code);
+            oDiscount[oCoupon.coupon_type](oCoupon.discount);
+        } else {
+            disableDiscount();
+            alert('Invalid Coupon!');
+        }
+    }
+
+    const calculateDiscountRate = (iValue) => {
+        var oTotal = calculateTotal();
+        var iCalculate = (iValue / 100) * oTotal.price;
+        alert(sCouponMessage);
+        setDiscount(iCalculate);
+    }
+
+    const calculateDiscountValue = (iValue) => {
+        alert(sCouponMessage);
+        setDiscount(iValue);
+    }
+
+    const disableDiscount = () => {
+        setDiscount(0);
+        setCouponCode(false);
     }
 
     const showLoginButton = () => {
@@ -528,8 +607,8 @@ const Checkout = ({location}) => {
             return (
                 <Fragment>
                     <Col xs={12} md={8}>
-                            {showProducts()} 
-                            {showTotal()}
+                        {showProducts()} 
+                        {showTotal()}
                     </Col>
                     <Col xs={6} md={4} className="border rounded border-left-dark p-4">
                         {showDeliveryDetails()}

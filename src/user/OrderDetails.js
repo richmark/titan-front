@@ -146,7 +146,8 @@ const OrderDetails = ({match}) => {
                             <Col sm={{span: 6}}>
                                 <Container className="m-2 mb-4">
                                     <h5>Payment Summary</h5>
-                                    <strong>Subtotal</strong> <span className="float-right">₱ <span>{oOrder.amount - oOrder.shipping_fee}</span></span><br/>
+                                    {showSubTotal()}
+                                    {showDiscount()}
                                     <strong>Shipping Fee</strong> <span className="float-right">₱ <span>{oOrder.shipping_fee}</span></span><br/>
                                     <hr/>
                                     <strong>Total (with VAT)</strong> <span className="float-right">₱ <span>{oOrder.amount}</span></span>
@@ -158,6 +159,32 @@ const OrderDetails = ({match}) => {
             </Container>            
         );
     };
+
+    const showSubTotal = () => {
+        if (oOrder.discount_fee > 0) {
+            return (
+                <Fragment>
+                    <strong>Subtotal</strong> <span className="float-right">₱ <span>{oOrder.amount - oOrder.shipping_fee + oOrder.discount_fee}</span></span><br/>
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <strong>Subtotal</strong> <span className="float-right">₱ <span>{oOrder.amount - oOrder.shipping_fee}</span></span><br/>
+                </Fragment>
+            );
+        }
+    }
+
+    const showDiscount = () => {
+        if (oOrder.discount_fee > 0) {
+            return (
+                <Fragment>
+                    <strong>Discount</strong> <span className="float-right">₱ <span>({oOrder.discount_fee})</span></span><br/>
+                </Fragment>
+            );
+        }
+    } 
     
 	return (
         <Layout>
