@@ -27,6 +27,11 @@ const Checkout = ({location}) => {
     const [bEnable, setEnable] = useState(true);
     const oBuyNow = oQuery.parse(location.search);
 
+    // For Discount
+    const [iDiscount, setDiscount] = useState(0);
+    const [sCouponCode, setCouponCode] = useState(false);
+    const sCouponMessage = 'Coupon Discount Applied!';
+
     // For Shipping and Billing Details Init
     var oDetail = false;
     if (user) {
@@ -131,6 +136,8 @@ const Checkout = ({location}) => {
             shipping: btoa(JSON.stringify(oShipping)),
             amount: oTotal.total,
             shipping_fee: oTotal.fee,
+            discount: iDiscount,
+            coupon_code: sCouponCode,
             products: [],
             bBuyNow: bEnable
         }
@@ -179,6 +186,7 @@ const Checkout = ({location}) => {
             var aCart = getCart();
             setRun(aCart);
             setProduct(aCart);
+            checkDiscount();
         }
     };
 
@@ -198,6 +206,7 @@ const Checkout = ({location}) => {
 
     const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
+        checkDiscount();
         var oCount = getProductCount(sId, iProductCount);
         if (bIncrease === true && oCount.bCount === false) {
             alert('Cannot add product anymore, product has reach stock limit');
@@ -276,11 +285,12 @@ const Checkout = ({location}) => {
             iPrice += (oProduct.price * oProduct.count);
         });
         
-        var iTotal = iPrice + iShipFee;
+        var iTotal = iPrice + iShipFee - iDiscount;
         oTotal = {
-            price : iPrice,
-            fee   : iShipFee,
-            total : iTotal
+            price   : iPrice,
+            fee     : iShipFee,
+            discount: iDiscount,
+            total   : iTotal
         }
         return oTotal;
     }
@@ -292,11 +302,13 @@ const Checkout = ({location}) => {
                 <Row>
                     <Col xs={4} md={4}>
                         <p className="font-weight-bold">Subtotal</p>
+                        {oTotal.discount > 0 && <p className="font-weight-bold">Discount</p>}
                         <p className="font-weight-bold">Shipping Fee</p>
                         <p className="font-weight-bold">Total</p>
                     </Col>
                     <Col xs={8} md={8} className="text-right">
                         <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
+                        {oTotal.discount > 0 && <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>}
                         <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
                         <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
@@ -510,6 +522,7 @@ const Checkout = ({location}) => {
         if (oValidator.allValid()) {
             checkCouponCode(oData.coupon_code).then(oData => {
                 if (oData.data.length === 0) {
+                    disableDiscount();
                     alert('Coupon code does not exist');
                 } else {
                     implementDiscount(oData.data[0]);
@@ -517,19 +530,46 @@ const Checkout = ({location}) => {
             });
             return;
         }
+        disableDiscount();
         alert('Please input coupon code to apply');
     }
 
-    const implementDiscount = (oCoupon) => {        
+    const checkDiscount = () => {
+        if (iDiscount > 0) {
+            alert('Please apply coupon again');
+            disableDiscount();
+        }
+    }
+
+    const implementDiscount = (oCoupon) => {    
         if (oCoupon.status === true) {
             var oDiscount = {
-                'Discount Rate'  : 'multiply',
-                'Discount Value' : 'minus'
+                'Discount Rate'  : calculateDiscountRate,
+                'Discount Value' : calculateDiscountValue
             }
-            console.log(oDiscount[oCoupon.coupon_type]);
+            setCouponCode(oCoupon.coupon_code);
+            oDiscount[oCoupon.coupon_type](oCoupon.discount);
         } else {
+            disableDiscount();
             alert('Invalid Coupon!');
         }
+    }
+
+    const calculateDiscountRate = (iValue) => {
+        var oTotal = calculateTotal();
+        var iCalculate = (iValue / 100) * oTotal.price;
+        alert(sCouponMessage);
+        setDiscount(iCalculate);
+    }
+
+    const calculateDiscountValue = (iValue) => {
+        alert(sCouponMessage);
+        setDiscount(iValue);
+    }
+
+    const disableDiscount = () => {
+        setDiscount(0);
+        setCouponCode(false);
     }
 
     const showLoginButton = () => {
