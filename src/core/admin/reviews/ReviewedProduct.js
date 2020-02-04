@@ -96,7 +96,7 @@ const ReviewedProduct = ({ match }) => {
                                             {oMoment(oData.createdAt).format('LLL')}
                                             </div>
                                             <div className="text-left mt-3">
-                                            {oData.user.email}
+                                            {oData.user.first_name} {oData.user.last_name}
                                             </div>
                                             <div className="border rounded p-3">
                                             {oData.comment}
