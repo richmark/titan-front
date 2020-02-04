@@ -217,6 +217,22 @@ const Layout = ({
 
   const showNavCategories = () => {
     if (oCategories) {
+      if (oCategories.length > 10) {
+        var aTempCategory = JSON.parse(JSON.stringify(oCategories));
+        var aCategorySplit = aTempCategory.splice(0, 10);
+        aCategorySplit.push({name : 'Load More...', _id : 'list/show'});
+        return (
+          <Dropdown.Menu>
+            {aCategorySplit.map((oCategory, iIndex) => {
+              return (
+                <Dropdown.Item key={iIndex} href={`/categories/${oCategory._id}`}>
+                  {oCategory.name}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        );
+      }
       return (
         <Dropdown.Menu>
           {oCategories.map((oCategory, iIndex) => {
