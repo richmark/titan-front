@@ -3,7 +3,6 @@ import { Carousel, Container, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 
 const ProductBundleCarousel = () => {
-    console.log(`${IMAGE_API}/images/others/Banner_Ads.png`);
     const aData = [
         {
             name: 'Pipe Tools',
