@@ -13,8 +13,12 @@ export const getReviewsByProductIdCount = (sProductId) => {
     .catch(err => console.log(err));
 };
 
-export const getReviewsByProductId = (sProductId) => {
-    return fetch(`${API_URL}/reviews/product/${sProductId}`, {
+export const getReviewsByProductId = (sProductId, visibility = undefined) => {
+    let sQueryParam = '';
+    if (visibility) {
+        sQueryParam = `?visibility=${visibility}`;
+    }
+    return fetch(`${API_URL}/reviews/product/${sProductId}${sQueryParam}`, {
         method: 'GET',
         headers: {
             Accept: 'application/json'

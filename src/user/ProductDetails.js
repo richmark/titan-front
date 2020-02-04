@@ -300,7 +300,7 @@ const ProductDetails = ({match}) => {
       {showRelatedProduct()}
       {checkProduct(bProduct)}
       {redirectBuyNow()}
-      {CommentCard()}
+      {CommentCard(_id)}
     </Layout>
   );
 };
