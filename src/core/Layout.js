@@ -220,12 +220,15 @@ const Layout = ({
       if (oCategories.length > 10) {
         var aTempCategory = JSON.parse(JSON.stringify(oCategories));
         var aCategorySplit = aTempCategory.splice(0, 10);
-        aCategorySplit.push({name : 'Load More...', _id : 'list/show'});
+        aCategorySplit.push({ name: "Load More...", _id: "list/show" });
         return (
           <Dropdown.Menu>
             {aCategorySplit.map((oCategory, iIndex) => {
               return (
-                <Dropdown.Item key={iIndex} href={`/categories/${oCategory._id}`}>
+                <Dropdown.Item
+                  key={iIndex}
+                  href={`/categories/${oCategory._id}`}
+                >
                   {oCategory.name}
                 </Dropdown.Item>
               );
@@ -429,7 +432,10 @@ const Layout = ({
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link style={{ textDecoration: "none", color: "black" }} href="/">
+          <Nav.Link
+            style={{ textDecoration: "none", color: "black" }}
+            href="/search/result"
+          >
             <span
               style={{
                 backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,

@@ -2,8 +2,18 @@ import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../core/Layout";
 import CategorySideList from "./format/category/CategorySideList";
 import ProductCard from "./format/product/ProductCard";
-import { Container, Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
-import { searchProduct } from "../core/admin/products/productsApi";
+import {
+  Container,
+  Row,
+  Col,
+  DropdownButton,
+  Dropdown,
+  Form
+} from "react-bootstrap";
+import {
+  searchProduct,
+  getProductByCategoryAndName
+} from "../core/admin/products/productsApi";
 import { getTotalCount } from "../core/client/cartHelpers";
 
 const SearchResult = ({ match }) => {
@@ -11,6 +21,7 @@ const SearchResult = ({ match }) => {
 
   const [aCategories, setCategories] = useState([]);
   const [aProducts, setProducts] = useState([]);
+  const [searchedProducts, setSearchedProducts] = useState([]);
   const sId = match.params.queryString;
   const init = () => {
     searchProduct(sId).then(oData => {
@@ -18,6 +29,7 @@ const SearchResult = ({ match }) => {
         console.log(oData.error);
       } else {
         setProducts(oData.data);
+        setSearchedProducts(oData.data);
       }
     });
   };
@@ -30,6 +42,60 @@ const SearchResult = ({ match }) => {
     setCategories(aData);
   };
 
+  const handleClickCheckBox = oEvent => {
+    var checkedValues = getCheckedValues();
+
+    if (checkedValues.length !== 0) {
+      var results = filterByCategory(getCheckedValues());
+      setProducts(results);
+      return;
+    }
+    init();
+  };
+
+  const filterByCategory = aCheckedValues => {
+    var results = [];
+
+    for (var j = 0; j < aCheckedValues.length; j++) {
+      for (var i = 0; i < searchedProducts.length; i++) {
+        if (searchedProducts[i].category._id === aCheckedValues[j]) {
+          results.push(searchedProducts[i]);
+        }
+      }
+    }
+
+    return results;
+  };
+  const getCheckedValues = () => {
+    let checkboxElements = document.getElementsByName("categoryCheckbox");
+    let checkedArray = [];
+    for (var i = 0; i < checkboxElements.length; i++) {
+      if (checkboxElements[i].checked) {
+        checkedArray.push(checkboxElements[i].value);
+      }
+    }
+
+    return checkedArray;
+  };
+  const showCategorySideList = () => {
+    return aCategories.map((aCategory, iIndex) => {
+      return (
+        <Fragment key={iIndex}>
+          <Form.Group className="category-side-list mb-0" controlId={iIndex}>
+            <Form.Check
+              name="categoryCheckbox"
+              type="checkbox"
+              className="text-uppercase"
+              label={aCategory.name}
+              value={aCategory._id}
+              onClick={handleClickCheckBox}
+            />
+          </Form.Group>
+        </Fragment>
+      );
+    });
+  };
+
   return (
     <Layout oGetCategory={getCategory} run={iRun}>
       <Container>
@@ -40,7 +106,7 @@ const SearchResult = ({ match }) => {
               <p style={{ color: "black" }} className="mt-1 font-weight-bold">
                 Categories
               </p>
-              {CategorySideList(aCategories)}
+              {showCategorySideList()}
               <div className="border-bottom border-black mt-5 border"></div>
             </div>
           </Col>
