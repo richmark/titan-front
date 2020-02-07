@@ -19,6 +19,7 @@ const CategoryCard = (aData) => {
                             />
                         </Col>
                     </Row>
+                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>

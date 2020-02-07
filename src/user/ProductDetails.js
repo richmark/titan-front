@@ -156,6 +156,7 @@ const ProductDetails = ({match}) => {
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
           <Row>
             <Col xs={6} md={4}>
+              {checkIfSoldOut()}
               <Image
                 className="border mx-auto"
                 src={previewImage}
@@ -221,6 +222,19 @@ const ProductDetails = ({match}) => {
     }
     
   }
+
+  const checkIfSoldOut = () => {
+    if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+      return (
+        <Fragment>
+          <Image 
+            src={`${IMAGE_API}/images/others/soldout.png`}
+            style={{width: "80px", height: "35px", position: 'absolute', top: '15px', left: '245px'}} 
+          />
+        </Fragment>
+      );
+    }
+  };
 
   const runBuyNow = () => {
     if (iStock > 0) {

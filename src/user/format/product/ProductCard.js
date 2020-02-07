@@ -47,6 +47,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
             <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
                 <Row>
                     <Col>
+                        {showSoldOutImage(oProduct)}
                         <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                             <Image 
                                 src={`${IMAGE_API}/images/products/${sImage}`}
@@ -65,6 +66,19 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
         );
     };
 
+    const showSoldOutImage = (oProduct) => {
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            return (
+                <Fragment>
+                    <Image 
+                        src={`${IMAGE_API}/images/others/soldout.png`}
+                        style={{width: "50px", height: "20px", position: 'absolute', top: '10px', left: '154px'}} 
+                    />
+                </Fragment>
+            );
+        }
+    };
+
     const showAddCartButton = (oProduct, sName) => {
         const oStyle = {
             color: 'white', 
@@ -73,8 +87,10 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
         if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
             return (
                 <Fragment>
-                    <button className="default-button  text-center" style={oStyle}>
-                        SOLD OUT
+                    <button className="default-button text-center" onClick={showAlertNoStock} style={oStyle}>
+                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
                 </Fragment>
             );
@@ -90,6 +106,10 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
             );
         } 
     }
+
+    const showAlertNoStock = () => {
+        return alert('Product is out of stock.');
+    };
 
     const showLayout = (aProducts) => {
         var iSize = 3;
