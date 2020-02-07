@@ -190,7 +190,7 @@ const Layout = ({
             xl={2}
             sm={2}
             className="mt-2 mb-2 ellipsis pr-0"
-            style={{ maxWidth: "102px" }}
+            style={{ maxWidth: "102px", marginRight: '5px' }}
           >
             <a
               href="/signup"
