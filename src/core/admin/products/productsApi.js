@@ -135,6 +135,21 @@ export const searchProduct = sQuery => {
     .catch(err => console.log(err));
 };
 
+export const searchProductByBrand = sQuery => {
+  var aQuery = { query: sQuery };
+  return fetch(`${API_URL}/product/brand/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(aQuery)
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
 export const searchProductByCategory = sId => {
   return fetch(`${API_URL}/products/category/${sId}`, {
     method: "GET",
