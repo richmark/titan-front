@@ -39,6 +39,7 @@ import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
 import BundleDetails from "./user/BundleDetails";
 import AboutUs from "./user/AboutUs";
+import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -146,6 +147,7 @@ const Routes = () => {
         exact
         component={UpdateProduct}
       />
+      <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
     </BrowserRouter>
   );
 };
