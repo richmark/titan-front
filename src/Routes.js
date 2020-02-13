@@ -38,6 +38,7 @@ import PaymayaStatus from "./user/PaymentStatus";
 import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
 import BundleDetails from "./user/BundleDetails";
+import AboutUs from "./user/AboutUs";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -88,6 +89,7 @@ const Routes = () => {
       <Route path="/search/result" exact component={SearchResult} />
       <Route path="/categories/list/show" exact component={CategoryList} />
       <Route path="/bundle" exact component={BundleDetails} />
+      <Route path="/about-us" exact component={AboutUs} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
