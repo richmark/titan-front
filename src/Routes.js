@@ -40,6 +40,7 @@ import CategoryList from "./user/CategoryList";
 import BundleDetails from "./user/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
+import ContactUs from "./user/ContactUs";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -91,6 +92,7 @@ const Routes = () => {
       <Route path="/categories/list/show" exact component={CategoryList} />
       <Route path="/bundle" exact component={BundleDetails} />
       <Route path="/about-us" exact component={AboutUs} />
+      <Route path="/contact-us" exact component={ContactUs} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />

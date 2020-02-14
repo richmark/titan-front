@@ -502,7 +502,7 @@ const Layout = ({
                   HOME
                 </a>
                 <br></br>
-                <a href="/" className="text-white">
+                <a href="/about-us" className="text-white">
                   ABOUT US
                 </a>
                 <br></br>
@@ -514,7 +514,7 @@ const Layout = ({
                   PRODUCTS
                 </a>
                 <br></br>
-                <a href="/" className="text-white">
+                <a href="/contact-us" className="text-white">
                   CONTACT US
                 </a>
                 <br></br>
