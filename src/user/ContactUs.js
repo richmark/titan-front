@@ -3,21 +3,13 @@ import Layout from "../core/Layout";
 import { Container, Row, Col, Image, Form, Button, Card } from "react-bootstrap";
 import { IMAGE_API } from "../config";
 
-const AboutUs = () => {
+const ContactUs = () => {
 
-  const showAboutMain = () => {
+  const showContactMain = () => {
     return (
       <Fragment>
         <Container className="border border-black rounded p-5">
-            <h3>About us</h3>
-            <p>
-                Tital Supertools Hardware is a company that carries multipe
-                brands fot the assortment of the clients to choose from at an
-                affordable price
-            </p>
-
-            <p><strong>STORE INFORMATION</strong></p>
-            <p>273 Rizal Avenue Extension, Caloocan City</p>
+            <h3>Contact us</h3>
             <p>
                 <i
                 className="fas fa-phone-alt"
@@ -32,6 +24,14 @@ const AboutUs = () => {
                 ></i>{" "}
                 sales.tsthardware@gmail.com
             </p>
+
+            <p>
+                <i
+                className="fab fa-facebook-messenger"
+                style={{ color: "#0084ff" }}
+                ></i>{" "}
+                MESSENGER PLUGIN WIP
+            </p>
         </Container>
       </Fragment>
     );
@@ -39,9 +39,9 @@ const AboutUs = () => {
 
   return (
     <Layout>
-      {showAboutMain()}
+      {showContactMain()}
     </Layout>
   );
 };
 
-export default AboutUs;
+export default ContactUs;
