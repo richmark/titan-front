@@ -37,6 +37,8 @@ import ReviewProduct from "./user/ReviewProduct";
 import PaymayaStatus from "./user/PaymentStatus";
 import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
+import Banner from "./core/admin/banner/Banner";
+import UpdateBanner from './core/admin/banner/UpdateBanner';
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -141,6 +143,16 @@ const Routes = () => {
         path="/admin/products/update/:productId"
         exact
         component={UpdateProduct}
+      />
+      <AdminRoute
+        path="/admin/banner"
+        exact
+        component={Banner}
+      />
+      <AdminRoute
+        path="/admin/banner/update/:bannerId"
+        exact
+        component={UpdateBanner}
       />
     </BrowserRouter>
   );
