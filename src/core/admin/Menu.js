@@ -206,6 +206,7 @@ const Menu = () => {
           <a
             className="nav-link collapsed"
             data-toggle="collapse"
+<<<<<<< HEAD
             data-target="#bannerMgmt"
             aria-expanded="true"
             aria-controls="collapseTwo"
@@ -214,13 +215,28 @@ const Menu = () => {
           </a>
           <div
             id="bannerMgmt"
+=======
+            data-target="#levelManagement"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+          >
+            <span>Level Management</span>
+          </a>
+          <div
+            id="levelManagement"
+>>>>>>> master
             className="collapse"
             aria-labelledby="headingTwo"
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
+<<<<<<< HEAD
               <Link to="/admin/banner" className="collapse-item">
                 Add Banner
+=======
+              <Link to="/admin/levels" className="collapse-item">
+                Manage Level
+>>>>>>> master
               </Link>
             </div>
           </div>

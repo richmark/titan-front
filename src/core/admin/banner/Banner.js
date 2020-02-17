@@ -183,35 +183,6 @@ const Banner = () => {
                                             )
                                         })
                                     }
-                                    
-                                    {/* {products &&
-                                        products.map((oProduct, iIndex) => (
-                                        <tr key={iIndex}>
-                                            <th scope="row">
-                                            <input
-                                                type="checkbox"
-                                                value={oProduct._id}
-                                                name="productCheckbox"
-                                                onChange={handleSelectToggle}
-                                            />
-                                            </th>
-                                            <td>
-                                            <img
-                                                src={`${IMAGE_API}/images/products/${oProduct.image}`}
-                                                style={{ width: "100%" }}
-                                            />
-                                            </td>
-                                            <td>
-                                            <Link to={`/admin/products/update/${oProduct._id}`}>
-                                                {oProduct.product_name}
-                                            </Link>
-                                            </td>
-                                            <td>{oProduct.stock}</td>
-                                            <td>{oProduct.price}</td>
-                                            <td>{oProduct.category.name}</td>
-                                            <td>{oMoment(oProduct.createdAt).format("LLL")}</td>
-                                        </tr>
-                                        ))} */}
                                     </tbody>
                             </table>
                         </div>

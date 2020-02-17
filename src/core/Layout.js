@@ -26,7 +26,8 @@ const Layout = ({
   loader = "none",
   run = undefined,
   oGetCategory = () => {},
-  children
+  children,
+  searchPlaceHolder = "Search here"
 }) => {
   const { user } = isAuthenticated();
   const [iCount, setCount] = useState(0);
@@ -34,6 +35,7 @@ const Layout = ({
   const [mLoader, setLoader] = useState(loader);
   const [oCategories, setCategories] = useState(false);
   const [oCategoriesFooter, spliceCategories] = useState(false);
+  const [sPlaceHolder, setPlaceHolder] = useState(searchPlaceHolder);
   const searchUrl = "/search/result/" + sSearchQuery;
 
   useEffect(() => {
@@ -62,6 +64,10 @@ const Layout = ({
 
   const handleSearchClick = oEvent => {
     window.location.replace(searchUrl);
+  };
+
+  const handleSearchboxClick = oEvent => {
+    setPlaceHolder("");
   };
 
   const splice = aCategories => {
@@ -190,7 +196,7 @@ const Layout = ({
             xl={2}
             sm={2}
             className="mt-2 mb-2 ellipsis pr-0"
-            style={{ maxWidth: "102px", marginRight: '5px' }}
+            style={{ maxWidth: "102px", marginRight: "5px" }}
           >
             <a
               href="/signup"
@@ -368,7 +374,7 @@ const Layout = ({
           <Col xs={5} md={5} xl={5} sm={5}>
             <InputGroup style={{ width: "100%" }}>
               <FormControl
-                placeholder="Search here"
+                placeholder={sPlaceHolder}
                 aria-label="Search here"
                 aria-describedby="basic-addon2"
                 style={{
@@ -376,6 +382,7 @@ const Layout = ({
                   borderBottomLeftRadius: "50rem"
                 }}
                 onChange={handleQueryChange}
+                onClick={handleSearchboxClick}
               />
               <InputGroup.Append>
                 <Button
@@ -495,7 +502,7 @@ const Layout = ({
                   HOME
                 </a>
                 <br></br>
-                <a href="/" className="text-white">
+                <a href="/about-us" className="text-white">
                   ABOUT US
                 </a>
                 <br></br>
@@ -507,7 +514,7 @@ const Layout = ({
                   PRODUCTS
                 </a>
                 <br></br>
-                <a href="/" className="text-white">
+                <a href="/contact-us" className="text-white">
                   CONTACT US
                 </a>
                 <br></br>

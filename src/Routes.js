@@ -39,6 +39,10 @@ import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
 import Banner from "./core/admin/banner/Banner";
 import UpdateBanner from './core/admin/banner/UpdateBanner';
+import BundleDetails from "./user/BundleDetails";
+import AboutUs from "./user/AboutUs";
+import ContactUs from "./user/ContactUs";
+import ManageLevel from "./core/admin/levels/ManageLevel";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -88,6 +92,9 @@ const Routes = () => {
 
       <Route path="/search/result" exact component={SearchResult} />
       <Route path="/categories/list/show" exact component={CategoryList} />
+      <Route path="/bundle" exact component={BundleDetails} />
+      <Route path="/about-us" exact component={AboutUs} />
+      <Route path="/contact-us" exact component={ContactUs} />
       {/* Private Routes */}
       <PrivateRoute path="/profile/:userId" exact component={Profile} />
       <PrivateRoute path="/upload" exact component={UploadImage} />
@@ -154,6 +161,7 @@ const Routes = () => {
         exact
         component={UpdateBanner}
       />
+      <AdminRoute path="/admin/levels" exact component={ManageLevel}/>
     </BrowserRouter>
   );
 };

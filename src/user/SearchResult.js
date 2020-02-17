@@ -58,13 +58,27 @@ const SearchResult = ({ match }) => {
 
     for (var j = 0; j < aCheckedValues.length; j++) {
       for (var i = 0; i < searchedProducts.length; i++) {
-        if (searchedProducts[i].category._id === aCheckedValues[j]) {
-          results.push(searchedProducts[i]);
+        if (
+          searchedProducts[i].category._id === aCheckedValues[j] ||
+          searchedProducts[i].brand === aCheckedValues[j]
+        ) {
+          if (!checkContainsObject(results, searchedProducts[i])) {
+            results.push(searchedProducts[i]);
+          }
         }
       }
     }
 
     return results;
+  };
+
+  const checkContainsObject = (oList, aInput) => {
+    for (var i = 0; i < oList.length; i++) {
+      if (oList[i] === aInput) {
+        return true;
+      }
+    }
+    return false;
   };
   const getCheckedValues = () => {
     let checkboxElements = document.getElementsByName("categoryCheckbox");
@@ -96,17 +110,51 @@ const SearchResult = ({ match }) => {
     });
   };
 
+  const showBrandSideList = () => {
+    return (
+      <Fragment>
+        <Form.Group className="category-side-list mb-0" controlId="titan">
+          <Form.Check
+            name="categoryCheckbox"
+            type="checkbox"
+            className="text-uppercase"
+            label="Titan"
+            value="Titan"
+            onClick={handleClickCheckBox}
+          />
+        </Form.Group>
+        <Form.Group className="category-side-list mb-0" controlId="yojimbo">
+          <Form.Check
+            name="categoryCheckbox"
+            type="checkbox"
+            className="text-uppercase"
+            label="Yojimbo"
+            value="Yojimbo"
+            onClick={handleClickCheckBox}
+          />
+        </Form.Group>
+      </Fragment>
+    );
+  };
+
   return (
-    <Layout oGetCategory={getCategory} run={iRun}>
+    <Layout oGetCategory={getCategory} run={iRun} searchPlaceHolder={sId}>
       <Container>
         <Row>
           <Col sm={3}>
-            <div>
+            <div className="mb-3">
               <div className="border-bottom border-black mt-5 border"></div>
               <p style={{ color: "black" }} className="mt-1 font-weight-bold">
                 Categories
               </p>
               {showCategorySideList()}
+              <div className="border-bottom border-black mt-5 border"></div>
+            </div>
+            <div>
+              <p style={{ color: "black" }} className="mt-1 font-weight-bold">
+                Brands
+              </p>
+              {showBrandSideList()}
               <div className="border-bottom border-black mt-5 border"></div>
             </div>
           </Col>
