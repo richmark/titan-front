@@ -195,7 +195,7 @@ const Menu = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/shippers" className="collapse-item">
+              <Link to="/admin/subadmin" className="collapse-item">
                 All Sub-admins
               </Link>
               <Link to="/admin/subadmin/add" className="collapse-item">

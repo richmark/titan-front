@@ -40,6 +40,7 @@ import CategoryList from "./user/CategoryList";
 import BundleDetails from "./user/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
+import Subadmins from "./core/admin/subadmins/SubAdmins";
 import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
 // custom routes
@@ -151,6 +152,7 @@ const Routes = () => {
         component={UpdateProduct}
       />
       <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
+      <AdminRoute path="/admin/subadmin" exact component={Subadmins} />
       <AdminRoute path="/admin/levels" exact component={ManageLevel} />
     </BrowserRouter>
   );
