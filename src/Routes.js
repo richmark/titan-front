@@ -40,6 +40,7 @@ import CategoryList from "./user/CategoryList";
 import BundleDetails from "./user/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import ContactUs from "./user/ContactUs";
+import ManageLevel from "./core/admin/levels/ManageLevel";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -148,6 +149,7 @@ const Routes = () => {
         exact
         component={UpdateProduct}
       />
+      <AdminRoute path="/admin/levels" exact component={ManageLevel}/>
     </BrowserRouter>
   );
 };
