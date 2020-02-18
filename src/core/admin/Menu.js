@@ -182,6 +182,32 @@ const Menu = () => {
           <a
             className="nav-link collapsed"
             data-toggle="collapse"
+            data-target="#subAdminMgmt"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+          >
+            <span>Sub-admin Management</span>
+          </a>
+          <div
+            id="subAdminMgmt"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white py-2 collapse-inner rounded">
+              <Link to="/admin/subadmin" className="collapse-item">
+                All Sub-admins
+              </Link>
+              <Link to="/admin/subadmin/add" className="collapse-item">
+                Add Sub-admins
+              </Link>
+            </div>
+          </div>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed"
+            data-toggle="collapse"
             data-target="#wholesaleApp"
             aria-expanded="true"
             aria-controls="collapseTwo"
