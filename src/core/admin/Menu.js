@@ -258,6 +258,52 @@ const Menu = () => {
             </div>
           </div>
         </li>
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#bannerMgmt"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+          >
+            <span>Banner Management</span>
+          </a>
+          <div
+            id="bannerMgmt"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white py-2 collapse-inner rounded">
+              <Link to="/admin/banner" className="collapse-item">
+                Add Banner
+              </Link>
+            </div>
+          </div>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#levelManagement"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+          >
+            <span>Level Management</span>
+          </a>
+          <div
+            id="levelManagement"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white py-2 collapse-inner rounded">
+              <Link to="/admin/levels" className="collapse-item">
+                Manage Level
+              </Link>
+            </div>
+          </div>
+        </li>
         {/* Divider */}
         <hr className="sidebar-divider d-none d-md-block" />
         {/* Sidebar Toggler (Sidebar) */}

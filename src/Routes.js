@@ -37,6 +37,8 @@ import ReviewProduct from "./user/ReviewProduct";
 import PaymayaStatus from "./user/PaymentStatus";
 import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
+import Banner from "./core/admin/banner/Banner";
+import UpdateBanner from './core/admin/banner/UpdateBanner';
 import BundleDetails from "./user/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
@@ -151,9 +153,19 @@ const Routes = () => {
         exact
         component={UpdateProduct}
       />
+      <AdminRoute
+        path="/admin/banner"
+        exact
+        component={Banner}
+      />
+      <AdminRoute
+        path="/admin/banner/update/:bannerId"
+        exact
+        component={UpdateBanner}
+      />
+      <AdminRoute path="/admin/levels" exact component={ManageLevel}/>
       <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
       <AdminRoute path="/admin/subadmin" exact component={Subadmins} />
-      <AdminRoute path="/admin/levels" exact component={ManageLevel} />
     </BrowserRouter>
   );
 };
