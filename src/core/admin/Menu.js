@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import "../../../src/styles.css";
+import { isAuthenticated } from "../../auth/authUtil";
 
 const Menu = () => {
   const showMenu = () => {
@@ -27,58 +28,188 @@ const Menu = () => {
         {/* Divider */}
         <hr className="sidebar-divider" />
         {/* Nav Item - Pages Collapse Menu */}
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#bundleMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Bundle Deals Management</span>
-          </a>
-          <div
-            id="bundleMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/bundles" className="collapse-item">
-                All bundles
-              </Link>
-              <Link to="/admin/bundles/add" className="collapse-item">
-                Make bundle
-              </Link>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#couponMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Coupon Management</span>
-          </a>
-          <div
-            id="couponMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/coupons" className="collapse-item">
-                All Coupons
-              </Link>
-              <Link to="/admin/coupons/add" className="collapse-item">
-                Add Coupons
-              </Link>
-            </div>
-          </div>
-        </li>
+        {isAuthenticated().user.role === 1 ? (
+          <Fragment>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#bundleMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Bundle Deals Management</span>
+              </a>
+              <div
+                id="bundleMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/bundles" className="collapse-item">
+                    All bundles
+                  </Link>
+                  <Link to="/admin/bundles/add" className="collapse-item">
+                    Make bundle
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#couponMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Coupon Management</span>
+              </a>
+              <div
+                id="couponMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/coupons" className="collapse-item">
+                    All Coupons
+                  </Link>
+                  <Link to="/admin/coupons/add" className="collapse-item">
+                    Add Coupons
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#prodMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Product Management</span>
+              </a>
+              <div
+                id="prodMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/products/add" className="collapse-item">
+                    Add Products
+                  </Link>
+                  <Link to="/admin/products" className="collapse-item">
+                    All Products
+                  </Link>
+                  <Link to="/admin/categories" className="collapse-item">
+                    Categories
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#reviewMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Review Management</span>
+              </a>
+              <div
+                id="reviewMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/reviews" className="collapse-item">
+                    All Reviews
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#shipperMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Shipper Management</span>
+              </a>
+              <div
+                id="shipperMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/shippers" className="collapse-item">
+                    All Shipper
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#subAdminMgmt"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Sub-admin Management</span>
+              </a>
+              <div
+                id="subAdminMgmt"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/subadmin" className="collapse-item">
+                    All Sub-admins
+                  </Link>
+                  <Link to="/admin/subadmin/add" className="collapse-item">
+                    Add Sub-admins
+                  </Link>
+                </div>
+              </div>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#levelManagement"
+                aria-expanded="true"
+                aria-controls="collapseTwo"
+              >
+                <span>Level Management</span>
+              </a>
+              <div
+                id="levelManagement"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div className="bg-white py-2 collapse-inner rounded">
+                  <Link to="/admin/levels" className="collapse-item">
+                    Manage Level
+                  </Link>
+                </div>
+              </div>
+            </li>
+          </Fragment>
+        ) : (
+          <div></div>
+        )}
         <li className="nav-item">
           <a
             className="nav-link collapsed"
@@ -107,112 +238,11 @@ const Menu = () => {
           <a
             className="nav-link collapsed"
             data-toggle="collapse"
-            data-target="#prodMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Product Management</span>
-          </a>
-          <div
-            id="prodMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/products/add" className="collapse-item">
-                Add Products
-              </Link>
-              <Link to="/admin/products" className="collapse-item">
-                All Products
-              </Link>
-              <Link to="/admin/categories" className="collapse-item">
-                Categories
-              </Link>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#reviewMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Review Management</span>
-          </a>
-          <div
-            id="reviewMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/reviews" className="collapse-item">
-                All Reviews
-              </Link>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#shipperMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Shipper Management</span>
-          </a>
-          <div
-            id="shipperMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/shippers" className="collapse-item">
-                All Shipper
-              </Link>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#subAdminMgmt"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Sub-admin Management</span>
-          </a>
-          <div
-            id="subAdminMgmt"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/subadmin" className="collapse-item">
-                All Sub-admins
-              </Link>
-              <Link to="/admin/subadmin/add" className="collapse-item">
-                Add Sub-admins
-              </Link>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
             data-target="#wholesaleApp"
             aria-expanded="true"
             aria-controls="collapseTwo"
           >
-            <span>Wholsale User Applications</span>
+            <span>Wholesale User Applications</span>
           </a>
           <div
             id="wholesaleApp"
@@ -225,29 +255,6 @@ const Menu = () => {
                 All Wholesale User
               </Link>
               <a className="collapse-item">Process User</a>
-            </div>
-          </div>
-        </li>
-        <li className="nav-item">
-          <a
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#levelManagement"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
-          >
-            <span>Level Management</span>
-          </a>
-          <div
-            id="levelManagement"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <Link to="/admin/levels" className="collapse-item">
-                Manage Level
-              </Link>
             </div>
           </div>
         </li>

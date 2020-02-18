@@ -3,6 +3,7 @@ import DashboardLayout from "../DashboardLayout";
 import DataTable from "react-data-table-component";
 import { getAllSubadmins, deleteUser } from "../../client/clientApi";
 import { isAuthenticated } from "../../../auth/authUtil";
+import { Link } from "react-router-dom";
 
 const SubAdmins = () => {
   const { sToken, user } = isAuthenticated();
@@ -126,6 +127,13 @@ const SubAdmins = () => {
                       </span>
                     </div>
                   </div>
+                </div>
+                <div className="col-sm-7">
+                  <Link to="/admin/subadmin/add">
+                    <button className="btn btn-success float-right">
+                      Add New Subadmin
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
