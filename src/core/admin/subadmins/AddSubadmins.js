@@ -12,6 +12,7 @@ const AddSubadmins = () => {
     address: "Subadmin address",
     password: "",
     subadmin_password: "",
+    verified_email: true,
     role: 5
   });
 
@@ -32,7 +33,6 @@ const AddSubadmins = () => {
     oEvent.preventDefault();
 
     if (validateParameters()) {
-      console.log("wew");
       sendSignup(values).then(oData => {
         if (oData.error) {
           console.log(oData);
