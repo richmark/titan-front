@@ -73,3 +73,13 @@ export const deleteBanner = (sId, sToken, oBanner) => {
     })
     .catch(err => console.log(err));
 };
+
+export const listBanner = () => {
+    return fetch(`${API_URL}/banners`, {
+        method: 'GET'
+    })
+    .then(oResponse => {
+        return oResponse.json();
+    })
+    .catch(oError => console.log(oError));
+};
