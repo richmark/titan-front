@@ -142,7 +142,7 @@ const Banner = () => {
                             <div className="float-right mb-2">
                                 <button onClick={submitDelete} className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                             </div>
-                            <table className="table table-bordered">
+                            <table className="table table-bordered text-center">
                                 <thead>
                                     <tr>
                                         <th scope="col" style={{width: '3%'}}><input onClick={handleSelectAllToggle} type="checkbox" /></th>
@@ -150,6 +150,8 @@ const Banner = () => {
                                         <th scope="col">Banner Link</th>
                                         <th scope="col">Visibility</th>
                                         <th scope="col">Date Created</th>
+                                        <th scope="col">Action</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,11 +176,14 @@ const Banner = () => {
                                                     </td>
                                                     <td>{oBanner.banner_link}</td>
                                                     <td>
-                                                        <Link to={`/admin/banner/update/${oBanner._id}`}>
-                                                            {oBanner.visibility ? 'on' : 'off'}
-                                                        </Link>
+                                                        {oBanner.visibility ? 'on' : 'off'}
                                                     </td>
                                                     <td>{oMoment(oBanner.createdAt).format("LLL")}</td>
+                                                    <td>
+                                                        <Link to={`/admin/banner/update/${oBanner._id}`}>
+                                                            <button type="button" className="btn btn-primary">Edit</button>
+                                                        </Link>
+                                                    </td>
                                                 </tr>
                                             )
                                         })
