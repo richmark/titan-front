@@ -1,31 +1,33 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Carousel, Container, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
+import { listBanner } from '../../../core/admin/banner/bannerApi';
 
 const ProductBundleCarousel = () => {
-    const aData = [
-        {
-            name: 'Pipe Tools',
-            image: `${IMAGE_API}/images/others/Banner123.png`
-        },
-        {
-            name: 'PowerTools',
-            image: `${IMAGE_API}/images/others/Bundle_Ads.jpg`
-        },
-        {
-            name : "Welding Machine",
-            image: `${IMAGE_API}/images/others/Sale Ads.png`
-        }
-    ];
+
+    const [aBanner, setBanner] = useState([]);
+
+    useEffect(() => {
+        listBanner().then((oData) => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setBanner(oData.data);
+            }
+        });
+    }, []);
 
     const showCarouselItem = oBundle => {
         var sImage =
-            oBundle.image === undefined
+            oBundle.banner_image === undefined
                 ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
-                : oBundle.image;
+                : `${IMAGE_API}/images/banners/${oBundle.banner_image}`;
         return (
             <Fragment>
-                <Image className='d-block w-100' src={sImage} />
+                <a href={`https://${oBundle.banner_link}`} target="_blank">
+                    <Image className='d-block w-100' src={sImage} />
+                </a>
             </Fragment>
         );
     };
@@ -44,7 +46,7 @@ const ProductBundleCarousel = () => {
         );
     };
 
-    return <Container>{showCarousel(aData)}</Container>;
+    return aBanner.length > 0 && <Container>{showCarousel(aBanner)}</Container>;
 };
 
 export default ProductBundleCarousel;
