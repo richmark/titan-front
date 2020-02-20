@@ -1,172 +1,31 @@
 import React, { useState, useEffect, Fragment } from "react";
 import DashboardLayout from "../DashboardLayout";
-import {
-  getAllCoupons,
-  deleteCoupon,
-  countCoupon,
-  searchCoupon
-} from "./couponsApi";
+import { getAllCoupons, deleteCoupon } from "./couponsApi";
 import { isAuthenticated } from "../../../auth/authUtil";
+import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 
 const Coupons = () => {
   const { sToken, user } = isAuthenticated();
-  const [oCouponData, setCouponData] = useState([]);
-  const [count, setCount] = useState(0);
-  const [showCount, setShowCount] = useState(5);
-  const [searchFilter, setSearchFilter] = useState("");
-  const [paginationHide, setPaginationHide] = useState(false);
-  const [paginationCount, setPaginationCount] = useState(0);
-  const [paginationStart, setPaginationStart] = useState(1);
-  const [paginationEnd, setPaginationEnd] = useState(10);
-  const [pageActive, setPageActive] = useState(1);
+  const [coupons, setCoupons] = useState({});
+  const [allCoupons, setAllCoupons] = useState({});
+  const [couponType, setCouponType] = useState("All");
+  const [queryString, setQueryString] = useState("");
 
-  const loadCoupons = (iLimit, iOffset, sOrder, sSortBy) => {
-    getAllCoupons(iLimit, iOffset, sOrder, sSortBy).then(oData => {
+  const loadCoupons = () => {
+    getAllCoupons().then(oData => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setCouponData(oData.data);
+        setCoupons(oData.data);
+        setAllCoupons(oData.data);
       }
     });
   };
 
-  const getCouponCount = () => {
-    countCoupon().then(oData => {
-      if (oData.error) {
-        console.log(oData.error);
-      } else {
-        var iCount = oData.data.count;
-        setCount(iCount);
-        initializePagination(iCount, 5);
-      }
-    });
-  };
-
-  const initializePagination = (iCount, iShowCount) => {
-    var iPaginationCount = Math.ceil(iCount / iShowCount);
-    resetPagination();
-    setPaginationCount(iPaginationCount);
-    iPaginationCount > 9
-      ? setPaginationEnd(9)
-      : setPaginationEnd(iPaginationCount);
-
-    loadCoupons(iShowCount, 0, "asc", "_id");
-  };
-
-  const handleNextPagination = oEvent => {
-    var newPageActive = pageActive + 1;
-
-    if (paginationCount > pageActive) {
-      setPageActive(newPageActive);
-      loadCoupons(
-        showCount,
-        parseInt(showCount * (newPageActive - 1)),
-        "asc",
-        "_id"
-      );
-    }
-
-    if (paginationEnd >= 9) {
-      if (
-        pageActive >= Math.ceil(paginationEnd / 2) &&
-        paginationEnd !== paginationCount
-      ) {
-        setPaginationEnd(paginationEnd + 1);
-        setPaginationStart(paginationStart + 1);
-      }
-    }
-  };
-
-  const handlePrevPagination = oEvent => {
-    var newPageActive = pageActive - 1;
-
-    if (pageActive > 1) {
-      setPageActive(newPageActive);
-      loadCoupons(
-        showCount,
-        parseInt(showCount * (newPageActive - 1)),
-        "asc",
-        "_id"
-      );
-    }
-
-    if (paginationEnd >= 9) {
-      if (
-        pageActive >= Math.ceil(paginationEnd / 2) &&
-        paginationStart !== 1 &&
-        pageActive <= paginationCount - 4
-      ) {
-        setPaginationEnd(paginationEnd - 1);
-        setPaginationStart(paginationStart - 1);
-      }
-    }
-  };
-
-  const resetPagination = () => {
-    setPageActive(1);
-    setPaginationStart(1);
-    setPaginationEnd(10);
-    setPaginationCount(0);
-  };
-
-  const handleDelete = iCouponId => oEvent => {
-    oEvent.preventDefault();
-    if (window.confirm("Are you sure you want to delete this coupon?")) {
-      deleteCoupon(user._id, sToken, iCouponId).then(oData => {
-        if (oData.error) {
-          alert("Something went wrong.");
-        } else {
-          alert("Coupon Successfully Deleted!");
-          window.location.reload();
-        }
-      });
-    }
-  };
-
-  const handleShowChange = oEvent => {
-    var newShowCount = oEvent.target.value;
-    setShowCount(newShowCount);
-    initializePagination(count, newShowCount);
-  };
-
-  const handleChangeQuery = oEvent => {
-    if (oEvent.target.value !== "") {
-      searchCoupon(oEvent.target.value).then(oData => {
-        if (oData.error) {
-          console.log(oData.error);
-        } else {
-          setCouponData(oData.data);
-          setPaginationHide(true);
-        }
-      });
-    } else {
-      loadCoupons();
-      getCouponCount();
-      setPaginationHide(false);
-    }
-  };
-
-  const handleChangeFilter = oEvent => {
-    setSearchFilter(oEvent.target.value);
-  };
-
-  const handleSearchFilter = oEvent => {
-    if (searchFilter !== "All") {
-      searchCoupon(searchFilter).then(oData => {
-        if (oData.error) {
-          console.log(oData.error);
-        } else {
-          setCouponData(oData.data);
-          setPaginationHide(true);
-        }
-      });
-    } else {
-      loadCoupons();
-      getCouponCount();
-      setPaginationHide(false);
-    }
-  };
+  useEffect(() => {
+    loadCoupons();
+  }, []);
 
   const formatDate = dDate => {
     var monthNames = [
@@ -190,10 +49,156 @@ const Coupons = () => {
 
     return day + " " + monthNames[monthIndex] + " " + year;
   };
-  useEffect(() => {
+
+  const showDataTable = () => {
+    const oData = coupons;
+    const oColumns = [
+      {
+        name: "Coupon Name",
+        selector: "coupon_name",
+        sortable: true
+      },
+      {
+        name: "Coupon Code",
+        selector: "coupon_code",
+        sortable: true
+      },
+      {
+        name: "Discount Type",
+        selector: "coupon_type",
+        sortable: true
+      },
+      {
+        name: "Discount Value",
+        selector: "discount",
+        sortable: true
+      },
+      {
+        name: "Description",
+        selector: "description",
+        sortable: true
+      },
+      {
+        name: "Start Date",
+        selector: "start_date",
+        sortable: true,
+        format: oRow => formatDate(new Date(oRow.start_date))
+      },
+      {
+        name: "End Date",
+        selector: "end_date",
+        sortable: true,
+        format: oRow => formatDate(new Date(oRow.end_date))
+      },
+      {
+        name: "Used By",
+        selector: "used_by",
+        sortable: true
+      },
+      {
+        name: "Action",
+        cell: oRow => {
+          return (
+            <Fragment>
+              <Link to={`/admin/coupons/update/${oRow._id}`}>
+                Edit
+                <i className="ml-1 mr-2 fa fa-pen" />
+              </Link>
+              <a href="#" onClick={handleDelete(oRow._id)}>
+                Delete
+                <i className="ml-1 fa fa-trash" />
+              </a>
+            </Fragment>
+          );
+        },
+        sortable: true
+      }
+    ];
+    return (
+      <Fragment>
+        <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
+          <DataTable
+            columns={oColumns}
+            data={oData}
+            pagination={true}
+            striped
+          />
+        </div>
+      </Fragment>
+    );
+  };
+
+  const handleDelete = iCouponId => oEvent => {
+    oEvent.preventDefault();
+    if (window.confirm("Are you sure you want to delete this coupon?")) {
+      deleteCoupon(user._id, sToken, iCouponId).then(oData => {
+        if (oData.error) {
+          alert("Something went wrong.");
+        } else {
+          alert("Coupon Successfully Deleted!");
+          window.location.reload();
+        }
+      });
+    }
+  };
+
+  const handleSearchQueryChange = oEvent => {
+    var sQueryString = oEvent.target.value;
+    setQueryString(sQueryString);
+    if (sQueryString !== "") {
+      var aResult = filterSearch(sQueryString);
+      setCoupons(aResult);
+      return;
+    }
     loadCoupons();
-    getCouponCount();
-  }, []);
+  };
+
+  const filterSearch = sQueryString => {
+    var results = [];
+    for (var j = 0; j < allCoupons.length; j++) {
+      if (
+        allCoupons[j].coupon_name.indexOf(sQueryString) !== -1 ||
+        allCoupons[j].coupon_code.indexOf(sQueryString) !== -1 ||
+        allCoupons[j].description.indexOf(sQueryString) !== -1 ||
+        allCoupons[j].used_by.indexOf(sQueryString) !== -1
+      ) {
+        results.push(allCoupons[j]);
+      }
+    }
+
+    return results;
+  };
+
+  const filterSearchByType = () => {
+    var results = [];
+
+    if (couponType === "All") {
+      return allCoupons;
+    }
+
+    for (var j = 0; j < allCoupons.length; j++) {
+      if (allCoupons[j].coupon_type.indexOf(couponType) !== -1) {
+        results.push(allCoupons[j]);
+      }
+    }
+
+    return results;
+  };
+
+  const handleSearchClick = oEvent => {
+    console.log(coupons);
+  };
+
+  const handleCouponTypeChange = oEvent => {
+    var value = oEvent.target.value;
+    setCouponType(value);
+  };
+
+  const handleFilterClick = oEvent => {
+    var aResult = filterSearchByType();
+    setQueryString("");
+    setCoupons(aResult);
+  };
 
   const showFilters = () => {
     return (
@@ -211,10 +216,14 @@ const Coupons = () => {
                       placeholder="Search Coupon"
                       aria-label="Search"
                       aria-describedby="basic-addon2"
-                      onChange={handleChangeQuery}
+                      value={queryString}
+                      onChange={handleSearchQueryChange}
                     />
                     <div className="input-group-append">
-                      <span className="btn btn-primary">
+                      <span
+                        className="btn btn-primary"
+                        onClick={handleSearchClick}
+                      >
                         <i className="fas fa-search fa-sm" />
                       </span>
                     </div>
@@ -224,174 +233,15 @@ const Coupons = () => {
               <select
                 id="category"
                 className="btn btn-light border mr-2"
-                onChange={handleChangeFilter}
+                onChange={handleCouponTypeChange}
               >
-                <option value="All" selected>
-                  All Coupon Types
-                </option>
+                <option value="All">All Coupon Types</option>
                 <option value="Discount Rate">Discount Rate</option>
-                <option value="Fixed Price">Fixed Price</option>
+                <option value="Discount Value">Fixed Price</option>
               </select>
-              <button className="btn btn-primary" onClick={handleSearchFilter}>
+              <button className="btn btn-primary" onClick={handleFilterClick}>
                 Filter
               </button>
-            </div>
-          </div>
-        </div>
-      </Fragment>
-    );
-  };
-  const showCoupons = () => {
-    return (
-      <Fragment>
-        <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
-          <div className="card border-left-primary shadow h-100 py-2">
-            <div className="card-body">
-              <div
-                className={
-                  paginationHide
-                    ? "float-left mb-2 d-none"
-                    : "float-left mb-2 d-block"
-                }
-              >
-                <span>{count}</span> Total
-              </div>
-              <Link to="/admin/coupons/add">
-                <button
-                  className="btn btn-success float-right mb-2"
-                  onClick={handleSearchFilter}
-                >
-                  Add New Coupon
-                </button>
-              </Link>
-
-              <div
-                className={
-                  paginationHide
-                    ? "float-right mb-2 d-none"
-                    : "float-right mb-2 d-block"
-                }
-              >
-                <select
-                  className="btn btn-primary dropdown-toggle mr-2"
-                  onChange={handleShowChange}
-                >
-                  <option value="5"> Show 5 per page</option>
-                  <option value="10"> Show 10 per page</option>
-                  <option value="25"> Show 25 per page</option>
-                  <option value="50"> Show 50 per page</option>
-                </select>
-              </div>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Coupon Name
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Coupon Code
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Discount Type
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Discount Value
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Description
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      Start Date
-                    </th>
-                    <th scope="col" style={{ textAlign: "center" }}>
-                      End Date
-                    </th>
-                    <th scope="col" colSpan="2" style={{ textAlign: "center" }}>
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {oCouponData &&
-                    oCouponData.map((oCoupon, iIndex) => (
-                      <tr key={iIndex}>
-                        <td style={{ textAlign: "center" }}>
-                          {oCoupon.coupon_name}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {oCoupon.coupon_code}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {oCoupon.coupon_type}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {oCoupon.discount}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {oCoupon.description}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {formatDate(new Date(oCoupon.start_date))}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {formatDate(new Date(oCoupon.end_date))}
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          <Link to={`/admin/coupons/update/${oCoupon._id}`}>
-                            <i className="fas fa-pen fa-sm"></i>
-                          </Link>
-                        </td>
-
-                        <td style={{ textAlign: "center" }}>
-                          <a href="" onClick={handleDelete(oCoupon._id)}>
-                            <i className="fas fa-trash fa-sm "></i>
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              <div
-                className={
-                  paginationHide ? "text-center d-none" : "text-center d-block"
-                }
-                style={{ float: "right" }}
-              >
-                <nav aria-label="Page navigation example text-center">
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <button
-                        className="page-link"
-                        onClick={handlePrevPagination}
-                      >
-                        Previous
-                      </button>
-                    </li>
-                    {[...Array(paginationEnd - paginationStart + 1)].map(
-                      (e, i) => (
-                        <li
-                          className={
-                            i + paginationStart === pageActive
-                              ? "page-item active"
-                              : "page-item"
-                          }
-                          key={i}
-                        >
-                          <a className="page-link">{i + paginationStart}</a>
-                        </li>
-                      )
-                    )}
-                    <li className="page-item">
-                      <button
-                        className="page-link"
-                        onClick={handleNextPagination}
-                      >
-                        Next
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
             </div>
           </div>
         </div>
@@ -401,7 +251,7 @@ const Coupons = () => {
   return (
     <DashboardLayout name="Coupon Management" detail="All Coupons">
       {showFilters()}
-      {showCoupons()}
+      {showDataTable()}
     </DashboardLayout>
   );
 };

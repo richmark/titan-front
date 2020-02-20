@@ -43,21 +43,13 @@ export const checkCouponCode = sCouponCode => {
     .catch(err => console.log(err));
 };
 
-export const getAllCoupons = (
-  iLimit = 5,
-  iOffset = 0,
-  sOrder = "asc",
-  sSortBy = "_id"
-) => {
-  return fetch(
-    `${API_URL}/coupon?limit=${iLimit}&offset=${iOffset}&order=${sOrder}&sortBy=${sSortBy}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+export const getAllCoupons = () => {
+  return fetch(`${API_URL}/coupon`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
     }
-  )
+  })
     .then(response => {
       return response.json();
     })

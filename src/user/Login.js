@@ -50,7 +50,6 @@ const Login = () => {
     oValidator.message("email", values.email, "required");
     oValidator.message("password", values.password, "required");
     if (oValidator.allValid()) {
-      console.log("pass");
       sendSignin(values).then(oData => {
         if (oData.error) {
           setValues({ ...values, error: oData.error });
@@ -219,7 +218,6 @@ const Login = () => {
 
   const redirectUser = () => {
     if (redirectToReferrer) {
-      console.log(user.role);
       if (user && user.role === 1) {
         return <Redirect to="/admin/products" />;
       }

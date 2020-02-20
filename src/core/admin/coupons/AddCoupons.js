@@ -39,6 +39,14 @@ const AddCoupons = () => {
     error
   } = values;
 
+  useEffect(() => {
+    setValues({
+      ...values,
+      start_date: getDate(false),
+      end_date: getDate(true)
+    });
+  }, []);
+
   const redirectForbidden = () => {
     if (bRedirect === true) {
       return <Redirect to="/admin/coupons" />;
@@ -58,7 +66,7 @@ const AddCoupons = () => {
     return sResult;
   };
 
-  const getDate = (bEnd = false) => {
+  const getDate = bEnd => {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -266,7 +274,7 @@ const AddCoupons = () => {
                           id="validationDefaultUsername"
                           aria-describedby="inputGroupPrepend2"
                           onChange={handleChange("start_date")}
-                          value={getDate()}
+                          value={start_date}
                           required
                         />
                         <div className="input-group-append">
@@ -292,7 +300,7 @@ const AddCoupons = () => {
                           id="validationDefaultUsername"
                           aria-describedby="inputGroupPrepend2"
                           onChange={handleChange("end_date")}
-                          value={getDate(true)}
+                          value={end_date}
                           required
                         />
                         <div className="input-group-append">
