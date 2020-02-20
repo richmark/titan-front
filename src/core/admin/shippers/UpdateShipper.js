@@ -1,22 +1,26 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import { isAuthenticated } from '../../../auth/authUtil';
 import { getShipper, updateShipper } from './shippersApi';
 
 const UpdateShipper = ({ match }) => {
 
+    const [result, setResult] = useState(false);
     const {sToken, user} = isAuthenticated();
     const [values, setValues] = useState({
         shipper_name: '',
         contact_person: '',
         contact_number: '',
-        shipper_address: ''
+        shipper_address: '',
+        shipper_website: ''
     });
     const {
         shipper_name,
         contact_person,
         contact_number,
-        shipper_address
+        shipper_address,
+        shipper_website
     } = values;
 
     const handleChange = name => oEvent => {
@@ -40,6 +44,7 @@ const UpdateShipper = ({ match }) => {
                 console.log(oData.error);
             } else {
                 alert('Updated Successfully');
+                setResult(!result);
             }
         });
     }
@@ -47,6 +52,12 @@ const UpdateShipper = ({ match }) => {
     useEffect(() => {
         loadShipper();
     }, []);
+
+    const redirectPage = () => {
+        if (result === true) {
+            return <Redirect to="/admin/banner" />;
+        }
+    };
 
     const showUpdateShipper = () => {
         return (
@@ -116,6 +127,17 @@ const UpdateShipper = ({ match }) => {
                                     <textarea value={shipper_address} onChange={handleChange('shipper_address')} className='form-control w-100' />
                                 </div>
                             </div>
+                            <div className='form-group row'>
+                                <label
+                                    htmlFor='inputPassword'
+                                    className='col-sm-4 col-form-label'
+                                >
+                                    Shipper Website
+                                </label>
+                                <div className='col-sm'>
+                                    <textarea value={shipper_website} onChange={handleChange('shipper_website')} className='form-control w-100' />
+                                </div>
+                            </div>
                             <button onClick={submitShipper} className='btn btn-primary'>Update</button>
                         </div>
                     </div>
@@ -127,6 +149,7 @@ const UpdateShipper = ({ match }) => {
     return (
         <DashboardLayout name='Shipper Management' detail='Update Shipper'>
             {showUpdateShipper()}
+            {redirectPage()}
         </DashboardLayout>
     );
 };

@@ -59,3 +59,19 @@ export const updateShipper = (sId, sToken, shipperId, oData) => {
     })
     .catch(err => console.log(err));
 };
+
+export const deleteShipper = (sId, sToken, oShipper) => {
+    return fetch(`${API_URL}/shippers/delete/${sId}`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(oShipper)
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};

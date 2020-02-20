@@ -1,24 +1,28 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import DashboardLayout from '../DashboardLayout';
 import { isAuthenticated } from '../../../auth/authUtil';
-import { getAllShippers, createShipper } from './shippersApi';
+import { getAllShippers, createShipper, deleteShipper } from './shippersApi';
 import { Link } from 'react-router-dom';
 
 const Shippers = () => {
+    const [toggleAll, setToggleAll] = useState(false);
     const [result, setResult] = useState(false);
     const {sToken, user} = isAuthenticated();
     const [shippers, setShippers] = useState([]);
+    const [selectedShippers, setSelectedShippers] = useState([]);
     const [values, setValues] = useState({
         shipper_name: '',
         contact_person: '',
         contact_number: '',
-        shipper_address: ''
+        shipper_address: '',
+        shipper_website: ''
     });
     const {
         shipper_name,
         contact_person,
         contact_number,
-        shipper_address
+        shipper_address,
+        shipper_website
     } = values;
 
     const loadShippers = () => {
@@ -26,7 +30,8 @@ const Shippers = () => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                setShippers(oData.data);
+                var aNewObject = (oData.data).map(oItem => ({ ...oItem, checked: false }));
+                setShippers(aNewObject);
             }
         });
     }
@@ -41,7 +46,8 @@ const Shippers = () => {
                     shipper_name: '',
                     contact_person: '',
                     contact_number: '',
-                    shipper_address: ''
+                    shipper_address: '',
+                    shipper_website: ''
                 });
                 setResult(!result);
                 alert('Created Successfully');
@@ -57,6 +63,52 @@ const Shippers = () => {
         loadShippers();
     }, [result]);
     
+    const handleSelectToggle = oEvent => {
+        var sShipperId = oEvent.target.value;
+        var iIndexShipper = shippers.findIndex(oItem => oItem._id === sShipperId);
+        if (oEvent.target.checked) {
+            if (selectedShippers.includes(sShipperId) === false) {
+                selectedShippers.push(sShipperId);
+                setSelectedShippers(JSON.parse(JSON.stringify(selectedShippers)));
+                shippers[iIndexShipper].checked = true;
+                setShippers(JSON.parse(JSON.stringify(shippers)));
+            }
+            return;
+        }
+        var iIndex = selectedShippers.findIndex(oItem => oItem === sShipperId);
+        selectedShippers.splice(iIndex, 1);
+        setSelectedShippers(JSON.parse(JSON.stringify(selectedShippers)));
+        shippers[iIndexShipper].checked = false;
+        setShippers(JSON.parse(JSON.stringify(shippers)));
+    };
+
+    const handleSelectAllToggle = oEvent => {
+        setToggleAll(!toggleAll);
+        if (oEvent.target.checked) {
+            var aSelectedData = shippers.map(oItem => ({ ...oItem, checked: true }));
+            setShippers(JSON.parse(JSON.stringify(aSelectedData)));
+            var aSelectedIds = aSelectedData.map(oItem => oItem._id);
+            setSelectedShippers(aSelectedIds);
+            return;
+        }
+        var aSelectedData = shippers.map(oItem => ({ ...oItem, checked: false }));
+        setShippers(JSON.parse(JSON.stringify(aSelectedData)));
+        setSelectedShippers([]);
+    };
+
+    const submitDelete = () => {
+        if (window.confirm('Are you sure you want to delete?') === true) {
+            deleteShipper(user._id, sToken, selectedShippers).then(oData => {
+                if (oData.error) {
+                    console.log(oData);
+                } else {
+                    alert('Deleted Successfully');
+                    setResult(!result);
+                    setToggleAll(!toggleAll);
+                }
+            });
+        }
+    };
 
     const showShippers = () => {
         return (
@@ -126,6 +178,17 @@ const Shippers = () => {
                                     <textarea value={shipper_address} onChange={handleChange('shipper_address')} className='form-control w-100' />
                                 </div>
                             </div>
+                            <div className='form-group row'>
+                                <label
+                                    htmlFor='inputPassword'
+                                    className='col-sm-4 col-form-label'
+                                >
+                                    Shipper Website
+                                </label>
+                                <div className='col-sm'>
+                                    <textarea value={shipper_website} onChange={handleChange('shipper_website')} className='form-control w-100' />
+                                </div>
+                            </div>
                             <button onClick={submitShipper} className='btn btn-primary'>Add</button>
                         </div>
                     </div>
@@ -137,7 +200,7 @@ const Shippers = () => {
                                 <span>10</span> Items
                             </div>
                             <div className='float-right mb-2'>
-                                <button className='btn btn-danger'>
+                                <button onClick={submitDelete} className='btn btn-danger'>
                                     <i className='fa fa-trash' /> Delete
                                 </button>
                             </div>
@@ -145,19 +208,20 @@ const Shippers = () => {
                                 <thead>
                                     <tr>
                                         <th scope='col' style={{ width: '3%' }}>
-                                            <input type='checkbox' />
+                                            <input checked={toggleAll} type='checkbox' onChange={handleSelectAllToggle} />
                                         </th>
                                         <th scope='col'>Shipper Name</th>
                                         <th scope='col'>Contact Person</th>
                                         <th scope='col'>Telephone</th>
                                         <th scope='col'>Shipper Address</th>
+                                        <th scope='col'>Shipper Website</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {shippers.length > 0 && shippers.map((oData, iIndex) => (
                                         <tr key={iIndex}>
                                             <th scope='row'>
-                                                <input type='checkbox' />
+                                                <input type='checkbox' checked={oData.checked} value={oData._id} onChange={handleSelectToggle}/>
                                             </th>
                                             <td>
                                                 <Link to={`shippers/${oData._id}`}>
@@ -172,6 +236,13 @@ const Shippers = () => {
                                             </td>
                                             <td>
                                                 {oData.shipper_address}
+                                            </td>
+                                            <td style={{ width: '126px' }}>
+                                                <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '250px', overflow: 'hidden' }}>
+                                                    <a href={oData.shipper_website} target="_blank">
+                                                        {oData.shipper_website}
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
