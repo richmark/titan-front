@@ -8,6 +8,8 @@ import oMoment from "moment";
 import _ from 'lodash';
 
 const Banner = () => {
+    const [toggleAll, setToggleAll] = useState(false);
+
     const { sToken, user } = isAuthenticated();
 
     const [result, setResult] = useState(false);
@@ -93,6 +95,7 @@ const Banner = () => {
     };
 
     const handleSelectAllToggle = oEvent => {
+        setToggleAll(!toggleAll);
         if (oEvent.target.checked) {
             var aSelectedData = banners.map(oItem => ({ ...oItem, checked: true }));
             setBanners(JSON.parse(JSON.stringify(aSelectedData)));
@@ -106,14 +109,17 @@ const Banner = () => {
     };
 
     const submitDelete = () => {
-        deleteBanner(user._id, sToken, selectedBanners).then(oData => {
-            if (oData.error) {
-                console.log(oData);
-            } else {
-                alert('Deleted Successfully');
-                setResult(!result);
-            }
-        });
+        if (window.confirm('Are you sure you want to delete?') === true) {
+            deleteBanner(user._id, sToken, selectedBanners).then(oData => {
+                if (oData.error) {
+                    console.log(oData);
+                } else {
+                    alert('Deleted Successfully');
+                    setResult(!result);
+                    setToggleAll(!toggleAll);
+                }
+            });
+        }
     };
 
     const showAddBanner = () => {
@@ -145,7 +151,7 @@ const Banner = () => {
                             <table className="table table-bordered text-center">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style={{width: '3%'}}><input onClick={handleSelectAllToggle} type="checkbox" /></th>
+                                        <th scope="col" style={{width: '3%'}}><input checked={toggleAll} onChange={handleSelectAllToggle} type="checkbox" /></th>
                                         <th scope="col" style={{width: '10%'}}>Image</th>
                                         <th scope="col">Banner Link</th>
                                         <th scope="col">Visibility</th>
