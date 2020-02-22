@@ -55,7 +55,7 @@ const UpdateShipper = ({ match }) => {
 
     const redirectPage = () => {
         if (result === true) {
-            return <Redirect to="/admin/banner" />;
+            return <Redirect to="/admin/shippers" />;
         }
     };
 
@@ -121,10 +121,10 @@ const UpdateShipper = ({ match }) => {
                                     htmlFor='inputPassword'
                                     className='col-sm-4 col-form-label'
                                 >
-                                    Address
+                                    Shipper Website
                                 </label>
                                 <div className='col-sm'>
-                                    <textarea value={shipper_address} onChange={handleChange('shipper_address')} className='form-control w-100' />
+                                    <input value={shipper_website} onChange={handleChange('shipper_website')} className='form-control w-100' />
                                 </div>
                             </div>
                             <div className='form-group row'>
@@ -132,10 +132,10 @@ const UpdateShipper = ({ match }) => {
                                     htmlFor='inputPassword'
                                     className='col-sm-4 col-form-label'
                                 >
-                                    Shipper Website
+                                    Address
                                 </label>
                                 <div className='col-sm'>
-                                    <textarea value={shipper_website} onChange={handleChange('shipper_website')} className='form-control w-100' />
+                                    <textarea value={shipper_address} onChange={handleChange('shipper_address')} className='form-control w-100' />
                                 </div>
                             </div>
                             <button onClick={submitShipper} className='btn btn-primary'>Update</button>

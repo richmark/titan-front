@@ -272,7 +272,6 @@ const UpdateProduct = ({ match }) => {
                 onChange={handleChange("brand")}
                 id="brand"
                 className="btn btn-light w-100 border mb-2"
-                defaultValue={'Titan'}
               >
                 <option disabled defaultValue>
                   Select brand
