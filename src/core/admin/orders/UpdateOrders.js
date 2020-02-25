@@ -20,32 +20,41 @@ const Orders = ({ match }) => {
         tracking_number: ''
     });
     const { status, shipper_id, tracking_number } = values;
-    const loadOrder = () => {
-        getOrderById(user._id, sToken, match.params.orderId).then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else {
-              const oOrder = oData.data;
-              setOrder(oOrder);
-              setValues({
-                shipper_id: oOrder.shipper._id,
-                status: oOrder.status,
-                shipper_name: oOrder.shipper.shipper_name,
-                tracking_number: oOrder.tracking_number
-              });
-              loadShipper();
-            }
-        });
-    };
-
     const loadShipper = () => {
-        getAllShippers(user._id, sToken).then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else {
-              setShippers(oData.data);
+      getAllShippers(user._id, sToken).then(oData => {
+          if (oData.error) {
+              console.log(oData.error);
+          } else {
+            setShippers(oData.data);
+            loadOrder(oData.data);
+          }
+      });
+    };
+    const loadOrder = (oShippers) => {
+      getOrderById(user._id, sToken, match.params.orderId).then(oData => {
+          if (oData.error) {
+              console.log(oData.error);
+          } else {
+            const oOrder = oData.data;
+            setOrder(oOrder);
+            /**
+             * check shipper first
+             */
+            if (oOrder.shipper === undefined && oShippers.length > 0) {
+              const oDefaultShipper = oShippers.filter(oItem => oItem.shipper_name === 'Basic Shipper');
+              oOrder.shipper = {
+                _id: oDefaultShipper[0]._id,
+                shipper_name: oDefaultShipper[0].shipper_name,
+              };
             }
-        });
+            setValues({
+              shipper_id: oOrder.shipper._id,
+              shipper_name: oOrder.shipper.shipper_name,
+              status: oOrder.status,
+              tracking_number: oOrder.tracking_number
+            });
+          }
+      });
     };
 
     const getTotal = () => {
@@ -89,7 +98,7 @@ const Orders = ({ match }) => {
     };
 
     useEffect(() => {
-      loadOrder();
+      loadShipper();
     }, [result]);
 
     const getShipperSite = () => {
@@ -110,12 +119,13 @@ const Orders = ({ match }) => {
           <Fragment>
             <h5>Shipper Details</h5>
             <select
-                onChange={handleChange("shipper_id")}
-                id='category'
-                className='btn btn-light w-25 border mb-2'
+              value={shipper_id}
+              onChange={handleChange("shipper_id")}
+              id='category'
+              className='btn btn-light w-25 border mb-2'
             >
-                <option disabled defaultValue>
-                    Select a Shipper
+                <option disabled>
+                  Select Shipper
                 </option>
                 {
                     shippers &&
