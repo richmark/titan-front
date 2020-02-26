@@ -40,11 +40,11 @@ const Orders = ({ match }) => {
             /**
              * check shipper first
              */
-            if (oOrder.shipper === undefined && oShippers.length > 0) {
+            if (oOrder.shipper === null && oShippers.length > 0) {
               const oDefaultShipper = oShippers.filter(oItem => oItem.shipper_name === 'Basic Shipper');
               oOrder.shipper = {
-                _id: oDefaultShipper[0]._id,
-                shipper_name: oDefaultShipper[0].shipper_name,
+                _id: oDefaultShipper.length > 0 ? oDefaultShipper[0]._id : oShippers[0]._id,
+                shipper_name: oDefaultShipper.length > 0 ?  oDefaultShipper[0].shipper_name : oShippers[0].name,
               };
             }
             setValues({
@@ -202,7 +202,7 @@ const Orders = ({ match }) => {
               <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
                 <div className="card border-left-primary shadow h-100 py-2">
                   <div className="card-body">
-                    {shippers.count > 0 ? showProcessOrder() : (
+                    {shippers.length > 0 ? showProcessOrder() : (
                       <h5>No Shipper Available</h5>
                     )}
                   </div>
