@@ -383,6 +383,7 @@ const Layout = ({
                 }}
                 onChange={handleQueryChange}
                 onClick={handleSearchboxClick}
+                onKeyPress={handleEnterSearch}
               />
               <InputGroup.Append>
                 <Button
@@ -591,6 +592,13 @@ const Layout = ({
         </div>
       </Fragment>
     );
+  };
+
+  const handleEnterSearch = oEvent => {
+    oEvent.persist();
+    if (oEvent.key === 'Enter') {
+      return handleSearchClick();
+    }
   };
 
   return (
