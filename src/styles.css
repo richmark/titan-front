@@ -124,3 +124,31 @@ span {
   .carousel-control-next:hover {
     background-image: linear-gradient(to right, transparent , #00000070);
   }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tst-current {
+    padding-left: 1em; 
+    text-indent: -.7em;
+  }
+
+  .tst-current::before {
+    content: "• "  !important;
+    color: #fbad17 !important; /* or whatever color you prefer */
+  }
+
+  .tst-list {
+    padding-left: 1em; 
+    text-indent: -.7em;
+    color: lightgray;
+
+  }
+
+  .tst-list::before {
+    content: "• "  !important;
+    color: lightgray !important; /* or whatever color you prefer */
+  }
