@@ -40,7 +40,6 @@ const Login = () => {
   const { email, password, error, redirectToReferrer } = values;
 
   const sendSubmit = oEvent => {
-    oEvent.preventDefault();
     var oValidator = oValidatorLibrary();
     setMessage("");
     setDanger({
@@ -241,11 +240,18 @@ const Login = () => {
     }
   };
 
+  const doLoginEnter = oEvent => {
+    oEvent.persist();
+    if (oEvent.key === 'Enter') {
+      return sendSubmit();
+    }
+  };
+
   return (
     <Layout title="Login" description="Login here">
       {verifyToken()}
       {showVerificationMessage()}
-      <form>{bootstrapLogin()}</form>
+      <form onKeyPress={doLoginEnter}>{bootstrapLogin()}</form>
       {redirectUser()}
     </Layout>
   );
