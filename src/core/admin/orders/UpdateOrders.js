@@ -48,8 +48,8 @@ const Orders = ({ match }) => {
               };
             }
             setValues({
-              shipper_id: oOrder.shipper._id,
-              shipper_name: oOrder.shipper.shipper_name,
+              shipper_id: oOrder.shipper ? oOrder.shipper._id : '',
+              shipper_name: oOrder.shipper ? oOrder.shipper.shipper_name : '',
               status: oOrder.status,
               tracking_number: oOrder.tracking_number
             });
@@ -117,6 +117,18 @@ const Orders = ({ match }) => {
     const showProcessOrder = () => {
       return (
           <Fragment>
+            <h5>Order Status:
+              <select value={status} onChange={handleChange('status')} id='status' className='btn btn-light border ml-2 mr-2'>
+                  <option disabled defaultValue>
+                      Mark as
+                  </option>
+                  <option value='Not Processed'>Not Processed</option>
+                  <option value='Processing'>Processing</option>
+                  <option value='Shipped'>Shipped</option>
+                  <option value='Delivered'>Delivered</option>
+                  <option value='Cancelled'>Cancelled</option>
+              </select>
+            </h5>
             <h5>Shipper Details</h5>
             <select
               value={shipper_id}
@@ -137,7 +149,7 @@ const Orders = ({ match }) => {
                 }
             </select>
             <input onChange={handleChange("tracking_number")} value={tracking_number} type="text" className="form-control bg-light w-25 small mb-2" placeholder="Tracking Number" />
-            {shippers && getShipperSite()}
+            {getShipperSite()}
             <button onClick={submitOrder} className="btn btn-primary mt-5">
               Submit
             </button>
@@ -190,19 +202,9 @@ const Orders = ({ match }) => {
               <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
                 <div className="card border-left-primary shadow h-100 py-2">
                   <div className="card-body">
-                    <h5>Order Status:
-                      <select value={status} onChange={handleChange('status')} id='status' className='btn btn-light border ml-2 mr-2'>
-                          <option disabled defaultValue>
-                              Mark as
-                          </option>
-                          <option value='Not Processed'>Not Processed</option>
-                          <option value='Processing'>Processing</option>
-                          <option value='Shipped'>Shipped</option>
-                          <option value='Delivered'>Delivered</option>
-                          <option value='Cancelled'>Cancelled</option>
-                      </select>
-                    </h5>
-                    {showProcessOrder()}
+                    {shippers.count > 0 ? showProcessOrder() : (
+                      <h5>No Shipper Available</h5>
+                    )}
                   </div>
                 </div>
               </div>
