@@ -6,13 +6,13 @@ import { Redirect } from 'react-router-dom';
 import { getProduct } from '../core/admin/products/productsApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { getBraintreeClientToken, processPayment, initiatePaymayaCheckout } from '../core/client/checkoutApi';
-import { sendOrderData } from '../core/client/orderApi';
 import oQuery from 'query-string';
 import BasicFormInput from './format/BasicFormInput';
 import BasicAlert from './format/BasicAlert';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import { APP_URL } from '../config';
 import { checkCouponCode } from '../core/admin/coupons/couponsApi';
+import { getUserData } from '../core/client/userApi';
 
 
 const Checkout = ({location}) => {
@@ -49,13 +49,31 @@ const Checkout = ({location}) => {
     const [modalBilling, setModalBilling] = useState(false);
     const [modalShipping, setModalShipping] = useState(false);
 
+    // For Check Role
+    const [iRole, setRole] = useState(false);
+
     // Product Stock Adjustment
     var bOnlyOnce = false;
+
 
     const init = () => {
         var aCart = getCart();
         initializeCheckout(aCart);
     };
+
+    /**
+     * Function that validates the role of the user
+     * Hack-proof
+     */
+    const checkRole = () => {
+        getUserData(user._id, sToken).then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else {
+                setRole(oData.role);
+            }
+        });
+    }
 
     const initializeCheckout = (aCart) => {
         setProduct(aCart);
@@ -63,6 +81,7 @@ const Checkout = ({location}) => {
     }
 
     useEffect(() => {
+        checkRole();
         if (oBuyNow.sType !== 'buyNow') {
             init();
             return;
@@ -498,7 +517,7 @@ const Checkout = ({location}) => {
     }
 
     const showCoupon = () => {
-        return (
+        return (iRole !== 4) && (
             <InputGroup className="mb-2 mt-5" >
                 <FormControl
                     id="coupon_code"
