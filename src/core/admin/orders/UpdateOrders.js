@@ -40,7 +40,7 @@ const Orders = ({ match }) => {
             /**
              * check shipper first
              */
-            if (oOrder.shipper === null && oShippers.length > 0) {
+            if (oOrder.shipper === undefined && oShippers.length > 0) {
               const oDefaultShipper = oShippers.filter(oItem => oItem.shipper_name === 'Basic Shipper');
               oOrder.shipper = {
                 _id: oDefaultShipper.length > 0 ? oDefaultShipper[0]._id : oShippers[0]._id,
@@ -67,18 +67,24 @@ const Orders = ({ match }) => {
 
     const submitOrder = (oEvent) => {
       oEvent.preventDefault();
-      if (status === 'Not Processed') {
-        alert('Invalid order status');
-        return;
-      }
-      updateOrder(user._id, sToken, match.params.orderId, values).then(oData => {
-        if (oData.error) {
-            console.log(oData.error);
-        } else {
-          alert('Updated Successfully');
-          setResult(!result);
+      if (window.confirm('Are you sure you want to submit?') === true) {
+        if (status === 'Not Processed') {
+          alert('Invalid order status');
+          return;
         }
-      });
+        if (status === 'Shipped' && tracking_number.trim() === '') {
+          alert('Invalid shipper or tracking number');
+          return;
+        }
+        updateOrder(user._id, sToken, match.params.orderId, values).then(oData => {
+          if (oData.error) {
+              console.log(oData.error);
+          } else {
+            alert('Updated Successfully');
+            setResult(!result);
+          }
+        });
+      }
     };
 
     const handleChange = name => oEvent => {
