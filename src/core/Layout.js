@@ -119,7 +119,7 @@ const Layout = ({
               </span>
             </Col>
             <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
-              <span className="text-white">
+              <span id="top" className="text-white">
                 <i
                   className="fas fa-phone-alt"
                   style={{ color: "#ffc044" }}
@@ -174,7 +174,7 @@ const Layout = ({
             </span>
           </Col>
           <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
-            <span className="text-white">
+            <span id="top" className="text-white">
               <i className="fas fa-phone-alt" style={{ color: "#ffc044" }}></i>{" "}
               028-00000
             </span>
@@ -551,6 +551,11 @@ const Layout = ({
             <div className="float-right">
               <a href="/" style={{ color: "white" }}>
                 follow us<i className="ml-2 fab fa-facebook-square"></i>
+              </a>
+            </div>
+            <div className="mt-5">
+              <a href="#top" className="titan-link" style={{textDecoration: 'none'}}>
+                Back to top
               </a>
             </div>
           </Container>
