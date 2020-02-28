@@ -81,11 +81,13 @@ const HomePage = () => {
         if (bLoadButton === true) {
             return (
                 <Fragment>
-                    <Row>
-                        <Col className="text-center">
-                            <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
-                        </Col>
-                    </Row>
+                    <Container>
+                        <Row>
+                            <Col className="text-center">
+                                <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Fragment>
             );
         }
@@ -99,8 +101,8 @@ const HomePage = () => {
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard(aNewArrivals, setRun, 'New Arrivals')}
-            {ProductCard(aBestSellers, setRun, 'Best Sellers')}
+            {ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
+            {ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
             {ProductCard(aProducts, setRun)}
             {showLoadMoreButton()}
         </Layout>

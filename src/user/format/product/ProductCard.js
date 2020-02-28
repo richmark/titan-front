@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
-const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
+const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
     var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
-        sHeader = 'Result';
+        sHeader = 'RESULT';
     }
     const iCount = 1;
     
@@ -57,7 +57,8 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                     </Col>
                 </Row>
                 <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                <Row className=" mt-2">
+                {showRating()}
+                <Row className="">
                     <Col>
                         {showAddCartButton(oProduct, sName)}
                     </Col>
@@ -89,7 +90,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                 <Fragment>
                     <button className="default-button text-center" onClick={showAlertNoStock} style={oStyle}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
                 </Fragment>
@@ -99,7 +100,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                 <Fragment>
                     <button className="default-button  text-center" onClick={addToCart(oProduct)} style={oStyle}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
                 </Fragment>
@@ -109,6 +110,20 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
 
     const showAlertNoStock = () => {
         return alert('Product is out of stock.');
+    };
+
+    const showRating = () => {
+        return (
+            <Fragment>
+                <div className="mt-2" style={{marginLeft: '40px'}}>
+                    <span className='fa fa-star checked mr-2'></span>
+                    <span className='fa fa-star checked mr-2'></span>
+                    <span className='fa fa-star checked mr-2'></span>
+                    <span className='fa fa-star checked mr-2'></span>
+                    <span className='fa fa-star checked mr-2'></span>
+                </div>
+            </Fragment>
+        );
     };
 
     const showLayout = (aProducts) => {
@@ -137,7 +152,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
 
     return (
         <Container>
-<div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '40px', left: '23px', fontSize : '20px'}}>{sHeader}</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', letterSpacing: '7px'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    
