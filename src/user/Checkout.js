@@ -31,11 +31,10 @@ const Checkout = ({location}) => {
     // For Discount (Dynamic/Coupon-Wholesaler)
     const [iDiscount, setDiscount] = useState(0);
     const [sCouponCode, setCouponCode] = useState(false);
-    const [sMessage, setMessage] = useState('Coupon Discount Applied!');
     const [sLevel, setLevel] = useState(false);
     const [aLevel, setDiscountLevel] = useState(false);
-    const [iPriceLevel, setPriceLevel] = useState(false);
-
+    const [bStart, setStart] = useState(false);
+    
     // For Shipping and Billing Details Init
     var oDetail = false;
     if (user) {
@@ -95,7 +94,6 @@ const Checkout = ({location}) => {
                     populateDiscountLevel(oData.data);
                 }
             });
-            // sLevel && setMessage(`${sLevel} level discount applied!`);
         }
         setRole(iParam);
     }
@@ -205,7 +203,7 @@ const Checkout = ({location}) => {
             products: [],
             bBuyNow: bEnable
         }
-
+        sCouponCode === false && delete oOrder.coupon_code;
         aProduct.map((oProduct, iIndex) => {
             var oSingleProduct = {
                 id: oProduct._id,
@@ -361,19 +359,45 @@ const Checkout = ({location}) => {
     /**
      * Applies Level Discount
      */
-    const applyLevelDiscount = () => {
-        console.log(aLevel)
+    const applyLevelDiscount = (iData) => {
+        var oBronze = aLevel.Bronze;
+        var oSilver = aLevel.Silver;
+        var oGold = aLevel.Gold;
+        if (iData <= oBronze.threshold) {
+            sLevel !== false && alert('No discount applied');
+            disableDiscount();
+            setLevel(false);
+        } else if (iData > oBronze.threshold && iData < oSilver.threshold) {
+            runLevelDiscount(oBronze);
+        } else if (iData >= oSilver.threshold && iData < oGold.threshold) {
+            runLevelDiscount(oSilver);
+        } else if (iData >= oGold.threshold) {
+            runLevelDiscount(oGold);
+        }
+    }
+
+    /**
+     * Apply level discount logic
+     */
+    const runLevelDiscount = (oDiscount) => {
+        var sMessage = 'Level Discount Applied!';
+        sLevel !== oDiscount.level && alert(`${oDiscount.level} ${sMessage}`);
+        setLevel(oDiscount.level);
+        calculateDiscountRate(oDiscount.percentage);
     }
 
     const showTotal = () => {
         var oTotal = calculateTotal();
-        (iRole === 4 && aLevel) && applyLevelDiscount(oTotal.p);
+        if (iRole === 4 && aLevel && bStart === false) {
+            setStart(true);
+            applyLevelDiscount(oTotal.price);
+        }
         return (
             <div className="border rounded p-4 mt-2">
                 <Row>
                     <Col xs={4} md={4}>
                         <p className="font-weight-bold">Subtotal</p>
-                        {oTotal.discount > 0 && <p className="font-weight-bold">Discount</p>}
+                        {oTotal.discount > 0 && <p className="font-weight-bold">Discount {iRole === 4 && `(${sLevel})`}</p>}
                         <p className="font-weight-bold">Shipping Fee</p>
                         <p className="font-weight-bold">Total</p>
                     </Col>
@@ -605,15 +629,22 @@ const Checkout = ({location}) => {
         alert('Please input coupon code to apply');
     }
 
+    /**
+     * Updates price/discount
+     * Wholesaler only
+     */
+    useEffect(() => {
+        if (iRole === 4) {
+            var oTotal = calculateTotal();
+            applyLevelDiscount(oTotal.price);
+        }
+    }, [iRun]);
+
+
     const checkDiscount = () => {
-        if (iDiscount > 0) {
-            if (iRole === 4) {
-                var oTotal = calculateTotal();
-                console.log(oTotal);
-            } else {
-                alert('Please apply coupon again');
-                disableDiscount();
-            }   
+        if (iDiscount > 0 && iRole !== 4) {
+            alert('Please apply coupon again');
+            disableDiscount();
         }
     }
 
@@ -631,14 +662,14 @@ const Checkout = ({location}) => {
         }
     }
 
-    const calculateDiscountRate = (iValue) => {
+    const calculateDiscountRate = (iValue, sMessage = 'Coupon Discount Applied!') => {
         var oTotal = calculateTotal();
         var iCalculate = (iValue / 100) * oTotal.price;
-        alert(sMessage);
+        iRole !== 4 && alert(sMessage);
         setDiscount(iCalculate);
     }
 
-    const calculateDiscountValue = (iValue) => {
+    const calculateDiscountValue = (iValue, sMessage = 'Coupon Discount Applied!') => {
         alert(sMessage);
         setDiscount(iValue);
     }
