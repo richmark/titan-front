@@ -39,8 +39,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
         if (window.location.pathname.split('/')[1] === 'categories') {
             sStyle =  'pl-1';
         }
-
-        if ( sHeader === 'Result') {
+        if ( sHeader === 'RESULT') {
             sStyle =  'pl-2';
         }
         return (
@@ -128,7 +127,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
 
     const showLayout = (aProducts) => {
         var iSize = 3;
-        if (sHeader === 'Result') {
+        if (sHeader === 'RESULT') {
             iSize = 4;
         }
         return (

@@ -560,7 +560,7 @@ const AddProduct = () => {
       {showAddProductDetail()}
       {showSave()}
       {redirectForbidden()}
-      {redirectCategory()};
+      {redirectCategory()}
     </DashboardLayout>
   );
 };
