@@ -19,6 +19,9 @@ const HomePage = () => {
     const [bLoadButton, setLoadButton] = useState(true);
     const [iOffset, setOffset] = useState(0);
 
+    // All Average Rating With Visibility
+    const [aStar, setStar] = useState(false);
+
     const iLimit = parseInt(PRODUCT_LIMIT, 10);
 
     const init = () => {
@@ -101,9 +104,9 @@ const HomePage = () => {
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
-            {ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
-            {ProductCard(aProducts, setRun)}
+            {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
+            {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
+            {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
             {showLoadMoreButton()}
         </Layout>
     );

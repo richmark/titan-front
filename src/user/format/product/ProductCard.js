@@ -6,6 +6,7 @@ import { addItem, getTotalCount, getProductCount } from '../../../core/client/ca
 
 
 const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
+    console.log(aData);
     var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
         sHeader = 'RESULT';
