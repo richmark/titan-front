@@ -93,7 +93,7 @@ const Layout = ({
   };
 
   const getStyle = () => {
-    if (window.location.pathname === "/") {
+    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
       return {
         backgroundImage: `url(${IMAGE_API}/images/others/background.png)`
       };
@@ -102,7 +102,7 @@ const Layout = ({
   };
 
   const getFontColor = () => {
-    if (window.location.pathname === "/") {
+    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
       return {
         color: 'white',
         textDecoration: 'none'
