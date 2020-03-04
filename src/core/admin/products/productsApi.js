@@ -3,11 +3,11 @@ import { API_URL } from "../../../config";
 export const getAllProducts = (
   iLimit = 6,
   iOffset = 0,
-  sOrder = "asc",
+  iOrder = 1,
   sSortBy = "_id"
 ) => {
   return fetch(
-    `${API_URL}/products?limit=${iLimit}&offset=${iOffset}&order=${sOrder}&sortBy=${sSortBy}`,
+    `${API_URL}/products?limit=${iLimit}&offset=${iOffset}&order=${iOrder}&sortBy=${sSortBy}`,
     {
       method: "GET",
       headers: {

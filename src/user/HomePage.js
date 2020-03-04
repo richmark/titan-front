@@ -19,9 +19,6 @@ const HomePage = () => {
     const [bLoadButton, setLoadButton] = useState(true);
     const [iOffset, setOffset] = useState(0);
 
-    // All Average Rating With Visibility
-    const [aStar, setStar] = useState(false);
-
     const iLimit = parseInt(PRODUCT_LIMIT, 10);
 
     const init = () => {
@@ -53,13 +50,13 @@ const HomePage = () => {
     }
 
     const getNewArrivals = () => {
-        getAllProducts(4, 0, 'desc', 'createdAt').then(oData => {
+        getAllProducts(4, 0, -1, 'createdAt').then(oData => {
             runCallBack(oData, setNewArrivals);
         });
     }
 
     const getBestSellers = () => {
-        getAllProducts(4, 0, 'desc', 'sold').then(oData => {
+        getAllProducts(4, 0, -1, 'sold').then(oData => {
             runCallBack(oData, setBestSellers);
         });
     }
