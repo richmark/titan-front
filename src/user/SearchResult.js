@@ -11,9 +11,9 @@ import {
   Form
 } from "react-bootstrap";
 import {
-  searchProduct,
   getProductByCategoryAndName
 } from "../core/admin/products/productsApi";
+import { searchProduct } from "../core/client/productApi";
 import { getTotalCount } from "../core/client/cartHelpers";
 
 const SearchResult = ({ match }) => {
@@ -59,7 +59,7 @@ const SearchResult = ({ match }) => {
     for (var j = 0; j < aCheckedValues.length; j++) {
       for (var i = 0; i < searchedProducts.length; i++) {
         if (
-          searchedProducts[i].category._id === aCheckedValues[j] ||
+          searchedProducts[i].category[0]._id === aCheckedValues[j] ||
           searchedProducts[i].brand === aCheckedValues[j]
         ) {
           if (!checkContainsObject(results, searchedProducts[i])) {
@@ -88,7 +88,6 @@ const SearchResult = ({ match }) => {
         checkedArray.push(checkboxElements[i].value);
       }
     }
-
     return checkedArray;
   };
   const showCategorySideList = () => {

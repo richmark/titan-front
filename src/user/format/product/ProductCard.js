@@ -56,7 +56,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
                     </Col>
                 </Row>
                 <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                {showRating()}
+                {showRating(oProduct)}
                 <Row className="">
                     <Col>
                         {showAddCartButton(oProduct, sName)}
@@ -111,19 +111,38 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
         return alert('Product is out of stock.');
     };
 
-    const showRating = () => {
+    /**
+     * Shows Star Rating
+     */
+    const showRating = (oProduct) => {
+        const iRating = 5;
+        var iStar = 3;
+        var sCheck = 'checked';
+        var aItems = [];
+        if (oProduct.reviews && oProduct.reviews.length > 0) {
+            iStar = calculateAverageRate(oProduct.reviews);
+        }
+        for (var iLoop = 1; iLoop <= iRating; iLoop++) {
+            sCheck = (iLoop <= iStar) ? 'checked' : '';
+            aItems.push(<span key={iLoop} className={`fa fa-star mr-2 ${sCheck}`}></span>);
+        }
         return (
             <Fragment>
                 <div className="mt-2" style={{marginLeft: '40px'}}>
-                    <span className='fa fa-star checked mr-2'></span>
-                    <span className='fa fa-star checked mr-2'></span>
-                    <span className='fa fa-star checked mr-2'></span>
-                    <span className='fa fa-star checked mr-2'></span>
-                    <span className='fa fa-star checked mr-2'></span>
-                </div>
+                    {aItems}
+                </div>  
             </Fragment>
         );
     };
+
+    /**
+     * Calculates Average Rate
+     */
+    const calculateAverageRate = (aRate) => {
+        return Math.floor(aRate.reduce((iData, oAdd) => {
+            return iData + oAdd.rate
+        }, 0) / aRate.length);
+    }
 
     const showLayout = (aProducts) => {
         var iSize = 3;
