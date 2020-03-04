@@ -120,7 +120,7 @@ const Checkout = ({location}) => {
     }
 
     useEffect(() => {
-        checkRole();
+        user && checkRole();
         if (oBuyNow.sType !== 'buyNow') {
             init();
             return;

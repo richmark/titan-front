@@ -4,7 +4,7 @@ import CategoryCard from './format/category/CategoryCard';
 import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { getAllProducts } from '../core/admin/products/productsApi';
+import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
 
