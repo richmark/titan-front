@@ -41,7 +41,7 @@ export const getAllProducts = (
 };
 
 /**
- * Search Product Client Side
+ * Search Product for Client Side with Reviews
  */
 export const searchProduct = sQuery => {
     var aQuery = { query: sQuery };
@@ -56,4 +56,23 @@ export const searchProduct = sQuery => {
         return response.json();
       })
       .catch(err => console.log(err));
+};
+
+/**
+ * Get Products By Category for Client Side with Reviews
+ */
+export const getProductByCategory = (sId, skip, order) => {
+    return fetch(
+      `${API_URL}/products/client/category/${sId}?skip=${skip}&order=${order}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        }
+      }
+    )
+      .then(oResponse => {
+        return oResponse.json();
+      })
+      .catch(oError => console.log(oError));
 };
