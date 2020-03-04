@@ -1,18 +1,18 @@
 import { API_URL } from "../../../config";
 
 export const createBundle = (sId, sToken, oBundle) => {
-    return fetch(`${API_URL}/bundle/create/${sId}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${sToken}`
-      },
-      body: oBundle
+  return fetch(`${API_URL}/bundle/create/${sId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    },
+    body: oBundle
+  })
+    .then(response => {
+      return response.json();
     })
-      .then(response => {
-        return response.json();
-      })
-      .catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
 
 export const updateBundle = (sId, sToken, oBundle, sBundleId) => {
