@@ -68,6 +68,37 @@ const OrderDetails = ({match}) => {
         });            
     }
 
+    /**
+     * Maps order history in order details
+     */
+    const showOrderHistory = () => {
+        return (
+            <Container className="p-5">
+                <Card className="p-3">
+                    <ul>
+                        {oOrder.history.map((oHistory, iIndex) => {
+                            return (
+                                <Fragment key={iIndex}>
+                                    <li className="tst-current">[{oHistory.process_time}] - {oHistory.note} {oHistory.status === 'Shipped' ? showShippingLink() : ''}</li>
+                                </Fragment>
+                            );
+                        })} 
+                    </ul>
+                </Card>
+            </Container>
+        );
+    }
+
+    /**
+     * Show Shipper Link
+     * If order is "shipped" link of tracking website should be provided
+     */
+    const showShippingLink = () => {
+        return (
+            <a href={oOrder.shipper.shipper_website}  target='_blank'>(Tracking Website)</a>
+        );
+    }
+
     const showDetails = () => {
         return oOrder && (
             <Container>
@@ -119,18 +150,7 @@ const OrderDetails = ({match}) => {
                         </Row>
                     </Container>
                     <hr/>
-                    <Container className="p-5">
-                        <Card className="p-3">
-                            <ul>
-                                <li className="tst-current">02/10/2020 10:06 [Cainta Hub] Your order has been delivered.</li>
-                                <li className="tst-list">2/10/2020 06:11 [Cainta Hub]The order has been taken by the Courier</li>
-                                <li className="tst-list">02/08/2020 01:24 [Cainta Hub]Your parcel has arrived at destination hub</li>
-                                <li className="tst-list">02/07/2020 22:06 [Paranaque DC]Your parcel has been received by sorting center</li>
-                                <li className="tst-list">02/07/2020 16:27 [Paranaque DC]Your parcel has been picked up</li>
-                                <li className="tst-list">02/06/2020 13:58 Order pick-up request (SPX:PH20695240535X)</li>
-                            </ul>
-                        </Card>
-                    </Container>
+                    {showOrderHistory()}
                     <Container className="mt-2 mb-4">
                         <Table borderless responsive="sm" className="text-center">
                             <tbody style={{height: "100px"}}>
