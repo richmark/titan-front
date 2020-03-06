@@ -123,8 +123,11 @@ const Profile = ({match}) => {
     };
 
     const showDataTable = (bCount) => {
-
         const oData = aOrder;
+        oData.forEach( aElement => {
+            var oDate =  new Date(aElement['createdAt']);
+            aElement['createdAt'] = oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes())
+        });
         const oColumns = [
             {
                 name: 'Order Id',
