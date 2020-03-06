@@ -17,7 +17,7 @@ const Reviews = () => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                setReviewCount(oData.data[0].count);
+                setReviewCount(oData.data.length ? oData.data[0].count : 0);
                 loadReviews();
             }
         });
@@ -57,7 +57,7 @@ const Reviews = () => {
                             </div>
                         </div>
                         </div>
-                        <div className="float-left"><span>{review_count}</span> Items</div>
+                        <div className="float-left"><span>{review_count}</span> Item(s)</div>
                         <div className="float-right mb-2">
                             <button className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                         </div>

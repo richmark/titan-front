@@ -93,12 +93,22 @@ const Layout = ({
   };
 
   const getStyle = () => {
-    if (window.location.pathname === "/") {
+    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
       return {
         backgroundImage: `url(${IMAGE_API}/images/others/background.png)`
       };
     }
     return { backgroundColor: "white" };
+  };
+
+  const getFontColor = () => {
+    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
+      return {
+        color: 'white',
+        textDecoration: 'none'
+      };
+    }
+    return { color: "black", textDecoration: 'none' };
   };
 
   const showUserGuest = () => {
@@ -210,7 +220,7 @@ const Layout = ({
                 width: "24px",
                 display: "block",
                 cursor: "pointer",
-                paddingLeft: "28px"
+                paddingLeft: "25px"
               }}
             >
               Register
@@ -419,9 +429,10 @@ const Layout = ({
   };
   const showNavBarThird = () => {
     return (
-      <Nav activeKey="/home" className="container">
+      <Fragment>
+        <Nav activeKey="/home" className="container">
         <Nav.Item>
-          <Nav.Link style={{ textDecoration: "none", color: "black" }} href="/">
+          <Nav.Link style={getFontColor()} href="/">
             <span
               style={{
                 backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
@@ -435,13 +446,13 @@ const Layout = ({
                 marginRight: "30px"
               }}
             >
-              <strong>Home</strong>
+              <strong>HOME</strong>
             </span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link
-            style={{ textDecoration: "none", color: "black" }}
+            style={getFontColor()}
             href="/search/result"
           >
             <span
@@ -457,13 +468,13 @@ const Layout = ({
                 marginRight: "30px"
               }}
             >
-              <strong>Shop</strong>
+              <strong>SHOP</strong>
             </span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
           <Nav.Link
-            style={{ textDecoration: "none", color: "black" }}
+            style={getFontColor()}
             href={user && `/profile/${user._id}`}
           >
             <Row className="ml-1">
@@ -480,11 +491,37 @@ const Layout = ({
                   paddingLeft: "28px"
                 }}
               ></span>
-              <strong>Your Order</strong>
+              <strong>YOUR ORDER</strong>
+            </Row>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link
+            style={getFontColor()}
+            href={user && `/profile/${user._id}`}
+          >
+            <Row className="ml-1">
+              <span
+                style={{
+                  backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
+                  backgroundPosition: "6px 0px",
+                  backgroundSize: "18px",
+                  backgroundRepeat: "no-repeat",
+                  height: "22px",
+                  width: "24px",
+                  display: "block",
+                  cursor: "pointer",
+                  paddingLeft: "28px"
+                }}
+              ></span>
+              <strong>BUNDLE DEALS</strong>
             </Row>
           </Nav.Link>
         </Nav.Item>
       </Nav>
+        <div style={{ borderBottom: "8px solid #ffc044", backgroundColor: "black" }}>
+        </div>
+      </Fragment>
     );
   };
 

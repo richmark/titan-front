@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
-const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
+const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
     var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
-        sHeader = 'Result';
+        sHeader = 'RESULT';
     }
     const iCount = 1;
     
@@ -39,8 +39,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
         if (window.location.pathname.split('/')[1] === 'categories') {
             sStyle =  'pl-1';
         }
-
-        if ( sHeader === 'Result') {
+        if ( sHeader === 'RESULT') {
             sStyle =  'pl-2';
         }
         return (
@@ -57,7 +56,8 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                     </Col>
                 </Row>
                 <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                <Row className=" mt-2">
+                {showRating(oProduct)}
+                <Row className="">
                     <Col>
                         {showAddCartButton(oProduct, sName)}
                     </Col>
@@ -89,7 +89,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                 <Fragment>
                     <button className="default-button text-center" onClick={showAlertNoStock} style={oStyle}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
                 </Fragment>
@@ -99,7 +99,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
                 <Fragment>
                     <button className="default-button  text-center" onClick={addToCart(oProduct)} style={oStyle}>
                         <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{sName}</p>
+                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
                         <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
                     </button>
                 </Fragment>
@@ -111,9 +111,42 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
         return alert('Product is out of stock.');
     };
 
+    /**
+     * Shows Star Rating
+     */
+    const showRating = (oProduct) => {
+        const iRating = 5;
+        var iStar = 3;
+        var sCheck = 'checked';
+        var aItems = [];
+        if (oProduct.reviews && oProduct.reviews.length > 0) {
+            iStar = calculateAverageRate(oProduct.reviews);
+        }
+        for (var iLoop = 1; iLoop <= iRating; iLoop++) {
+            sCheck = (iLoop <= iStar) ? 'checked' : '';
+            aItems.push(<span key={iLoop} className={`fa fa-star mr-2 ${sCheck}`}></span>);
+        }
+        return (
+            <Fragment>
+                <div className="mt-2" style={{marginLeft: '40px'}}>
+                    {aItems}
+                </div>  
+            </Fragment>
+        );
+    };
+
+    /**
+     * Calculates Average Rate
+     */
+    const calculateAverageRate = (aRate) => {
+        return Math.floor(aRate.reduce((iData, oAdd) => {
+            return iData + oAdd.rate
+        }, 0) / aRate.length);
+    }
+
     const showLayout = (aProducts) => {
         var iSize = 3;
-        if (sHeader === 'Result') {
+        if (sHeader === 'RESULT') {
             iSize = 4;
         }
         return (
@@ -137,7 +170,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'Our Products') => {
 
     return (
         <Container>
-<div className="category-tab mb-5" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '40px', left: '23px', fontSize : '20px'}}>{sHeader}</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', letterSpacing: '7px'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    

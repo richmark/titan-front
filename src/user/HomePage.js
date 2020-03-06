@@ -4,7 +4,7 @@ import CategoryCard from './format/category/CategoryCard';
 import ProductCard from './format/product/ProductCard';
 import ProductBundleCarousel from './format/product/ProductBundleCarousel';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { getAllProducts } from '../core/admin/products/productsApi';
+import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
 
@@ -50,13 +50,13 @@ const HomePage = () => {
     }
 
     const getNewArrivals = () => {
-        getAllProducts(4, 0, 'desc', 'createdAt').then(oData => {
+        getAllProducts(4, 0, -1, 'createdAt').then(oData => {
             runCallBack(oData, setNewArrivals);
         });
     }
 
     const getBestSellers = () => {
-        getAllProducts(4, 0, 'desc', 'sold').then(oData => {
+        getAllProducts(4, 0, -1, 'sold').then(oData => {
             runCallBack(oData, setBestSellers);
         });
     }
@@ -81,11 +81,13 @@ const HomePage = () => {
         if (bLoadButton === true) {
             return (
                 <Fragment>
-                    <Row>
-                        <Col className="text-center">
-                            <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
-                        </Col>
-                    </Row>
+                    <Container>
+                        <Row>
+                            <Col className="text-center">
+                                <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Fragment>
             );
         }
@@ -99,9 +101,9 @@ const HomePage = () => {
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             {showCategoryLayout()}
-            {ProductCard(aNewArrivals, setRun, 'New Arrivals')}
-            {ProductCard(aBestSellers, setRun, 'Best Sellers')}
-            {ProductCard(aProducts, setRun)}
+            {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
+            {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
+            {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
             {showLoadMoreButton()}
         </Layout>
     );

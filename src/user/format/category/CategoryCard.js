@@ -23,7 +23,7 @@ const CategoryCard = (aData) => {
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}>{oCategories.name}</p>
+                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oCategories.name}</strong></p>
                             </button>
                         </Col>
                     </Row>
@@ -65,7 +65,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mb-5 mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '40px', left: '23px', fontSize : '20px'}}>Categories</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', letterSpacing: '7px'}}>CATEGORIES</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    

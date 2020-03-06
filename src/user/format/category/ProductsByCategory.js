@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Layout from '../../../core/Layout';
 import { Card, Container, Image, Col, Row } from 'react-bootstrap';
-import { getProductByCategory } from '../../../core/admin/products/productsApi';
+import { getProductByCategory } from '../../../core/client/productApi';
 import ProductCard from '../product/ProductCard';
 import { getTotalCount } from '../../../core/client/cartHelpers';
 
 const ProductsByCategory = ({ match }) => {
     const [iRun, setRun] = useState(getTotalCount());
-    const [order, setOrder] = useState('desc');
+    const [order, setOrder] = useState(-1);
     const [limit, setLimit] = useState(6);
     const [skip, setSkip] = useState(0);
     const [values, setValues]= useState({

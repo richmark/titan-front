@@ -17,7 +17,7 @@ span {
 }
 
 .checked {
-    color: #fbad17;
+    color: #fbad17 !important;
 }
 .titan-link {
     color: #fbad17;
@@ -151,4 +151,8 @@ span {
   .tst-list::before {
     content: "• "  !important;
     color: lightgray !important; /* or whatever color you prefer */
+  }
+
+  .fa-star {
+    color: #99948a;
   }
