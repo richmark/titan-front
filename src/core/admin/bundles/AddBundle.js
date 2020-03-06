@@ -15,8 +15,7 @@ const AddBundle = () => {
   const [bundles, setBundles] = useState({
     bundle_name: "",
     bundle_description: "",
-    bundle_thumbnail:
-      "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
+    bundle_thumbnail: "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
     discount_type: "fix",
     discount_value: 0,
     formData: "",
@@ -111,8 +110,8 @@ const AddBundle = () => {
     var iTotal = 0;
     selectedProducts.forEach(oElement => {
       iTotal += oElement.count
-        ? oElement.count * oElement.price
-        : oElement.price;
+        ? oElement.count * oElement.bundle_price
+        : oElement.bundle_price;
     });
     return iTotal;
   };
@@ -212,7 +211,7 @@ const AddBundle = () => {
 
   const resetBundle = () => {
     setSelectedProducts([]);
-    document.getElementById('image').value = '';
+    document.getElementById('bundle_thumbnail').value = '';
     document.getElementById('discount_type').value = 'fix';
     var oForm = new FormData();
     oForm.set('discount_type', 'fix');
@@ -284,10 +283,10 @@ const AddBundle = () => {
               </select>
               <select id="category" className="btn btn-light border mr-2">
                 <option value="null" disabled>
-                  Filter by stock
+                  Filter by bundle_stock
                 </option>
-                <option value="null">In stock</option>
-                <option value="null">Out of stock</option>
+                <option value="null">In bundle_stock</option>
+                <option value="null">Out of bundle_stock</option>
               </select>
               <button className="btn btn-primary">Filter</button>
               <div className="mt-5">
@@ -339,7 +338,7 @@ const AddBundle = () => {
                                 }}
                               />
                             </td>
-                            <td>{oProduct.product_name}</td>
+                            <td>{oProduct.bundle_name}</td>
                             <td>{oProduct.stock}</td>
                             <td>{oProduct.price}</td>
                             <td>{oProduct.category.name}</td>
@@ -505,7 +504,7 @@ const AddBundle = () => {
                       onChange={handleChange("bundle_thumbnail")}
                       type="file"
                       className="form-control-file"
-                      id="image"
+                      id="bundle_thumbnail"
                     />
                   </div>
                   <div className="border p-3 mb-4 mt-3">
@@ -581,7 +580,7 @@ const AddBundle = () => {
                                   }}
                                 />
                               </td>
-                              <td>{oProduct.product_name}</td>
+                              <td>{oProduct.bundle_name}</td>
                               <td>{oProduct.price}</td>
                               <td>
                                 <input
@@ -599,8 +598,8 @@ const AddBundle = () => {
                               </td>
                               {/* <td>
                                 {oProduct.count === undefined
-                                  ? oProduct.price
-                                  : oProduct.count * oProduct.price}
+                                  ? oProduct.bundle_price
+                                  : oProduct.count * oProduct.bundle_price}
                               </td> */}
                             </tr>
                           );
@@ -628,7 +627,7 @@ const AddBundle = () => {
                 <button onClick={submitBundle} className="btn btn-primary mr-2">
                   Save Bundle
                 </button>
-                <button className="btn btn-primary">View Bundle Details</button>
+                {/* <button className="btn btn-primary">View Bundle Details</button> */}
               </div>
             </div>
           </div>

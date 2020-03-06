@@ -58,3 +58,32 @@ export const getBundle = (sId, sToken, sBundleId) => {
   })
   .catch(err => console.log(err));
 };
+
+/**
+ * For public
+ */
+export const getBundleList = () => {
+  return fetch(`${API_URL}/bundles`, {
+      method: 'GET'
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+export const deleteBundle = (sId, sToken, oBundles) => {
+  return fetch(`${API_URL}/bundles/delete/${sId}`, {
+    method: 'DELETE',
+    headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${sToken}`,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(oBundles)
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
