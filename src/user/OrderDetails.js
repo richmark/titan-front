@@ -79,7 +79,7 @@ const OrderDetails = ({match}) => {
                         {oOrder.history.map((oHistory, iIndex) => {
                             return (
                                 <Fragment key={iIndex}>
-                                    <li className="tst-current">[{oHistory.process_time}] - {oHistory.note} {oHistory.status === 'Shipped' ? showShippingLink() : ''}</li>
+                                    <li className="tst-current">[{formatDate(oHistory.process_time)}] - {oHistory.note} {oHistory.status === 'Shipped' ? showShippingLink() : ''}</li>
                                 </Fragment>
                             );
                         })} 
@@ -108,7 +108,7 @@ const OrderDetails = ({match}) => {
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
                                <strong>Order No:</strong> <span>{oOrder._id}</span><br/>
-                               <strong>Date Ordered:</strong> <span>{oOrder.createdAt}</span>
+                               <strong>Date Ordered:</strong> <span>{formatDate(oOrder.createdAt)}</span>
                             </Container>
                         </Col>
                         <Col sm={{span: 6}}>
@@ -217,7 +217,12 @@ const OrderDetails = ({match}) => {
                 </Fragment>
             );
         }
-    } 
+    }
+
+    const formatDate = (sDate) => {
+        var oDate =  new Date(sDate);
+        return oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes());
+    }
     
 	return (
         <Layout>
