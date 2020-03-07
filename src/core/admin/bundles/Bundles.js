@@ -4,26 +4,76 @@ import DashboardLayout from '../DashboardLayout';
 import oMoment from 'moment';
 import { IMAGE_API } from "../../../config";
 import { isAuthenticated } from "../../../auth/authUtil";
-import { getAllBundles } from './bundlesApi';
+import { getAllBundles, deleteBundle } from './bundlesApi';
 
 const Bundles = () => {
-
+    const [toggleAll, setToggleAll] = useState(false);
+    const [result, setResult] = useState(false);
     const { sToken, user } = isAuthenticated();
     const [bundles, setBundles] = useState(false);
+    const [selectedBundles, setSelectedBundles] = useState([]);
 
     const loadBundles = () => {
         getAllBundles(user._id, sToken).then(oBundles => {
             if (oBundles.error) {
                 console.log(oBundles.error);
             } else {
-                setBundles(oBundles.data);
+                var aNewObject = (oBundles.data).map(oItem => ({ ...oItem, checked: false }));
+                setBundles(aNewObject);
             }
         });
     };
 
     useEffect(() => {
         loadBundles();
-    }, []);
+    }, [result]);
+
+    const submitDelete = () => {
+        if (window.confirm('Are you sure you want to delete?') === true) {
+            deleteBundle(user._id, sToken, selectedBundles).then(oData => {
+                if (oData.error) {
+                    console.log(oData);
+                } else {
+                    alert('Deleted Successfully');
+                    setResult(!result);
+                    setToggleAll(!toggleAll);
+                }
+            });
+        }
+    };
+
+    const handleSelectAllToggle = oEvent => {
+        setToggleAll(!toggleAll);
+        if (oEvent.target.checked) {
+            var aSelectedData = bundles.map(oItem => ({ ...oItem, checked: true }));
+            setBundles(JSON.parse(JSON.stringify(aSelectedData)));
+            var aSelectedIds = aSelectedData.map(oItem => oItem._id);
+            setSelectedBundles(aSelectedIds);
+            return;
+        }
+        var aSelectedData = bundles.map(oItem => ({ ...oItem, checked: false }));
+        setBundles(JSON.parse(JSON.stringify(aSelectedData)));
+        setSelectedBundles([]);
+    };
+
+    const handleSelectToggle = oEvent => {
+        var bundleId = oEvent.target.value;
+        var iIndexBanner = bundles.findIndex(oItem => oItem._id === bundleId);
+        if (oEvent.target.checked) {
+            if (selectedBundles.includes(bundleId) === false) {
+                selectedBundles.push(bundleId);
+                setSelectedBundles(JSON.parse(JSON.stringify(selectedBundles)));
+                bundles[iIndexBanner].checked = true;
+                setBundles(JSON.parse(JSON.stringify(bundles)));
+            }
+            return;
+        }
+        var iIndex = selectedBundles.findIndex(oItem => oItem === bundleId);
+        selectedBundles.splice(iIndex, 1);
+        setSelectedBundles(JSON.parse(JSON.stringify(selectedBundles)));
+        bundles[iIndexBanner].checked = false;
+        setBundles(JSON.parse(JSON.stringify(bundles)));
+    };
 
     const showBundles = () => {
         return (
@@ -77,10 +127,10 @@ const Bundles = () => {
                     <div className='card border-left-primary shadow h-100 py-2'>
                         <div className='card-body'>
                             <div className='float-left'>
-                                <span>10</span> Items
+                                <span></span> Items
                             </div>
                             <div className='float-right mb-2'>
-                                <button className='btn btn-danger'>
+                                <button onClick={submitDelete} className='btn btn-danger'>
                                     <i className='fa fa-trash' /> Delete
                                 </button>
                             </div>
@@ -88,7 +138,7 @@ const Bundles = () => {
                                 <thead>
                                     <tr>
                                         <th scope='col' style={{ width: '3%' }}>
-                                            <input type='checkbox' />
+                                            <input checked={toggleAll} type='checkbox' onChange={handleSelectAllToggle} />
                                         </th>
                                         <th scope='col'>Bundle Name</th>
                                         <th scope='col'>Discount Type</th>
@@ -101,7 +151,11 @@ const Bundles = () => {
                                         return (
                                             <tr key={iIndex}>
                                                 <th scope='row'>
-                                                    <input type='checkbox' />
+                                                    <input checked={oBundle.checked}
+                                                        type="checkbox"
+                                                        value={oBundle._id}
+                                                        onChange={handleSelectToggle}
+                                                    />
                                                 </th>
                                                 <td>
                                                     <Link to={`/admin/bundles/update/${oBundle._id}`}>

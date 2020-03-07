@@ -10,6 +10,7 @@ const Shippers = () => {
     const {sToken, user} = isAuthenticated();
     const [shippers, setShippers] = useState([]);
     const [selectedShippers, setSelectedShippers] = useState([]);
+
     const [values, setValues] = useState({
         shipper_name: '',
         contact_person: '',
@@ -17,6 +18,7 @@ const Shippers = () => {
         shipper_address: '',
         shipper_website: ''
     });
+
     const {
         shipper_name,
         contact_person,

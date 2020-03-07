@@ -15,11 +15,14 @@ const AddBundle = () => {
   const [bundles, setBundles] = useState({
     bundle_name: "",
     bundle_description: "",
-    bundle_thumbnail:
-      "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
-    discount_type: "",
-    discount_value: "",
-    formData: ""
+    bundle_thumbnail: "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
+    discount_type: "fix",
+    discount_value: 0,
+    formData: "",
+    bundle_display: "T",
+    bundle_sold_out: "F",
+    bundle_price: 0,
+    bundle_stock: 0
   });
 
   const {
@@ -28,7 +31,11 @@ const AddBundle = () => {
     bundle_thumbnail,
     discount_type,
     discount_value,
-    formData
+    formData,
+    bundle_display,
+    bundle_sold_out,
+    bundle_price,
+    bundle_stock
   } = bundles;
 
   useEffect(() => {
@@ -62,10 +69,13 @@ const AddBundle = () => {
         console.log(oProducts.error);
       } else {
         setProducts(oProducts.data);
+        var oForm = new FormData();
+        oForm.set('discount_type', 'fix');
+        oForm.set('bundle_display', 'T');
+        oForm.set('bundle_sold_out', 'F');
         setBundles({
           ...bundles,
-          formData: new FormData(),
-          discount_type: "fix"
+          formData: oForm
         });
       }
     });
@@ -100,8 +110,8 @@ const AddBundle = () => {
     var iTotal = 0;
     selectedProducts.forEach(oElement => {
       iTotal += oElement.count
-        ? oElement.count * oElement.price
-        : oElement.price;
+        ? oElement.count * oElement.bundle_price
+        : oElement.bundle_price;
     });
     return iTotal;
   };
@@ -149,6 +159,9 @@ const AddBundle = () => {
   };
 
   const handleChange = name => oEvent => {
+    if (['discount_value', 'bundle_price', 'bundle_stock'].includes(name) === true) { // remove leading zeroes
+      oEvent.target.value = parseInt(oEvent.target.value, 10);
+    }
     if (name !== "bundle_thumbnail") {
       const value = oEvent.target.value;
       formData.set(name, value);
@@ -198,19 +211,32 @@ const AddBundle = () => {
 
   const resetBundle = () => {
     setSelectedProducts([]);
-    document.getElementById("image").value = "";
-    document.getElementById("discount_type").value = "fix";
+    document.getElementById('bundle_thumbnail').value = '';
+    document.getElementById('discount_type').value = 'fix';
     var oForm = new FormData();
-    oForm.set("discount_type", "fix");
+    oForm.set('discount_type', 'fix');
+    oForm.set('bundle_display', 'T');
+    oForm.set('bundle_sold_out', 'F');
     setBundles({
-      bundle_name: "",
-      bundle_description: "",
-      bundle_thumbnail: "",
-      discount_type: "fix",
-      discount_value: "",
-      formData: oForm
+      bundle_name: '',
+      bundle_description: '',
+      bundle_thumbnail: 'https://ctt.trains.com/sitefiles/images/no-preview-available.png',
+      discount_type: 'fix',
+      discount_value: 0,
+      formData: oForm,
+      bundle_price: 0,
+      bundle_display: 'T',
+      bundle_sold_out: 'F',
+      bundle_stock: 0
     });
   };
+
+  const getComputation = () => {
+    if (bundle_price !== ''  && bundle_price !== undefined) {
+      return (discount_type === "fix") ? (bundle_price - discount_value) : bundle_price - (bundle_price * (discount_value / 100));
+    }
+    return 0;
+  }
 
   const showAddBundle = () => {
     return (
@@ -257,10 +283,10 @@ const AddBundle = () => {
               </select>
               <select id="category" className="btn btn-light border mr-2">
                 <option value="null" disabled>
-                  Filter by stock
+                  Filter by bundle_stock
                 </option>
-                <option value="null">In stock</option>
-                <option value="null">Out of stock</option>
+                <option value="null">In bundle_stock</option>
+                <option value="null">Out of bundle_stock</option>
               </select>
               <button className="btn btn-primary">Filter</button>
               <div className="mt-5">
@@ -312,7 +338,7 @@ const AddBundle = () => {
                                 }}
                               />
                             </td>
-                            <td>{oProduct.product_name}</td>
+                            <td>{oProduct.bundle_name}</td>
                             <td>{oProduct.stock}</td>
                             <td>{oProduct.price}</td>
                             <td>{oProduct.category.name}</td>
@@ -365,69 +391,120 @@ const AddBundle = () => {
               <div className="row">
                 <div className="col-sm-12 col-md-12 col-xl-12">
                   <div className="form-group row">
-                    <label
-                      htmlFor="inputPassword"
-                      className="col-sm-4 col-form-label"
-                    >
-                      Bundle Name
-                    </label>
-                    <div className="col-sm">
+                    <div className="col-sm-12">
                       <input
                         value={bundle_name}
                         type="text"
                         onChange={handleChange("bundle_name")}
                         className="form-control"
                         id="inputPassword"
-                        placeholder="Name"
+                        placeholder="Bundle Name"
                       />
                     </div>
-                    <div className="col-sm">
-                      <select
-                        defaultValue={"fix"}
-                        onChange={handleChange("discount_type")}
-                        id="discount_type"
-                        className="btn btn-light border mr-2"
-                      >
-                        <option value="default" disabled>
-                          Discount type
-                        </option>
-                        <option value="fix">Fix Value</option>
-                        <option value="percentage">Percentage</option>
-                      </select>
-                    </div>
+                  </div>
+                  <div className='form-group row'>
+                    <div className='col-sm-12'>
+                        <textarea
+                          placeholder='Description'
+                          value={bundle_description}
+                          onChange={handleChange("bundle_description")}
+                          className="form-control"
+                          id="exampleFormControlTextarea1"
+                        />
+                      </div>
                   </div>
                   <div className="form-group row">
                     <label
                       htmlFor="inputPassword"
-                      className="col-sm-4 col-form-label"
+                      className="pr-0 col-sm-2 col-form-label"
                     >
-                      Discount Value
+                      Stock
                     </label>
-                    <div className="col-sm">
+                    <div className="pl-0 col-sm-10">
                       <input
-                        value={discount_value}
-                        min={1}
-                        onChange={handleChange("discount_value")}
+                        value={bundle_stock}
                         type="number"
+                        onChange={handleChange("bundle_stock")}
                         className="form-control"
                         id="inputPassword"
-                        placeholder="Value"
                       />
                     </div>
                   </div>
-                  <textarea
-                    value={bundle_description}
-                    onChange={handleChange("bundle_description")}
-                    className="form-control"
-                    id="exampleFormControlTextarea1"
-                  />
+                  <div className="form-group row">
+                    <label
+                        htmlFor="inputPassword"
+                        className="pr-0 col-sm-2 col-form-label"
+                      >
+                        Price
+                      </label>
+                      <div className="pl-0 col-sm-10">
+                        <input
+                          value={bundle_price}
+                          min={1}
+                          onChange={handleChange("bundle_price")}
+                          type="number"
+                          className="form-control"
+                          id="inputPassword"
+                          placeholder="Price"
+                        />
+                      </div>
+                  </div>
+                  <div className="form-group row">
+                    <label
+                        htmlFor="inputPassword"
+                        className="col-sm-4 col-form-label"
+                      >
+                      Discount Type
+                    </label>
+                    <div className="pl-0 col-sm-8">
+                        <select
+                          value={discount_type}
+                          onChange={handleChange("discount_type")}
+                          id="discount_type"
+                          className="btn btn-light border"
+                        >
+                          <option value="default" disabled>
+                            Select Type
+                          </option>
+                          <option value="fix">Fix Value</option>
+                          <option value="percentage">Percentage</option>
+                        </select>
+                      </div>
+                  </div>
+                  <div className='form-group row'>
+                    <label
+                        htmlFor="inputPassword"
+                        className="col-sm-4 col-form-label"
+                      >
+                      Discount Value
+                    </label>
+                    <div className="pl-0 col-sm-8">
+                        <input
+                          value={discount_value}
+                          min={1}
+                          onChange={handleChange("discount_value")}
+                          type="number"
+                          className="form-control"
+                          id="inputPassword"
+                          placeholder="Discount Value"
+                        />
+                      </div>
+                  </div>
+                  {/* <div className='form-group row'>
+                    <label
+                        htmlFor="inputPassword"
+                        className="col-sm-12 col-form-label"
+                      >
+                      Computation: {getComputation()}
+                    </label>
+                  </div> */}
                   <div className="border p-3 mb-4 mt-3">
                     <h6>Image Upload</h6>
                     <input
                       onChange={handleChange("bundle_thumbnail")}
                       type="file"
                       className="form-control-file"
-                      id="image"
+                      id="bundle_thumbnail"
                     />
                   </div>
                   <div className="border p-3 mb-4 mt-3">
@@ -439,6 +516,31 @@ const AddBundle = () => {
                         maxWidth: '250px'
                       }}
                     />
+                  </div>
+                  <div className="border p-3 mt-2 mb-4">
+                    <h6>Product Display</h6>
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="inlineCheckbox1"
+                        onChange={handleChange("bundle_display")}
+                        value={bundle_display === "T" ? "F" : "T"}
+                        checked={bundle_display === "T" ? true : false}
+                      ></input>
+                      <label className="form-check-label">Display</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="inlineCheckbox2"
+                        onChange={handleChange("bundle_sold_out")}
+                        value={bundle_sold_out === "F" ? "T" : "F"}
+                        checked={bundle_sold_out === "F" ? false : true}
+                      ></input>
+                      <label className="form-check-label">Sold Out</label>
+                    </div>
                   </div>
                   <table className="table table-bordered">
                     <thead>
@@ -454,7 +556,7 @@ const AddBundle = () => {
                         <th scope="col">Product Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">Quantity</th>
-                        <th scope="col">Sub total</th>
+                        {/* <th scope="col">Sub total</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -478,7 +580,7 @@ const AddBundle = () => {
                                   }}
                                 />
                               </td>
-                              <td>{oProduct.product_name}</td>
+                              <td>{oProduct.bundle_name}</td>
                               <td>{oProduct.price}</td>
                               <td>
                                 <input
@@ -494,17 +596,17 @@ const AddBundle = () => {
                                   }}
                                 />
                               </td>
-                              <td>
+                              {/* <td>
                                 {oProduct.count === undefined
-                                  ? oProduct.price
-                                  : oProduct.count * oProduct.price}
-                              </td>
+                                  ? oProduct.bundle_price
+                                  : oProduct.count * oProduct.bundle_price}
+                              </td> */}
                             </tr>
                           );
                         })}
                     </tbody>
                   </table>
-                  <div className="float-right mb-2 w-100">
+                  {/* <div className="float-right mb-2 w-100">
                     <p>
                       Total:{" "}
                       <span className="float-right">
@@ -518,14 +620,14 @@ const AddBundle = () => {
                         {selectedProducts.length > 0 && getDiscountedPrice()}
                       </span>
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-sm-12 col-md-12 col-xl-12">
                 <button onClick={submitBundle} className="btn btn-primary mr-2">
                   Save Bundle
                 </button>
-                <button className="btn btn-primary">View Bundle Details</button>
+                {/* <button className="btn btn-primary">View Bundle Details</button> */}
               </div>
             </div>
           </div>

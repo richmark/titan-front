@@ -79,13 +79,13 @@ const ProductsByCategory = ({ match }) => {
                 return;
             }
         });
-    }   
+    }
 
     return (
         <Layout oGetCategory={getCategoryName} run={iRun}>
             {showProductsByCategory()}
         </Layout>
-    );    
+    );
 }
 
 export default ProductsByCategory;

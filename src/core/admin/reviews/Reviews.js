@@ -28,6 +28,7 @@ const Reviews = () => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
+                console.log(oData);
                 setReviews(oData.data);
             }
         });

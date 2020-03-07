@@ -498,7 +498,7 @@ const Layout = ({
         <Nav.Item>
           <Nav.Link
             style={getFontColor()}
-            href={user && `/profile/${user._id}`}
+            href={user && `/bundles`}
           >
             <Row className="ml-1">
               <span

@@ -1,18 +1,18 @@
 import { API_URL } from "../../../config";
 
 export const createBundle = (sId, sToken, oBundle) => {
-    return fetch(`${API_URL}/bundle/create/${sId}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${sToken}`
-      },
-      body: oBundle
+  return fetch(`${API_URL}/bundle/create/${sId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${sToken}`
+    },
+    body: oBundle
+  })
+    .then(response => {
+      return response.json();
     })
-      .then(response => {
-        return response.json();
-      })
-      .catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
 
 export const updateBundle = (sId, sToken, oBundle, sBundleId) => {
@@ -52,6 +52,45 @@ export const getBundle = (sId, sToken, sBundleId) => {
           Accept: 'application/json',
           Authorization: `Bearer ${sToken}`
       }
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+/**
+ * For public
+ */
+export const getBundleList = () => {
+  return fetch(`${API_URL}/bundles/client`, {
+      method: 'GET'
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+export const deleteBundle = (sId, sToken, oBundles) => {
+  return fetch(`${API_URL}/bundles/delete/${sId}`, {
+    method: 'DELETE',
+    headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${sToken}`,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(oBundles)
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+export const getBundleById = (sBundleId) => {
+  return fetch(`${API_URL}/bundles/client/${sBundleId}`, {
+      method: 'GET',
   })
   .then(response => {
       return response.json();
