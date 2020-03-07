@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 const BundleCard = (aData) => {
 
     const showCardBase = (oBundles) => {
-        console.log(oBundles);
         var sImage = (oBundles.bundle_thumbnail === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundles.bundle_thumbnail;
         return (
             <Link to={`bundles/${oBundles._id}`}>
@@ -34,14 +33,12 @@ const BundleCard = (aData) => {
     };
 
     const showLayout = (aBundles) => {
-        console.log(aBundles);
         return (
             <Container>
                 <Row className="mt-2 ml-3 mr-2">
                     <Col sm={{offset:0, span: 12}}>
                         <Row className="mb-2">
                             {aBundles.data.map((oBundles, iIndex) => {
-                                console.log(oBundles);
                                 return (
                                     <Col sm={3} key={iIndex} className="pl-0">
                                         {showCardBase(oBundles)}
