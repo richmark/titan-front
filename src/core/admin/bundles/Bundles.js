@@ -159,7 +159,7 @@ const Bundles = () => {
                                                 </th>
                                                 <td>
                                                     <Link to={`/admin/bundles/update/${oBundle._id}`}>
-                                                        {oBundle.product_name}
+                                                        {oBundle.bundle_name}
                                                     </Link>
                                                 </td>
                                                 <td>{oBundle.discount_type}</td>

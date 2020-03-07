@@ -39,12 +39,13 @@ import SearchResult from "./user/SearchResult";
 import CategoryList from "./user/CategoryList";
 import Banner from "./core/admin/banner/Banner";
 import UpdateBanner from './core/admin/banner/UpdateBanner';
-import BundleDetails from "./user/BundleDetails";
+import BundleDetails from "./user/format/bundle/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
 import Subadmins from "./core/admin/subadmins/SubAdmins";
 import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
+import BundleDeals from './user/format/bundle/BundleDeals';
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -94,7 +95,8 @@ const Routes = () => {
 
       <Route path="/search/result" exact component={SearchResult} />
       <Route path="/categories/list/show" exact component={CategoryList} />
-      <Route path="/bundle" exact component={BundleDetails} />
+      <Route path="/bundles" exact component={BundleDeals} />
+      <Route path="/bundles/:bundleId" exact component={BundleDetails} />
       <Route path="/about-us" exact component={AboutUs} />
       <Route path="/contact-us" exact component={ContactUs} />
       {/* Private Routes */}

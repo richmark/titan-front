@@ -63,7 +63,7 @@ export const getBundle = (sId, sToken, sBundleId) => {
  * For public
  */
 export const getBundleList = () => {
-  return fetch(`${API_URL}/bundles`, {
+  return fetch(`${API_URL}/bundles/client`, {
       method: 'GET'
   })
   .then(response => {
@@ -81,6 +81,16 @@ export const deleteBundle = (sId, sToken, oBundles) => {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify(oBundles)
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+export const getBundleById = (sBundleId) => {
+  return fetch(`${API_URL}/bundles/client/${sBundleId}`, {
+      method: 'GET',
   })
   .then(response => {
       return response.json();
