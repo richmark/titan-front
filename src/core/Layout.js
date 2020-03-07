@@ -503,7 +503,7 @@ const Layout = ({
             <Row className="ml-1">
               <span
                 style={{
-                  backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
+                  backgroundImage: `url(${IMAGE_API}/images/others/bundle.png)`,
                   backgroundPosition: "6px 0px",
                   backgroundSize: "18px",
                   backgroundRepeat: "no-repeat",

@@ -66,7 +66,6 @@ const Signup = ({ match }) => {
     };
 
     const clickSubmit = oEvent => {
-        oEvent.preventDefault();
         const sDanger = 'border-danger';
         var sMessage = '';
         const oDanger = {};
@@ -326,7 +325,7 @@ const Signup = ({ match }) => {
             <div className='container text-center'>
                 <div className='row'>
                     <div className='col-sm'></div>
-                    <div className='col-sm-6 border m-5 p-5 rounded'  style={{backgroundColor: '#ffc044'}}>
+                    <div className='col-sm-6 border m-5 p-5 rounded'  style={{backgroundColor: '#ffc044'}} onKeyPress={doLoginEnter}>
                         {showCommonForm()}
                         {showConditionalForm()}
                         {/* <button
@@ -380,6 +379,13 @@ const Signup = ({ match }) => {
                 return <Redirect to='/admin/dashboard' />;
             }
             return <Redirect to='/' />;
+        }
+    };
+
+    const doLoginEnter = oEvent => {
+        oEvent.persist();
+        if (oEvent.key === 'Enter') {
+          return clickSubmit();
         }
     };
 
