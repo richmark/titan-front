@@ -211,7 +211,7 @@ const BundleDetails = ({match}) => {
   }
 
   const showDetails = () => {
-    if (products.length > 0) {
+    if (products.length > 0 && products.length === 5) {
       return (
         <Fragment>
           <Container className="border border-black rounded p-5 mt-4">
@@ -219,16 +219,44 @@ const BundleDetails = ({match}) => {
               <Row className="mt-3 text-center">
                 {products.map((oItem, iKey) => {
                   return (
-                    <Col key={iKey} >
+                    <Col key={iKey}>
                       <a href={`/product/details/${oItem.product._id}`}>
                         <Image
                           className="border mx-auto"
                           src={`${IMAGE_API}/images/products/${oItem.product.image}`}
                           rounded
-                          width="100%"
+                          width="150px"
                           height="150px"
                         />
                         <p>{oItem.product.product_name}</p>
+                      </a>
+                    </Col>
+                  );
+                })}
+              </Row>
+          </Container>
+        </Fragment>
+      );
+    }
+
+    if (products.length > 0 && products.length < 5) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+              <h5>Bundled Items</h5>
+              <Row className="mt-3 text-center">
+                {products.map((oItem, iKey) => {
+                  return (
+                    <Col key={iKey} sm={3}>
+                      <a href={`/product/details/${oItem.product._id}`}>
+                        <Image
+                          className="border mx-auto"
+                          src={`${IMAGE_API}/images/products/${oItem.product.image}`}
+                          rounded
+                          width="200px"
+                          height="200px"
+                        />
+                        <p>Product Name</p>
                       </a>
                     </Col>
                   );
