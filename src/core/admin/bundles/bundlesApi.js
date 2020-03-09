@@ -16,7 +16,6 @@ export const createBundle = (sId, sToken, oBundle) => {
 };
 
 export const updateBundle = (sId, sToken, oBundle, sBundleId) => {
-  // console.log(sId, sToken, oBundle, sBundleId);
   return fetch(`${API_URL}/bundle/update/${sId}/${sBundleId}`, {
     method: "PUT",
     headers: {
@@ -64,6 +63,17 @@ export const getBundle = (sId, sToken, sBundleId) => {
  */
 export const getBundleList = () => {
   return fetch(`${API_URL}/bundles/client`, {
+      method: 'GET'
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
+
+export const getRelatedBundle = (sId) => {
+  console.log(sId);
+  return fetch(`${API_URL}/bundles/client/related/${sId}`, {
       method: 'GET'
   })
   .then(response => {
