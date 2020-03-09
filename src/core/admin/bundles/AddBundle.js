@@ -292,7 +292,6 @@ const AddBundle = () => {
                         Thumbnail
                       </th>
                       <th scope="col">Product Name</th>
-                      <th scope="col">Stock</th>
                       <th scope="col">Price</th>
                       <th scope="col">Category</th>
                       <th scope="col">Date Created</th>
@@ -321,7 +320,6 @@ const AddBundle = () => {
                               />
                             </td>
                             <td>{oProduct.product_name}</td>
-                            <td>{oProduct.stock}</td>
                             <td>{oProduct.price}</td>
                             <td>{oProduct.category.name}</td>
                             <td>
@@ -430,6 +428,15 @@ const AddBundle = () => {
                         placeholder="Price"
                       />
                     </div>
+                  </div>
+                  <div className="border p-3 mb-4 mt-3">
+                    <h6>Image Upload</h6>
+                    <input
+                      onChange={handleChange("bundle_thumbnail")}
+                      type="file"
+                      className="form-control-file"
+                      id="bundle_thumbnail"
+                    />
                   </div>
                   <div className="border p-3 mb-4 mt-3">
                     <img
