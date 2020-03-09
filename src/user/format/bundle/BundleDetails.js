@@ -253,8 +253,8 @@ const BundleDetails = ({match}) => {
                           className="border mx-auto"
                           src={`${IMAGE_API}/images/products/${oItem.product.image}`}
                           rounded
-                          width="100%"
-                          height="150px"
+                          width="150px"
+                          height="auto"
                         />
                         <p>Product Name</p>
                       </a>
