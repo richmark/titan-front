@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import Layout from "../../../core/Layout";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Row, Col, Image, Form, Button, Card } from "react-bootstrap";
-import { getBundleById, getBundleList } from "../../../core/admin/bundles/bundlesApi";
+import { getBundleById, getRelatedBundle } from "../../../core/admin/bundles/bundlesApi";
 import { IMAGE_API } from "../../../config";
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers';
 
@@ -48,7 +48,7 @@ const BundleDetails = ({match}) => {
   const [bRedirect, setRedirect] = useState(false);
 
   const getListBundles = () => {
-    getBundleList().then(oData => {
+    getRelatedBundle(_id).then(oData => {
       if (oData.error) {
         console.log(oData.error);
       } else {
@@ -228,7 +228,7 @@ const BundleDetails = ({match}) => {
                           width="150px"
                           height="150px"
                         />
-                        <p>Product Name</p>
+                        <p>{oItem.product.product_name}</p>
                       </a>
                     </Col>
                   );
