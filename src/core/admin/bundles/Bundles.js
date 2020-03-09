@@ -141,8 +141,8 @@ const Bundles = () => {
                                             <input checked={toggleAll} type='checkbox' onChange={handleSelectAllToggle} />
                                         </th>
                                         <th scope='col'>Bundle Name</th>
-                                        <th scope='col'>Discount Type</th>
-                                        <th scope='col'>Discount Value</th>
+                                        <th scope='col'>Bundle Stock</th>
+                                        <th scope='col'>Bundle Price</th>
                                         <th scope='col'>Date Created</th>
                                     </tr>
                                 </thead>
@@ -162,8 +162,8 @@ const Bundles = () => {
                                                         {oBundle.bundle_name}
                                                     </Link>
                                                 </td>
-                                                <td>{oBundle.discount_type}</td>
-                                                <td>{oBundle.discount_value}</td>
+                                                <td>{oBundle.bundle_stock}</td>
+                                                <td>{oBundle.bundle_price}</td>
                                                 <td>{oMoment(oBundle.createdAt).format('DD-MM-YYYY')}</td>
                                             </tr>
                                         )
