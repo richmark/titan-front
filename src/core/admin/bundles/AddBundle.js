@@ -227,60 +227,9 @@ const AddBundle = () => {
         <div className="col-md-7 col-sm-7 col-xl-7 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <h4>Search and filter</h4>
-              <div className="form-group row">
-                <label
-                  htmlFor="product-name"
-                  className="col-sm-2 col-form-label"
-                >
-                  Bundle Name
-                </label>
-                <div className="col-sm-5">
-                  <div className="input-group">
-                    <input
-                      onChange={handleChange("product_name")}
-                      type="text"
-                      className="form-control bg-light border-0 small"
-                      placeholder="Search"
-                      aria-label="Search"
-                      aria-describedby="basic-addon2"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-primary" type="button">
-                        <i className="fas fa-search fa-sm" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <select id="category" className="btn btn-light border mr-2">
-                <option disabled defaultValue>
-                  No category
-                </option>
-                {categories &&
-                  categories.map((oCategory, iIndex) => (
-                    <option key={iIndex} value={oCategory._id}>
-                      {oCategory.name}
-                    </option>
-                  ))}
-              </select>
-              <select id="category" className="btn btn-light border mr-2">
-                <option value="null" disabled>
-                  Filter by stock
-                </option>
-                <option value="null">In stock</option>
-                <option value="null">Out of stock</option>
-              </select>
-              <button className="btn btn-primary">Filter</button>
               <div className="mt-5">
                 <div className="float-left">
                   <span>10</span> Items
-                </div>
-                <div className="float-right mb-2">
-                  <button onClick={resetBundle} className="btn btn-primary">
-                    {" "}
-                    Reset Bundle
-                  </button>
                 </div>
                 <table className="table table-bordered">
                   <thead>
@@ -486,7 +435,6 @@ const AddBundle = () => {
                         </th>
                         <th scope="col">Product Name</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -512,20 +460,6 @@ const AddBundle = () => {
                               </td>
                               <td>{oProduct.product_name}</td>
                               <td>{oProduct.price}</td>
-                              <td>
-                                <input
-                                  min="1"
-                                  value={oProduct.count ? oProduct.count : 1}
-                                  onChange={handleProductCount(oProduct._id)}
-                                  type="number"
-                                  className="form-control bg-light border-0 small"
-                                  placeholder="Qty"
-                                  style={{
-                                    paddingRight: "6px",
-                                    width: "70px"
-                                  }}
-                                />
-                              </td>
                             </tr>
                           );
                         })}
