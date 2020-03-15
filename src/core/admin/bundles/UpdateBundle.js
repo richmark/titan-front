@@ -10,7 +10,6 @@ import oMoment from "moment";
 const UpdateBundle = ({ match }) => {
   const [products, setProducts] = useState(false);
   const { sToken, user } = isAuthenticated();
-  const [cancel, setCancel] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [bundles, setBundles] = useState({
     _id: "",
@@ -166,46 +165,6 @@ const UpdateBundle = ({ match }) => {
     return iTotal;
   };
 
-  const getDiscountedPrice = () => {
-    if (discount_type && discount_value) {
-      var iTotal = getTotalPrice();
-      return discount_type === "fix"
-        ? (iTotal -= discount_value)
-        : iTotal - iTotal * (discount_value / 100);
-    }
-    return 0;
-  };
-
-  const resetBundle = () => {
-    setSelectedProducts([]);
-    document.getElementById("bundle_thumbnail").value = "";
-    document.getElementById("discount_type").value = "fix";
-    var oForm = new FormData();
-    oForm.set("discount_type", "fix");
-    setBundles({
-      product_name: "",
-      bundle_description: "",
-      bundle_thumbnail:
-        "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
-      discount_type: "fix",
-      discount_value: "",
-      formData: oForm
-    });
-  };
-
-  const cancelUpdate = oEvent => {
-    oEvent.preventDefault();
-    if (window.confirm("Are you sure you want to cancel?") === true) {
-      setCancel(true);
-    }
-  };
-
-  const redirectPage = () => {
-    if (cancel === true) {
-      return <Redirect to="/admin/bundles" />;
-    }
-  };
-
   const isProductSelected = sProductId => {
     let oData = selectedProducts.find(oProduct => oProduct._id === sProductId);
     return oData === undefined ? false : true;
@@ -254,57 +213,9 @@ const UpdateBundle = ({ match }) => {
         <div className="col-md-7 col-sm-7 col-xl-7 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <h4>Search and filter</h4>
-              <div className="form-group row">
-                <label
-                  htmlFor="product-name"
-                  className="col-sm-2 col-form-label"
-                >
-                  Bundle Name
-                </label>
-                <div className="col-sm-5">
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      className="form-control bg-light border-0 small"
-                      placeholder="Search"
-                      aria-label="Search"
-                      aria-describedby="basic-addon2"
-                    />
-                    <div className="input-group-append">
-                      <button className="btn btn-primary" type="button">
-                        <i className="fas fa-search fa-sm" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <select id="category" className="btn btn-light border mr-2">
-                <option value="null" disabled>
-                  Select a Category
-                </option>
-              </select>
-              <select id="category" className="btn btn-light border mr-2">
-                <option value="null" disabled>
-                  Filter by bundle_stock
-                </option>
-                <option value="null">In bundle_stock</option>
-                <option value="null">Out of bundle_stock</option>
-              </select>
-              <button className="btn btn-primary">Filter</button>
               <div className="mt-5">
                 <div className="float-left">
                   <span>10</span> Items
-                </div>
-                <div className="float-right mb-2">
-                  <button onClick={cancelUpdate} className="btn btn-danger">
-                    {" "}
-                    Cancel
-                  </button>
-                  <button onClick={resetBundle} className="btn btn-primary">
-                    {" "}
-                    Reset Bundle
-                  </button>
                 </div>
                 <table className="table table-bordered">
                   <thead>
@@ -510,8 +421,6 @@ const UpdateBundle = ({ match }) => {
                         </th>
                         <th scope="col">Product Name</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        {/* <th scope="col">Sub total</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -537,20 +446,6 @@ const UpdateBundle = ({ match }) => {
                               </td>
                               <td>{oProduct.product_name}</td>
                               <td>{oProduct.price}</td>
-                              <td>
-                                <input
-                                  min="1"
-                                  value={oProduct.count ? oProduct.count : 1}
-                                  onChange={handleProductCount(oProduct._id)}
-                                  type="number"
-                                  className="form-control bg-light border-0 small"
-                                  placeholder="Qty"
-                                  style={{
-                                    paddingRight: "6px",
-                                    width: "70px"
-                                  }}
-                                />
-                              </td>
                             </tr>
                           );
                         })}
@@ -571,9 +466,8 @@ const UpdateBundle = ({ match }) => {
   };
 
   return (
-    <DashboardLayout name="Bundle Management" detail="Update Bundle">
+    <DashboardLayout name="Bundle Deals Management" detail="Update Bundle">
       {showBundle()}
-      {redirectPage()}
     </DashboardLayout>
   );
 };
