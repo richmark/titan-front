@@ -13,31 +13,31 @@ const UpdateBundle = ({ match }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [bundles, setBundles] = useState({
     _id: "",
-    bundle_name: "",
+    product_name: "",
     discount_value: "",
-    bundle_description: "",
+    description: "",
     discount_type: "",
-    bundle_thumbnail:
+    image:
       "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
     products: [],
     formData: "",
-    bundle_display: "T",
-    bundle_sold_out: "F",
-    bundle_price: 0,
-    bundle_stock: 0
+    display: "T",
+    sold_out: "F",
+    price: 0,
+    stock: 0
   });
   const {
     _id,
-    bundle_name,
+    product_name,
     discount_value,
-    bundle_description,
+    description,
     discount_type,
-    bundle_thumbnail,
+    image,
     formData,
-    bundle_display,
-    bundle_sold_out,
-    bundle_price,
-    bundle_stock
+    display,
+    sold_out,
+    price,
+    stock
   } = bundles;
 
   const loadProductCount = () => {
@@ -69,10 +69,10 @@ const UpdateBundle = ({ match }) => {
         setBundles({
           ...oBundle.data,
           formData: new FormData(),
-          bundle_thumbnail: `${IMAGE_API}/images/bundles/${oBundle.data.bundle_thumbnail}`
+          image: `${IMAGE_API}/images/products/${oBundle.data.image}`
         });
         var aProduct = [];
-        oBundle.data.products.map(oItem => {
+        oBundle.data.bundle_product.map(oItem => {
           aProduct.push({ ...oItem.product, count: oItem.count });
         });
         setSelectedProducts(aProduct);
@@ -115,7 +115,7 @@ const UpdateBundle = ({ match }) => {
   };
 
   const handleChange = name => oEvent => {
-    if (name !== "bundle_thumbnail") {
+    if (name !== "image") {
       const value = oEvent.target.value;
       formData.set(name, value);
       setBundles({ ...bundles, [name]: value });
@@ -159,8 +159,8 @@ const UpdateBundle = ({ match }) => {
     var iTotal = 0;
     selectedProducts.forEach(oElement => {
       iTotal += oElement.count
-        ? oElement.count * oElement.bundle_price
-        : oElement.bundle_price;
+        ? oElement.count * oElement.price
+        : oElement.price;
     });
     return iTotal;
   };
@@ -180,7 +180,6 @@ const UpdateBundle = ({ match }) => {
       var oSelectedData = products.find(oItem => oItem._id === productId);
       oSelectedData.count = "1";
       selectedProducts.push(oSelectedData);
-      console.log(selectedProducts);
       setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
       return;
     }
@@ -195,7 +194,7 @@ const UpdateBundle = ({ match }) => {
       const { _id, count } = oProduct;
       return { product: _id, count };
     });
-    formData.set("products", JSON.stringify(aData));
+    formData.set("bundle_product", JSON.stringify(aData));
     updateBundle(user._id, sToken, formData, match.params.bundleId).then(
       oData => {
         if (oData.error) {
@@ -308,9 +307,9 @@ const UpdateBundle = ({ match }) => {
                   <div className="form-group row">
                     <div className="col-sm-12">
                       <input
-                        value={bundle_name}
+                        value={product_name}
                         type="text"
-                        onChange={handleChange("bundle_name")}
+                        onChange={handleChange("product_name")}
                         className="form-control"
                         id="inputPassword"
                         placeholder="Bundle Name"
@@ -320,9 +319,9 @@ const UpdateBundle = ({ match }) => {
                   <div className="form-group row">
                     <div className="col-sm-12">
                       <textarea
-                        placeholder="bundle_description"
-                        value={bundle_description}
-                        onChange={handleChange("bundle_description")}
+                        placeholder="description"
+                        value={description}
+                        onChange={handleChange("description")}
                         className="form-control"
                         id="exampleFormControlTextarea1"
                       />
@@ -337,9 +336,9 @@ const UpdateBundle = ({ match }) => {
                     </label>
                     <div className="pl-0 col-sm-10">
                       <input
-                        value={bundle_stock}
+                        value={stock}
                         type="number"
-                        onChange={handleChange("bundle_stock")}
+                        onChange={handleChange("stock")}
                         className="form-control"
                         id="inputPassword"
                       />
@@ -354,9 +353,9 @@ const UpdateBundle = ({ match }) => {
                     </label>
                     <div className="pl-0 col-sm-10">
                       <input
-                        value={bundle_price}
+                        value={price}
                         min={1}
-                        onChange={handleChange("bundle_price")}
+                        onChange={handleChange("price")}
                         type="number"
                         className="form-control"
                         id="inputPassword"
@@ -367,15 +366,15 @@ const UpdateBundle = ({ match }) => {
                   <div className="border p-3 mb-4 mt-3">
                     <h6>Image Upload</h6>
                     <input
-                      onChange={handleChange("bundle_thumbnail")}
+                      onChange={handleChange("image")}
                       type="file"
                       className="form-control-file"
-                      id="bundle_thumbnail"
+                      id="image"
                     />
                   </div>
                   <div className="border p-3 mb-4 mt-3">
                     <img
-                      src={bundle_thumbnail}
+                      src={image}
                       style={{
                         width: "28vw",
                         height: "25vh",
@@ -390,9 +389,9 @@ const UpdateBundle = ({ match }) => {
                         className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox1"
-                        onChange={handleChange("bundle_display")}
-                        value={bundle_display === "T" ? "F" : "T"}
-                        checked={bundle_display === "T" ? true : false}
+                        onChange={handleChange("display")}
+                        value={display === "T" ? "F" : "T"}
+                        checked={display === "T" ? true : false}
                       ></input>
                       <label className="form-check-label">Display</label>
                     </div>
@@ -401,9 +400,9 @@ const UpdateBundle = ({ match }) => {
                         className="form-check-input"
                         type="checkbox"
                         id="inlineCheckbox2"
-                        onChange={handleChange("bundle_sold_out")}
-                        value={bundle_sold_out === "F" ? "T" : "F"}
-                        checked={bundle_sold_out === "F" ? false : true}
+                        onChange={handleChange("sold_out")}
+                        value={sold_out === "F" ? "T" : "F"}
+                        checked={sold_out === "F" ? false : true}
                       ></input>
                       <label className="form-check-label">Sold Out</label>
                     </div>
