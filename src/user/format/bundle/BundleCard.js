@@ -7,14 +7,14 @@ import { Link } from 'react-router-dom';
 const BundleCard = (aData) => {
 
     const showCardBase = (oBundles) => {
-        var sImage = (oBundles.bundle_thumbnail === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundles.bundle_thumbnail;
+        var sImage = (oBundles.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundles.image;
         return (
             <Link to={`bundles/${oBundles._id}`}>
                 <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
                     <Row>
                         <Col>
                             <Image 
-                                src={`${IMAGE_API}/images/bundles/${sImage}`}
+                                src={`${IMAGE_API}/images/products/${sImage}`}
                                 style={{width: "200px", height: "200px"}} 
                             />
                         </Col>
@@ -23,7 +23,7 @@ const BundleCard = (aData) => {
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oBundles.bundle_name}</strong></p>
+                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oBundles.product_name}</strong></p>
                             </button>
                         </Col>
                     </Row>

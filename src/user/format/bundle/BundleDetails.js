@@ -10,33 +10,33 @@ const BundleDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
   const [relatedBundles, setRelatedBundles] = useState([]);
   const [bundle, setBundle] = useState({
-    bundle_sold: '',
-    bundle_display: '',
-    bundle_sold_out: '',
+    sold: '',
+    display: '',
+    sold_out: '',
     _id: match.params.bundleId,
     discount_type: '',
-    bundle_name: '',
-    bundle_description: '',
-    bundle_stock: '',
-    bundle_price: '',
+    product_name: '',
+    description: '',
+    stock: '',
+    price: '',
     discount_value: '',
-    products: '',
-    bundle_thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
+    bundle_product: '',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
   });
 
   const {
-    bundle_sold,
-    bundle_display,
-    bundle_sold_out,
+    sold,
+    display,
+    sold_out,
     _id,
     discount_type,
-    bundle_name,
-    bundle_description,
-    bundle_stock,
-    bundle_price,
+    product_name,
+    description,
+    stock,
+    price,
     discount_value,
-    products,
-    bundle_thumbnail
+    bundle_product,
+    image
   } = bundle;
 
   const [iCount, setCount] = useState(1);
@@ -66,7 +66,7 @@ const BundleDetails = ({match}) => {
   }
 
   const addToCart = () => {
-    var oCount = getProductCount(_id, bundle_stock);
+    var oCount = getProductCount(_id, stock);
     if (oCount.bCount === false) {
         alert('Cannot add product, item is out of stock or item stock is added in cart');
         return;
@@ -85,7 +85,7 @@ const BundleDetails = ({match}) => {
         setBoolProduct(false);
       } else {
         setBundle(oData.data);
-        calculateCartStock(oData.data._id, oData.data.bundle_stock);
+        calculateCartStock(oData.data._id, oData.data.stock);
         getListBundles();
       }
     });
@@ -121,7 +121,7 @@ const BundleDetails = ({match}) => {
               {checkIfSoldOut()}
               <Image
                 className="border mx-auto"
-                src={`${IMAGE_API}/images/bundles/${bundle_thumbnail}`}
+                src={`${IMAGE_API}/images/products/${image}`}
                 rounded
                 width="100%"
                 height="300px"
@@ -129,11 +129,11 @@ const BundleDetails = ({match}) => {
             </Col>
             <Col xs={12} md={8}>
               <span>
-                <h3>{bundle_name}</h3>
+                <h3>{product_name}</h3>
               </span>
               <hr />
               <h4>
-                ₱ <span>{bundle_price}</span>
+                ₱ <span>{price}</span>
               </h4>
               {showAddCartButton()}
             </Col>
@@ -144,7 +144,7 @@ const BundleDetails = ({match}) => {
   };
 
   const showAddCartButton = () => {
-    if (bundle_stock === 0 || bundle_sold_out === 'T') {
+    if (stock === 0 || sold_out === 'T') {
       return (
         <Fragment>
           ITEM IS SOLD OUT
@@ -175,7 +175,7 @@ const BundleDetails = ({match}) => {
   }
 
   const checkIfSoldOut = () => {
-    if (bundle_stock === 0 || bundle_sold_out === 'T') {
+    if (stock === 0 || sold_out === 'T') {
       return (
         <Fragment>
           <Image
@@ -211,13 +211,13 @@ const BundleDetails = ({match}) => {
   }
 
   const showDetails = () => {
-    if (products.length > 0 && products.length === 5) {
+    if (bundle_product.length > 0 && bundle_product.length === 5) {
       return (
         <Fragment>
           <Container className="border border-black rounded p-5 mt-4">
               <h5>Bundled Items</h5>
               <Row className="mt-3 text-center">
-                {products.map((oItem, iKey) => {
+                {bundle_product.map((oItem, iKey) => {
                   return (
                     <Col key={iKey}>
                       <a href={`/product/details/${oItem.product._id}`}>
@@ -239,13 +239,13 @@ const BundleDetails = ({match}) => {
       );
     }
 
-    if (products.length > 0 && products.length < 5) {
+    if (bundle_product.length > 0 && bundle_product.length < 5) {
       return (
         <Fragment>
           <Container className="border border-black rounded p-5 mt-4">
               <h5>Bundled Items</h5>
               <Row className="mt-3 text-center">
-                {products.map((oItem, iKey) => {
+                {bundle_product.map((oItem, iKey) => {
                   return (
                     <Col key={iKey} sm={3}>
                       <a href={`/product/details/${oItem.product._id}`}>
@@ -256,7 +256,7 @@ const BundleDetails = ({match}) => {
                           width="200px"
                           height="200px"
                         />
-                        <p>Product Name</p>
+                        <p>{oItem.product.product_name}</p>
                       </a>
                     </Col>
                   );
@@ -289,7 +289,7 @@ const BundleDetails = ({match}) => {
                                         <Col>
                                             <a href={`/bundles/${oItem._id}`} className="mx-auto">
                                                 <Image
-                                                    src={`${IMAGE_API}/images/bundles/${oItem.bundle_thumbnail}`}
+                                                    src={`${IMAGE_API}/images/products/${oItem.image}`}
                                                     style={{width: "200px", height: "200px"}}
                                                 />
                                             </a>
@@ -300,8 +300,8 @@ const BundleDetails = ({match}) => {
                                         <Col>
                                         <button className="default-button  text-center" style={oStyle}>
                                             <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.bundle_name}</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.bundle_price}</p>
+                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.product_name}</p>
+                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.price}</p>
                                         </button>
                                         </Col>
                                     </Row>

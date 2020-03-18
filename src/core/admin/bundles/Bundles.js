@@ -159,11 +159,11 @@ const Bundles = () => {
                                                 </th>
                                                 <td>
                                                     <Link to={`/admin/bundles/update/${oBundle._id}`}>
-                                                        {oBundle.bundle_name}
+                                                        {oBundle.product_name}
                                                     </Link>
                                                 </td>
-                                                <td>{oBundle.bundle_stock}</td>
-                                                <td>{oBundle.bundle_price}</td>
+                                                <td>{oBundle.stock}</td>
+                                                <td>{oBundle.price}</td>
                                                 <td>{oMoment(oBundle.createdAt).format('DD-MM-YYYY')}</td>
                                             </tr>
                                         )

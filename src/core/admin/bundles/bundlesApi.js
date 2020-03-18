@@ -1,20 +1,5 @@
 import { API_URL } from "../../../config";
 
-export const createBundle = (sId, sToken, oBundle) => {
-  return fetch(`${API_URL}/bundle/create/${sId}`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${sToken}`
-    },
-    body: oBundle
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(err => console.log(err));
-};
-
 export const updateBundle = (sId, sToken, oBundle, sBundleId) => {
   return fetch(`${API_URL}/bundle/update/${sId}/${sBundleId}`, {
     method: "PUT",
@@ -72,7 +57,6 @@ export const getBundleList = () => {
 };
 
 export const getRelatedBundle = (sId) => {
-  console.log(sId);
   return fetch(`${API_URL}/bundles/client/related/${sId}`, {
       method: 'GET'
   })

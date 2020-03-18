@@ -65,7 +65,6 @@ const AddBundle = () => {
       if (oProducts.error) {
         console.log(oProducts.error);
       } else {
-        console.log(oProducts);
         setProducts(oProducts.data);
         var oForm = new FormData();
         oForm.set("sold_out", "F");
