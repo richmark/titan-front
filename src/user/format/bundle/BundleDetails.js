@@ -84,8 +84,19 @@ const BundleDetails = ({match}) => {
         console.log(oData.error);
         setBoolProduct(false);
       } else {
-        setBundle(oData.data);
-        calculateCartStock(oData.data._id, oData.data.stock);
+        var oBundle = oData.data;
+        setBundle({
+          ...bundle,
+          image : `${IMAGE_API}/images/products/${oBundle.image}`,
+          product_name: oBundle.product_name,
+          price: oBundle.price,
+          description: oBundle.description,
+          stock: oBundle.stock,
+          sold_out : oBundle.sold_out,
+          display: oBundle.display,
+          bundle_product:oBundle.bundle_product
+        });
+        calculateCartStock(oBundle._id, oBundle.stock);
         getListBundles();
       }
     });
@@ -112,7 +123,7 @@ const BundleDetails = ({match}) => {
   };
 
   const showBundleMain = () => {
-    return (
+    return bundle.image !== '' && (
       <Fragment>
         <Container className="border border-black rounded p-5">
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
@@ -121,7 +132,7 @@ const BundleDetails = ({match}) => {
               {checkIfSoldOut()}
               <Image
                 className="border mx-auto"
-                src={`${IMAGE_API}/images/products/${image}`}
+                src={image}
                 rounded
                 width="100%"
                 height="300px"
