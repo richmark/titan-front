@@ -10,31 +10,19 @@ const BundleDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
   const [relatedBundles, setRelatedBundles] = useState([]);
   const [bundle, setBundle] = useState({
-    sold: '',
-    display: '',
-    sold_out: '',
     _id: match.params.bundleId,
-    discount_type: '',
     product_name: '',
-    description: '',
     stock: '',
     price: '',
-    discount_value: '',
     bundle_product: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
   });
 
   const {
-    sold,
-    display,
-    sold_out,
     _id,
-    discount_type,
     product_name,
-    description,
     stock,
     price,
-    discount_value,
     bundle_product,
     image
   } = bundle;
@@ -102,6 +90,17 @@ const BundleDetails = ({match}) => {
     });
   };
 
+  /**
+   * Redirects to forbidden if invalid product id
+   */
+  const checkProduct = bProduct => {
+    if (bProduct === false) {
+        return (
+            <Redirect to="/forbidden"/>
+        );
+    }
+  };
+
   const calculateCartStock = (sProductId, iValue) => {
     var oCount = getProductCount(sProductId, iValue);
     var iCart = iValue - (oCount.iCount === undefined ? 0 : oCount.iCount);
@@ -155,7 +154,7 @@ const BundleDetails = ({match}) => {
   };
 
   const showAddCartButton = () => {
-    if (stock === 0 || sold_out === 'T') {
+    if (bundle.stock === 0 || bundle.sold_out === 'T') {
       return (
         <Fragment>
           ITEM IS SOLD OUT
@@ -186,7 +185,7 @@ const BundleDetails = ({match}) => {
   }
 
   const checkIfSoldOut = () => {
-    if (stock === 0 || sold_out === 'T') {
+    if (bundle.stock === 0 || bundle.sold_out === 'T') {
       return (
         <Fragment>
           <Image
@@ -360,6 +359,7 @@ const BundleDetails = ({match}) => {
       {showBundleMain()}
       {showDetails()}
       {showRelatedBundle()}
+      {checkProduct(bProduct)}
       {showComment()}
       {redirectBuyNow()}
     </Layout>

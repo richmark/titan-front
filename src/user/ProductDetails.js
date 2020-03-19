@@ -14,6 +14,7 @@ import CommentCard from "./format/comment/CommentCard";
 const ProductDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
   const [previewImage, setPreviewImage] = useState('');
+  const [bBundle, setRedirectBundle] = useState(false);
   const [oRelatedProducts, setRelatedProducts] = useState([]);
   const [oProduct, setProduct] = useState({
     image : "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS",
@@ -58,6 +59,8 @@ const ProductDetails = ({match}) => {
       if (oData.error) {
         console.log(oData.error);
         setBoolProduct(false);
+      } else if (oData.data.bundle_product && oData.data.bundle_product.length > 0) {
+        setTimeout(() => setRedirectBundle(true), 250);
       } else {
         oData = oData.data;
         setInfo(oData.additional_info);
@@ -74,7 +77,7 @@ const ProductDetails = ({match}) => {
         });
         calculateCartStock(oData._id, oData.stock);
         setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
-        fetchCategory(oData.category);
+        oData.category && fetchCategory(oData.category);
         }
     });
   };
@@ -127,6 +130,17 @@ const ProductDetails = ({match}) => {
     if (bProduct === false) {
         return (
             <Redirect to="/forbidden"/>
+        );
+    }
+  };
+
+  /**
+   * Redirect to bundle details
+   */
+  const redirectBundle = () => {
+    if (bBundle === true) {
+        return (
+            <Redirect to={`/bundles/${match.params.productId}`}/>
         );
     }
   };
@@ -315,6 +329,7 @@ const ProductDetails = ({match}) => {
       {showRelatedProduct()}
       {checkProduct(bProduct)}
       {redirectBuyNow()}
+      {redirectBundle()}
       {CommentCard(_id)}
     </Layout>
   );

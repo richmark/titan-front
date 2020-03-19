@@ -127,7 +127,6 @@ const Checkout = ({location}) => {
         }
         setEnable(false);
         var aCart = [decodeData(oBuyNow.id)];
-        console.log(aCart);
         initializeCheckout(aCart);
     }, []);
 
