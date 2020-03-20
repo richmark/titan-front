@@ -5,36 +5,26 @@ import { Container, Row, Col, Image, Form, Button, Card } from "react-bootstrap"
 import { getBundleById, getRelatedBundle } from "../../../core/admin/bundles/bundlesApi";
 import { IMAGE_API } from "../../../config";
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers';
+import CommentCard from '../comment/CommentCard';
+import BundleCard from '../bundle/BundleCard';
 
 const BundleDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
   const [relatedBundles, setRelatedBundles] = useState([]);
   const [bundle, setBundle] = useState({
-    sold: '',
-    display: '',
-    sold_out: '',
     _id: match.params.bundleId,
-    discount_type: '',
     product_name: '',
-    description: '',
     stock: '',
     price: '',
-    discount_value: '',
     bundle_product: '',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS'
   });
 
   const {
-    sold,
-    display,
-    sold_out,
     _id,
-    discount_type,
     product_name,
-    description,
     stock,
     price,
-    discount_value,
     bundle_product,
     image
   } = bundle;
@@ -52,7 +42,7 @@ const BundleDetails = ({match}) => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setRelatedBundles(oData.data);
+        setRelatedBundles(oData);
       }
     });
   }
@@ -84,11 +74,33 @@ const BundleDetails = ({match}) => {
         console.log(oData.error);
         setBoolProduct(false);
       } else {
-        setBundle(oData.data);
-        calculateCartStock(oData.data._id, oData.data.stock);
+        var oBundle = oData.data;
+        setBundle({
+          ...bundle,
+          image : `${IMAGE_API}/images/products/${oBundle.image}`,
+          product_name: oBundle.product_name,
+          price: oBundle.price,
+          description: oBundle.description,
+          stock: oBundle.stock,
+          sold_out : oBundle.sold_out,
+          display: oBundle.display,
+          bundle_product:oBundle.bundle_product
+        });
+        calculateCartStock(oBundle._id, oBundle.stock);
         getListBundles();
       }
     });
+  };
+
+  /**
+   * Redirects to forbidden if invalid product id
+   */
+  const checkProduct = bProduct => {
+    if (bProduct === false) {
+        return (
+            <Redirect to="/forbidden"/>
+        );
+    }
   };
 
   const calculateCartStock = (sProductId, iValue) => {
@@ -112,7 +124,7 @@ const BundleDetails = ({match}) => {
   };
 
   const showBundleMain = () => {
-    return (
+    return bundle.image !== '' && (
       <Fragment>
         <Container className="border border-black rounded p-5">
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
@@ -121,7 +133,7 @@ const BundleDetails = ({match}) => {
               {checkIfSoldOut()}
               <Image
                 className="border mx-auto"
-                src={`${IMAGE_API}/images/products/${image}`}
+                src={image}
                 rounded
                 width="100%"
                 height="300px"
@@ -144,7 +156,7 @@ const BundleDetails = ({match}) => {
   };
 
   const showAddCartButton = () => {
-    if (stock === 0 || sold_out === 'T') {
+    if (bundle.stock === 0 || bundle.sold_out === 'T') {
       return (
         <Fragment>
           ITEM IS SOLD OUT
@@ -175,7 +187,7 @@ const BundleDetails = ({match}) => {
   }
 
   const checkIfSoldOut = () => {
-    if (stock === 0 || sold_out === 'T') {
+    if (bundle.stock === 0 || bundle.sold_out === 'T') {
       return (
         <Fragment>
           <Image
@@ -268,80 +280,20 @@ const BundleDetails = ({match}) => {
     }
   };
 
+  /**
+   * Show Related Bundle
+   * Uses Bundle Card
+   */
   const showRelatedBundle = () => {
-    const oStyle = {
-        color: 'white',
-        background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
-    };
-    return (
-    <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
-        <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', letterSpacing: '3px'}}>RELATED BUNDLES</p></strong></div>            <Container>
-                <Row className="mt-2 ml-3 mr-2">
-                    <Col sm={{offset:0, span: 12}}>
-                        <Row className="mb-2">
-
-                          {relatedBundles && relatedBundles.map((oItem, iKey) => {
-                            return (
-                              <Col key={iKey} sm={3} className="pl-0">
-                                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}>
-                                    <Row>
-                                        <Col>
-                                            <a href={`/bundles/${oItem._id}`} className="mx-auto">
-                                                <Image
-                                                    src={`${IMAGE_API}/images/products/${oItem.image}`}
-                                                    style={{width: "200px", height: "200px"}}
-                                                />
-                                            </a>
-                                        </Col>
-                                    </Row>
-                                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                                    <Row className=" mt-2">
-                                        <Col>
-                                        <button className="default-button  text-center" style={oStyle}>
-                                            <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.product_name}</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.price}</p>
-                                        </button>
-                                        </Col>
-                                    </Row>
-                                </Card>
-                              </Col>
-                            );
-                          })}
-                        </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </Container>
-    </Fragment>
-    );
-  };
-
-  const showComment = () => {
-    return (
-        <Container className="border border-black rounded p-5 mt-4">
-          <h5 className="mb-4">Comments</h5>
-            <Card className='mb-3'>
-            <Card.Body>
-                <Card.Title></Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                Sample User - Verified Purchase
-                <span className="ml-2">
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                </span>
-                </Card.Subtitle>
-                <Card.Text>
-                Sample comment lorem ipsum dolor
-                </Card.Text>
-            </Card.Body>
-            </Card>
-        </Container>
-    );
+    if (relatedBundles.data && relatedBundles.data.length > 0) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+            {BundleCard(relatedBundles)}
+          </Container>
+        </Fragment>
+      );
+    }
   };
 
   return (
@@ -349,7 +301,8 @@ const BundleDetails = ({match}) => {
       {showBundleMain()}
       {showDetails()}
       {showRelatedBundle()}
-      {showComment()}
+      {checkProduct(bProduct)}
+      {CommentCard(match.params.bundleId)}
       {redirectBuyNow()}
     </Layout>
   );

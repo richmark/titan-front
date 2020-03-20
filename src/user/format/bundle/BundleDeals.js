@@ -18,7 +18,7 @@ const BundleDeals = () => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                setBundles({...bundles, ...oData});
+                setBundles(oData);
             }
         });
     };
