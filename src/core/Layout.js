@@ -472,7 +472,7 @@ const Layout = ({
             </span>
           </Nav.Link>
         </Nav.Item>
-        <Nav.Item>
+        {user && <Nav.Item>
           <Nav.Link
             style={getFontColor()}
             href={user && `/profile/${user._id}`}
@@ -494,11 +494,11 @@ const Layout = ({
               <strong>YOUR ORDER</strong>
             </Row>
           </Nav.Link>
-        </Nav.Item>
+        </Nav.Item>}
         <Nav.Item>
           <Nav.Link
             style={getFontColor()}
-            href={user && `/bundles`}
+            href={`/bundles`}
           >
             <Row className="ml-1">
               <span
