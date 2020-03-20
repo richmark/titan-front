@@ -5,6 +5,8 @@ import { Container, Row, Col, Image, Form, Button, Card } from "react-bootstrap"
 import { getBundleById, getRelatedBundle } from "../../../core/admin/bundles/bundlesApi";
 import { IMAGE_API } from "../../../config";
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers';
+import CommentCard from '../comment/CommentCard';
+import BundleCard from '../bundle/BundleCard';
 
 const BundleDetails = ({match}) => {
   const [iRun, setRun] = useState(getTotalCount());
@@ -40,7 +42,7 @@ const BundleDetails = ({match}) => {
       if (oData.error) {
         console.log(oData.error);
       } else {
-        setRelatedBundles(oData.data);
+        setRelatedBundles(oData);
       }
     });
   }
@@ -278,80 +280,20 @@ const BundleDetails = ({match}) => {
     }
   };
 
+  /**
+   * Show Related Bundle
+   * Uses Bundle Card
+   */
   const showRelatedBundle = () => {
-    const oStyle = {
-        color: 'white',
-        background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
-    };
-    return (
-    <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
-        <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', letterSpacing: '3px'}}>RELATED BUNDLES</p></strong></div>            <Container>
-                <Row className="mt-2 ml-3 mr-2">
-                    <Col sm={{offset:0, span: 12}}>
-                        <Row className="mb-2">
-
-                          {relatedBundles && relatedBundles.map((oItem, iKey) => {
-                            return (
-                              <Col key={iKey} sm={3} className="pl-0">
-                                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}>
-                                    <Row>
-                                        <Col>
-                                            <a href={`/bundles/${oItem._id}`} className="mx-auto">
-                                                <Image
-                                                    src={`${IMAGE_API}/images/products/${oItem.image}`}
-                                                    style={{width: "200px", height: "200px"}}
-                                                />
-                                            </a>
-                                        </Col>
-                                    </Row>
-                                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                                    <Row className=" mt-2">
-                                        <Col>
-                                        <button className="default-button  text-center" style={oStyle}>
-                                            <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.product_name}</p>
-                                            <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{oItem.price}</p>
-                                        </button>
-                                        </Col>
-                                    </Row>
-                                </Card>
-                              </Col>
-                            );
-                          })}
-                        </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </Container>
-    </Fragment>
-    );
-  };
-
-  const showComment = () => {
-    return (
-        <Container className="border border-black rounded p-5 mt-4">
-          <h5 className="mb-4">Comments</h5>
-            <Card className='mb-3'>
-            <Card.Body>
-                <Card.Title></Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                Sample User - Verified Purchase
-                <span className="ml-2">
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                    <span className="fa fa-star checked" />
-                </span>
-                </Card.Subtitle>
-                <Card.Text>
-                Sample comment lorem ipsum dolor
-                </Card.Text>
-            </Card.Body>
-            </Card>
-        </Container>
-    );
+    if (relatedBundles.data && relatedBundles.data.length > 0) {
+      return (
+        <Fragment>
+          <Container className="border border-black rounded p-5 mt-4">
+            {BundleCard(relatedBundles)}
+          </Container>
+        </Fragment>
+      );
+    }
   };
 
   return (
@@ -360,7 +302,7 @@ const BundleDetails = ({match}) => {
       {showDetails()}
       {showRelatedBundle()}
       {checkProduct(bProduct)}
-      {showComment()}
+      {CommentCard(match.params.bundleId)}
       {redirectBuyNow()}
     </Layout>
   );
