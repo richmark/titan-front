@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Layout from '../core/Layout';
 import { Container, Row, Col, Card, ProgressBar, Table, Image  } from 'react-bootstrap';
 import { getOrderById } from '../core/admin/orders/ordersApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { IMAGE_API } from '../config';
+import Receipt from './Receipt';
 
 const OrderDetails = ({match}) => {
     const [oOrder, setOrder] = useState(false);
@@ -186,11 +187,30 @@ const OrderDetails = ({match}) => {
                                     <strong>Total (with VAT)</strong> <span className="float-right">₱ <span>{oOrder.amount}</span></span>
                                 </Container>
                             </Col>
+                            <Col sm={{span: 6}}>
+                                <Container className="m-2 mb-4">
+                                    <button id='SubmitPrint' onClick={printReceipt}>Print Receipt</button>
+                                </Container>
+                            </Col>
                         </Row>
                     </Container>
                 </Card>
-            </Container>            
+                <div id='PrintOrder' style={{display: 'none'}}>
+                <Receipt order={oOrder}/>
+                </div>
+            </Container>
         );
+    };
+
+    const printReceipt = (oEvent) => {
+        oEvent.preventDefault();
+        var oRestorePage = window.document.body.innerHTML;
+        window.document.getElementById('PrintOrder').style.display = '';
+        var oPrintContent = window.document.getElementById('PrintOrder').outerHTML;
+        window.document.body.innerHTML = oPrintContent;
+        window.print();
+        window.document.body.innerHTML = oRestorePage;
+        window.document.getElementById('SubmitPrint').addEventListener('click', printReceipt);
     };
 
     const showSubTotal = () => {
