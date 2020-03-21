@@ -53,9 +53,15 @@ import ProcessWholesaler from "./core/admin/wholesalers/ProcessWholesaler";
 import UploadImage from "./user/UploadImage";
 import ReviewedProduct from "./core/admin/reviews/ReviewedProduct";
 
+import MessengerChat from './user/MessengerChat';
+import Policy from "./user/Policy";
+import Terms from './user/Terms';
 const Routes = () => {
   return (
     <BrowserRouter>
+      <Route path='/terms' exact component={Terms} />
+      <Route path='/policy' exact component={Policy} />
+      <Route path="/test" exact component={MessengerChat} />
       <Route path="/login" exact component={Login} />
       <Route path="/signup" exact component={PreRegister} />
       <Route path="/signout" exact component={Signout} />
