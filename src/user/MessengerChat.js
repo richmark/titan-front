@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import Layout from "../core/Layout";
-import { Container, Row, Col, Image, Form, Button, Card } from "react-bootstrap";
-import { IMAGE_API, PAGE_ID } from "../config";
+import { PAGE_ID } from "../config";
 
 const MessengerChat = () => {
 
@@ -12,7 +11,7 @@ const MessengerChat = () => {
               version          : 'v6.0'
             });
           };
-  
+
           (function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
@@ -22,8 +21,7 @@ const MessengerChat = () => {
         }(document, 'script', 'facebook-jssdk'));
     };
 
-    const showMessengerChat = () => {
-        return (
+    return (
         <Fragment>
             <div id="fb-root"></div>
             {showFBMessenger()}
@@ -32,13 +30,6 @@ const MessengerChat = () => {
                 page_id={PAGE_ID}>
             </div>
         </Fragment>
-        );
-    };
-
-    return (
-        <Layout>
-        {showMessengerChat()}
-        </Layout>
     );
 };
 

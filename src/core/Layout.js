@@ -21,13 +21,15 @@ import { getTotalCount } from "./client/cartHelpers";
 import { Link } from "react-router-dom";
 import { IMAGE_API } from "../config";
 import { getAllCategories } from "../core/admin/categories/categoriesApi";
+import MessengerChat from '../user/MessengerChat';
 
 const Layout = ({
   loader = "none",
   run = undefined,
   oGetCategory = () => {},
   children,
-  searchPlaceHolder = "Search here"
+  searchPlaceHolder = "Search here",
+  messenger = true
 }) => {
   const { user } = isAuthenticated();
   const [iCount, setCount] = useState(0);
@@ -654,6 +656,7 @@ const Layout = ({
           {children}
         </div>
         {oCategories && showFooter()}
+        {messenger === true && <MessengerChat />}
       </div>
     </Fragment>
   );
