@@ -58,7 +58,9 @@ const SearchResult = ({ match }) => {
 
     for (var j = 0; j < aCheckedValues.length; j++) {
       for (var i = 0; i < searchedProducts.length; i++) {
+        searchedProducts[i].category[0] = searchedProducts[i].category[0] === undefined ? 'combo_deals' : searchedProducts[i].category[0];
         if (
+          searchedProducts[i].category[0] === aCheckedValues[j] ||
           searchedProducts[i].category[0]._id === aCheckedValues[j] ||
           searchedProducts[i].brand === aCheckedValues[j]
         ) {
@@ -147,6 +149,16 @@ const SearchResult = ({ match }) => {
                 Categories
               </p>
               {showCategorySideList()}
+              <Form.Group className="category-side-list mb-0" controlId="combo_deals">
+              <Form.Check
+                name="categoryCheckbox"
+                type="checkbox"
+                className="text-uppercase"
+                label="Combo Deals"
+                value="combo_deals"
+                onClick={handleClickCheckBox}
+              />
+            </Form.Group>
               <div className="border-bottom border-black mt-5 border"></div>
             </div>
             <div>

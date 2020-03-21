@@ -24,7 +24,6 @@ const ProductReview = ({ match }) => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                console.log(oData.data);
                 setProduct(oData.data);
             }
         });

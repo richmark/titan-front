@@ -9,7 +9,7 @@ const BundleCard = (aData) => {
     const showCardBase = (oBundles) => {
         var sImage = (oBundles.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundles.image;
         return (
-            <Link to={`bundles/${oBundles._id}`}>
+            <a href={`/bundles/${oBundles._id}`}>
                 <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
                     <Row>
                         <Col>
@@ -20,6 +20,7 @@ const BundleCard = (aData) => {
                         </Col>
                     </Row>
                     <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
+                    {showRating(oBundles)}
                     <Row className=" mt-2">
                         <Col>
                             <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
@@ -28,7 +29,7 @@ const BundleCard = (aData) => {
                         </Col>
                     </Row>
                 </Card>
-            </Link>
+            </a>
         );
     };
 
@@ -62,6 +63,39 @@ const BundleCard = (aData) => {
                 </Fragment>
             );
         });
+    }
+
+    /**
+     * Shows Star Rating
+     */
+    const showRating = (oProduct) => {
+        const iRating = 5;
+        var iStar = 3;
+        var sCheck = 'checked';
+        var aItems = [];
+        if (oProduct.reviews && oProduct.reviews.length > 0) {
+            iStar = calculateAverageRate(oProduct.reviews);
+        }
+        for (var iLoop = 1; iLoop <= iRating; iLoop++) {
+            sCheck = (iLoop <= iStar) ? 'checked' : '';
+            aItems.push(<span key={iLoop} className={`fa fa-star mr-2 ${sCheck}`}></span>);
+        }
+        return (
+            <Fragment>
+                <div className="mt-2" style={{marginLeft: '40px'}}>
+                    {aItems}
+                </div>  
+            </Fragment>
+        );
+    };
+
+    /**
+     * Calculates Average Rate
+     */
+    const calculateAverageRate = (aRate) => {
+        return Math.floor(aRate.reduce((iData, oAdd) => {
+            return iData + oAdd.rate
+        }, 0) / aRate.length);
     }
 
     return (
