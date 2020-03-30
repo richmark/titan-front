@@ -89,3 +89,19 @@ export const updateReview = (sId, sToken, oData, sReviewId) => {
     })
     .catch(err => console.log(err));
 };
+
+export const deleteReview = (sId, sToken, oProduct) => {
+    return fetch(`${API_URL}/review/delete/${sId}`, {
+        method: 'DELETE',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(oProduct)
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};

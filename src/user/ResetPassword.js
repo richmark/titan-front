@@ -43,13 +43,11 @@ const ResetPassword = props => {
 		}
 
 		sendResetPassword(values, props.match.params.tokenId).then(oData => {
-			console.log(oData);
 			if (oData.error) {
 				setError(oData.error);
 				console.log(oData.error);
 			} else {
 				setSuccess(oData.message);
-				console.log(oData);
 			}
 		});
 	};

@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 import { createBanner, getBanners, deleteBanner } from './bannerApi';
 import oMoment from "moment";
 import _ from 'lodash';
+import DataTable from "react-data-table-component";
 
 const Banner = () => {
-    const [toggleAll, setToggleAll] = useState(false);
 
     const { sToken, user } = isAuthenticated();
 
@@ -75,54 +75,67 @@ const Banner = () => {
         formData.set(name, oFile);
     };
 
-    const handleSelectToggle = oEvent => {
-        var bannerId = oEvent.target.value;
-        var iIndexBanner = banners.findIndex(oItem => oItem._id === bannerId);
-        if (oEvent.target.checked) {
-            if (selectedBanners.includes(bannerId) === false) {
-                selectedBanners.push(bannerId);
-                setSelectedBanners(JSON.parse(JSON.stringify(selectedBanners)));
-                banners[iIndexBanner].checked = true;
-                setBanners(JSON.parse(JSON.stringify(banners)));
-            }
-            return;
-        }
-        var iIndex = selectedBanners.findIndex(oItem => oItem === bannerId);
-        selectedBanners.splice(iIndex, 1);
-        setSelectedBanners(JSON.parse(JSON.stringify(selectedBanners)));
-        banners[iIndexBanner].checked = false;
-        setBanners(JSON.parse(JSON.stringify(banners)));
-    };
-
-    const handleSelectAllToggle = oEvent => {
-        setToggleAll(!toggleAll);
-        if (oEvent.target.checked) {
-            var aSelectedData = banners.map(oItem => ({ ...oItem, checked: true }));
-            setBanners(JSON.parse(JSON.stringify(aSelectedData)));
-            var aSelectedIds = aSelectedData.map(oItem => oItem._id);
-            setSelectedBanners(aSelectedIds);
-            return;
-        }
-        var aSelectedData = banners.map(oItem => ({ ...oItem, checked: false }));
-        setBanners(JSON.parse(JSON.stringify(aSelectedData)));
-        setSelectedBanners([]);
+    const handleSelectToggle = ({ allSelected, selectedCount, selectedRows }) => {
+        setSelectedBanners(JSON.parse(JSON.stringify(selectedRows)));
     };
 
     const submitDelete = () => {
         if (window.confirm('Are you sure you want to delete?') === true) {
-            deleteBanner(user._id, sToken, selectedBanners).then(oData => {
+            const aBannerIds = _.map(selectedBanners, '_id');
+            deleteBanner(user._id, sToken, aBannerIds).then(oData => {
                 if (oData.error) {
                     console.log(oData);
                 } else {
                     alert('Deleted Successfully');
                     setResult(!result);
-                    setToggleAll(!toggleAll);
                 }
             });
         }
     };
 
     const showAddBanner = () => {
+        const oData = banners;
+        const oColumns = [
+            {
+                name: "Image",
+                cell: oRow => {
+                    return (
+                      <Fragment>
+                        <Link to={`/admin/banner/update/${oRow._id}`}>
+                            <img style={{ width: "100%" }} src={`${IMAGE_API}/images/banners/${oRow.banner_image}`} />
+                        </Link>
+                      </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Banner Link",
+                selector: "banner_link",
+                sortable: true,
+                cell: oRow => {
+                    return (
+                        <Fragment>
+                            <a href={oRow.banner_link} target="_blank">
+                                {oRow.banner_link.substring(0, 20)}
+                            </a>
+                        </Fragment>
+                    )
+                }
+            },
+            {
+                name: "Visibility",
+                selector: "visibility",
+                sortable: true,
+                format: oRow => oRow.visibility ? 'on' : 'off'
+            },
+            {
+                name: "Date Created",
+                selector: "createdAt",
+                sortable: true,
+                format: oRow => oMoment(oRow.createdAt).format("LL")
+            }
+        ];
+
         return (
             <Fragment>
                 <div className="col-md-4 col-sm-4 col-xl-4 mb-4">
@@ -148,54 +161,16 @@ const Banner = () => {
                             <div className="float-right mb-2">
                                 <button onClick={submitDelete} className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                             </div>
-                            <table className="table table-bordered text-center">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style={{width: '3%'}}><input checked={toggleAll} onChange={handleSelectAllToggle} type="checkbox" /></th>
-                                        <th scope="col" style={{width: '10%'}}>Image</th>
-                                        <th scope="col">Banner Link</th>
-                                        <th scope="col">Visibility</th>
-                                        <th scope="col">Date Created</th>
-                                        <th scope="col">Action</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        banners.length > 0 &&
-                                        banners.map((oBanner, iIndex) => {
-                                            return (
-                                                <tr key={iIndex}>
-                                                    <td>
-                                                        <input
-                                                            checked={oBanner.checked}
-                                                            type="checkbox"
-                                                            value={oBanner._id}
-                                                            // name="productCheckbox"
-                                                            onChange={handleSelectToggle}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <Link to={`/admin/banner/update/${oBanner._id}`}>
-                                                            <img style={{ width: "100%" }} src={`${IMAGE_API}/images/banners/${oBanner.banner_image}`} />
-                                                        </Link>
-                                                    </td>
-                                                    <td>{oBanner.banner_link}</td>
-                                                    <td>
-                                                        {oBanner.visibility ? 'on' : 'off'}
-                                                    </td>
-                                                    <td>{oMoment(oBanner.createdAt).format("LLL")}</td>
-                                                    <td>
-                                                        <Link to={`/admin/banner/update/${oBanner._id}`}>
-                                                            <button type="button" className="btn btn-primary">Edit</button>
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                    </tbody>
-                            </table>
+                            <DataTable
+                                columns={oColumns}
+                                data={oData}
+                                pagination={true}
+                                striped
+                                selectableRows
+                                keyField='_id'
+                                onSelectedRowsChange={handleSelectToggle}
+                                selectableRowsNoSelectAll={true}
+                            />
                         </div>
                     </div>
                 </div>

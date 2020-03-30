@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import oMoment from 'moment';
 import { isAuthenticated } from "../../../auth/authUtil";
 import { getOrders } from './ordersApi';
+import DataTable from "react-data-table-component";
 
 const Orders = () => {
 
@@ -24,10 +25,48 @@ const Orders = () => {
         loadAllOrders();
     }, []);
 
+    const handleSelectToggle = ({ allSelected, selectedCount, selectedRows }) => {
+        // setSelectedOrders(JSON.parse(JSON.stringify(selectedRows)));
+    };
+
     const showOrders = () => {
+        const oData = orders;
+        const oColumns = [
+            {
+                name: "Order Number",
+                selector: "product_name",
+                sortable: true,
+                cell: oRow => {
+                    return (
+                      <Fragment>
+                        <Link to={`/admin/orders/${oRow._id}`}>
+                            {oRow._id}
+                        </Link>
+                      </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Customer",
+                selector: "user.email",
+                sortable: true
+            },
+            {
+                name: "Status",
+                selector: "status",
+                sortable: true
+            },
+            {
+                name: "Date",
+                selector: "createdAt",
+                sortable: true,
+                format: oRow => oMoment(oRow.createdAt).format('LLL')
+            },
+        ];
+
         return (
             <Fragment>
-                <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
+                {/* <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
                     <div className='card border-left-primary shadow h-100 py-2'>
                         <div className='card-body'>
                             <select
@@ -62,60 +101,20 @@ const Orders = () => {
                             <button className='btn btn-primary'>Filter</button>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
                     <div className='card border-left-primary shadow h-100 py-2'>
                         <div className='card-body'>
-                            <div className='float-right'>
-                                <span>10</span> Items
-                            </div>
-                            <table className='table table-bordered'>
-                                <thead>
-                                    <tr>
-                                        <th scope='col'>Order Number</th>
-                                        <th scope='col'>Customer</th>
-                                        <th scope='col'>Status</th>
-                                        <th scope='col'>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders && orders.map((oOrders, iIndex) => (
-                                        <tr key={iIndex}>
-                                            <td>
-                                                <Link to={`/admin/orders/${oOrders._id}`}>
-                                                    {oOrders._id}
-                                                </Link>
-                                            </td>
-                                            <td>{oOrders.user.email}</td>
-                                            <td>{oOrders.status}</td>
-                                            <td>{oMoment(oOrders.createdAt).format('LLL')}</td>
-                                        </tr>    
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className=' text-center'>
-                                <nav aria-label='Page navigation example text-center'>
-                                    <ul className='pagination'>
-                                        <li className='page-item'>
-                                            <a className='page-link'>
-                                                Previous
-                                            </a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>1</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>2</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>3</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <DataTable
+                                columns={oColumns}
+                                data={oData}
+                                pagination={true}
+                                striped
+                                // selectableRows
+                                keyField='_id'
+                                // onSelectedRowsChange={handleSelectToggle}
+                                // selectableRowsNoSelectAll={true}
+                            />
                         </div>
                     </div>
                 </div>

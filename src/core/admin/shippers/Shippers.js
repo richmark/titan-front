@@ -3,6 +3,8 @@ import DashboardLayout from '../DashboardLayout';
 import { isAuthenticated } from '../../../auth/authUtil';
 import { getAllShippers, createShipper, deleteShipper } from './shippersApi';
 import { Link } from 'react-router-dom';
+import DataTable from "react-data-table-component";
+import _ from 'lodash';
 
 const Shippers = () => {
     const [toggleAll, setToggleAll] = useState(false);
@@ -65,42 +67,14 @@ const Shippers = () => {
         loadShippers();
     }, [result]);
     
-    const handleSelectToggle = oEvent => {
-        var sShipperId = oEvent.target.value;
-        var iIndexShipper = shippers.findIndex(oItem => oItem._id === sShipperId);
-        if (oEvent.target.checked) {
-            if (selectedShippers.includes(sShipperId) === false) {
-                selectedShippers.push(sShipperId);
-                setSelectedShippers(JSON.parse(JSON.stringify(selectedShippers)));
-                shippers[iIndexShipper].checked = true;
-                setShippers(JSON.parse(JSON.stringify(shippers)));
-            }
-            return;
-        }
-        var iIndex = selectedShippers.findIndex(oItem => oItem === sShipperId);
-        selectedShippers.splice(iIndex, 1);
-        setSelectedShippers(JSON.parse(JSON.stringify(selectedShippers)));
-        shippers[iIndexShipper].checked = false;
-        setShippers(JSON.parse(JSON.stringify(shippers)));
-    };
-
-    const handleSelectAllToggle = oEvent => {
-        setToggleAll(!toggleAll);
-        if (oEvent.target.checked) {
-            var aSelectedData = shippers.map(oItem => ({ ...oItem, checked: true }));
-            setShippers(JSON.parse(JSON.stringify(aSelectedData)));
-            var aSelectedIds = aSelectedData.map(oItem => oItem._id);
-            setSelectedShippers(aSelectedIds);
-            return;
-        }
-        var aSelectedData = shippers.map(oItem => ({ ...oItem, checked: false }));
-        setShippers(JSON.parse(JSON.stringify(aSelectedData)));
-        setSelectedShippers([]);
+    const handleSelectToggle = ({ allSelected, selectedCount, selectedRows }) => {
+        setSelectedShippers(JSON.parse(JSON.stringify(selectedRows)));
     };
 
     const submitDelete = () => {
         if (window.confirm('Are you sure you want to delete?') === true) {
-            deleteShipper(user._id, sToken, selectedShippers).then(oData => {
+            const aShipperIds = _.map(selectedShippers, '_id');
+            deleteShipper(user._id, sToken, aShipperIds).then(oData => {
                 if (oData.error) {
                     console.log(oData);
                 } else {
@@ -113,6 +87,53 @@ const Shippers = () => {
     };
 
     const showShippers = () => {
+        const oData = shippers;
+        const oColumns = [
+            {
+                name: "Shipper Name",
+                selector: "shipper_name",
+                sortable: true,
+                cell: oRow => {
+                    return (
+                      <Fragment>
+                        <Link to={`shippers/${oRow._id}`}>
+                            {oRow.shipper_name}
+                        </Link>
+                      </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Contact Person",
+                selector: "contact_person",
+                sortable: true
+            },
+            {
+                name: "Telephone",
+                selector: "contact_number",
+                sortable: true
+            },
+            {
+                name: "Shipper Address",
+                selector: "shipper_address",
+                sortable: true
+            },
+            {
+                name: "Shipper Website",
+                selector: "shipper_website",
+                sortable: true,
+                cell: oRow => {
+                    return (
+                        <Fragment>
+                            <a href={oRow.shipper_website} target="_blank">
+                                {oRow.shipper_website}
+                            </a>
+                        </Fragment>
+                    )
+                }
+            }
+        ];
+
         return (
             <Fragment>
                 <div className='col-md-4 col-sm-4 col-xl-4 mb-4'>
@@ -206,73 +227,16 @@ const Shippers = () => {
                                     <i className='fa fa-trash' /> Delete
                                 </button>
                             </div>
-                            <table className='table table-bordered'>
-                                <thead>
-                                    <tr>
-                                        <th scope='col' style={{ width: '3%' }}>
-                                            <input checked={toggleAll} type='checkbox' onChange={handleSelectAllToggle} />
-                                        </th>
-                                        <th scope='col'>Shipper Name</th>
-                                        <th scope='col'>Contact Person</th>
-                                        <th scope='col'>Telephone</th>
-                                        <th scope='col'>Shipper Address</th>
-                                        <th scope='col'>Shipper Website</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {shippers.length > 0 && shippers.map((oData, iIndex) => (
-                                        <tr key={iIndex}>
-                                            <th scope='row'>
-                                                <input type='checkbox' checked={oData.checked} value={oData._id} onChange={handleSelectToggle}/>
-                                            </th>
-                                            <td>
-                                                <Link to={`shippers/${oData._id}`}>
-                                                    {oData.shipper_name}
-                                                </Link>
-                                            </td>
-                                            <td>
-                                                {oData.contact_person}
-                                            </td>
-                                            <td>
-                                                {oData.contact_number}
-                                            </td>
-                                            <td>
-                                                {oData.shipper_address}
-                                            </td>
-                                            <td style={{ width: '126px' }}>
-                                                <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '250px', overflow: 'hidden' }}>
-                                                    <a href={oData.shipper_website} target="_blank">
-                                                        {oData.shipper_website}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            <div className=' text-center'>
-                                <nav aria-label='Page navigation example text-center'>
-                                    <ul className='pagination'>
-                                        <li className='page-item'>
-                                            <a className='page-link'>
-                                                Previous
-                                            </a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>1</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>2</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>3</a>
-                                        </li>
-                                        <li className='page-item'>
-                                            <a className='page-link'>Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                            <DataTable
+                                columns={oColumns}
+                                data={oData}
+                                pagination={true}
+                                striped
+                                selectableRows
+                                keyField='_id'
+                                onSelectedRowsChange={handleSelectToggle}
+                                selectableRowsNoSelectAll={true}
+                            />
                         </div>
                     </div>
                 </div>
@@ -282,7 +246,7 @@ const Shippers = () => {
 
     return (
         <DashboardLayout name='Shipper Management' detail='All Shippers'>
-            {showShippers()}
+            {shippers && showShippers()}
         </DashboardLayout>
     );
 };
