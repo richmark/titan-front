@@ -6,6 +6,8 @@ import oMoment from "moment";
 import { IMAGE_API } from "../../../config";
 import { isAuthenticated } from "../../../auth/authUtil";
 import { createProduct } from "../products/productsApi";
+import DataTable from "react-data-table-component";
+import _ from 'lodash';
 
 const AddBundle = () => {
   const [products, setProducts] = useState(false);
@@ -60,12 +62,13 @@ const AddBundle = () => {
     });
   };
 
-  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
-    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
+  const loadProducts = () => {
+    getAllProducts().then(oProducts => {
       if (oProducts.error) {
         console.log(oProducts.error);
       } else {
-        setProducts(oProducts.data);
+        var aNewObject = (oProducts.data).map(oItem => ({ ...oItem, checked: false }));
+        setProducts(aNewObject);
         var oForm = new FormData();
         oForm.set("sold_out", "F");
         setBundles({
@@ -76,56 +79,16 @@ const AddBundle = () => {
     });
   };
 
-  const handleSelectToggle = oEvent => {
-    var productId = oEvent.target.value;
-    if (oEvent.target.checked) {
-      if (selectedProducts.length > 4) {
-        alert("Max of 5 items only");
-        return;
-      }
-      var oSelectedData = products.find(oItem => oItem._id === productId);
-      oSelectedData.count = "1";
-      selectedProducts.push(oSelectedData);
-      setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-      return;
-    }
-    var iIndex = selectedProducts.findIndex(oItem => oItem._id === productId);
-    selectedProducts.splice(iIndex, 1);
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-  };
-
-  const handleProductCount = sProductId => oEvent => {
-    if (oEvent.target.value === "") {
-      oEvent.target.value = 1;
-    }
-    const iIndex = selectedProducts.findIndex(
-      oProduct => oProduct._id === sProductId
-    );
-    selectedProducts[iIndex].count = oEvent.target.value;
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
-  };
-
-  const getTotalPrice = () => {
-    var iTotal = 0;
-    selectedProducts.forEach(oElement => {
-      iTotal += oElement.count
-        ? oElement.count * oElement.price
-        : oElement.price;
+  const handleSelectToggle = ({ allSelected, selectedCount, selectedRows }) => {
+    setSelectedProducts(JSON.parse(JSON.stringify(selectedRows)));
+    const aBundleIds = _.map(selectedRows, '_id');
+    var aIndex = [];
+    aBundleIds.forEach(sId => {
+      aIndex.push(products.findIndex(oProduct => oProduct._id === sId));
+    })
+    aIndex.forEach(sIndex => {
+      products[sIndex].checked = true;
     });
-    return iTotal;
-  };
-
-  const isProductSelected = sProductId => {
-    let oData = selectedProducts.find(oProduct => oProduct._id === sProductId);
-    return oData === undefined ? false : true;
-  };
-
-  const removeSelectedProduct = sProductId => oEvent => {
-    const iIndex = selectedProducts.findIndex(
-      oProduct => oProduct._id === sProductId
-    );
-    selectedProducts.splice(iIndex, 1);
-    setSelectedProducts(JSON.parse(JSON.stringify(selectedProducts)));
   };
 
   const validateImage = (oFile, oEvent, name) => {
@@ -199,116 +162,62 @@ const AddBundle = () => {
     });
   };
 
-  const resetBundle = () => {
-    setSelectedProducts([]);
-    document.getElementById("image").value = "";
-    document.getElementById("discount_type").value = "fix";
-    var oForm = new FormData();
-    oForm.set("discount_type", "fix");
-    oForm.set("display", "T");
-    oForm.set("sold_out", "F");
-    setBundles({
-      product_name: "",
-      description: "",
-      image:
-        "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
-      formData: oForm,
-      price: 0,
-      display: "T",
-      sold_out: "F",
-      stock: 0
-    });
-  };
-
   const showAddBundle = () => {
+    const oData = products;
+    const oColumns = [
+      {
+        name: "Thumbnail",
+        cell: oRow => {
+          return (
+            <Fragment>
+              <img
+                src={`${IMAGE_API}/images/products/${oRow.image}`}
+                style={{
+                  width: "50%"
+                }}
+              />
+            </Fragment>
+          )
+        }
+      },
+      {
+        name: "Product Name",
+        selector: "product_name",
+        sortable: true
+      },
+      {
+        name: "Category",
+        selector: "category.name",
+        sortable: true
+      },
+      {
+          name: "Date Created",
+          selector: "createdAt",
+          sortable: true,
+          format: oRow => oMoment(oRow.createdAt).format('DD-MM-YYYY')
+      }
+    ];
+
     return (
       <Fragment>
         <div className="col-md-7 col-sm-7 col-xl-7 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
               <div className="mt-5">
-                <div className="float-left">
-                  <span>10</span> Items
-                </div>
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col" style={{ width: "3%" }}>
-                        <input type="checkbox" />
-                      </th>
-                      <th scope="col" style={{ width: "8%" }}>
-                        Thumbnail
-                      </th>
-                      <th scope="col">Product Name</th>
-                      <th scope="col">Price</th>
-                      <th scope="col">Category</th>
-                      <th scope="col">Date Created</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products &&
-                      products.map((oProduct, iIndex) => {
-                        return (
-                          <tr key={iIndex}>
-                            <th scope="row">
-                              <input
-                                checked={isProductSelected(oProduct._id)}
-                                type="checkbox"
-                                value={oProduct._id}
-                                name="productCheckbox"
-                                onChange={handleSelectToggle}
-                              />
-                            </th>
-                            <td className="text-center">
-                              <img
-                                src={`${IMAGE_API}/images/products/${oProduct.image}`}
-                                style={{
-                                  width: "50%"
-                                }}
-                              />
-                            </td>
-                            <td>{oProduct.product_name}</td>
-                            <td>{oProduct.price}</td>
-                            <td>{oProduct.category.name}</td>
-                            <td>
-                              {oMoment(oProduct.createdAt).format("DD-MM-YYYY")}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-                <div className=" text-center">
-                  <nav aria-label="Page navigation example text-center">
-                    <ul className="pagination">
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          Previous
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          1
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          2
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          3
-                        </a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link" href="#">
-                          Next
-                        </a>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+                <style>
+                  {`.bfOOvg { height: auto !important }`}
+                </style>
+                <DataTable
+                  title={'Product List'}
+                  columns={oColumns}
+                  data={oData}
+                  pagination={true}
+                  striped
+                  selectableRows
+                  keyField='_id'
+                  onSelectedRowsChange={handleSelectToggle}
+                  selectableRowsNoSelectAll={true}
+                />
               </div>
             </div>
           </div>
@@ -424,11 +333,6 @@ const AddBundle = () => {
                   <table className="table table-bordered">
                     <thead>
                       <tr>
-                        <th
-                          scope="col"
-                          className="border-0"
-                          style={{ width: "3%" }}
-                        />
                         <th scope="col" style={{ width: "8%" }}>
                           Thumbnail
                         </th>
@@ -441,14 +345,6 @@ const AddBundle = () => {
                         selectedProducts.map((oProduct, iIndex) => {
                           return (
                             <tr key={iIndex}>
-                              <th scope="row">
-                                <button
-                                  onClick={removeSelectedProduct(oProduct._id)}
-                                  className="btn btn-sm btn-danger"
-                                >
-                                  <i className="fa fa-minus" />
-                                </button>
-                              </th>
                               <td className="text-center">
                                 <img
                                   src={`${IMAGE_API}/images/products/${oProduct.image}`}
@@ -483,7 +379,7 @@ const AddBundle = () => {
 
   return (
     <DashboardLayout name="Bundle Deals Management" detail="Make Bundle">
-      {showAddBundle()}
+      {products && showAddBundle()}
     </DashboardLayout>
   );
 };

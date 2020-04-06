@@ -6,6 +6,7 @@ import { isAuthenticated } from "../../../auth/authUtil";
 import { getOrderById, updateOrder } from './ordersApi';
 import { getAllShippers } from '../shippers/shippersApi';
 import { IMAGE_API } from '../../../config';
+import Receipt from '../../../user/Receipt';
 
 const Orders = ({ match }) => {
   const [result, setResult] = useState(false);
@@ -163,12 +164,26 @@ const Orders = ({ match }) => {
       );
     };
 
+    const printReceipt = (oEvent) => {
+      oEvent.preventDefault();
+      var oRestorePage = window.document.body.innerHTML;
+      window.document.getElementById('PrintOrder').style.display = '';
+      var oPrintContent = window.document.getElementById('PrintOrder').outerHTML;
+      window.document.body.innerHTML = oPrintContent;
+      window.print();
+      window.document.body.innerHTML = oRestorePage;
+      window.document.getElementById('SubmitPrint').addEventListener('click', printReceipt);
+    };
+
     const showUpdateOrders = () => {
         return (
             <Fragment>
               <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
                 <div className="card border-left-primary shadow h-100 py-2">
                   <div className="card-body">
+                    <div>
+                      <button id='SubmitPrint' onClick={printReceipt}>Print Receipt</button>
+                    </div>
                     <div className="float-right"><span>{order && order.products.length}</span> Items</div>
                     <table className="table table-bordered">
                       <thead>
@@ -277,6 +292,9 @@ const Orders = ({ match }) => {
                   </div>
                 </div>
               </div>
+              {order && <div id='PrintOrder' style={{display: 'none'}}>
+                <Receipt order={order}/>
+              </div>}
             </Fragment>
           );
     };

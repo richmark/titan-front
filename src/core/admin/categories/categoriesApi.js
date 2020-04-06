@@ -57,3 +57,19 @@ export const updateCategory = (sId, sToken, oCategory, sCategoryId) => {
     })
     .catch(err => console.log(err));
 };
+
+export const deleteCategory = (sId, sToken, oCategories) => {
+  return fetch(`${API_URL}/category/delete/${sId}`, {
+    method: 'DELETE',
+    headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${sToken}`,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(oCategories)
+  })
+  .then(response => {
+      return response.json();
+  })
+  .catch(err => console.log(err));
+};
