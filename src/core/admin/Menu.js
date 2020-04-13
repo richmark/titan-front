@@ -276,7 +276,29 @@ const Menu = () => {
               <Link to="/admin/wholesalers" className="collapse-item">
                 All Wholesale User
               </Link>
-              <a className="collapse-item">Process User</a>
+            </div>
+          </div>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#userManagement"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+          >
+            <span>User Management</span>
+          </a>
+          <div
+            id="userManagement"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white py-2 collapse-inner rounded">
+              <Link to="/" className="collapse-item">
+                User List
+              </Link>
             </div>
           </div>
         </li>

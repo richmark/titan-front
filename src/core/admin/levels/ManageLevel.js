@@ -131,7 +131,7 @@ const ManageLevel = () => {
                 <thead>
                   <tr>
                     <th scope="col">Level</th>
-                    <th scope="col">Price Discount</th>
+                    <th scope="col">Price Threshold</th>
                     <th scope="col">Percentage</th>
                   </tr>
                 </thead>

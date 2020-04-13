@@ -25,7 +25,7 @@ const ProductBundleCarousel = () => {
                 : `${IMAGE_API}/images/banners/${oBundle.banner_image}`;
         return (
             <Fragment>
-                <a href={`https://${oBundle.banner_link}`} target="_blank">
+                <a href={`${oBundle.banner_link}`} target="_blank">
                     <Image className='d-block w-100' src={sImage} />
                 </a>
             </Fragment>
