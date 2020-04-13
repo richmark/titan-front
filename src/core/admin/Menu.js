@@ -276,7 +276,6 @@ const Menu = () => {
               <Link to="/admin/wholesalers" className="collapse-item">
                 All Wholesale User
               </Link>
-              <a className="collapse-item">Process User</a>
             </div>
           </div>
         </li>
