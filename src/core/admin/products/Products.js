@@ -1,41 +1,33 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { Link, Redirect } from "react-router-dom";
 import DashboardLayout from "../DashboardLayout";
-import {
-  getAllProducts,
-  getProductCount,
-  searchProduct,
-  searchProductByCategory
-} from "./productsApi";
+import { getAllProducts } from "./productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
 import oMoment from "moment";
 import { deleteProduct } from "./productsApi";
 import { IMAGE_API } from "../../../config";
 import { isAuthenticated } from "../../../auth/authUtil";
-import { shallowEqual } from "@babel/types";
+import DataTable from "react-data-table-component";
+import _ from "lodash";
 
 const Products = () => {
+  const [result, setResult] = useState(false);
+  const [originalProducts, setOriginalProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [count, setCount] = useState(0);
-  const [showCount, setShowCount] = useState(5);
   const [filter, setFilter] = useState("All");
-  const [paginationCount, setPaginationCount] = useState(0);
-  const [paginationHide, setPaginationHide] = useState(false);
-  const [paginationStart, setPaginationStart] = useState(1);
-  const [paginationEnd, setPaginationEnd] = useState(10);
-  const [pageActive, setPageActive] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const { sToken, user } = isAuthenticated();
   const [redirectAddProduct, setRedirectAddProduct] = useState(false);
+  const [queryString, setQueryString] = useState("");
 
   useEffect(() => {
     loadCategories();
-    loadProductCount();
-  }, []);
+    loadProducts();
+  }, [result]);
 
   const loadCategories = () => {
-    getAllCategories().then(oCategories => {
+    getAllCategories().then((oCategories) => {
       if (oCategories.error) {
         console.log(oCategories.error);
       } else {
@@ -44,154 +36,59 @@ const Products = () => {
     });
   };
 
-  const loadProducts = (iLimit, iOffset, sOrder, sSortBy) => {
-    getAllProducts(iLimit, iOffset, sOrder, sSortBy).then(oProducts => {
+  const loadProducts = () => {
+    getAllProducts().then((oProducts) => {
       if (oProducts.error) {
         console.log(oProducts.error);
       } else {
         setProducts(oProducts.data);
+        setOriginalProducts(oProducts.data);
       }
     });
   };
 
-  const loadProductCount = () => {
-    getProductCount().then(oData => {
-      if (oData.error) {
-        console.log(oData.error);
-      } else {
-        var iCount = oData.data.count;
-        setCount(iCount);
-        initializePagination(iCount, 5);
-      }
-    });
+  const handleSelectToggle = ({ allSelected, selectedCount, selectedRows }) => {
+    setSelectedProducts(JSON.parse(JSON.stringify(selectedRows)));
   };
 
-  const initializePagination = (iCount, iShowCount) => {
-    var iPaginationCount = Math.ceil(iCount / iShowCount);
-    resetPagination();
-    setPaginationCount(iPaginationCount);
-    iPaginationCount > 9
-      ? setPaginationEnd(9)
-      : setPaginationEnd(iPaginationCount);
-
-    loadProducts(
-      iShowCount,
-      parseInt(iShowCount * (pageActive - 1), "asc", "_id")
-    );
-  };
-
-  const handleShowChange = oEvent => {
-    var newShowCount = oEvent.target.value;
-    setShowCount(newShowCount);
-    initializePagination(count, newShowCount);
-  };
-
-  const handleNextPagination = oEvent => {
-    var newPageActive = pageActive + 1;
-
-    if (paginationCount > pageActive) {
-      setPageActive(newPageActive);
-      loadProducts(
-        showCount,
-        parseInt(showCount * (newPageActive - 1)),
-        "asc",
-        "_id"
-      );
-    }
-
-    if (paginationEnd >= 9) {
-      if (
-        pageActive >= Math.ceil(paginationEnd / 2) &&
-        paginationEnd !== paginationCount
-      ) {
-        setPaginationEnd(paginationEnd + 1);
-        setPaginationStart(paginationStart + 1);
+  const filterSearch = sQueryString => {
+    var results = [];
+    for (var j = 0; j < originalProducts.length; j++) {
+      if (originalProducts[j].product_name.indexOf(sQueryString) !== -1) {
+        results.push(originalProducts[j]);
       }
     }
+
+    return results;
   };
 
-  const handlePrevPagination = oEvent => {
-    var newPageActive = pageActive - 1;
-
-    if (pageActive > 1) {
-      setPageActive(newPageActive);
-      loadProducts(
-        showCount,
-        parseInt(showCount * (newPageActive - 1)),
-        "asc",
-        "_id"
-      );
-    }
-
-    if (paginationEnd >= 9) {
-      if (
-        pageActive >= Math.ceil(paginationEnd / 2) &&
-        paginationStart !== 1 &&
-        pageActive <= paginationCount - 4
-      ) {
-        setPaginationEnd(paginationEnd - 1);
-        setPaginationStart(paginationStart - 1);
-      }
-    }
-  };
-
-  const handleSelectToggle = oEvent => {
-    var productId = oEvent.target.value;
-    if (oEvent.target.checked) {
-      selectedProducts.push(productId);
-      setSelectedProducts(selectedProducts);
-      return;
-    }
-    var iIndex = selectedProducts.indexOf(productId);
-    selectedProducts.splice(iIndex, 1);
-    setSelectedProducts(selectedProducts);
-  };
-
-  const handleChangeQuery = oEvent => {
-    if (oEvent.target.value !== "") {
-      searchProduct(oEvent.target.value).then(oData => {
-        if (oData.error) {
-          console.log(oData.error);
-        } else {
-          setProducts(oData.data);
-          setPaginationHide(true);
-        }
-      });
-    } else {
-      loadCategories();
-      loadProductCount();
-      setPaginationHide(false);
-    }
-  };
-
-  const handleFilterChange = oEvent => {
+  const handleFilterChange = (oEvent) => {
     setFilter(oEvent.target.value);
   };
 
-  const handleFilterClick = oEvent => {
+  const handleFilterClick = (oEvent) => {
+    oEvent.preventDefault();
+    setProducts(filterSearch(queryString));
+
     if (filter != "All") {
-      searchProductByCategory(filter).then(oData => {
-        if (oData.error) {
-          console.log(oData.error);
-        } else {
-          setProducts(oData.data);
-          setPaginationHide(true);
-        }
+      var oFiltered = _.filter(filterSearch(queryString), function (oItem) {
+        return oItem.category._id == filter; 
       });
-    } else {
-      loadCategories();
-      loadProductCount();
-      setPaginationHide(false);
+      setProducts(oFiltered);
     }
   };
 
-  const handleDelete = () => {
-    if (selectedProducts.length === 0) {
-      alert("No selected products!");
-      return;
-    }
-    if (window.confirm("Are you sure you want to delete these product(s)?")) {
-      startDeleteProducts();
+  const submitDelete = () => {
+    if (window.confirm("Are you sure you want to delete?") === true) {
+      const aProductIds = _.map(selectedProducts, "_id");
+      deleteProduct(user._id, sToken, aProductIds).then((oData) => {
+        if (oData.error) {
+          console.log(oData);
+        } else {
+          alert("Deleted Successfully");
+          setResult(!result);
+        }
+      });
     }
   };
 
@@ -202,7 +99,7 @@ const Products = () => {
   const checkDelete = () => {
     selectedProducts.splice(0, 1);
     if (selectedProducts.length !== 0) {
-      setTimeout(function() {
+      setTimeout(function () {
         startDeleteProducts();
       }, 100);
     } else {
@@ -211,8 +108,8 @@ const Products = () => {
     }
   };
 
-  const deleteProducts = iProductNo => {
-    deleteProduct(user._id, iProductNo, sToken).then(oData => {
+  const deleteProducts = (iProductNo) => {
+    deleteProduct(user._id, iProductNo, sToken).then((oData) => {
       if (oData.error) {
       } else {
         checkDelete();
@@ -220,39 +117,79 @@ const Products = () => {
     });
   };
 
-  const toggleSelectAll = bChecked => {
-    var eProductCheckbox = document.getElementsByName("productCheckbox");
-    var aTemp = [];
-
-    for (var iCount = 0; iCount < eProductCheckbox.length; iCount++) {
-      eProductCheckbox[iCount].checked = bChecked;
-      bChecked && iCount !== 0 && aTemp.push(eProductCheckbox[iCount].value);
-    }
-
-    setSelectedProducts(aTemp);
-  };
-
-  const resetPagination = () => {
-    setPageActive(1);
-    setPaginationStart(1);
-    setPaginationEnd(10);
-    setPaginationCount(0);
-    toggleSelectAll(false);
-  };
-
   const redirectToAddProductPage = () => {
     if (redirectAddProduct === true) {
-      return <Redirect to='/admin/products/add'></Redirect>
+      return <Redirect to="/admin/products/add"></Redirect>;
     }
+  };
+
+  const showDeleteProduct = () => {
+    return (
+      <Fragment>
+        <div className="float-right mb-2 d-block">
+          <button className="btn btn-danger" onClick={submitDelete}>
+            <i className="fa fa-trash" /> Delete
+          </button>
+        </div>
+      </Fragment>
+    );
+  };
+
+  const handleChangeQuery = (oEvent) => {
+    setQueryString(oEvent.target.value);
   }
 
   const showProducts = () => {
+    const oData = products;
+    const oColumns = [
+      {
+        name: "Thumbnail",
+        cell: (oRow) => {
+          return (
+            <Fragment>
+              <img
+                src={`${IMAGE_API}/images/products/${oRow.image}`}
+                style={{
+                  width: "50%",
+                }}
+              />
+            </Fragment>
+          );
+        },
+      },
+      {
+        name: "Product Name",
+        selector: "product_name",
+        sortable: true,
+        cell: (oRow) => {
+          return (
+            <Fragment>
+              <Link to={`/admin/products/update/${oRow._id}`}>
+                {oRow.product_name}
+              </Link>
+            </Fragment>
+          );
+        },
+      },
+      {
+        name: "Category",
+        selector: "category.name",
+        sortable: true,
+      },
+      {
+        name: "Date Created",
+        selector: "createdAt",
+        sortable: true,
+        format: (oRow) => oMoment(oRow.createdAt).format("DD-MM-YYYY"),
+      },
+    ];
+
     return (
       <Fragment>
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <h4>Search and filter</h4>
+              <h4>Search and Filter</h4>
               <div className="form-group row">
                 <div className="col-sm-5">
                   <div className="input-group">
@@ -262,13 +199,9 @@ const Products = () => {
                       placeholder="Search"
                       aria-label="Search"
                       aria-describedby="basic-addon2"
+                      value={queryString}
                       onChange={handleChangeQuery}
                     />
-                    <div className="input-group-append">
-                      <button className="btn btn-primary" type="button">
-                        <i className="fas fa-search fa-sm" />
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -286,7 +219,7 @@ const Products = () => {
                   ))}
               </select>
               <button className="btn btn-primary" onClick={handleFilterClick}>
-                Filter
+                Find
               </button>
               <button className="btn btn-primary mr-2" style={{float: "right"}} onClick={()=>{setRedirectAddProduct(true)}}>Add Product</button>
             </div>
@@ -295,133 +228,19 @@ const Products = () => {
         <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
           <div className="card border-left-primary shadow h-100 py-2">
             <div className="card-body">
-              <div
-                className={
-                  paginationHide
-                    ? "float-left mb-2 d-none"
-                    : "float-left mb-2 d-block"
-                }
-              >
-                <span>{count}</span> Total
-              </div>
-              <div
-                className={
-                  paginationHide
-                    ? "float-right mb-2 d-none"
-                    : "float-right mb-2 d-block"
-                }
-              >
-                <select
-                  className="btn btn-primary dropdown-toggle mr-2"
-                  onChange={handleShowChange}
-                >
-                  <option value="5"> Show 5 per page</option>
-                  <option value="10"> Show 10 per page</option>
-                  <option value="25"> Show 25 per page</option>
-                  <option value="50"> Show 50 per page</option>
-                </select>
-                <button className="btn btn-danger" onClick={handleDelete}>
-                  <i className="fa fa-trash" /> Delete
-                </button>
-              </div>
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th scope="col" style={{ width: "3%" }}>
-                      <input
-                        type="checkbox"
-                        name="productCheckbox"
-                        onChange={oEvent =>
-                          oEvent.target.checked
-                            ? toggleSelectAll(true)
-                            : toggleSelectAll(false)
-                        }
-                      />
-                    </th>
-                    <th scope="col" style={{ width: "10%" }}>
-                      Thumbnail
-                    </th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Date Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products &&
-                    products.map((oProduct, iIndex) => (
-                      <tr key={iIndex}>
-                        <th scope="row">
-                          <input
-                            type="checkbox"
-                            value={oProduct._id}
-                            name="productCheckbox"
-                            onChange={handleSelectToggle}
-                          />
-                        </th>
-                        <td>
-                          <img
-                            src={`${IMAGE_API}/images/products/${oProduct.image}`}
-                            style={{ width: "100%" }}
-                          />
-                        </td>
-                        <td>
-                          <Link to={`/admin/products/update/${oProduct._id}`}>
-                            {oProduct.product_name}
-                          </Link>
-                        </td>
-                        <td>{oProduct.stock}</td>
-                        <td>{oProduct.price}</td>
-                        <td>{oProduct.category.name}</td>
-                        <td>{oMoment(oProduct.createdAt).format("LLL")}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              <div
-                style={{ float: "right" }}
-                className={
-                  paginationHide
-                    ? "text-center d-none"
-                    : "text-center mb-2 d-block"
-                }
-              >
-                <nav aria-label="Page navigation example text-center">
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <button
-                        className="page-link"
-                        onClick={handlePrevPagination}
-                      >
-                        Previous
-                      </button>
-                    </li>
-                    {[...Array(paginationEnd - paginationStart + 1)].map(
-                      (e, i) => (
-                        <li
-                          className={
-                            i + paginationStart === pageActive
-                              ? "page-item active"
-                              : "page-item"
-                          }
-                          key={i}
-                        >
-                          <a className="page-link">{i + paginationStart}</a>
-                        </li>
-                      )
-                    )}
-                    <li className="page-item">
-                      <button
-                        className="page-link"
-                        onClick={handleNextPagination}
-                      >
-                        Next
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              {products.length > 0 && showDeleteProduct()}
+              <style>{`.bfOOvg { height: auto !important }`}</style>
+              <DataTable
+                title={"Product List"}
+                columns={oColumns}
+                data={oData}
+                pagination={true}
+                striped
+                selectableRows
+                keyField="_id"
+                onSelectedRowsChange={handleSelectToggle}
+                selectableRowsNoSelectAll={true}
+              />
             </div>
           </div>
         </div>

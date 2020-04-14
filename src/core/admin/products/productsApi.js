@@ -11,14 +11,14 @@ export const getAllProducts = (
     {
       method: "GET",
       headers: {
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     }
   )
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 export const createProduct = (sId, sToken, oProduct) => {
@@ -26,27 +26,27 @@ export const createProduct = (sId, sToken, oProduct) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${sToken}`
+      Authorization: `Bearer ${sToken}`,
     },
-    body: oProduct
+    body: oProduct,
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-export const getProduct = sId => {
+export const getProduct = (sId) => {
   return fetch(`${API_URL}/product/${sId}`, {
     method: "GET",
     headers: {
-      Accept: "application/json"
-    }
+      Accept: "application/json",
+    },
   })
-    .then(oResponse => {
+    .then((oResponse) => {
       return oResponse.json();
     })
-    .catch(oError => console.log(oError));
+    .catch((oError) => console.log(oError));
 };
 
 export const updateProduct = (sId, sToken, oProduct, sProductId) => {
@@ -54,41 +54,43 @@ export const updateProduct = (sId, sToken, oProduct, sProductId) => {
     method: "PUT",
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${sToken}`
+      Authorization: `Bearer ${sToken}`,
     },
-    body: oProduct
+    body: oProduct,
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-export const deleteProduct = (sId, sProductId, sToken) => {
-  return fetch(`${API_URL}/product/${sProductId}/${sId}`, {
+export const deleteProduct = (sId, sToken, aProduct) => {
+  return fetch(`${API_URL}/product/delete/${sId}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${sToken}`
-    }
+      Authorization: `Bearer ${sToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(aProduct),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 export const getProductCount = () => {
   return fetch(`${API_URL}/products/count`, {
     method: "GET",
     headers: {
-      Accept: "application/json"
-    }
+      Accept: "application/json",
+    },
   })
-    .then(oResponse => {
+    .then((oResponse) => {
       return oResponse.json();
     })
-    .catch(oError => console.log(oError));
+    .catch((oError) => console.log(oError));
 };
 
 export const getProductByCategory = (sId, skip, order) => {
@@ -97,68 +99,68 @@ export const getProductByCategory = (sId, skip, order) => {
     {
       method: "GET",
       headers: {
-        Accept: "application/json"
-      }
+        Accept: "application/json",
+      },
     }
   )
-    .then(oResponse => {
+    .then((oResponse) => {
       return oResponse.json();
     })
-    .catch(oError => console.log(oError));
+    .catch((oError) => console.log(oError));
 };
 
-export const getRelatedProduct = sId => {
+export const getRelatedProduct = (sId) => {
   return fetch(`${API_URL}/products/related/${sId}`, {
     method: "GET",
     headers: {
-      Accept: "application/json"
-    }
+      Accept: "application/json",
+    },
   })
-    .then(oResponse => {
+    .then((oResponse) => {
       return oResponse.json();
     })
-    .catch(oError => console.log(oError));
+    .catch((oError) => console.log(oError));
 };
 
-export const searchProduct = sQuery => {
+export const searchProduct = (sQuery) => {
   var aQuery = { query: sQuery };
   return fetch(`${API_URL}/product/search`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(aQuery)
+    body: JSON.stringify(aQuery),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-export const searchProductByBrand = sQuery => {
+export const searchProductByBrand = (sQuery) => {
   var aQuery = { query: sQuery };
   return fetch(`${API_URL}/product/brand/search`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(aQuery)
+    body: JSON.stringify(aQuery),
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
-export const searchProductByCategory = sId => {
+export const searchProductByCategory = (sId) => {
   return fetch(`${API_URL}/products/category/${sId}`, {
     method: "GET",
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   })
-    .then(response => {
+    .then((response) => {
       return response.json();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };

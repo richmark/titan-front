@@ -59,11 +59,22 @@ const Orders = ({ match }) => {
     };
 
     const getTotal = () => {
-        let mTotal = 0;
-        order.products.map((oProduct, iIndex) => {
-            mTotal += oProduct.price * oProduct.count;
-        })
-        return mTotal;
+      let mTotal = 0;
+      order.products.map((oProduct, iIndex) => {
+          mTotal += oProduct.price * oProduct.count;
+      });
+
+      return mTotal - order.discount_fee;
+    };
+
+    const getDiscountFee = () => {
+      if (order.discount_fee > 0) {
+        return (
+          <Fragment>
+            <p>Discount Fee: <span>{order.discount_fee}</span></p>
+          </Fragment>
+        );
+      }
     };
 
     const submitOrder = (oEvent) => {
@@ -215,6 +226,7 @@ const Orders = ({ match }) => {
                       </tbody>
                     </table>
                     <div className="float-right">
+                      {order && getDiscountFee()}
                       <p>Total: <span>{order && getTotal()}</span></p>
                     </div>
                   </div>
