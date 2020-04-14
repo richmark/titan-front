@@ -248,7 +248,7 @@ const Login = () => {
   };
 
   return (
-    <Layout title="Login" description="Login here" messenger={false}>
+    <Layout title="Login" description="Login here">
       {verifyToken()}
       {showVerificationMessage()}
       <form onKeyPress={doLoginEnter}>{bootstrapLogin()}</form>
