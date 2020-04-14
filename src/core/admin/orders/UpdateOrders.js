@@ -62,8 +62,8 @@ const Orders = ({ match }) => {
       let mTotal = 0;
       order.products.map((oProduct, iIndex) => {
           mTotal += oProduct.price * oProduct.count;
-      })
-      console.log(mTotal, order.discount_fee);
+      });
+
       return mTotal - order.discount_fee;
     };
 
