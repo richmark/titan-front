@@ -43,6 +43,7 @@ import BundleDetails from "./user/format/bundle/BundleDetails";
 import AboutUs from "./user/AboutUs";
 import AddSubadmin from "./core/admin/subadmins/AddSubadmins";
 import Subadmins from "./core/admin/subadmins/SubAdmins";
+import VerifiedUsers from "./core/admin/verifiedusers/VerifiedUsers";
 import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
 import BundleDeals from './user/format/bundle/BundleDeals';
@@ -173,7 +174,7 @@ const Routes = () => {
       />
       <AdminRoute path="/admin/levels" exact component={ManageLevel}/>
       <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
-      <AdminRoute path="/admin/subadmin" exact component={Subadmins} />
+      <AdminRoute path="/admin/verified/users" exact component={VerifiedUsers} />
     </BrowserRouter>
   );
 };
