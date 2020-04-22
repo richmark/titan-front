@@ -52,9 +52,12 @@ const Products = () => {
   };
 
   const filterSearch = sQueryString => {
+    sQueryString = sQueryString.toLowerCase();
     var results = [];
+
     for (var j = 0; j < originalProducts.length; j++) {
-      if (originalProducts[j].product_name.indexOf(sQueryString) !== -1) {
+      var sProductName = originalProducts[j].product_name.toLowerCase();
+      if (sProductName.indexOf(sQueryString) !== -1) {
         results.push(originalProducts[j]);
       }
     }
@@ -139,6 +142,13 @@ const Products = () => {
     setQueryString(oEvent.target.value);
   }
 
+  const sendSubmit = oEvent => {
+    oEvent.persist();
+    if (oEvent.key === 'Enter') {
+      handleFilterClick(oEvent);
+    }
+  }
+
   const showProducts = () => {
     const oData = products;
     const oColumns = [
@@ -201,7 +211,16 @@ const Products = () => {
                       aria-describedby="basic-addon2"
                       value={queryString}
                       onChange={handleChangeQuery}
+                      onKeyPress={sendSubmit}
                     />
+                    <div className="input-group-append">
+                      <span
+                        className="btn btn-primary"
+                        onClick={handleFilterClick}
+                      >
+                        <i className="fas fa-search fa-sm" />
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -218,9 +237,6 @@ const Products = () => {
                     </option>
                   ))}
               </select>
-              <button className="btn btn-primary" onClick={handleFilterClick}>
-                Find
-              </button>
               <button className="btn btn-primary mr-2" style={{float: "right"}} onClick={()=>{setRedirectAddProduct(true)}}>Add Product</button>
             </div>
           </div>
