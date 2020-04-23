@@ -7,6 +7,7 @@ import { createBanner, getBanners, deleteBanner } from './bannerApi';
 import oMoment from "moment";
 import _ from 'lodash';
 import DataTable from "react-data-table-component";
+import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
 
 const Banner = () => {
 
@@ -45,15 +46,24 @@ const Banner = () => {
 
     const submitBanner = (oEvent) => {
         oEvent.preventDefault();
-        createBanner(user._id, sToken, formData).then(oData => {
-            if (oData.error) {
-                console.log(oData);
-            } else {
-                setValues({ banner_image: '', banner_link: '', visibility: false, formData: new FormData() });
-                setResult(!result);
-                alert('Created Successfully');
-            }
-        })
+        var oValidator = oValidatorLibrary();
+        oValidator.message('BannerLink', getValue('bannerLink'), 'required|valid_url');
+        oValidator.message('BannerImage', getValue('bannerImage'), 'required');
+        if (oValidator.allValid()) {
+            createBanner(user._id, sToken, formData).then(oData => {
+                if (oData.error) {
+                    console.log(oData);
+                } else {
+                    setValues({ banner_image: '', banner_link: '', visibility: false, formData: new FormData() });
+                    setResult(!result);
+                    alert('Created Successfully');
+                }
+            })
+        } else {
+            var oError = oValidator.getErrorMessages();
+            alert(setErrorMessage(oError));
+        }
+        
     };
 
     const handleChange = (name) => (oEvent) => {
@@ -91,6 +101,18 @@ const Banner = () => {
                 }
             });
         }
+    };
+
+    const getValue = (sValue) => {
+        return document.getElementById(sValue).value.trim()
+    }
+
+    const setErrorMessage = (oError) => {
+        var aMessage = [];
+        Object.keys(oError).map(mKey => {
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
+        });
+        return aMessage;
     };
 
     const showAddBanner = () => {
@@ -141,10 +163,10 @@ const Banner = () => {
                 <div className="col-md-4 col-sm-4 col-xl-4 mb-4">
                     <div className="card border-left-primary shadow h-100 py-2">
                         <div className="card-body">
-                            <input value={banner_link} onChange={handleChange('banner_link')} type="text" className="form-control bg-light small mb-2" placeholder="Banner Link" />
+                            <input id="bannerLink" value={banner_link} onChange={handleChange('banner_link')} type="text" className="form-control bg-light small mb-2" placeholder="Banner Link" />
                             <div className="border p-3 mb-2">
                                 <h6>Image Upload</h6>
-                                <input value={banner_image} onChange={handleChange('banner_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                                <input id="bannerImage" value={banner_image} onChange={handleChange('banner_image')} type="file" className="form-control-file" />
                             </div>
                             <div className="border p-3 mb-2">
                                 <h6>Visibility</h6>

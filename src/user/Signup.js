@@ -170,7 +170,7 @@ const Signup = ({ match }) => {
                         value={email}
                         type='email'
                         className={`form-control ${danger_email}`}
-                        placeholder='Enter email'
+                        placeholder='Enter Email'
                     />
                     </div>
                 </div>
@@ -328,34 +328,12 @@ const Signup = ({ match }) => {
                     <div className='col-sm-6 border m-5 p-5 rounded'  style={{backgroundColor: '#ffc044'}} onKeyPress={doLoginEnter}>
                         {showCommonForm()}
                         {showConditionalForm()}
-                        {/* <button
-                            onClick={clickSubmit}
-                            type='button'
-                            className='btn btn-success'
-
-                        >
-                            REGISTER
-                        </button> */}
                         <Col sm={{span: 6, offset: 3}}>
                             <Button onClick={clickSubmit} variant="primary" className="mt-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>REGISTER</Button>
                         </Col>
                     </div>
                     <div className='col-sm'></div>
                 </div>
-                {/* <button
-                    onClick={clickSubmit}
-                    type='button'
-                    className='btn btn-success'
-                >
-                    REGISTER
-                </button>
-                <Link to="/signup">
-                    <button
-                        className='btn btn-secondary mx-3'
-                    >
-                        Cancel
-                    </button>
-                </Link> */}
             </div>
         );
 

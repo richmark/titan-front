@@ -34,6 +34,17 @@ export const oValidatorLibrary = () => {
           }
           return new Date(oVal[0]).getTime() < new Date(oVal[1]).getTime();
         }
+      },
+      valid_url: {
+        message: "Invalid url! Must include http protocol",
+        rule: (oVal, oParams, oValidator) => {
+          return (
+            oValidator.helpers.testRegex(
+              oVal,
+              /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+            ) && oParams.indexOf(oVal) === -1
+          );
+        }
       }
     }
   };

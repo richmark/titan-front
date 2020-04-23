@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import DashboardLayout from '../DashboardLayout';
 import { isAuthenticated } from "../../../auth/authUtil";
 import { updateBanner, getBannerById } from './bannerApi';
+import { oValidatorLibrary } from "../../../libraries/validatorLibrary";
 
 const UpdateBanner = ({ match }) => {
 
@@ -54,15 +55,23 @@ const UpdateBanner = ({ match }) => {
 
     const submitBanner = (oEvent) => {
         oEvent.preventDefault();
-        updateBanner(user._id, sToken, formData, match.params.bannerId).then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else {
-                setValues({ banner_image: '', banner_link: '', visibility: false, formData: new FormData() });
-                setResult(!result);
-                alert('Updated Successfully');
-            }
-        })
+        var oValidator = oValidatorLibrary();
+        oValidator.message('BannerLink', getValue('bannerLink'), 'required|valid_url');
+        if (oValidator.allValid()) {
+            updateBanner(user._id, sToken, formData, match.params.bannerId).then(oData => {
+                if (oData.error) {
+                    console.log(oData.error);
+                } else {
+                    setValues({ banner_image: '', banner_link: '', visibility: false, formData: new FormData() });
+                    setResult(!result);
+                    alert('Updated Successfully');
+                }
+            })
+        } else {
+            var oError = oValidator.getErrorMessages();
+            alert(setErrorMessage(oError));
+        }
+        
     };
 
     const redirectPage = () => {
@@ -71,16 +80,28 @@ const UpdateBanner = ({ match }) => {
         }
     };
 
+    const getValue = (sValue) => {
+        return document.getElementById(sValue).value.trim()
+    }
+
+    const setErrorMessage = (oError) => {
+        var aMessage = [];
+        Object.keys(oError).map(mKey => {
+            aMessage.push((typeof oError[mKey] === 'object') ? '' : oError[mKey]); 
+        });
+        return aMessage;
+    };
+
     const showUpdateBanner = () => {
         return (
             <Fragment>
                 <div className="col-md-4 col-sm-4 col-xl-4 mb-4">
                     <div className="card border-left-primary shadow h-100 py-2">
                         <div className="card-body">
-                            <input value={banner_link} onChange={handleChange('banner_link')} type="text" className="form-control bg-light small mb-2" placeholder="Banner Link" />
+                            <input id="bannerLink" value={banner_link} onChange={handleChange('banner_link')} type="text" className="form-control bg-light small mb-2" placeholder="Banner Link" />
                             <div className="border p-3 mb-2">
                                 <h6>Image Upload</h6>
-                                <input onChange={handleChange('banner_image')} type="file" className="form-control-file" id="exampleFormControlFile1" />
+                                <input id="bannerImage" onChange={handleChange('banner_image')} type="file" className="form-control-file"/>
                             </div>
                             <div className="border p-3 mb-2">
                                 <h6>Visibility</h6>

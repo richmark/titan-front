@@ -174,6 +174,7 @@ const Routes = () => {
       />
       <AdminRoute path="/admin/levels" exact component={ManageLevel}/>
       <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
+      <AdminRoute path="/admin/subadmin" exact component={Subadmins} />
       <AdminRoute path="/admin/verified/users" exact component={VerifiedUsers} />
     </BrowserRouter>
   );
