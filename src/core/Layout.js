@@ -563,8 +563,8 @@ const Layout = ({
               <Col xs={3} md={3} xl={3} sm={3} className="text-left">
                 <p style={{ color: "#ffc044" }}>ABOUT US</p>
                 <p>
-                  Tital Supertools Hardware is a company that carries multipe
-                  brands fot the assortment of the clients to choose from at an
+                  Titan Supertools Hardware is a company that carries multiple
+                  brands for the assortment of the clients to choose from at an
                   affordable price
                 </p>
 
