@@ -7,6 +7,7 @@ import { isAuthenticated } from "../../../auth/authUtil";
 const VerifiedUsers = () => {
   const { sToken, user } = isAuthenticated();
   const [allUsers, setUsers] = useState({});
+  const [aSearch, setSearch] = useState({});
   const [sQueryString, setQueryString] = useState("");
 
   useEffect(() => {
@@ -19,12 +20,13 @@ const VerifiedUsers = () => {
         console.log(oData.error);
       } else {
         setUsers(oData.data);
+        setSearch(oData.data);
       }
     });
   };
 
   const showDataTable = () => {
-    const oData = allUsers;
+    const oData = aSearch;
     const oColumns = [
       {
         name: "Email",
@@ -82,21 +84,21 @@ const checkUserType = (iRole) => {
     return aRole[iRole];
 }
 
-  const handleSearchClick = oEvent => {
-    if (sQueryString !== "") {
-      var aResults = filterSearch(sQueryString);
-      setUsers(aResults);
-    } else {
-        loadUsers();
-    }
-  };
+const handleSearchClick = oEvent => {
+  if (sQueryString !== "") {
+    var aResults = filterSearch(sQueryString);
+    setSearch(aResults);
+  } else {
+      loadUsers();
+  }
+};
 
 const handleSearchChange = oEvent => {
     var sQueryString = oEvent.target.value;
     setQueryString(sQueryString);
     if (sQueryString !== "") {
-        var aResults = filterSearch(sQueryString);
-        setUsers(aResults);
+      var aResults = filterSearch(sQueryString);
+      setSearch(aResults);
     } else {
         loadUsers();
     }
@@ -139,20 +141,21 @@ const handleSearchChange = oEvent => {
   };
 
 const filterSearch = sQueryString => {
-    var results = [];
-
-    for (var j = 0; j < allUsers.length; j++) {
-        if (
-            allUsers[j].email.indexOf(sQueryString) !== -1 ||
-            allUsers[j].first_name.indexOf(sQueryString) !== -1 ||
-            allUsers[j].last_name.indexOf(sQueryString) ||
-            allUsers[j].address.indexOf(sQueryString)
-        ) {
+  var results = [];
+  var sChecker = sQueryString.toLowerCase();
+  for (var j = 0; j < allUsers.length; j++) {
+      if (
+          allUsers[j].email.toLowerCase().indexOf(sChecker) !== -1 ||
+          allUsers[j].first_name.toLowerCase().indexOf(sChecker) !== -1 ||
+          allUsers[j].last_name.toLowerCase().indexOf(sChecker) !== -1 ||
+          allUsers[j].address.toLowerCase().indexOf(sChecker) !== -1 ||
+          checkUserType(allUsers[j].role).toLowerCase().indexOf(sChecker) !== -1
+      ) {
         results.push(allUsers[j]);
-        }
-    }
+      }
+  }
 
-    return results;
+  return results;
 };
 
   return (

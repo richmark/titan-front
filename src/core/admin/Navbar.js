@@ -40,15 +40,6 @@ const Navbar = () => {
                             className='dropdown-menu dropdown-menu-right shadow animated--grow-in'
                             aria-labelledby='userDropdown'
                         >
-                            <a className='dropdown-item' href='signout'>
-                                <i className='fas fa-user fa-sm fa-fw mr-2 text-gray-400' />
-                                Profile
-                            </a>
-                            <a className='dropdown-item' href='#'>
-                                <i className='fas fa-cogs fa-sm fa-fw mr-2 text-gray-400' />
-                                Settings
-                            </a>
-                            <div className='dropdown-divider' />
                             <a
                                 href={`${APP_URL}/signout`}
                                 className='dropdown-item'
