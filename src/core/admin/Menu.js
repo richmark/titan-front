@@ -253,6 +253,9 @@ const Menu = () => {
               <Link to="/admin/orders" className="collapse-item">
                 All Order
               </Link>
+              <Link to="/admin/orders/details/settings" className="collapse-item">
+                Order Settings
+              </Link>
             </div>
           </div>
         </li>
@@ -264,7 +267,7 @@ const Menu = () => {
             aria-expanded="true"
             aria-controls="collapseTwo"
           >
-            <span>Wholesale User Applications</span>
+            <span>User Applications</span>
           </a>
           <div
             id="wholesaleApp"
@@ -274,7 +277,7 @@ const Menu = () => {
           >
             <div className="bg-white py-2 collapse-inner rounded">
               <Link to="/admin/wholesalers" className="collapse-item">
-                All Wholesale User
+                All Applications
               </Link>
             </div>
           </div>

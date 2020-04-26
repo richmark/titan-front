@@ -59,7 +59,7 @@ const VerifiedUsers = () => {
             return checkUserType(oRow.role)
         },
         sortable: true,
-    },
+      },
     ];
     return (
       <Fragment>

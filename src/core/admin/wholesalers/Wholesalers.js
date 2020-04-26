@@ -48,7 +48,14 @@ const Wholesalers = () => {
                         </Fragment>
                     )
                 }
-            }
+            },
+            {
+                name: 'Type',
+                cell: oRow => {
+                    return checkUserType(oRow.role)
+                },
+                sortable: true,
+            },
         ];
 
         return (
@@ -70,10 +77,19 @@ const Wholesalers = () => {
         );
     };
 
+    const checkUserType = (iRole) => {
+        const aRole = {
+            2 : 'Personal',
+            3 : 'Corporate',
+            4 : 'Wholesaler'
+        };
+        return aRole[iRole];
+    }
+
     return (
         <DashboardLayout
-            name='Wholesale User Application'
-            detail='All Wholesale User'
+            name='User Applications'
+            detail='All Applications'
         >
             {showWholesalers()}
         </DashboardLayout>
