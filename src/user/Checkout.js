@@ -14,6 +14,7 @@ import { APP_URL } from '../config';
 import { checkCouponCode } from '../core/admin/coupons/couponsApi';
 import { getUserData } from '../core/client/userApi';
 import { getAllLevels } from '../core/admin/levels/levelsApi';
+import { getSettings } from '../core/admin/orders/ordersApi';
 
 
 const Checkout = ({location}) => {
@@ -34,6 +35,9 @@ const Checkout = ({location}) => {
     const [sLevel, setLevel] = useState(false);
     const [aLevel, setDiscountLevel] = useState(false);
     const [bStart, setStart] = useState(false);
+
+    // For Delivery Settings
+    const [iDeliveryFee, setDeliveryFee] = useState(100);
     
     // For Shipping and Billing Details Init
     var oDetail = false;
@@ -58,7 +62,6 @@ const Checkout = ({location}) => {
 
     // Product Stock Adjustment
     var bOnlyOnce = false;
-
 
     const init = () => {
         var aCart = getCart();
@@ -121,6 +124,13 @@ const Checkout = ({location}) => {
 
     useEffect(() => {
         user && checkRole();
+        getSettings().then(oData => {
+            if (oData.error) {
+                console.log(oData.error);
+            } else if (oData.data.length > 0) {
+                setDeliveryFee(oData.data[0].delivery_fee);
+            }
+        })
         if (oBuyNow.sType !== 'buyNow') {
             init();
             return;
@@ -337,7 +347,7 @@ const Checkout = ({location}) => {
     const calculateTotal = () => {
         var oTotal = {};
         var iPrice = 0;
-        var iShipFee = 100;
+        var iShipFee = parseInt(iDeliveryFee, 10);
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
             if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
                 setProduct([]);
