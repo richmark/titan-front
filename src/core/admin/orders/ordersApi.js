@@ -57,3 +57,29 @@ export const updateOrder = (sId, sToken, sOrderId, oData) => {
     })
     .catch(err => console.log(err));
 }
+
+export const getSettings = () => {
+    return fetch(`${API_URL}/settings`, {
+        method: 'GET',
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const updateSettings = (sId, sToken, sSettingId, oData) => {
+    return fetch(`${API_URL}/settings/${sId}/${sSettingId}`, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(oData)
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+}

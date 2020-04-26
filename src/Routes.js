@@ -16,6 +16,7 @@ import AddCoupons from "./core/admin/coupons/AddCoupons";
 import UpdateCoupon from "./core/admin/coupons/UpdateCoupon";
 import Orders from "./core/admin/orders/Orders";
 import UpdateOrders from "./core/admin/orders/UpdateOrders";
+import OrderSettings from "./core/admin/orders/OrderSettings";
 import Products from "./core/admin/products/Products";
 import Reviews from "./core/admin/reviews/Reviews";
 import Shippers from "./core/admin/shippers/Shippers";
@@ -132,6 +133,7 @@ const Routes = () => {
       />
       <AdminRoute path="/admin/coupons/add" exact component={AddCoupons} />
       <AdminRoute path="/admin/orders" exact component={Orders} />
+      <AdminRoute path="/admin/orders/details/settings" exact component={OrderSettings} />
       <AdminRoute
         path="/admin/orders/:orderId"
         exact
