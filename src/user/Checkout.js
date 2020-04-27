@@ -56,9 +56,10 @@ const Checkout = ({location}) => {
     const [modalBilling, setModalBilling] = useState(false);
     const [modalShipping, setModalShipping] = useState(false);
 
-    // For Check Role
+    // For Check Role and Admin verification
     const iWholeSaler = 4;
     const [iRole, setRole] = useState(false);
+    const [bVerify, setVerify] = useState(false);
 
     // Product Stock Adjustment
     var bOnlyOnce = false;
@@ -77,7 +78,7 @@ const Checkout = ({location}) => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
-                implementRole(oData.role);
+                implementRole(oData);
             }
         });
     }
@@ -86,10 +87,12 @@ const Checkout = ({location}) => {
      * Function that changes the alert message
      * Alert message is based on coupon or wholesale discount
      * Sets the role
+     * Must be admin verified
      * Gets the Level Data (Gold, Silver, Bronze)
      */
-    const implementRole = (iParam) => {
-        if (iParam === 4) {
+    const implementRole = (oParam) => {
+        var iParam = oParam.role;
+        if (iParam === 4 && oParam.verified_admin === true) {
             getAllLevels().then(oData => {
                 if (oData.error) {
                     console.log(oData.error);
@@ -99,6 +102,7 @@ const Checkout = ({location}) => {
             });
         }
         setRole(iParam);
+        setVerify(oParam.verified_admin);
     }
 
     /**
@@ -423,7 +427,7 @@ const Checkout = ({location}) => {
     }
 
     const showDeliveryDetails = () => {
-        if (user) {
+        if (user && ((iRole <= 2) || (iRole > 2 && iRole <= 4 && bVerify === true))) {
             return (
                 <Fragment>
                     {showDetails('Billing', oBilling, setModalBilling)}
@@ -644,7 +648,7 @@ const Checkout = ({location}) => {
      * Wholesaler only
      */
     useEffect(() => {
-        if (iRole === 4) {
+        if (iRole === 4 && bVerify === true) {
             var oTotal = calculateTotal();
             applyLevelDiscount(oTotal.price);
         }
@@ -694,8 +698,23 @@ const Checkout = ({location}) => {
             <Fragment>
                 <div className='text-center mt-5'>
                     <h5>Do you want to checkout?</h5>
-                    <Button variant='warning' className='mt-3' href='/login'>Please Log In</Button>
+                    {showButtonOrMessage()}
                 </div>
+            </Fragment>
+        );
+    }
+
+    const showButtonOrMessage = () => {
+        if (user && bVerify === false) {
+            return (
+                <Fragment>
+                    <h6>Please wait for admin approval</h6>
+                </Fragment>
+            );
+        }
+        return (
+            <Fragment>
+                <Button variant='warning' className='mt-3' href='/login'>Please Log In</Button>
             </Fragment>
         );
     }
