@@ -32,7 +32,7 @@ const PaymentStatus = ({ match, location }) => {
                 setSuccess(oRetrieve.data._id);
             });
         } else {
-            alert('Processing Failed! Please try again');
+            alert(`Processing Failed (${oData.status})! Please try again`);
             setCheckout(true);
         }
     }, []);
