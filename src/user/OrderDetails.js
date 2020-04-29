@@ -12,6 +12,7 @@ const OrderDetails = ({match}) => {
     const [oBilling, setBilling] = useState(false);
     const [oShipping, setShipping] = useState(false);
     const { sToken, user } = isAuthenticated();
+    const [bForbidden, setForbidden] = useState(false);
     const oProgressBar = {
         'Not Processed' : 5,
         'Processing'    : 33,
@@ -21,8 +22,9 @@ const OrderDetails = ({match}) => {
 
     const init = () => {
         getOrderById(user._id, sToken, match.params.orderId).then((oData) => {
-            if (oData.error) {
+            if (oData.error || oData.data.user !== user._id) {
                 console.log(oData.error);
+                setForbidden(true);
                 return;
             }
             const oDetail = oData.data;
@@ -33,8 +35,18 @@ const OrderDetails = ({match}) => {
     }
 
     useEffect(() => {
-        init();
+        if (user) {
+            init();
+        } else {
+            setForbidden(true);
+        }
     }, []);
+
+    const redirectForbidden = () => {
+        if (bForbidden === true) {
+            return <Redirect to="/forbidden" />;
+        }   
+    }
 
     const showReview = (oProduct) => {
         if (oProduct.reviewed === false) {
@@ -247,6 +259,7 @@ const OrderDetails = ({match}) => {
 	return (
         <Layout>
             {showDetails()}
+            {redirectForbidden()}
         </Layout>
     );
 };
