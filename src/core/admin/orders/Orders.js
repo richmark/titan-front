@@ -9,7 +9,7 @@ import DataTable from "react-data-table-component";
 const Orders = () => {
 
     const { sToken, user } = isAuthenticated();
-    const [orders, setOrders] = useState(false);
+    const [orders, setOrders] = useState([]);
 
     const loadAllOrders = () => {
         getOrders(user._id, sToken).then(oOrders => {
@@ -66,42 +66,6 @@ const Orders = () => {
 
         return (
             <Fragment>
-                {/* <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
-                    <div className='card border-left-primary shadow h-100 py-2'>
-                        <div className='card-body'>
-                            <select
-                                id='category'
-                                className='btn btn-light border mr-2'
-                            >
-                                <option disabled defaultValue>
-                                    All Dates
-                                </option>
-                                <option>September 2019</option>
-                            </select>
-                            <select
-                                id='category'
-                                className='btn btn-light border mr-2'
-                            >
-                                <option disabled defaultValue>
-                                    Filter by customer
-                                </option>
-                            </select>
-                            <select
-                                id='category'
-                                className='btn btn-light border mr-2'
-                            >
-                                <option disabled defaultValue>
-                                    Filter by status
-                                </option>
-                                <option>Processing</option>
-                                <option>Shipped</option>
-                                <option>Delivered</option>
-                                <option>Cancelled</option>
-                            </select>
-                            <button className='btn btn-primary'>Filter</button>
-                        </div>
-                    </div>
-                </div> */}
                 <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
                     <div className='card border-left-primary shadow h-100 py-2'>
                         <div className='card-body'>

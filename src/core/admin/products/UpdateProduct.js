@@ -456,7 +456,7 @@ const UpdateProduct = ({ match }) => {
   };
 
   return (
-    <DashboardLayout name="Product Management" detail="Update Product">
+    <DashboardLayout name="Product Management" detail={[<a href='/admin/products'>All Products</a>, ' / Update Product']}>
       {showUpdateProductForm()}
       {showUpdateProductDetail()}
       {showUpdate()}

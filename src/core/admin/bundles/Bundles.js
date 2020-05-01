@@ -107,7 +107,7 @@ const Bundles = () => {
     };
 
     return (
-        <DashboardLayout name='Bundle Management' detail='All Bundles'>
+        <DashboardLayout name='Bundle Deals Management' detail='All Bundles'>
             {bundles && showBundles()}
         </DashboardLayout>
     );

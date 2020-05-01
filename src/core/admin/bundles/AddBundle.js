@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
+import { Redirect } from "react-router-dom";
 import DashboardLayout from "../DashboardLayout";
 import { getAllProducts, getProductCount } from "../products/productsApi";
 import { getAllCategories } from "../categories/categoriesApi";
@@ -10,6 +11,7 @@ import DataTable from "react-data-table-component";
 import _ from 'lodash';
 
 const AddBundle = () => {
+  const [redirect, setRedirect] = useState(false);
   const [products, setProducts] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -158,6 +160,7 @@ const AddBundle = () => {
         console.log(oData.error);
       } else {
         alert("Bundle created successfully");
+        setRedirect(true);
       }
     });
   };
@@ -377,9 +380,16 @@ const AddBundle = () => {
     );
   };
 
+  const redirectToBundleList = () => {
+    if (redirect === true) {
+      return <Redirect to="/admin/bundles"></Redirect>;
+    }
+  };
+
   return (
     <DashboardLayout name="Bundle Deals Management" detail="Make Bundle">
       {products && showAddBundle()}
+      {redirectToBundleList()}
     </DashboardLayout>
   );
 };

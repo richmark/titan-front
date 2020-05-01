@@ -390,7 +390,7 @@ const UpdateBundle = ({ match }) => {
   };
 
   return (
-    <DashboardLayout name="Bundle Deals Management" detail="Update Bundle">
+    <DashboardLayout name="Bundle Deals Management" detail={[<a href='/admin/bundles'>All Bundles</a>, ' / Update Bundle']}>
       {products && showBundle()}
     </DashboardLayout>
   );

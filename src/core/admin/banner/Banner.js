@@ -201,7 +201,7 @@ const Banner = () => {
     };
 
     return (
-        <DashboardLayout name='Banner Management' detail='Add Banner'>
+        <DashboardLayout name='Banner Management' detail='Banners'>
             {showAddBanner()}
         </DashboardLayout>
     );
