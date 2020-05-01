@@ -352,7 +352,7 @@ const UpdateCoupon = ({ match }) => {
     );
   };
   return (
-    <DashboardLayout name="Coupon Management" detail="Update Coupons">
+    <DashboardLayout name="Coupon Management" detail={[<a href='/admin/coupons'>All Coupons</a>, ' / Update Coupon']}>
       {showUpdateCouponForm()}
       {redirectForbidden()}
     </DashboardLayout>

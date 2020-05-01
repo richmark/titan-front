@@ -147,7 +147,7 @@ const UpdateShipper = ({ match }) => {
     };
 
     return (
-        <DashboardLayout name='Shipper Management' detail='Update Shipper'>
+        <DashboardLayout name='Shipper Management' detail={[<a href='/admin/shippers'>All Shippers</a>, ' / Update Shipper']}>
             {showUpdateShipper()}
             {redirectPage()}
         </DashboardLayout>

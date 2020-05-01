@@ -117,7 +117,7 @@ const UpdateBanner = ({ match }) => {
     };
 
     return (
-        <DashboardLayout name='Banner Management' detail='Update Banner'>
+        <DashboardLayout name='Banner Management' detail={[<a href='/admin/banner'>Banners</a>, ' / Update Banner']}>
             {showUpdateBanner()}
             {redirectPage()}
         </DashboardLayout>

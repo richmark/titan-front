@@ -45,8 +45,13 @@ const Categories = () => {
       if (oData.error) {
         console.log(oData);
       } else {
+        setValues({
+          name: "",
+          category_image: "",
+          formData: new FormData()
+        });
         setResult(!result);
-        // setValues({ name: "", category_image: "" });
+        alert('Created Successfully');
       }
     });
   };
@@ -113,7 +118,14 @@ const Categories = () => {
       {
         name: "Name",
         selector: "name",
-        sortable: true
+        sortable: true,
+        cell: oRow => {
+          return (
+            <Link to={`/admin/categories/update/${oRow._id}`}>
+              {oRow.name}
+            </Link>
+          )
+        }
       },
       {
         name: "Date Created",

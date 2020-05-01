@@ -219,9 +219,9 @@ const Shippers = () => {
                 <div className='col-md-12 col-sm-12 col-xl-12 mb-4'>
                     <div className='card border-left-primary shadow h-100 py-2'>
                         <div className='card-body'>
-                            <div className='float-left'>
+                            {/* <div className='float-left'>
                                 <span>10</span> Items
-                            </div>
+                            </div> */}
                             <div className='float-right mb-2'>
                                 <button onClick={submitDelete} className='btn btn-danger'>
                                     <i className='fa fa-trash' /> Delete
