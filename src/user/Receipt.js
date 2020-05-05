@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import oMoment from 'moment';
 
 const Receipt = ({order}) => {
 
@@ -15,7 +16,8 @@ const Receipt = ({order}) => {
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
                                <strong>Order No:</strong> <span>{order._id}</span><br/>
-                               <strong>Date Ordered:</strong> <span>{formatDate(order.createdAt)}</span>
+                               <strong>Reference No:</strong> <span>{order.reference_number}</span><br/>
+                               <strong>Date Ordered:</strong> <span>{oMoment(order.createdAt).format('L')}</span>
                             </Container>
                         </Col>
                         <Col sm={{span: 6}}>
@@ -130,11 +132,6 @@ const Receipt = ({order}) => {
             </Container>            
         );
     };
-
-    const formatDate = (sDate) => {
-        var oDate =  new Date(sDate);
-        return oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes());
-    }
 
 	return (
         <Fragment>
