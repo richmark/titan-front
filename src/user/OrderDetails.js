@@ -6,6 +6,7 @@ import { getOrderById } from '../core/admin/orders/ordersApi';
 import { isAuthenticated } from '../auth/authUtil';
 import { IMAGE_API } from '../config';
 import Receipt from './Receipt';
+import oMoment from 'moment';
 
 const OrderDetails = ({match}) => {
     const [oOrder, setOrder] = useState(false);
@@ -92,7 +93,7 @@ const OrderDetails = ({match}) => {
                         {oOrder.history.map((oHistory, iIndex) => {
                             return (
                                 <Fragment key={iIndex}>
-                                    <li className="tst-current">[{formatDate(oHistory.process_time)}] - {oHistory.note} {oHistory.status === 'Shipped' ? showShippingLink() : ''}</li>
+                                    <li className="tst-current">[{oMoment(oHistory.process_time).format('MM/DD/YYYY HH:mm')}] - {oHistory.note} {oHistory.status === 'Shipped' ? showShippingLink() : ''}</li>
                                 </Fragment>
                             );
                         })} 
@@ -122,7 +123,7 @@ const OrderDetails = ({match}) => {
                             <Container className="m-2">
                                <strong>Order No:</strong> <span>{oOrder._id}</span><br/>
                                <strong>Payment Reference:</strong> <span>{oOrder.reference_number}</span><br/>
-                               <strong>Date Ordered:</strong> <span>{formatDate(oOrder.createdAt)}</span>
+                               <strong>Date Ordered:</strong> <span>{oMoment(oOrder.createdAt).format('MM/DD/YYYY HH:mm')}</span>
                             </Container>
                         </Col>
                         <Col sm={{span: 6}}>
@@ -252,11 +253,6 @@ const OrderDetails = ({match}) => {
         }
     }
 
-    const formatDate = (sDate) => {
-        var oDate =  new Date(sDate);
-        return oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes());
-    }
-    
 	return (
         <Layout>
             {showDetails()}
