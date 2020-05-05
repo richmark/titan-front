@@ -34,7 +34,7 @@ const Orders = () => {
         const oColumns = [
             {
                 name: "Order Number",
-                selector: "product_name",
+                selector: "order_number",
                 sortable: true,
                 cell: oRow => {
                     return (
@@ -42,6 +42,18 @@ const Orders = () => {
                         <Link to={`/admin/orders/${oRow._id}`}>
                             {oRow._id}
                         </Link>
+                      </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Payment Reference",
+                selector: "reference_number",
+                sortable: true,
+                cell: oRow => {
+                    return (
+                      <Fragment>
+                            {oRow.reference_number}
                       </Fragment>
                     );
                 }
