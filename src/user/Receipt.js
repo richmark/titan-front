@@ -15,8 +15,8 @@ const Receipt = ({order}) => {
                     <Row>
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
-                               <strong>Order No:</strong> <span>{order._id}</span><br/>
-                               <strong>Reference No:</strong> <span>{order.reference_number}</span><br/>
+                               <strong>Order ID:</strong> <span>{order._id}</span><br/>
+                               <strong>Payment Reference:</strong> <span>{order.reference_number}</span><br/>
                                <strong>Date Ordered:</strong> <span>{oMoment(order.createdAt).format('L')}</span>
                             </Container>
                         </Col>
