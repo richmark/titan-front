@@ -270,7 +270,7 @@ const Orders = ({ match }) => {
                   <div className="card-body">
                     <h5>Payment Information</h5>
                     <p>Transaction ID: {order.transaction_id}</p>
-                    <p>Reference Number: {order.reference_number} </p>
+                    <p>Payment Reference: {order.reference_number} </p>
                   </div>
                 </div>
               </div>

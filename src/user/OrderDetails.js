@@ -121,7 +121,7 @@ const OrderDetails = ({match}) => {
                     <Row>
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
-                               <strong>Order No:</strong> <span>{oOrder._id}</span><br/>
+                               <strong>Order ID:</strong> <span>{oOrder._id}</span><br/>
                                <strong>Payment Reference:</strong> <span>{oOrder.reference_number}</span><br/>
                                <strong>Date Ordered:</strong> <span>{oMoment(oOrder.createdAt).format('MM/DD/YYYY HH:mm')}</span>
                             </Container>
