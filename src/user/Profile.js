@@ -183,9 +183,7 @@ const Profile = ({match}) => {
             <Card className="mt-3 px-3 py-2" style={{ fontSize: "16px"}}>
                 <Card.Body>
                     <Row>My Order</Row>
-                    <Row className="mt-3">
-                        {showOrderTable()}
-                    </Row>
+                    {showOrderTable()}
                 </Card.Body>
             </Card>
         );
