@@ -312,7 +312,7 @@ const Profile = ({match}) => {
             Object.keys(oData).map(sKey => {
                 oForm.set(sKey, oData[sKey]);
             });
-            sendUpdateUserData(match.params.userId, sToken, oForm).then((oData) => {
+            sendUpdateUserData(user._id, sToken, oForm).then((oData) => {
                 if (oData.error) {
                     console.log(oData.error)
                 } else {
@@ -418,7 +418,7 @@ const Profile = ({match}) => {
         if (oValidator.allValid()) {
             //fetch call goes here
             delete oData.confirm_password;
-            sendUpdateUserPassword(match.params.userId, sToken, oData).then((oResponse) => {
+            sendUpdateUserPassword(user._id, sToken, oData).then((oResponse) => {
                 if (oResponse.error) {
                     oDanger({
                         current_password : setErrorBorder(oResponse.error),
