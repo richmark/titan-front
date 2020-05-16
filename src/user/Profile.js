@@ -126,7 +126,7 @@ const Profile = ({match}) => {
         const oData = aOrder;
         oData.forEach( aElement => {
             var oDate =  new Date(aElement['createdAt']);
-            aElement['createdAt'] = oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes())
+            aElement['created_date'] = oDate.getMonth() + 1 + '/' + oDate.getDate() + '/' + oDate.getFullYear() + ' ' + oDate.getHours() + ':' + ((oDate.getMinutes() < 10) ? '0' + oDate.getMinutes() : oDate.getMinutes())
         });
         const oColumns = [
             {
@@ -137,6 +137,9 @@ const Profile = ({match}) => {
             {
                 name: 'Date',
                 selector: 'createdAt',
+                cell: oRow => {
+                    return oRow.created_date;
+                },
                 sortable: true,
             },
             {
