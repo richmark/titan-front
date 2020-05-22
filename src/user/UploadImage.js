@@ -4,6 +4,7 @@ import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth/authUtil';
 import { uploadImage, getImage } from '../core/client/clientApi';
 import { IMAGE_API } from '../config';
+import { getUserData } from '../core/client/userApi'
 
 const UploadImage = () => {
     const [values, setValues] = useState({
@@ -19,15 +20,18 @@ const UploadImage = () => {
 
     const getAllImages = () => {
         const { user, sToken } = isAuthenticated();
-        const sPrefix = `${IMAGE_API}/images/users/user-${user._id}`;
-        setValues({
-            ...values,
-            store_front: `${sPrefix}-store_front.jpeg`,
-            company_bir: `${sPrefix}-company_bir.jpeg`,
-            mayor_permit: `${sPrefix}-mayor_permit.jpeg`,
-            user: user,
-            sToken: sToken
+        const sPrefix = `${IMAGE_API}/images/users/`;
+        getUserData(user._id, sToken).then(oData => {
+            setValues({
+                ...values,
+                store_front: `${sPrefix}${oData.store_front}`,
+                company_bir: `${sPrefix}${oData.company_bir}`,
+                mayor_permit: `${sPrefix}${oData.mayor_permit}`,
+                user: user,
+                sToken: sToken
+            });
         });
+        
     };
 
     useEffect(() => {
