@@ -192,6 +192,11 @@ const Products = () => {
         sortable: true,
       },
       {
+        name: "Price",
+        selector: "price",
+        sortable: true,
+      },
+      {
         name: "Date Created",
         selector: "createdAt",
         sortable: true,
