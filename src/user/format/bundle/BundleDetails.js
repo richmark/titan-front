@@ -296,9 +296,26 @@ const BundleDetails = ({match}) => {
     }
   };
 
+  /**
+   * Show bundle details
+   */
+  const showBundleDetails = () => {
+    return (
+      <Fragment>
+        <Container className="border border-black rounded p-5 mt-4">
+          <h5>{bundle.product_name} Details</h5>
+          <p>
+            {bundle.description}
+          </p>
+        </Container>
+      </Fragment>
+    );
+  };
+
   return (
     <Layout run={iRun}>
       {showBundleMain()}
+      {showBundleDetails()}
       {showDetails()}
       {showRelatedBundle()}
       {checkProduct(bProduct)}
