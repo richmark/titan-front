@@ -679,8 +679,9 @@ const Checkout = ({location}) => {
     const calculateDiscountRate = (iValue, sMessage = 'Coupon Discount Applied!') => {
         var oTotal = calculateTotal();
         var iCalculate = (iValue / 100) * oTotal.price;
+        var iDiscountedPrice = iCalculate.toFixed(2);
         iRole !== 4 && alert(sMessage);
-        setDiscount(iCalculate);
+        setDiscount(iDiscountedPrice);
     }
 
     const calculateDiscountValue = (iValue, sMessage = 'Coupon Discount Applied!') => {
