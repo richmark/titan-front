@@ -13,10 +13,27 @@ export const getReviewsByProductIdCount = (sProductId) => {
     .catch(err => console.log(err));
 };
 
-export const getReviewsByProductId = (sProductId, visibility = undefined) => {
+export const getReviewsByProductIdClient = (sProductId, visibility = undefined, iLimit = 5, iOffset = 0) => {
     let sQueryParam = '';
     if (visibility) {
-        sQueryParam = `?visibility=${visibility}`;
+        sQueryParam = `?visibility=${visibility}&limit=${iLimit}&offset=${iOffset}`;
+    }
+    return fetch(`${API_URL}/reviews/product/client/${sProductId}${sQueryParam}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json'
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+export const getReviewsByProductId = (sProductId, visibility = undefined, iLimit = 5, iOffset = 0) => {
+    let sQueryParam = '';
+    if (visibility) {
+        sQueryParam = `?visibility=${visibility}&limit=${iLimit}&offset=${iOffset}`;
     }
     return fetch(`${API_URL}/reviews/product/${sProductId}${sQueryParam}`, {
         method: 'GET',

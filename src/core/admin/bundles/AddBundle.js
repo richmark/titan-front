@@ -194,10 +194,9 @@ const AddBundle = () => {
         sortable: true
       },
       {
-          name: "Date Created",
-          selector: "createdAt",
-          sortable: true,
-          format: oRow => oMoment(oRow.createdAt).format('DD-MM-YYYY')
+        name: "Price",
+        selector: "price",
+        sortable: true,
       }
     ];
 

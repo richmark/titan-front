@@ -85,7 +85,7 @@ const Routes = () => {
         component={ProductsByCategory}
       />
       <Route path="/order/detail/:orderId" exact component={OrderDetails} />
-      <Route
+      <PrivateRoute
         path="/product/review/:orderId/:productId"
         exact
         component={ReviewProduct}
