@@ -8,6 +8,7 @@ import { isAuthenticated } from '../auth/authUtil';
 import { createReview } from '../core/admin/reviews/reviewsApi';
 import { oValidatorLibrary } from '../libraries/validatorLibrary';
 import BasicAlert from './format/BasicAlert';
+import { getOrderById } from '../core/admin/orders/ordersApi';
 
 const ProductReview = ({ match }) => {
 
@@ -15,11 +16,33 @@ const ProductReview = ({ match }) => {
     const [oProduct, setProduct] = useState(false);
     const [mAlert, setAlert] = useState(false);
     const [bRedirect, setRedirect] = useState(false);
+    const [bForbidden, setForbidden] = useState(false);
 
     const sOrderId = match.params.orderId;
     const { sToken, user } = isAuthenticated();
 
     useEffect(() => {
+        getOrderById(user._id, sToken, sOrderId).then((oData) => {
+            if (oData.error || oData.data.user !== user._id) {
+                setForbidden(true);
+                return;
+            }
+            
+            var aProductIds = oData.data.products.map(oValues => {
+                return oValues._id;
+            });
+
+            if (aProductIds.indexOf(match.params.productId) < 0) {
+                setForbidden(true);
+                return;
+            }
+
+            getProductDetail();
+
+        });
+    }, []);
+
+    const getProductDetail = () => {
         getProduct(match.params.productId).then(oData => {
             if (oData.error) {
                 console.log(oData.error);
@@ -27,7 +50,7 @@ const ProductReview = ({ match }) => {
                 setProduct(oData.data);
             }
         });
-    }, []);
+    };
 
     const submitReview = () => {
         setAlert(false);
@@ -49,6 +72,12 @@ const ProductReview = ({ match }) => {
         if (bRedirect === true) {
             return <Redirect to={`/order/detail/${sOrderId}`}/>
         }
+    }
+
+    const redirectForbidden = () => {
+        if (bForbidden === true) {
+            return <Redirect to="/forbidden" />;
+        }   
     }
 
     const sendReview = (oParam) => {
@@ -146,6 +175,7 @@ const ProductReview = ({ match }) => {
         <Layout>
             {showProductReview()}
             {redirectUser()}
+            {redirectForbidden()}
         </Layout>
     );
 };

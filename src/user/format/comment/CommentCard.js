@@ -1,18 +1,30 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Card, Container, Col, Row, Button, Image } from "react-bootstrap";
-import { getReviewsByProductId } from "../../../../src/core/admin/reviews/reviewsApi";
+import { getReviewsByProductIdClient } from "../../../../src/core/admin/reviews/reviewsApi";
 import _ from "lodash";
 
 const CommentCard = sProductId => {
-  const [reviews, setReviews] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [bLoadButton, setLoadButton] = useState(true);
+  const [limit, setLimit] = useState(5);
+  const [offset, setOffset] = useState(0);
 
   const init = () => {
-    getReviewsByProductId(sProductId, true).then(oData => {
+    getReviews();
+  };
+
+  const getReviews = () => {
+    getReviewsByProductIdClient(sProductId, true, limit, offset).then(oData => {
       if (oData.error) {
         console.log(oData.error);
         return;
       }
-      setReviews(oData.data);
+
+      setOffset(limit + offset);
+      if (oData.data.length % limit > 0 || oData.data.length === 0) {
+        setLoadButton(false);
+      }
+      setReviews(reviews.concat(oData.data));
     });
   };
 
@@ -40,8 +52,24 @@ const CommentCard = sProductId => {
     init();
   }, []);
 
+  const showLoadMoreButton = () => {
+    if (bLoadButton === true) {
+      return (
+        <Fragment>
+          <Container>
+            <Row>
+              <Col className="text-center">
+                <Button variant="warning" onClick={getReviews}>Load More</Button>
+              </Col>
+            </Row>
+          </Container>
+        </Fragment>
+      );
+    }
+  };
+
   const showReviews = () => {
-    if (reviews && reviews.length > 0) {
+    if (reviews.length > 0) {
       return (
         <Container className="border border-black rounded p-5 mt-4">
           <h5 className="mb-4">Comments</h5>
@@ -65,6 +93,7 @@ const CommentCard = sProductId => {
               </Card>
             )
           })}
+          {showLoadMoreButton()}
         </Container>
       );
     }

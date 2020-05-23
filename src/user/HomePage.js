@@ -31,7 +31,7 @@ const HomePage = () => {
         if (aData.length % iLimit > 0 || aData.length === 0) {
             setLoadButton(false);
         } 
-        setProducts(aProducts.concat(aData));  
+        setProducts(aProducts.concat(aData));
     }
 
     const runCallBack = (oData, oCallback) => {

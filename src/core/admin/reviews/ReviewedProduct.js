@@ -5,12 +5,15 @@ import { getReviewsByProductId, updateReview, getReviewsByProductIdCount } from 
 import { isAuthenticated } from '../../../auth/authUtil';
 import _ from 'lodash';
 import oMoment from 'moment';
+import DataTable from "react-data-table-component";
 
 const ReviewedProduct = ({ match }) => {
 
     const {sToken, user} = isAuthenticated();
     const [review_count, setReviewCount] = useState(false);
     const [reviews, setReviews] = useState(false);
+    const [originalReviews, setOriginalReviews] = useState(false);
+    const [queryString, setQueryString] = useState("");
 
     const getListReviewCount = () => {
         getReviewsByProductIdCount(match.params.productId).then(oData => {
@@ -28,7 +31,12 @@ const ReviewedProduct = ({ match }) => {
             if (oData.error) {
                 console.log(oData.error);
             } else {
+                oData.data = oData.data.map(oItem => {
+                    oItem.user['name'] = `${oItem.user.first_name} ${oItem.user.last_name}`
+                    return oItem;
+                });
                 setReviews(oData.data);
+                setOriginalReviews(oData.data);
             }
         });
     };
@@ -67,7 +75,81 @@ const ReviewedProduct = ({ match }) => {
         getListReviewCount();
     }, []);
 
+    const handleFilterClick = oEvent => {
+        setQueryString("");
+    };
+
+    const handleSearchQueryChange = oEvent => {
+        var sQueryString = oEvent.target.value;
+        setQueryString(sQueryString);
+        if (sQueryString !== "") {
+            var aResult = filterSearch(sQueryString);
+            setReviews(aResult);
+            return;
+        }
+        setReviews(originalReviews);
+    };
+
+    const filterSearch = sQueryString => {
+        sQueryString = sQueryString.toLowerCase();
+        var results = [];
+        for (var j = 0; j < originalReviews.length; j++) {
+            var sName = originalReviews[j].user.name.toLowerCase();
+            if (sName.indexOf(sQueryString) !== -1) {
+                results.push(originalReviews[j]);
+            }
+        }
+
+        return results;
+    };
+
     const showReviews = () => {
+        const oData = reviews;
+        const oColumns = [
+            {
+                name: "User Name",
+                cell: oRow => {
+                    return (
+                        <Fragment>
+                          {oRow.user.first_name} {oRow.user.last_name}
+                        </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Description",
+                selector: 'comment'
+            },
+            {
+                name: "Rate",
+                selector: 'rate',
+                sortable: true,
+                cell: oRow => {
+                    return (
+                        <Fragment>
+                            {getRating(oRow.rate)}
+                        </Fragment>
+                    );
+                }
+            },
+            {
+                name: "Date Created",
+                selector: "createdAt",
+                sortable: true,
+                format: oRow => oMoment(oRow.createdAt).format('LLL')
+            },
+            {
+                name: "Visibility",
+                cell: oRow => {
+                    return (
+                        <Fragment>
+                            <input type="checkbox" onChange={submitReview(oRow._id)} defaultChecked={oRow.visibility} />
+                        </Fragment>
+                    );
+                }
+            }
+        ];
+
         return (
             <Fragment>
                 <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
@@ -77,7 +159,14 @@ const ReviewedProduct = ({ match }) => {
                         <label htmlFor="product-name" className="col-sm-2 col-form-label">User name</label>
                         <div className="col-sm-5">
                             <div className="input-group">
-                            <input type="text" className="form-control bg-light border-0 small" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2" />
+                            <input type="text"
+                            className="form-control bg-light border-0 small"
+                            placeholder="Search"
+                            aria-label="Search"
+                            aria-describedby="basic-addon2"
+                            value={queryString}
+                            onChange={handleSearchQueryChange}
+                            />
                             <div className="input-group-append">
                                 <button className="btn btn-primary" type="button">
                                 <i className="fas fa-search fa-sm" />
@@ -88,52 +177,28 @@ const ReviewedProduct = ({ match }) => {
                         </div>
                         <div className="row">
                         <div className="float-left col-sm-12 col-md-12 col-xl-12 mb-4"><span>{review_count}</span> Items</div>
-                            {
-                                reviews && reviews.map((oData, iIndex) => {
-                                    return (
-                                        <div key={iIndex} className="col-sm-12 col-md-12 col-xl-12 mb-4">
-                                            <div className="text-right mt-3 w-25 float-right">
-                                            {oMoment(oData.createdAt).format('LLL')}
-                                            </div>
-                                            <div className="text-left mt-3">
-                                            {oData.user.first_name} {oData.user.last_name}
-                                            </div>
-                                            <div className="border rounded p-3">
-                                            {oData.comment}
-                                            </div>
-                                            <div id="rating" className="text-right mt-3 w-25 float-right">
-                                                {
-                                                    getRating(oData.rate)
-                                                }
-                                            </div>
-                                            <div id="rating" className="text-left mt-3">
-                                                <input type="checkbox" onChange={submitReview(oData._id)} defaultChecked={oData.visibility} />Visible
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            }
                         </div>
-                        <div className=" text-center">
-                        <nav aria-label="Page navigation example text-center">
-                            <ul className="pagination">
-                            <li className="page-item"><a className="page-link">Previous</a></li>
-                            <li className="page-item"><a className="page-link">1</a></li>
-                            <li className="page-item"><a className="page-link">2</a></li>
-                            <li className="page-item"><a className="page-link">3</a></li>
-                            <li className="page-item"><a className="page-link">Next</a></li>
-                            </ul>
-                        </nav>
-                        </div>
+                        <DataTable
+                            title={"Product Reviews"}
+                            columns={oColumns}
+                            data={oData}
+                            pagination={true}
+                            striped
+                            // selectableRows
+                            keyField='_id'
+                            // onSelectedRowsChange={handleSelectToggle}
+                            selectableRowsNoSelectAll={true}
+                        />
                     </div>
                     </div>
                 </div>
             </Fragment>
         )
     };
+
     return (
-        <DashboardLayout name='Review Management' detail='All Reviews / Verify Reviews'>
-            {showReviews()}
+        <DashboardLayout name='Review Management' detail={[<a href='/admin/reviews'>All Reviews</a>, ' / Verify Reviews']}>
+            {reviews && showReviews()}
         </DashboardLayout>
     );
 }

@@ -98,6 +98,7 @@ const Reviews = () => {
                                 <button onClick={submitDelete} className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                             </div>
                             <DataTable
+                                title={"Reviews"}
                                 columns={oColumns}
                                 data={oData}
                                 pagination={true}
@@ -114,7 +115,7 @@ const Reviews = () => {
         )
     };
     return (
-        <DashboardLayout name='Review Management' detail='All Reviews / Verify Reviews'>
+        <DashboardLayout name='Review Management' detail='All Reviews'>
             {reviews && showReviews()}
         </DashboardLayout>
     );
