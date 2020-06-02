@@ -3,181 +3,90 @@ import DashboardLayout from "../DashboardLayout";
 import DataTable from "react-data-table-component";
 import { getOrderProductsByUser } from "../verifiedusers/VerifedUsersApi";
 import { isAuthenticated } from "../../../auth/authUtil";
+import { IMAGE_API } from "../../../config";
+import oMoment from "moment";
 
 const PurchaseHistory = ({ match }) => {
-    console.log(match.params.userId);
     const { sToken, user } = isAuthenticated();
-    // const [allUsers, setUsers] = useState({});
-    // const [aSearch, setSearch] = useState({});
-    // const [sQueryString, setQueryString] = useState("");
+    const [orderProducts, setOrderProducts] = useState([]);
 
     useEffect(() => {
         loadPurchaseHistory();
     }, []);
 
     const loadPurchaseHistory = () => {
-        getOrderProductsByUser(user._id, sToken).then((oData) => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else {
-                console.log(oData);
+        getOrderProductsByUser(user._id, sToken, match.params.userId).then(
+            (oData) => {
+                if (oData.error) {
+                    console.log(oData.error);
+                } else {
+                    var oOrderProduct = [];
+                    oData.data.filter((oOrder) => {
+                        oOrder.products.filter((oProducts) => {
+                            oOrderProduct.push({
+                                _id: oOrder._id,
+                                createdAt: oOrder.createdAt,
+                                product: oProducts.product,
+                            });
+                        });
+                    });
+
+                    setOrderProducts(oOrderProduct);
+                }
             }
-        });
+        );
     };
 
-    // const loadUsers = () => {
-    //     getAllUsers(user._id, sToken).then((oData) => {
-    //         if (oData.error) {
-    //             console.log(oData.error);
-    //         } else {
-    //             setUsers(oData.data);
-    //             setSearch(oData.data);
-    //         }
-    //     });
-    // };
+    const showDataTable = () => {
+        const oData = orderProducts;
+        const oColumns = [
+            {
+                name: "Order ID",
+                selector: "_id",
+                sortable: true,
+            },
+            {
+                name: "Product Name",
+                selector: "product.product_name",
+                sortable: true,
+            },
+            {
+                name: "Product Image",
+                cell: (oRow) => {
+                    return (
+                        <Fragment>
+                            <img
+                                src={`${IMAGE_API}/images/products/${oRow.product.image}`}
+                                style={{
+                                    width: "25%",
+                                }}
+                            />
+                        </Fragment>
+                    );
+                },
+            },
+            {
+                name: "Order Date",
+                selector: "createdAt",
+                sortable: true,
+                format: (oRow) => oMoment(oRow.createdAt).format("DD-MM-YYYY")
+            }
+        ];
+        return (
+            <Fragment>
+                <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
+                    <style>{`.bfOOvg { height: auto !important }`}</style>
+                    <DataTable
+                        columns={oColumns}
+                        data={oData}
+                        pagination={true}
+                        striped
+                    />
+                </div>
+            </Fragment>
+        );
+    };
 
-    // const showDataTable = () => {
-    //     const oData = aSearch;
-    //     const oColumns = [
-    //         {
-    //             name: "Email",
-    //             selector: "email",
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "First Name",
-    //             selector: "first_name",
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "Last Name",
-    //             selector: "last_name",
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "Mobile Number",
-    //             selector: "mobile_number",
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "Address",
-    //             selector: "address",
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "Type",
-    //             cell: (oRow) => {
-    //                 return checkUserType(oRow.role);
-    //             },
-    //             sortable: true,
-    //         },
-    //         {
-    //             name: "Purchase History",
-    //             cell: (oRow) => {
-    //                 return <Fragment>{oRow.product_name}</Fragment>;
-    //             },
-    //         },
-    //     ];
-    //     return (
-    //         <Fragment>
-    //             <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
-    //                 <DataTable
-    //                     columns={oColumns}
-    //                     data={oData}
-    //                     pagination={true}
-    //                     striped
-    //                 />
-    //             </div>
-    //         </Fragment>
-    //     );
-    // };
-
-    // const checkUserType = (iRole) => {
-    //     const aRole = {
-    //         2: "Personal",
-    //         3: "Corporate",
-    //         4: "Wholesaler",
-    //     };
-    //     return aRole[iRole];
-    // };
-
-    // const handleSearchClick = (oEvent) => {
-    //     if (sQueryString !== "") {
-    //         var aResults = filterSearch(sQueryString);
-    //         setSearch(aResults);
-    //     } else {
-    //         loadUsers();
-    //     }
-    // };
-
-    // const handleSearchChange = (oEvent) => {
-    //     var sQueryString = oEvent.target.value;
-    //     setQueryString(sQueryString);
-    //     if (sQueryString !== "") {
-    //         var aResults = filterSearch(sQueryString);
-    //         setSearch(aResults);
-    //     } else {
-    //         loadUsers();
-    //     }
-    // };
-
-    // const showFilters = () => {
-    //     return (
-    //         <Fragment>
-    //             <div className="col-md-12 col-sm-12 col-xl-12 mb-4">
-    //                 <div className="card border-left-primary shadow h-100 py-2">
-    //                     <div className="card-body">
-    //                         <h4 className="mb-2">Search and filter</h4>
-    //                         <div className="form-group row">
-    //                             <div className="col-sm-5">
-    //                                 <div className="input-group">
-    //                                     <input
-    //                                         type="text"
-    //                                         className="form-control bg-light border-0 small"
-    //                                         placeholder="Search Users"
-    //                                         aria-label="Search"
-    //                                         aria-describedby="basic-addon2"
-    //                                         onChange={handleSearchChange}
-    //                                     />
-    //                                     <div className="input-group-append">
-    //                                         <span
-    //                                             className="btn btn-primary"
-    //                                             onClick={handleSearchClick}
-    //                                         >
-    //                                             <i className="fas fa-search fa-sm" />
-    //                                         </span>
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </Fragment>
-    //     );
-    // };
-
-    // const filterSearch = (sQueryString) => {
-    //     var results = [];
-    //     var sChecker = sQueryString.toLowerCase();
-    //     for (var j = 0; j < allUsers.length; j++) {
-    //         if (
-    //             allUsers[j].email.toLowerCase().indexOf(sChecker) !== -1 ||
-    //             allUsers[j].first_name.toLowerCase().indexOf(sChecker) !== -1 ||
-    //             allUsers[j].last_name.toLowerCase().indexOf(sChecker) !== -1 ||
-    //             allUsers[j].address.toLowerCase().indexOf(sChecker) !== -1 ||
-    //             checkUserType(allUsers[j].role)
-    //                 .toLowerCase()
-    //                 .indexOf(sChecker) !== -1
-    //         ) {
-    //             results.push(allUsers[j]);
-    //         }
-    //     }
-
-    //     return results;
-    // };
-
-    // detail={[<a href='/admin/bundles'>All Bundles</a>, ' / Update Bundle']
     return (
         <DashboardLayout
             name="Purchase History"
@@ -186,8 +95,7 @@ const PurchaseHistory = ({ match }) => {
                 " / Purchase History",
             ]}
         >
-            {/* {showFilters()} */}
-            {/* {showDataTable()} */}
+            {showDataTable()}
         </DashboardLayout>
     );
 };

@@ -14,8 +14,8 @@ export const getAllUsers = (sId, sToken) => {
         .catch(err => console.log(err));
 };
 
-export const getOrderProductsByUser = (sId, sToken) => {
-    return fetch(`${API_URL}//orders/products/${sId}`, {
+export const getOrderProductsByUser = (sId, sToken, sUserId) => {
+    return fetch(`${API_URL}/orders/products/${sId}/${sUserId}`, {
         method: 'GET',
         headers: {
             Accept: 'application/json',
