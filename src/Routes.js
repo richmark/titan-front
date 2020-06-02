@@ -47,6 +47,7 @@ import Subadmins from "./core/admin/subadmins/SubAdmins";
 import VerifiedUsers from "./core/admin/verifiedusers/VerifiedUsers";
 import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
+import PurchaseHistory from './core/admin/verifiedusers/PurchaseHistory';
 import BundleDeals from './user/format/bundle/BundleDeals';
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
@@ -178,6 +179,7 @@ const Routes = () => {
       <AdminRoute path="/admin/subadmin/add" exact component={AddSubadmin} />
       <AdminRoute path="/admin/subadmin" exact component={Subadmins} />
       <AdminRoute path="/admin/verified/users" exact component={VerifiedUsers} />
+      <AdminRoute path="/admin/verified/users/:userId" exact component={PurchaseHistory} />
     </BrowserRouter>
   );
 };
