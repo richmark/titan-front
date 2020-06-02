@@ -13,3 +13,17 @@ export const getAllUsers = (sId, sToken) => {
         })
         .catch(err => console.log(err));
 };
+
+export const getOrderProductsByUser = (sId, sToken) => {
+    return fetch(`${API_URL}//orders/products/${sId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${sToken}`
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};

@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect, Fragment } from "react";
+import { Link } from 'react-router-dom';
 import DashboardLayout from "../DashboardLayout";
 import DataTable from "react-data-table-component";
 import { getAllUsers } from "../verifiedusers/VerifedUsersApi";
@@ -60,6 +61,19 @@ const VerifiedUsers = () => {
         },
         sortable: true,
       },
+      {
+        name: 'Purchase History',
+        center: true,
+        cell: oRow => {
+          return (
+            <Fragment>
+              <Link to={`/admin/verified/users/${oRow._id}`}>
+              <i class="fas fa-poll fa-2x"></i>
+              </Link>
+            </Fragment>
+          );
+        }
+      }
     ];
     return (
       <Fragment>

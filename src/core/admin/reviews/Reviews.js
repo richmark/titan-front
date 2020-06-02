@@ -97,6 +97,7 @@ const Reviews = () => {
                             <div className="float-right mb-2">
                                 <button onClick={submitDelete} className="btn btn-danger"><i className="fa fa-trash" /> Delete</button>
                             </div>
+                            <style>{`.bfOOvg { height: auto !important }`}</style>
                             <DataTable
                                 title={"Reviews"}
                                 columns={oColumns}
