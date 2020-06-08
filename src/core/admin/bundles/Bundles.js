@@ -76,6 +76,11 @@ const Bundles = () => {
                 sortable: true
             },
             {
+                name: "Bundle Weight",
+                selector: "weight",
+                sortable: true
+            },
+            {
                 name: "Date Created",
                 selector: "createdAt",
                 sortable: true,

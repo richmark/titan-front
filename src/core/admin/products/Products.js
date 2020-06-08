@@ -192,6 +192,11 @@ const Products = () => {
         sortable: true,
       },
       {
+        name: "Weight",
+        selector: "weight",
+        sortable: true,
+      },
+      {
         name: "Price",
         selector: "price",
         sortable: true,
