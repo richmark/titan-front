@@ -49,6 +49,7 @@ const Bundles = () => {
     };
 
     const showBundles = () => {
+        console.log(bundles);
         const oData = bundles;
         const oColumns = [
             {
@@ -73,6 +74,11 @@ const Bundles = () => {
             {
                 name: "Bundle Price",
                 selector: "price",
+                sortable: true
+            },
+            {
+                name: "Bundle Weight",
+                selector: "weight",
                 sortable: true
             },
             {

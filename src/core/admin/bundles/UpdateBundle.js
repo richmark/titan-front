@@ -26,7 +26,8 @@ const UpdateBundle = ({ match }) => {
     display: "T",
     sold_out: "F",
     price: 0,
-    stock: 0
+    stock: 0,
+    weight: 'Small'
   });
   const {
     _id,
@@ -39,7 +40,8 @@ const UpdateBundle = ({ match }) => {
     display,
     sold_out,
     price,
-    stock
+    stock,
+    weight
   } = bundles;
 
   const loadProductCount = () => {
@@ -262,6 +264,24 @@ const UpdateBundle = ({ match }) => {
                         className="form-control"
                         id="exampleFormControlTextarea1"
                       />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="pl-3 col-sm-12">
+                      <select
+                        value={weight}
+                        onChange={handleChange("weight")}
+                        id="weight"
+                        className="btn btn-light w-100 border mb-2"
+                        defaultValue={"Small"}
+                      >
+                        <option disabled defaultValue>
+                          Select weight
+                        </option>
+                        <option value={"Small"}>Small</option>
+                        <option value={"Medium"}>Medium</option>
+                        <option value={"Large"}>Large</option>
+                      </select>
                     </div>
                   </div>
                   <div className="form-group row">

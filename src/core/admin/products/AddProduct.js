@@ -30,7 +30,8 @@ const AddProduct = () => {
     error: false,
     formData: "",
     display: "T",
-    sold_out: "F"
+    sold_out: "F",
+    weight: "Small"
   });
 
   const {
@@ -325,6 +326,19 @@ const AddProduct = () => {
                 }
                 placeholder="Stock"
               />
+              <select
+                onChange={handleChange("weight")}
+                id="weight"
+                className="btn btn-light w-100 border mb-2"
+                defaultValue={"Small"}
+              >
+                <option disabled defaultValue>
+                  Select weight
+                </option>
+                <option value={"Small"}>Small</option>
+                <option value={"Medium"}>Medium</option>
+                <option value={"Large"}>Large</option>
+              </select>
               <select
                 onChange={handleChange("brand")}
                 id="brand"
