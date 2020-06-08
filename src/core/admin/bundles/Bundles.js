@@ -49,7 +49,6 @@ const Bundles = () => {
     };
 
     const showBundles = () => {
-        console.log(bundles);
         const oData = bundles;
         const oColumns = [
             {
