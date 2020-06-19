@@ -327,19 +327,6 @@ const AddProduct = () => {
                 placeholder="Stock"
               />
               <select
-                onChange={handleChange("weight")}
-                id="weight"
-                className="btn btn-light w-100 border mb-2"
-                defaultValue={"Small"}
-              >
-                <option disabled defaultValue>
-                  Select weight
-                </option>
-                <option value={"Small"}>Small</option>
-                <option value={"Medium"}>Medium</option>
-                <option value={"Large"}>Large</option>
-              </select>
-              <select
                 onChange={handleChange("brand")}
                 id="brand"
                 className="btn btn-light w-100 border mb-2"
@@ -458,6 +445,73 @@ const AddProduct = () => {
                   ></input>
                   <label className="form-check-label">Sold Out</label>
                 </div>
+              </div>
+              <div className="border p-3 mt-2">
+                <h6>Delivery Price</h6>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Metro Manila: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Metro Manila Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Luzon: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Luzon Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Visayas: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Visayas Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Mindanao: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Mindanao Price"
+                      />
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
