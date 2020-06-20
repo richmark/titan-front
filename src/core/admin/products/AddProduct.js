@@ -30,8 +30,7 @@ const AddProduct = () => {
     error: false,
     formData: "",
     display: "T",
-    sold_out: "F",
-    weight: "Small"
+    sold_out: "F"    
   });
 
   const {
@@ -48,7 +47,11 @@ const AddProduct = () => {
     error,
     formData,
     display,
-    sold_out
+    sold_out,
+    metro_manila,
+    luzon,
+    visayas,
+    mindanao
   } = values;
 
   const [bRedirect, setRedirect] = useState(false);
@@ -189,6 +192,11 @@ const AddProduct = () => {
     oValidator.message("Description", description, "required|max:200");
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
+    
+    oValidator.message("Metro Manila", metro_manila, "required");
+    oValidator.message("Luzon", luzon, "required");
+    oValidator.message("Visayas", visayas, "required");
+    oValidator.message("Mindanao", mindanao, "required");
 
     oValidator.fieldValid("Product name")
       ? setNameError(false)
@@ -211,6 +219,8 @@ const AddProduct = () => {
     if (formData.get("category") === null) {
       formData.set("category", category);
     }
+    
+    formData.set('delivery_price', JSON.stringify({metro_manila, luzon, visayas, mindanao}));
 
     if (oValidator.allValid()) {
       createProduct(user._id, sToken, formData).then(oData => {
@@ -454,6 +464,8 @@ const AddProduct = () => {
                     </div>
                     <div className="col-sm-9">
                       <input
+                        value={metro_manila}
+                        onChange={handleChange("metro_manila")}
                         type="number"
                         className={
                           price_error
@@ -470,6 +482,8 @@ const AddProduct = () => {
                     </div>
                     <div className="col-sm-9">
                       <input
+                        value={luzon}
+                        onChange={handleChange("luzon")}
                         type="number"
                         className={
                           price_error
@@ -486,6 +500,8 @@ const AddProduct = () => {
                     </div>
                     <div className="col-sm-9">
                       <input
+                        value={visayas}
+                        onChange={handleChange("visayas")}
                         type="number"
                         className={
                           price_error
@@ -502,6 +518,8 @@ const AddProduct = () => {
                     </div>
                     <div className="col-sm-9">
                       <input
+                        value={mindanao}
+                        onChange={handleChange("mindanao")}
                         type="number"
                         className={
                           price_error
