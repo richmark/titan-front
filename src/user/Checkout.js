@@ -36,9 +36,10 @@ const Checkout = ({location}) => {
     const [aLevel, setDiscountLevel] = useState(false);
     const [bStart, setStart] = useState(false);
 
-    // For Delivery Settings
+    // For Delivery Settings/Fee
     const [iDeliveryFee, setDeliveryFee] = useState(100);
     const [bFreight, setFreight] = useState(false);
+    const [sLocation, setLocation] = useState('metro_manila');
     
     // For Shipping and Billing Details Init
     var oDetail = false;
@@ -137,17 +138,26 @@ const Checkout = ({location}) => {
     const initializeCheckout = (aCart) => {
         setProduct(aCart);
         getRealPrice(aCart);
+        calculateDeliveryFee(aCart);
     }
 
+    /**
+     * Calculate Delivery Fee (Personal and Guest)
+     */
+    const calculateDeliveryFee = (aCart) => {
+        var iFee = 0;
+        aCart.map((oProduct, iIndex) => {
+            iFee += oProduct.delivery_price[sLocation] * oProduct.count;
+        });
+        setDeliveryFee(iFee);
+    }
+    
+    /**
+     * When Location is changed
+     * Recalculates delivery price
+     */
     useEffect(() => {
         user && checkRole();
-        getSettings().then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else if (oData.data.length > 0) {
-                setDeliveryFee(oData.data[0].delivery_fee);
-            }
-        })
         if (oBuyNow.sType !== 'buyNow') {
             init();
             return;
@@ -155,7 +165,7 @@ const Checkout = ({location}) => {
         setEnable(false);
         var aCart = [decodeData(oBuyNow.id)];
         initializeCheckout(aCart);
-    }, []);
+    }, [sLocation]);
 
     const decodeData = (sData) => {
         return JSON.parse(atob(sData));
@@ -275,6 +285,7 @@ const Checkout = ({location}) => {
             var aCart = getCart();
             setRun(aCart);
             setProduct(aCart);
+            calculateDeliveryFee(aCart);
             checkDiscount();
         }
     };
@@ -288,6 +299,7 @@ const Checkout = ({location}) => {
                     var aCart = getCart();
                     setRun(aCart);
                     setProduct(aCart);
+                    calculateDeliveryFee(aCart);
                 }
             });
         }
@@ -305,6 +317,7 @@ const Checkout = ({location}) => {
         var aCart = getCart();
         setRun(aCart);
         setProduct(aCart);
+        calculateDeliveryFee(aCart);
     };
 
     const singleProduct = (oProduct) => {
@@ -364,7 +377,7 @@ const Checkout = ({location}) => {
     const calculateTotal = () => {
         var oTotal = {};
         var iPrice = 0;
-        var iShipFee = parseInt(iDeliveryFee, 10);
+        var iShipFee = (bFreight === true) ? 0 : parseInt(iDeliveryFee, 10);
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
             if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
                 setProduct([]);
@@ -376,7 +389,7 @@ const Checkout = ({location}) => {
         var iTotal = iPrice + iShipFee - iDiscount;
         oTotal = {
             price   : iPrice,
-            fee     : (bFreight === true) ? 0 : iShipFee,
+            fee     : iShipFee,
             discount: iDiscount,
             total   : iTotal
         }

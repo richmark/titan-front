@@ -73,7 +73,8 @@ const ProductDetails = ({match}) => {
           description: oData.description,
           stock: oData.stock,
           sold_out : oData.sold_out,
-          display: oData.display
+          display: oData.display,
+          delivery_price: oData.delivery_price
         });
         calculateCartStock(oData._id, oData.stock);
         setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);

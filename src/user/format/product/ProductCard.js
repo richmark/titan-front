@@ -24,7 +24,8 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             product_name: oProduct.product_name,
             _id: oProduct._id,
             price: oProduct.price,
-            description: oProduct.description
+            description: oProduct.description,
+            delivery_price: oProduct.delivery_price
         }
         addItem(oData, iCount, () => {
           alert('Item added!');
