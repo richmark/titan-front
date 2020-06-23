@@ -38,6 +38,7 @@ const Checkout = ({location}) => {
 
     // For Delivery Settings
     const [iDeliveryFee, setDeliveryFee] = useState(100);
+    const [bFreight, setFreight] = useState(false);
     
     // For Shipping and Billing Details Init
     var oDetail = false;
@@ -102,7 +103,19 @@ const Checkout = ({location}) => {
             });
         }
         setRole(iParam);
+        implementFreightCollect(iParam);
         setVerify(oParam.verified_admin);
+    }
+
+    /**
+     * Function that checks role
+     * If role is corporate or wholesaler
+     * Delivery Charge is zero
+     */
+    const implementFreightCollect = (iParam) => {
+        if (iParam === 3 || iParam === 4) {
+            setFreight(true);
+        }
     }
 
     /**
@@ -363,7 +376,7 @@ const Checkout = ({location}) => {
         var iTotal = iPrice + iShipFee - iDiscount;
         oTotal = {
             price   : iPrice,
-            fee     : iShipFee,
+            fee     : (bFreight === true) ? 0 : iShipFee,
             discount: iDiscount,
             total   : iTotal
         }
@@ -418,11 +431,25 @@ const Checkout = ({location}) => {
                     <Col xs={8} md={8} className="text-right">
                         <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
                         {oTotal.discount > 0 && <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>}
-                        <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
+                        <p className="font-weight-bold "> {(bFreight === false) && "₱"} <span>{(bFreight === true) ? "Freight Collect*" : oTotal.fee}</span></p>
                         <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
+                    {showFreightMessage()}
                 </Row>
             </div>
+        );
+    }
+
+    /**
+     * Show freight message when role is corporate/wholesaler
+     */
+    const showFreightMessage = () => {
+        return bFreight && (
+            <Fragment>
+                <Col xs={12} md={12}>
+                    <sup className="font-weight-bold text-danger">*Shipping charges will be paid to the courier by client upon delivery</sup>
+                </Col>
+            </Fragment>
         );
     }
 
