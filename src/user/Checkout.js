@@ -36,9 +36,11 @@ const Checkout = ({location}) => {
     const [aLevel, setDiscountLevel] = useState(false);
     const [bStart, setStart] = useState(false);
 
-    // For Delivery Settings
+    // For Delivery Settings/Fee
     const [iDeliveryFee, setDeliveryFee] = useState(100);
-    
+    const [bFreight, setFreight] = useState(false);
+    const [sLocation, setLocation] = useState('metro_manila');
+
     // For Shipping and Billing Details Init
     var oDetail = false;
     if (user) {
@@ -63,6 +65,9 @@ const Checkout = ({location}) => {
 
     // Product Stock Adjustment
     var bOnlyOnce = false;
+
+    // Run Once
+    const [bRunOnce, setRunOnce] = useState(false);
 
     const init = () => {
         var aCart = getCart();
@@ -102,7 +107,19 @@ const Checkout = ({location}) => {
             });
         }
         setRole(iParam);
+        implementFreightCollect(iParam);
         setVerify(oParam.verified_admin);
+    }
+
+    /**
+     * Function that checks role
+     * If role is corporate or wholesaler
+     * Delivery Charge is zero
+     */
+    const implementFreightCollect = (iParam) => {
+        if (iParam === 3 || iParam === 4) {
+            setFreight(true);
+        }
     }
 
     /**
@@ -124,17 +141,26 @@ const Checkout = ({location}) => {
     const initializeCheckout = (aCart) => {
         setProduct(aCart);
         getRealPrice(aCart);
+        calculateDeliveryFee(aCart);
     }
 
+    /**
+     * Calculate Delivery Fee (Personal and Guest)
+     */
+    const calculateDeliveryFee = (aCart) => {
+        var iFee = 0;
+        aCart.map((oProduct, iIndex) => {
+            iFee += oProduct.delivery_price[sLocation] * oProduct.count;
+        });
+        setDeliveryFee(iFee);
+    }
+    
+    /**
+     * When Location is changed
+     * Recalculates delivery price
+     */
     useEffect(() => {
         user && checkRole();
-        getSettings().then(oData => {
-            if (oData.error) {
-                console.log(oData.error);
-            } else if (oData.data.length > 0) {
-                setDeliveryFee(oData.data[0].delivery_fee);
-            }
-        })
         if (oBuyNow.sType !== 'buyNow') {
             init();
             return;
@@ -142,7 +168,7 @@ const Checkout = ({location}) => {
         setEnable(false);
         var aCart = [decodeData(oBuyNow.id)];
         initializeCheckout(aCart);
-    }, []);
+    }, [sLocation]);
 
     const decodeData = (sData) => {
         return JSON.parse(atob(sData));
@@ -262,6 +288,7 @@ const Checkout = ({location}) => {
             var aCart = getCart();
             setRun(aCart);
             setProduct(aCart);
+            calculateDeliveryFee(aCart);
             checkDiscount();
         }
     };
@@ -275,6 +302,7 @@ const Checkout = ({location}) => {
                     var aCart = getCart();
                     setRun(aCart);
                     setProduct(aCart);
+                    calculateDeliveryFee(aCart);
                 }
             });
         }
@@ -292,6 +320,7 @@ const Checkout = ({location}) => {
         var aCart = getCart();
         setRun(aCart);
         setProduct(aCart);
+        calculateDeliveryFee(aCart);
     };
 
     const singleProduct = (oProduct) => {
@@ -351,7 +380,7 @@ const Checkout = ({location}) => {
     const calculateTotal = () => {
         var oTotal = {};
         var iPrice = 0;
-        var iShipFee = parseInt(iDeliveryFee, 10);
+        var iShipFee = (bFreight === true) ? 0 : parseInt(iDeliveryFee, 10);
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
             if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
                 setProduct([]);
@@ -418,12 +447,67 @@ const Checkout = ({location}) => {
                     <Col xs={8} md={8} className="text-right">
                         <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
                         {oTotal.discount > 0 && <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>}
-                        <p className="font-weight-bold "> ₱ <span>{oTotal.fee}</span></p>
+                        <p className="font-weight-bold "> {(bFreight === false) && "₱"} <span>{(bFreight === true) ? "Freight Collect*" : oTotal.fee}</span></p>
                         <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
+                    {showFreightMessage()}
                 </Row>
             </div>
         );
+    }
+
+    /**
+     * Show freight message when role is corporate/wholesaler
+     * Show Delivery location when role is personal/guest/admin
+     */
+    const showFreightMessage = () => {
+        if (bFreight === true) {
+            return bFreight && (
+                <Fragment>
+                    <Col xs={12} md={12}>
+                        <sup className="font-weight-bold text-danger">*Shipping charges will be paid to the courier by client upon delivery</sup>
+                    </Col>
+                </Fragment>
+            );
+        }
+        return (
+            <Fragment>
+                <Col xs={8} md={8}>
+                    <p className="font-weight-bold">Delivery Location</p>
+                </Col>
+                <Col xs={4} md={4}>
+                    <Form.Control onChange={updateLocationDelivery} id="location_delivery" as="select" custom>
+                        <option value="metro_manila">Metro Manila</option>
+                        <option value="luzon">Luzon</option>
+                        <option value="visayas">Visayas</option>
+                        <option value="mindanao">Mindanao</option>
+                    </Form.Control> 
+                </Col>
+            </Fragment>
+        );
+    }
+
+    /**
+     * This function will only run
+     * If selector with id location_delivery is instantiated
+     * Will only run once
+     */
+    const runOnce = () => {
+        var oDelivery = document.getElementById('location_delivery');
+        if (oDelivery && bRunOnce === false) {
+            updateLocationDelivery();
+            setRunOnce(true);
+        }
+        
+    }
+
+    /**
+     * Update Location Delivery
+     * Price is based on Location Delivery
+     */
+    const updateLocationDelivery = () => {
+        var oDelivery = document.getElementById('location_delivery');
+        oDelivery && setLocation(oDelivery.value);
     }
 
     const showDeliveryDetails = () => {
@@ -770,6 +854,7 @@ const Checkout = ({location}) => {
             {showProductMain()}
             {redirectForbidden()}
             {redirectUser()}
+            {runOnce()}
             <LaunchModal 
                 show={modalPaymaya}
                 onHide={() => setModalPaymaya(false)}

@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import _ from 'lodash';
 
 const UpdateBundle = ({ match }) => {
+  const [price_error, setPriceError] = useState(false);
   const [products, setProducts] = useState(false);
   const { sToken, user } = isAuthenticated();
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -27,7 +28,10 @@ const UpdateBundle = ({ match }) => {
     sold_out: "F",
     price: 0,
     stock: 0,
-    weight: 'Small'
+    metro_manila: 0,
+    luzon: 0,
+    visayas: 0,
+    mindanao: 0
   });
   const {
     _id,
@@ -41,7 +45,10 @@ const UpdateBundle = ({ match }) => {
     sold_out,
     price,
     stock,
-    weight
+    metro_manila,
+    luzon,
+    visayas,
+    mindanao
   } = bundles;
 
   const loadProductCount = () => {
@@ -59,10 +66,20 @@ const UpdateBundle = ({ match }) => {
       if (oBundle.error) {
         console.log(oBundle.error);
       } else {
+        if (oBundle.data.delivery_price) {
+          var iMetroManila = oBundle.data.delivery_price.metro_manila;
+          var iLuzon = oBundle.data.delivery_price.luzon;
+          var iVisayas = oBundle.data.delivery_price.visayas;
+          var iMindanao = oBundle.data.delivery_price.mindanao;
+        }
         setBundles({
           ...oBundle.data,
           formData: new FormData(),
-          image: `${IMAGE_API}/images/products/${oBundle.data.image}`
+          image: `${IMAGE_API}/images/products/${oBundle.data.image}`,
+          metro_manila: iMetroManila,
+          luzon: iLuzon,
+          visayas: iVisayas,
+          mindanao: iMindanao
         });
         var aProduct = [];
         oBundle.data.bundle_product.map(oItem => {
@@ -167,6 +184,7 @@ const UpdateBundle = ({ match }) => {
       return { product: _id, count };
     });
     formData.set("bundle_product", JSON.stringify(aData));
+    formData.set('delivery_price', JSON.stringify({metro_manila, luzon, visayas, mindanao}));
     updateBundle(user._id, sToken, formData, match.params.bundleId).then(
       oData => {
         if (oData.error) {
@@ -267,24 +285,6 @@ const UpdateBundle = ({ match }) => {
                     </div>
                   </div>
                   <div className="form-group row">
-                    <div className="pl-3 col-sm-12">
-                      <select
-                        value={weight}
-                        onChange={handleChange("weight")}
-                        id="weight"
-                        className="btn btn-light w-100 border mb-2"
-                        defaultValue={"Small"}
-                      >
-                        <option disabled defaultValue>
-                          Select weight
-                        </option>
-                        <option value={"Small"}>Small</option>
-                        <option value={"Medium"}>Medium</option>
-                        <option value={"Large"}>Large</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="form-group row">
                     <label
                       htmlFor="inputPassword"
                       className="pr-0 col-sm-2 col-form-label"
@@ -362,6 +362,81 @@ const UpdateBundle = ({ match }) => {
                         checked={sold_out === "F" ? false : true}
                       ></input>
                       <label className="form-check-label">Sold Out</label>
+                    </div>
+                  </div>
+                  <div className="border p-3 mb-4">
+                    <h6>Delivery Price</h6>
+                    <div className="form-group row">
+                      <div className="col-sm-3 form-label col-form-label text-center">
+                        <label>Metro Manila: </label>
+                      </div>
+                      <div className="col-sm-9">
+                        <input
+                          value={metro_manila}
+                          onChange={handleChange("metro_manila")}
+                          type="number"
+                          className={
+                            price_error
+                              ? "form-control bg-light small mb-2 border-danger"
+                              : "form-control bg-light mb-2"
+                          }
+                          placeholder="Metro Manila Price"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <div className="col-sm-3 form-label col-form-label text-center">
+                        <label>Luzon: </label>
+                      </div>
+                      <div className="col-sm-9">
+                        <input
+                          value={luzon}
+                          onChange={handleChange("luzon")}
+                          type="number"
+                          className={
+                            price_error
+                              ? "form-control bg-light small mb-2 border-danger"
+                              : "form-control bg-light mb-2"
+                          }
+                          placeholder="Luzon Price"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <div className="col-sm-3 form-label col-form-label text-center">
+                        <label>Visayas: </label>
+                      </div>
+                      <div className="col-sm-9">
+                        <input
+                          value={visayas}
+                          onChange={handleChange("visayas")}
+                          type="number"
+                          className={
+                            price_error
+                              ? "form-control bg-light small mb-2 border-danger"
+                              : "form-control bg-light mb-2"
+                          }
+                          placeholder="Visayas Price"
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group row">
+                      <div className="col-sm-3 form-label col-form-label text-center">
+                        <label>Mindanao: </label>
+                      </div>
+                      <div className="col-sm-9">
+                        <input
+                          value={mindanao}
+                          onChange={handleChange("mindanao")}
+                          type="number"
+                          className={
+                            price_error
+                              ? "form-control bg-light small mb-2 border-danger"
+                              : "form-control bg-light mb-2"
+                          }
+                          placeholder="Mindanao Price"
+                        />
+                      </div>
                     </div>
                   </div>
                   <table className="table table-bordered">

@@ -41,6 +41,7 @@ const Products = () => {
       if (oProducts.error) {
         console.log(oProducts.error);
       } else {
+        console.log(oProducts.data);
         setProducts(oProducts.data);
         setOriginalProducts(oProducts.data);
       }
@@ -189,11 +190,6 @@ const Products = () => {
       {
         name: "Stock",
         selector: "stock",
-        sortable: true,
-      },
-      {
-        name: "Weight",
-        selector: "weight",
         sortable: true,
       },
       {

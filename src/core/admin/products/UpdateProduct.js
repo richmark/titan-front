@@ -6,6 +6,7 @@ import { updateProduct, getProduct } from "./productsApi";
 import { IMAGE_API } from "../../../config";
 
 const UpdateProduct = ({ match }) => {
+  const [price_error, setPriceError] = useState(false);
   const { sToken, user } = isAuthenticated();
   const [categories, setCategories] = useState([]);
   const [values, setValues] = useState({
@@ -23,7 +24,10 @@ const UpdateProduct = ({ match }) => {
     display: 'T',
     sold_out: 'F',
     brand: '',
-    weight: 'Small'
+    metro_manila: 0,
+    luzon: 0,
+    visayas: 0,
+    mindanao: 0
   });
 
   const {
@@ -40,8 +44,11 @@ const UpdateProduct = ({ match }) => {
     formData,
     display,
     sold_out,
-    brand,
-    weight
+    brand,    
+    metro_manila,
+    luzon,
+    visayas,
+    mindanao
   } = values;
 
   const loadCategories = () => {
@@ -143,7 +150,13 @@ const UpdateProduct = ({ match }) => {
       getProduct(match.params.productId).then(oData => {
         if (oData.error) {
           console.log(oData.error);
-        } else {
+        } else {          
+          if (oData.data.delivery_price) {
+            var iMetroManila = oData.data.delivery_price.metro_manila;
+            var iLuzon = oData.data.delivery_price.luzon;
+            var iVisayas = oData.data.delivery_price.visayas;
+            var iMindanao = oData.data.delivery_price.mindanao;
+          }
           setValues({
             key: "",
             value: "",
@@ -164,7 +177,10 @@ const UpdateProduct = ({ match }) => {
             display: oData.data.display,
             sold_out: oData.data.sold_out,
             brand: oData.data.brand,
-            weight: oData.data.weight
+            metro_manila: iMetroManila,
+            luzon: iLuzon,
+            visayas: iVisayas,
+            mindanao: iMindanao
           });
           loadCategories();
         }
@@ -178,6 +194,7 @@ const UpdateProduct = ({ match }) => {
 
   const submitProduct = oEvent => {
     oEvent.preventDefault();
+    formData.set('delivery_price', JSON.stringify({metro_manila, luzon, visayas, mindanao}));
     updateProduct(user._id, sToken, formData, match.params.productId).then(
       oData => {
         if (oData.error) {
@@ -270,20 +287,6 @@ const UpdateProduct = ({ match }) => {
                 className="form-control bg-light small mb-2"
                 placeholder="Stock"
               />
-              <select
-                value={weight}
-                onChange={handleChange("weight")}
-                id="weight"
-                className="btn btn-light w-100 border mb-2"
-                defaultValue={"Small"}
-              >
-                <option disabled defaultValue>
-                  Select weight
-                </option>
-                <option value={"Small"}>Small</option>
-                <option value={"Medium"}>Medium</option>
-                <option value={"Large"}>Large</option>
-              </select>
               <select
                 value={brand}
                 onChange={handleChange("brand")}
@@ -384,6 +387,82 @@ const UpdateProduct = ({ match }) => {
                   <input className="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out === 'F' ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
                   <label className="form-check-label" >Sold Out</label>
                 </div>  
+              </div>
+
+              <div className="border p-3 mt-2">
+                <h6>Delivery Price</h6>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Metro Manila: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={metro_manila}
+                        onChange={handleChange("metro_manila")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Metro Manila Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Luzon: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={luzon}
+                        onChange={handleChange("luzon")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Luzon Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Visayas: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={visayas}
+                        onChange={handleChange("visayas")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Visayas Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Mindanao: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={mindanao}
+                        onChange={handleChange("mindanao")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Mindanao Price"
+                      />
+                    </div>
+                  </div>
               </div>
             </div>
           </div>

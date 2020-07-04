@@ -30,8 +30,7 @@ const AddProduct = () => {
     error: false,
     formData: "",
     display: "T",
-    sold_out: "F",
-    weight: "Small"
+    sold_out: "F"    
   });
 
   const {
@@ -48,7 +47,11 @@ const AddProduct = () => {
     error,
     formData,
     display,
-    sold_out
+    sold_out,
+    metro_manila,
+    luzon,
+    visayas,
+    mindanao
   } = values;
 
   const [bRedirect, setRedirect] = useState(false);
@@ -189,6 +192,11 @@ const AddProduct = () => {
     oValidator.message("Description", description, "required|max:200");
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
+    
+    oValidator.message("Metro Manila", metro_manila, "required");
+    oValidator.message("Luzon", luzon, "required");
+    oValidator.message("Visayas", visayas, "required");
+    oValidator.message("Mindanao", mindanao, "required");
 
     oValidator.fieldValid("Product name")
       ? setNameError(false)
@@ -211,6 +219,8 @@ const AddProduct = () => {
     if (formData.get("category") === null) {
       formData.set("category", category);
     }
+    
+    formData.set('delivery_price', JSON.stringify({metro_manila, luzon, visayas, mindanao}));
 
     if (oValidator.allValid()) {
       createProduct(user._id, sToken, formData).then(oData => {
@@ -326,19 +336,6 @@ const AddProduct = () => {
                 }
                 placeholder="Stock"
               />
-              <select
-                onChange={handleChange("weight")}
-                id="weight"
-                className="btn btn-light w-100 border mb-2"
-                defaultValue={"Small"}
-              >
-                <option disabled defaultValue>
-                  Select weight
-                </option>
-                <option value={"Small"}>Small</option>
-                <option value={"Medium"}>Medium</option>
-                <option value={"Large"}>Large</option>
-              </select>
               <select
                 onChange={handleChange("brand")}
                 id="brand"
@@ -458,6 +455,81 @@ const AddProduct = () => {
                   ></input>
                   <label className="form-check-label">Sold Out</label>
                 </div>
+              </div>
+              <div className="border p-3 mt-2">
+                <h6>Delivery Price</h6>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Metro Manila: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={metro_manila}
+                        onChange={handleChange("metro_manila")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Metro Manila Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Luzon: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={luzon}
+                        onChange={handleChange("luzon")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Luzon Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Visayas: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={visayas}
+                        onChange={handleChange("visayas")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Visayas Price"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-sm-3 form-label col-form-label text-center">
+                      <label>Mindanao: </label>
+                    </div>
+                    <div className="col-sm-9">
+                      <input
+                        value={mindanao}
+                        onChange={handleChange("mindanao")}
+                        type="number"
+                        className={
+                          price_error
+                            ? "form-control bg-light small mb-2 border-danger"
+                            : "form-control bg-light mb-2"
+                        }
+                        placeholder="Mindanao Price"
+                      />
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
