@@ -81,7 +81,7 @@ const HomePage = () => {
         if (bLoadButton === true) {
             return (
                 <Fragment>
-                    <Container>
+                    <Container className='pb-2'>
                         <Row>
                             <Col className="text-center">
                                 <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
@@ -100,11 +100,13 @@ const HomePage = () => {
 	return (
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
-            {showCategoryLayout()}
-            {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
-            {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
-            {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
-            {showLoadMoreButton()}
+            <Container style={{backgroundColor: 'white'}} fluid>
+                {showCategoryLayout()}
+                {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
+                {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
+                {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
+                {showLoadMoreButton()}
+            </Container> 
         </Layout>
     );
 };

@@ -10,7 +10,7 @@ const CategoryCard = (aData) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Link to={`categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
-                <Card className="my-2 ml-3 border-0"  style={{background: 'white'}}> 
+                <Card className="my-2 mx-auto border-0"  style={{background: 'white', width: "225px"}}> 
                     <Row>
                         <Col>
                             <Image
@@ -31,12 +31,11 @@ const CategoryCard = (aData) => {
     };
 
     const showLayout = (aCategories, iIndex) => {
-        console.log(aCategories);
         return (
             <Container>
                 <Row>
-                    <Col sm={{offset:0, span: 9}}>
-                        <Row className="ml-3 mr-3">
+                    <Col sm={12} md={12} lg={9}>
+                        <Row className="mx-auto">
                             {aCategories.map((oCategories, iIndex) => {
                                 return (
                                     <Col xs={12} sm={6} md={4} lg={4} key={iIndex} className="pl-0">
@@ -46,9 +45,9 @@ const CategoryCard = (aData) => {
                             })}
                         </Row>
                     </Col>
-                    <Col sm={{offset:0, span: 3}}>
+                    <Col sm={{offset:0, span: 3}} className='d-lg-block d-md-none d-sm-none d-none'>
                         <Image
-                            className='ml-1' 
+                            className='mx-auto' 
                             src={`${IMAGE_API}/images/others/side_banner_${iIndex + 1}.jpg`}
                         />
                     </Col>

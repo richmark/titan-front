@@ -46,7 +46,7 @@ const ProductBundleCarousel = () => {
         );
     };
 
-    return aBanner.length > 0 && <Container>{showCarousel(aBanner)}</Container>;
+    return aBanner.length > 0 && <Container className='pb-4'>{showCarousel(aBanner)}</Container>;
 };
 
 export default ProductBundleCarousel;

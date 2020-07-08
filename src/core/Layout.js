@@ -531,7 +531,7 @@ const Layout = ({
     return (
       oCategories && (
         <footer
-          className="text-center p-5 text-white mt-5"
+          className="text-center p-5 text-white"
           style={{ backgroundColor: "black" }}
         >
           <Container>
