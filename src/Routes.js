@@ -49,6 +49,7 @@ import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
 import PurchaseHistory from './core/admin/verifiedusers/PurchaseHistory';
 import BundleDeals from './user/format/bundle/BundleDeals';
+import SideBanner from "./core/admin/sidebanner/SideBanner";
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -169,6 +170,11 @@ const Routes = () => {
         path="/admin/banner"
         exact
         component={Banner}
+      />
+      <AdminRoute
+        path="/admin/sidebanner"
+        exact
+        component={SideBanner}
       />
       <AdminRoute
         path="/admin/banner/update/:bannerId"
