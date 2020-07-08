@@ -9,22 +9,20 @@ const CategoryCard = (aData) => {
     const showCardBase = (oCategories) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
-            <Link to={`categories/${oCategories._id}`}>
-                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+            <Link to={`categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
+                <Card className="my-2 ml-3 border-0"  style={{background: 'white'}}> 
                     <Row>
                         <Col>
-                            <Image 
+                            <Image
+                                className='ml-1' 
                                 src={`${IMAGE_API}/images/categories/${sImage}`}
-                                style={{width: "200px", height: "200px"}} 
+                                style={{width: "220px", height: "220px"}} 
                             />
                         </Col>
                     </Row>
-                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                    <Row className=" mt-2">
+                    <Row className="mt-2">
                         <Col>
-                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oCategories.name}</strong></p>
-                            </button>
+                           <p className="text-center" style={{fontSize: "14px", marginTop: '18px', textTransform: 'uppercase', fontFamily: 'Oswald', color: 'black'}}><strong>{oCategories.name}</strong></p>
                         </Col>
                     </Row>
                 </Card>
@@ -32,20 +30,27 @@ const CategoryCard = (aData) => {
         );
     };
 
-    const showLayout = (aCategories) => {
+    const showLayout = (aCategories, iIndex) => {
+        console.log(aCategories);
         return (
             <Container>
-                <Row className="mt-2 ml-3 mr-2">
-                    <Col sm={{offset:0, span: 12}}>
-                        <Row className="mb-2">
+                <Row>
+                    <Col sm={{offset:0, span: 9}}>
+                        <Row className="ml-3 mr-3">
                             {aCategories.map((oCategories, iIndex) => {
                                 return (
-                                    <Col sm={3} key={iIndex} className="pl-0">
+                                    <Col xs={12} sm={6} md={4} lg={4} key={iIndex} className="pl-0">
                                         {showCardBase(oCategories)}
                                     </Col>
                                 );
                             })}
                         </Row>
+                    </Col>
+                    <Col sm={{offset:0, span: 3}}>
+                        <Image
+                            className='ml-1' 
+                            src={`${IMAGE_API}/images/others/side_banner_${iIndex + 1}.jpg`}
+                        />
                     </Col>
                 </Row>
             </Container>
@@ -56,11 +61,11 @@ const CategoryCard = (aData) => {
      * TODO: add validation if aChunks is empty
      */
     const arrangeCategories = (aData) => {
-        const aChunks = _.chunk(aData, 4);
+        const aChunks = _.chunk(aData, 6);
         return aChunks.map((aCategories, iIndex) => {
             return (
                 <Fragment key={iIndex}>
-                    {showLayout(aCategories)}
+                    {showLayout(aCategories, iIndex)}
                 </Fragment>
             );
         });
