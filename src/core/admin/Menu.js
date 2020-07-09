@@ -203,6 +203,9 @@ const Menu = () => {
                   <Link to="/admin/banner" className="collapse-item">
                     Add Banner
                   </Link>
+                  <Link to="/admin/sidebanner" className="collapse-item">
+                    Add Side Banner
+                  </Link>
                 </div>
               </div>
             </li>
