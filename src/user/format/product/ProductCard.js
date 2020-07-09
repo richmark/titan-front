@@ -44,9 +44,9 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             sStyle =  'pl-2';
         }
         return (
-            <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+            <Card className="py-3 mx-auto border-1"  style={{background: 'transparent'}}> 
                 <Row>
-                    <Col>
+                    <Col className='text-center'>
                         {showSoldOutImage(oProduct)}
                         <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                             <Image 
@@ -56,13 +56,25 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
                         </a>
                     </Col>
                 </Row>
-                <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                {showRating(oProduct)}
-                <Row className="">
-                    <Col>
-                        {showAddCartButton(oProduct, sName)}
+                <Row style={{ fontFamily: 'Roboto Condensed', fontWeight: 'bold'}}>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.7rem'}}>
+                        <p style={{width: '80%'}} className='text-truncate'>{sName}</p>
+                    </Col>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
+                        <p style={{ color : 'red'}}>{`₱${oProduct.price}`}</p>
+                    </Col>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
+                        {showRating(oProduct)}
                     </Col>
                 </Row>
+                {/* <Row className="">
+                    <Col sm={6}>
+                        {showAddCartButton(oProduct, sName)}
+                    </Col>
+                    <Col sm={6}>
+                        {showAddCartButton(oProduct, sName)}
+                    </Col>
+                </Row> */}
             </Card>
         );
     };
@@ -83,7 +95,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
     const showAddCartButton = (oProduct, sName) => {
         const oStyle = {
             color: 'white', 
-            background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
+            // background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
         }
         if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
             return (
@@ -129,9 +141,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
         }
         return (
             <Fragment>
-                <div className="mt-2" style={{marginLeft: '40px'}}>
-                    {aItems}
-                </div>  
+                {aItems}
             </Fragment>
         );
     };
