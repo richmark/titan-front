@@ -162,5 +162,5 @@ ul {
 }
 
 .productCard:hover .productCardHide {
-  display: inherit !important;
+  display: flex !important;
 }

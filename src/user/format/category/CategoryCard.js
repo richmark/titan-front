@@ -10,13 +10,13 @@ const CategoryCard = (aData) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
             <Link to={`categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
-                <Card className="my-2 mx-auto border-0"  style={{background: 'white', width: "225px"}}> 
+                <Card className="my-2 mx-auto border-1"  style={{background: 'white', width: "225px"}}> 
                     <Row>
                         <Col>
                             <Image
                                 className='ml-1' 
                                 src={`${IMAGE_API}/images/categories/${sImage}`}
-                                style={{width: "220px", height: "220px"}} 
+                                style={{width: "200px", height: "200px"}} 
                             />
                         </Col>
                     </Row>
@@ -72,7 +72,7 @@ const CategoryCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', letterSpacing: '7px'}}>CATEGORIES</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', fontFamily : 'Oswald, sans-serif'}}>CATEGORIES</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    

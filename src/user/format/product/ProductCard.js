@@ -44,31 +44,35 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             sStyle =  'pl-2';
         }
         return (
-            <Card className="py-3 mx-auto border-0 mb-2 productCard"  style={{background: 'transparent'}}> 
-                <Row>
-                    <Col className='text-center'>
-                        {showSoldOutImage(oProduct)}
-                        <a href={`/product/details/${oProduct._id}`} className="mx-auto">
-                            <Image 
-                                src={`${IMAGE_API}/images/products/${sImage}`}
-                                style={{width: "200px", height: "200px"}} 
-                            />
-                        </a>
-                    </Col>
-                </Row>
-                <Row style={{ fontFamily: 'Roboto Condensed, sans-serif', fontWeight: 'bold'}}>
-                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.7rem'}}>
-                        <p style={{width: '80%'}} className='text-truncate'>{sName}</p>
-                    </Col>
-                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
-                        <p style={{ color : 'red'}}>{`₱${oProduct.price}`}</p>
-                    </Col>
-                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
-                        {showRating(oProduct)}
-                    </Col>
-                </Row>
+            <Fragment>
+                <div className='productCard'>
+                    <Card className="py-3 border-1 mb-2"  style={{background: 'transparent'}}> 
+                        <Row>
+                            <Col className='text-center'>
+                                {showSoldOutImage(oProduct)}
+                                <a href={`/product/details/${oProduct._id}`} className="mx-auto">
+                                    <Image 
+                                        src={`${IMAGE_API}/images/products/${sImage}`}
+                                        style={{width: "200px", height: "200px"}} 
+                                    />
+                                </a>
+                            </Col>
+                        </Row>
+                        <Row style={{ fontFamily: 'Roboto Condensed, sans-serif', fontWeight: 'bold'}}>
+                            <Col sm={{offset : 1, span : 12}} style={{fontSize: '.7rem'}}>
+                                <p style={{width: '80%'}} className='text-truncate'>{sName}</p>
+                            </Col>
+                            <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
+                                <p style={{ color : 'red'}}>{`₱${oProduct.price}`}</p>
+                            </Col>
+                            <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
+                                {showRating(oProduct)}
+                            </Col>
+                        </Row>
+                    </Card>
                 {showButtons(oProduct)}
-            </Card>
+                </div>
+            </Fragment>
         );
     };
 
@@ -81,12 +85,12 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             oClick = showAlertNoStock;
         } 
         return (
-            <Row className="mt-3 mx-2 productCardHide">
-                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem'}}>
-                    <Button onClick={buyNow(oProduct)} variant="" style={{ fontWeight : 'bold',fontSize: '.9rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
+            <Row className="ml-1 productCardHide text-center">
+                <Col lg={5} className='mr-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
+                    <Button onClick={buyNow(oProduct)} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
                 </Col>
-                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem'}}>
-                    <Button className='border-0' onClick={oClick} style={{fontSize: '.9rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
+                <Col lg={5} className='text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
+                    <Button className='border-0' onClick={oClick} style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
                 </Col>
             </Row>
         );
