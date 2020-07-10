@@ -9,7 +9,7 @@ body {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+    monospace;
 }
 
 span {
@@ -27,11 +27,11 @@ span {
     color: #fbad17;
 }
 
-.titan-link :hover {
+.titan-link:hover {
     color: #c08414;
 }
 
-.titan-link :link {
+.titan-link:link {
     color: #fbad17;
 }
 
@@ -68,91 +68,99 @@ span {
 @keyframes ldio-o8fa4n59lro {
     0% { transform: translate(-50%,-50%) rotate(0deg); }
     100% { transform: translate(-50%,-50%) rotate(360deg); }
-  }
-  .ldio-o8fa4n59lro div {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border: 10px solid #fbad17;
-    border-top-color: transparent;
-    border-radius: 50%;
-  }
-  .ldio-o8fa4n59lro div {
-    animation: ldio-o8fa4n59lro 1s linear infinite;
-    top: 50px;
-    left: 50px
-  }
-  .loadingio-spinner-rolling-9vq94p0gkx5 {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    overflow: hidden;
-    background: rgba(NaN, NaN, NaN, 0);
-  }
-  .ldio-o8fa4n59lro {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform: translateZ(0) scale(1);
-    backface-visibility: hidden;
-    transform-origin: 0 0; /* see note above */
-  }
-  .ldio-o8fa4n59lro div { box-sizing: content-box; }
+}
+.ldio-o8fa4n59lro div {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 10px solid #fbad17;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.ldio-o8fa4n59lro div {
+  animation: ldio-o8fa4n59lro 1s linear infinite;
+  top: 50px;
+  left: 50px
+}
+.loadingio-spinner-rolling-9vq94p0gkx5 {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  overflow: hidden;
+  background: rgba(NaN, NaN, NaN, 0);
+}
+.ldio-o8fa4n59lro {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-o8fa4n59lro div { box-sizing: content-box; }
 
-  .category-side-list:hover {
-    font-weight: bold;
-  }
+.category-side-list:hover {
+  font-weight: bold;
+}
 
-  .active {
-    font-weight: bold;
-  }
+.active {
+  font-weight: bold;
+}
 
-  .carousel-indicators > li {
-    border-radius: 50% !important;
-    width: 10px !important;
-    height: 10px !important;
-  }
+.carousel-indicators > li {
+  border-radius: 50% !important;
+  width: 10px !important;
+  height: 10px !important;
+}
 
-  .carousel-indicators {
-    top: 100%;
-  }
+.carousel-indicators {
+  top: 100%;
+}
 
-  .carousel-control-prev:hover {
-    background-image: linear-gradient(to right, #00000070 , transparent);
-  }
+.carousel-control-prev:hover {
+  background-image: linear-gradient(to right, #00000070 , transparent);
+}
 
-  .carousel-control-next:hover {
-    background-image: linear-gradient(to right, transparent , #00000070);
-  }
+.carousel-control-next:hover {
+  background-image: linear-gradient(to right, transparent , #00000070);
+}
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .tst-current {
-    padding-left: 1em; 
-    text-indent: -.7em;
-  }
+.tst-current {
+  padding-left: 1em; 
+  text-indent: -.7em;
+}
 
-  .tst-current::before {
-    content: "• "  !important;
-    color: #fbad17 !important; /* or whatever color you prefer */
-  }
+.tst-current::before {
+  content: "• "  !important;
+  color: #fbad17 !important; /* or whatever color you prefer */
+}
 
-  .tst-list {
-    padding-left: 1em; 
-    text-indent: -.7em;
-    color: lightgray;
+.tst-list {
+  padding-left: 1em; 
+  text-indent: -.7em;
+  color: lightgray;
 
-  }
+}
 
-  .tst-list::before {
-    content: "• "  !important;
-    color: lightgray !important; /* or whatever color you prefer */
-  }
+.tst-list::before {
+  content: "• "  !important;
+  color: lightgray !important; /* or whatever color you prefer */
+}
 
-  .fa-star {
-    color: #99948a;
-  }
+.fa-star {
+  color: #99948a;
+}
+
+.productCardHide {
+  display: none !important;
+}
+
+.productCard:hover .productCardHide {
+  display: inherit !important;
+}
