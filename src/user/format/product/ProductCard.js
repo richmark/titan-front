@@ -82,11 +82,11 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
         } 
         return (
             <Row className="mt-3 mx-2 productCardHide">
-                <Col sm={5} className='px-0'>
-                    <Button onClick={buyNow(oProduct)} className='border-1' variant="" style={{ fontWeight : 'bold',fontSize: '.9rem', color : '#d4652f', border : '1px solid rgba(0,0,0,.125)'}}>Buy Now</Button>
+                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem'}}>
+                    <Button onClick={buyNow(oProduct)} variant="" style={{ fontWeight : 'bold',fontSize: '.9rem', color : '#ff6900', fontFamily : 'Oswald Bold'}}>Buy Now</Button>
                 </Col>
-                <Col sm={6} className='px-0 mr-1'>
-                    <Button onClick={oClick} style={{fontSize: '.9rem', backgroundColor: '#f54021', borderColor: '#d4652f'}}>Add to Cart</Button>
+                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem'}}>
+                    <Button className='border-0' onClick={oClick} style={{fontSize: '.9rem', backgroundColor: 'transparent',fontFamily : 'Oswald Bold'}}>Add to Cart</Button>
                 </Col>
             </Row>
         );
@@ -160,7 +160,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
                         <Row className="mb-2">
                             {aProducts && aProducts.map((oProduct, iIndex) => {
                                 return (
-                                    <Col sm={iSize} key={iIndex} className="pl-0">
+                                    <Col lg={iSize} md={6} sm={6} xs={12} key={iIndex} className="pl-0">
                                         {showCardBase(oProduct)}
                                     </Col>
                                 );
