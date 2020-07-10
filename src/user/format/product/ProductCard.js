@@ -44,9 +44,9 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             sStyle =  'pl-2';
         }
         return (
-            <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+            <Card className="py-3 mx-auto border-0 mb-2 productCard"  style={{background: 'transparent'}}> 
                 <Row>
-                    <Col>
+                    <Col className='text-center'>
                         {showSoldOutImage(oProduct)}
                         <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                             <Image 
@@ -56,16 +56,49 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
                         </a>
                     </Col>
                 </Row>
-                <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                {showRating(oProduct)}
-                <Row className="">
-                    <Col>
-                        {showAddCartButton(oProduct, sName)}
+                <Row style={{ fontFamily: 'Roboto Condensed', fontWeight: 'bold'}}>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.7rem'}}>
+                        <p style={{width: '80%'}} className='text-truncate'>{sName}</p>
+                    </Col>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
+                        <p style={{ color : 'red'}}>{`₱${oProduct.price}`}</p>
+                    </Col>
+                    <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
+                        {showRating(oProduct)}
                     </Col>
                 </Row>
+                {showButtons(oProduct)}
             </Card>
         );
     };
+
+    /**
+     * Show Buy Now and AddtoCard Buttons
+     */
+    const showButtons = (oProduct) => {
+        var oClick = addToCart(oProduct);
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            oClick = showAlertNoStock;
+        } 
+        return (
+            <Row className="mt-3 mx-2 productCardHide">
+                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem'}}>
+                    <Button onClick={buyNow(oProduct)} variant="" style={{ fontWeight : 'bold',fontSize: '.9rem', color : '#ff6900', fontFamily : 'Oswald Bold'}}>Buy Now</Button>
+                </Col>
+                <Col lg={5} className='px-0 my-1 mx-1 text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem'}}>
+                    <Button className='border-0' onClick={oClick} style={{fontSize: '.9rem', backgroundColor: 'transparent',fontFamily : 'Oswald Bold'}}>Add to Cart</Button>
+                </Col>
+            </Row>
+        );
+    }
+
+    /**
+     * Put BUY NOW FUNCTION HERE!!!!
+     */
+    const buyNow = (oProduct) => oEvent => {
+        oEvent.preventDefault();
+        console.log('BUY NOW!!!!', oProduct)
+    }
 
     const showSoldOutImage = (oProduct) => {
         if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
@@ -79,34 +112,6 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
             );
         }
     };
-
-    const showAddCartButton = (oProduct, sName) => {
-        const oStyle = {
-            color: 'white', 
-            background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`
-        }
-        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
-            return (
-                <Fragment>
-                    <button className="default-button text-center" onClick={showAlertNoStock} style={oStyle}>
-                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
-                    </button>
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
-                    <button className="default-button  text-center" onClick={addToCart(oProduct)} style={oStyle}>
-                        <p className="ellipsis-button mb-0" style={{color: 'black', fontSize: "12px"}}>Add to Cart</p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}><strong>{sName}</strong></p>
-                        <p className="ellipsis-button mb-0" style={{fontSize: "14px"}}>{`₱ ${oProduct.price}`}</p>
-                    </button>
-                </Fragment>
-            );
-        } 
-    }
 
     const showAlertNoStock = () => {
         return alert('Product is out of stock.');
@@ -129,9 +134,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
         }
         return (
             <Fragment>
-                <div className="mt-2" style={{marginLeft: '40px'}}>
-                    {aItems}
-                </div>  
+                {aItems}
             </Fragment>
         );
     };
@@ -157,7 +160,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
                         <Row className="mb-2">
                             {aProducts && aProducts.map((oProduct, iIndex) => {
                                 return (
-                                    <Col sm={iSize} key={iIndex} className="pl-0">
+                                    <Col lg={iSize} md={6} sm={6} xs={12} key={iIndex} className="pl-0">
                                         {showCardBase(oProduct)}
                                     </Col>
                                 );
@@ -171,7 +174,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
 
     return (
         <Container>
-            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', letterSpacing: '7px'}}>{sHeader}</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', fontFamily : 'Oswald Bold', fontWeight : 'bold'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
     );    
