@@ -7,10 +7,12 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
+import { Redirect } from "react-router-dom";
 
 const HomePage = () => {
 
     const [iRun, setRun] = useState(getTotalCount());
+    const [oProductBuyNow, setProductBuyNow] = useState({});
 
     const [aCategories, setCategories] = useState([]);
     const [aProducts, setProducts] = useState([]);
@@ -96,17 +98,26 @@ const HomePage = () => {
     const addMoreProducts = () => {
         getOurProducts(iLimit, iOffset);
     }
+
+    const redirectBuyNow = () => {
+        if (JSON.stringify(oProductBuyNow) !== '{}') {
+            return (
+                <Redirect to={`/checkout?sType=buyNow&id=${btoa(JSON.stringify(oProductBuyNow))}`}/>
+            );
+        }
+    };
     
 	return (
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             <Container style={{backgroundColor: 'white'}} fluid>
                 {showCategoryLayout()}
-                {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
-                {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
-                {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
+                {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS', setProductBuyNow)}
+                {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS', setProductBuyNow)}
+                {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS', setProductBuyNow)}
                 {showLoadMoreButton()}
             </Container> 
+            {redirectBuyNow()}
         </Layout>
     );
 };
