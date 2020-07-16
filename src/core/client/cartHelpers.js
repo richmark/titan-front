@@ -113,7 +113,7 @@ export const emptyCart = (oNext = () => {}) => {
     }
 };
 
-export const getProductCount = (sProductId, iCount) => {
+export const getProductCount = (sProductId, iCount, iBuyNow = 0) => {
     let aCart = [];
     var oCount = {
         bCount : true
@@ -122,7 +122,7 @@ export const getProductCount = (sProductId, iCount) => {
         aCart = JSON.parse(localStorage.getItem('cart'));
         aCart && aCart.map((oProduct, iIndex) => {
             if (oProduct._id === sProductId) {
-                if (oProduct.count >= iCount) {
+                if (oProduct.count + iBuyNow >= iCount) {
                     oCount.bCount = false;
                 }
                 oCount.iCount = oProduct.count;
