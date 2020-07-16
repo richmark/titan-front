@@ -308,12 +308,41 @@ const Checkout = ({location}) => {
         }
     }
 
+    const encodeData = (oData) => {
+        return btoa(JSON.stringify(oData));
+    }
+
+    const redirectBuyNow = (oProduct) => {
+        window.location.href = `/checkout?sType=buyNow&id=${encodeData(oProduct)}`;
+    }
+
+    const updateItemBuyNow = (bIncrease) => oEvent => {
+        oEvent.preventDefault();
+        var iCount = parseInt((bIncrease) ? 1 : -1, 10);
+        var oBuyNowProduct = aProduct[0];
+        var iBuyNowCount = oBuyNowProduct.count;
+        if (bIncrease === false && iBuyNowCount === 1) {
+            return;
+        }
+        var oResult = getProductCount(oBuyNowProduct._id, oRealProduct[oBuyNowProduct._id].stock, iBuyNowCount);
+        if (bIncrease === true && (oResult.bCount === false || oRealProduct[oBuyNowProduct._id].stock === iBuyNowCount)) {
+            sendAlertStock();
+        } else {
+            oBuyNowProduct.count += iCount;
+            redirectBuyNow(oBuyNowProduct);
+        }
+    }
+
+    const sendAlertStock = () => {
+        alert('Cannot add product anymore, product has reach stock limit');
+    }
+
     const updateItem = (sId, bIncrease, iProductCount) => oEvent => {
         oEvent.preventDefault();
         checkDiscount();
         var oCount = getProductCount(sId, iProductCount);
         if (bIncrease === true && oCount.bCount === false) {
-            alert('Cannot add product anymore, product has reach stock limit');
+            sendAlertStock();
             return;
         }
         updateCount(sId, bIncrease);
@@ -346,11 +375,11 @@ const Checkout = ({location}) => {
                         <div className="mt-2">
                         <p>{oProduct.product_name}</p>
                             <div className="float-right font-weight-bold">Qty: 
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, false, oRealProduct[oProduct._id].stock)}>
+                                {<Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={bEnable === false ? updateItemBuyNow(false) : updateItem(oProduct._id, false, oRealProduct[oProduct._id].stock)}>
                                     -
                                 </Button>}
                                 <span> {oProduct.count}</span>
-                                {bEnable && <Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={updateItem(oProduct._id, true, oRealProduct[oProduct._id].stock)}>
+                                {<Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={bEnable === false ? updateItemBuyNow(true) : updateItem(oProduct._id, true, oRealProduct[oProduct._id].stock)}>
                                     +
                                 </Button>}
                             </div>
