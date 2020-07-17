@@ -46,10 +46,11 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
         return (
             <Fragment>
                 <div className='productCard'>
-                    <Card className="py-3 border-1 mb-2"  style={{background: 'transparent'}}> 
+                    <Card className="py-3 border-1 mb-2"  style={{background: 'transparent'}}>
+                        {showSoldOutImage(oProduct)} 
                         <Row>
                             <Col className='text-center'>
-                                {showSoldOutImage(oProduct)}
+                                {showSaleFeature(oProduct)} 
                                 <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                                     <Image 
                                         src={`${IMAGE_API}/images/products/${sImage}`}
@@ -87,7 +88,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
             oBuyNow = showAlertNoStock;
         } 
         return (
-            <Row className="ml-1 productCardHide text-center">
+            <Row className="ml-1 productCardHide text-center pb-2">
                 <Col lg={5} className='mr-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
                     <Button onClick={oBuyNow} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
                 </Col>
@@ -118,14 +119,45 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
         });
     }
 
+    const showSaleFeature = (oProduct) => {
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            return (
+                <Fragment>
+                    <div className='px-2 py-1'
+                        style={{
+                            fontSize: '.6rem', 
+                            position: 'absolute', 
+                            bottom: '1rem', 
+                            left: '2rem', 
+                            zIndex : 10,
+                            backgroundColor: 'red',
+                            color: 'white',
+                            borderRadius : '.25rem',
+                            fontWeight: 'bold'
+                        }} 
+                    >Save 20%</div>
+                </Fragment>
+            );
+        }
+    };
+
     const showSoldOutImage = (oProduct) => {
         if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
             return (
                 <Fragment>
-                    <Image 
-                        src={`${IMAGE_API}/images/others/soldout.png`}
-                        style={{width: "50px", height: "20px", position: 'absolute', top: '10px', left: '154px'}} 
-                    />
+                    <div className='p-1'
+                        style={{
+                            fontSize: '.6rem', 
+                            position: 'absolute', 
+                            bottom: '10px', 
+                            right: '10px', 
+                            zIndex : 10,
+                            backgroundColor: 'black',
+                            color: 'white',
+                            borderRadius : '.25rem',
+                            fontWeight: 'bold'
+                        }} 
+                    >Sold Out</div>
                 </Fragment>
             );
         }
