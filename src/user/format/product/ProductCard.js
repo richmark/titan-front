@@ -80,17 +80,19 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
      * Show Buy Now and AddtoCard Buttons
      */
     const showButtons = (oProduct) => {
-        var oClick = addToCart(oProduct);
+        var oAddCart = addToCart(oProduct);
+        var oBuyNow = buyNow(oProduct);
         if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
-            oClick = showAlertNoStock;
+            oAddCart = showAlertNoStock;
+            oBuyNow = showAlertNoStock;
         } 
         return (
             <Row className="ml-1 productCardHide text-center">
                 <Col lg={5} className='mr-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
-                    <Button onClick={buyNow(oProduct)} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
+                    <Button onClick={oBuyNow} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
                 </Col>
                 <Col lg={5} className='text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
-                    <Button className='border-0' onClick={oClick} style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
+                    <Button className='border-0' onClick={oAddCart} style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
                 </Col>
             </Row>
         );
