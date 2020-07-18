@@ -4,7 +4,7 @@ import { IMAGE_API } from '../../../config';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
-const CategoryCard = (aData) => {
+const CategoryCard = (aData, aSideBanner) => {
 
     const showCardBase = (oCategories) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
@@ -45,12 +45,14 @@ const CategoryCard = (aData) => {
                             })}
                         </Row>
                     </Col>
-                    <Col sm={{offset:0, span: 3}} className='d-lg-block d-md-none d-sm-none d-none'>
-                        <Image
-                            className='mx-auto' 
-                            src={`${IMAGE_API}/images/others/side_banner_${iIndex + 1}.jpg`}
-                        />
-                    </Col>
+                    {aSideBanner[iIndex] !== undefined && 
+                        <Col sm={{offset:0, span: 3}} className='d-lg-block d-md-none d-sm-none d-none'>
+                            <Image
+                                className='mx-auto' 
+                                src={`${IMAGE_API}/images/sidebanners/${aSideBanner[iIndex].side_banner_image}`}
+                            />
+                        </Col>
+                    }
                 </Row>
             </Container>
         );
