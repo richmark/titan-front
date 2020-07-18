@@ -172,6 +172,7 @@ const ProductDetails = ({match}) => {
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
           <Row>
             <Col xs={6} md={4}>
+              {showSaleFeature()}
               {checkIfSoldOut()}
               <Image
                 className="border mx-auto"
@@ -239,15 +240,46 @@ const ProductDetails = ({match}) => {
     
   }
 
+  const showSaleFeature = () => {
+    if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+      return (
+        <Fragment>
+          <div className='px-2 py-1'
+              style={{
+                  fontSize: '.6rem', 
+                  position: 'absolute', 
+                  bottom: '5rem', 
+                  left: '2rem', 
+                  zIndex : 10,
+                  backgroundColor: 'red',
+                  color: 'white',
+                  borderRadius : '.25rem',
+                  fontWeight: 'bold'
+              }} 
+          >Save 20%</div>
+      </Fragment>
+      );
+    }
+  };
+
   const checkIfSoldOut = () => {
     if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
       return (
         <Fragment>
-          <Image 
-            src={`${IMAGE_API}/images/others/soldout.png`}
-            style={{width: "80px", height: "35px", position: 'absolute', top: '15px', left: '245px'}} 
-          />
-        </Fragment>
+          <div className='p-1'
+              style={{
+                  fontSize: '.6rem', 
+                  position: 'absolute', 
+                  bottom: '5rem', 
+                  right: '1.5rem', 
+                  zIndex : 10,
+                  backgroundColor: 'black',
+                  color: 'white',
+                  borderRadius : '.25rem',
+                  fontWeight: 'bold'
+              }} 
+          >Sold Out</div>
+      </Fragment>
       );
     }
   };
