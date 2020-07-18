@@ -8,6 +8,7 @@ import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
 import { Redirect } from "react-router-dom";
+import { listSideBanner } from '../core/admin/sidebanner/sidebannerApi';
 
 const HomePage = () => {
 
@@ -20,6 +21,7 @@ const HomePage = () => {
     const [aBestSellers, setBestSellers] = useState([]);
     const [bLoadButton, setLoadButton] = useState(true);
     const [iOffset, setOffset] = useState(0);
+    const [aSideBanner, setSideBanner] = useState(false);
 
     const iLimit = parseInt(PRODUCT_LIMIT, 10);
 
@@ -27,6 +29,17 @@ const HomePage = () => {
         getOurProducts(iLimit, iOffset);
         getNewArrivals();
         getBestSellers();
+        getSideBanner();
+    };
+
+    const getSideBanner = () => {
+        listSideBanner().then(oData => {
+            if(oData.error) {
+                console.log(oData.error)
+            } else {
+                setSideBanner(oData.data);
+            }
+        });
     };
 
     const populateOurProducts = (aData) => {
@@ -70,7 +83,7 @@ const HomePage = () => {
     const showCategoryLayout = () => {
         return (
             <Container>
-                {CategoryCard(aCategories)}
+                {CategoryCard(aCategories, aSideBanner)}
             </Container>
         );
     };
@@ -111,7 +124,7 @@ const HomePage = () => {
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
             <Container style={{backgroundColor: 'white'}} fluid>
-                {showCategoryLayout()}
+                {aSideBanner.length && showCategoryLayout()}
                 {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS', setProductBuyNow)}
                 {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS', setProductBuyNow)}
                 {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS', setProductBuyNow)}
