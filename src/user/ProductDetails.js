@@ -291,9 +291,9 @@ const ProductDetails = ({match}) => {
      */
     const calculateSalePrice = (oProduct) => {
       if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
-          return oProduct.price - (oProduct.price * (oProduct.discount_sale / 100));
+          return (oProduct.price - (oProduct.price * (oProduct.discount_sale / 100))).toFixed(2);
       }
-      return oProduct.price;
+      return parseFloat(oProduct.price, 10).toFixed(2);
   }
 
   const runBuyNow = () => {
