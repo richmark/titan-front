@@ -25,7 +25,9 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
             _id: oProduct._id,
             price: oProduct.price,
             description: oProduct.description,
-            delivery_price: oProduct.delivery_price
+            delivery_price: oProduct.delivery_price,
+            display_sale: oProduct.display_sale,
+            discount_sale: oProduct.discount_sale
         }
         addItem(oData, iCount, () => {
           alert('Item added!');
@@ -64,7 +66,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
                                 <p style={{width: '80%'}} className='text-truncate'>{sName}</p>
                             </Col>
                             <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
-                                <p style={{ color : 'red'}}>{`₱${oProduct.price}`}</p>
+                                <p style={{ color : 'red'}}>{`₱${calculateSalePrice(oProduct)}`}</p>
                             </Col>
                             <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
                                 {showRating(oProduct)}
@@ -120,7 +122,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
     }
 
     const showSaleFeature = (oProduct) => {
-        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+        if (oProduct.display_sale === 'T' && oProduct.discount_sale > 0) {
             return (
                 <Fragment>
                     <div className='px-2 py-1'
@@ -135,7 +137,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
                             borderRadius : '.25rem',
                             fontWeight: 'bold'
                         }} 
-                    >Save 20%</div>
+                    >Save {oProduct.discount_sale}%</div>
                 </Fragment>
             );
         }
@@ -196,6 +198,16 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
         return Math.floor(aRate.reduce((iData, oAdd) => {
             return iData + oAdd.rate
         }, 0) / aRate.length);
+    }
+
+    /**
+     * Calculate Sale Price
+     */
+    const calculateSalePrice = (oProduct) => {
+        if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+            return oProduct.price - (oProduct.price * (oProduct.discount_sale / 100));
+        }
+        return oProduct.price;
     }
 
     const showLayout = (aProducts) => {
