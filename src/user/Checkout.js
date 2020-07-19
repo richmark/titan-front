@@ -188,7 +188,9 @@ const Checkout = ({location}) => {
                     price : oData.price,
                     stock : oData.stock,
                     sold_out : oData.sold_out,
-                    display  : oData.display
+                    display  : oData.display,
+                    display_sale : oData.display_sale,
+                    discount_sale : oData.discount_sale
                 };
                 if (iLoop === aReal.length) {
                     setRealProduct(oTemp);
@@ -249,7 +251,7 @@ const Checkout = ({location}) => {
                 id: oProduct._id,
                 name: oProduct.product_name,
                 description: oProduct.description,
-                price: oProduct.price,
+                price: calculateSalePrice(oProduct),
                 count: oProduct.count
             };
             oOrder.products.push(oSingleProduct); 
@@ -383,7 +385,7 @@ const Checkout = ({location}) => {
                                     +
                                 </Button>}
                             </div>
-                            ₱ <span>{oProduct.price}</span>
+                            ₱ <span>{calculateSalePrice(oProduct)}</span>
                         </div>
                         
                     </Col>
@@ -406,17 +408,27 @@ const Checkout = ({location}) => {
         );
     };
 
+    /**
+     * Calculate Sale Price
+     */
+    const calculateSalePrice = (oProduct) => {
+        if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+            return oProduct.price - (oProduct.price * (oProduct.discount_sale / 100));
+        }
+        return oProduct.price;
+    }
+
     const calculateTotal = () => {
         var oTotal = {};
         var iPrice = 0;
         var iShipFee = (bFreight === true) ? 0 : parseInt(iDeliveryFee, 10);
         aProduct.length > 0 && oRealProduct !== false && aProduct.map((oProduct, iIndex) => {
-            if (oProduct.count <= 0 || oProduct.price !== oRealProduct[oProduct._id].price) {
+            if (oProduct.count <= 0 || calculateSalePrice(oProduct) !== calculateSalePrice(oRealProduct[oProduct._id])) {
                 setProduct([]);
                 setForbidden(true);
                 emptyCart();
             }
-            iPrice += (oProduct.price * oProduct.count);
+            iPrice += (calculateSalePrice(oProduct) * oProduct.count);
         });
         var iTotal = iPrice + iShipFee - iDiscount;
         oTotal = {

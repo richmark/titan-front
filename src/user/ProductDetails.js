@@ -35,7 +35,7 @@ const ProductDetails = ({match}) => {
 
   const [bProduct, setBoolProduct] = useState(true);
   
-  const { image, additional_images, product_name, price, description, _id } = oProduct;
+  const { image, additional_images, product_name, price, description, _id, discount_sale, display_sale } = oProduct;
 
   // Product Stock and Redirect
   const [iStock, setStock] = useState(false);
@@ -74,7 +74,9 @@ const ProductDetails = ({match}) => {
           stock: oData.stock,
           sold_out : oData.sold_out,
           display: oData.display,
-          delivery_price: oData.delivery_price
+          delivery_price: oData.delivery_price,
+          discount_sale: oData.discount_sale,
+          display_sale: oData.display_sale
         });
         calculateCartStock(oData._id, oData.stock);
         setPreviewImage(`${IMAGE_API}/images/products/${oData.image}`);
@@ -198,7 +200,7 @@ const ProductDetails = ({match}) => {
               </span>
               <hr />
               <h4>
-                ₱ <span>{price}</span>
+                ₱ <span>{calculateSalePrice(oProduct)}</span>
               </h4>
               {showAddCartButton()}
             </Col>
@@ -241,7 +243,7 @@ const ProductDetails = ({match}) => {
   }
 
   const showSaleFeature = () => {
-    if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+    if (oProduct.display_sale === 'T' && oProduct.discount_sale > 0) {
       return (
         <Fragment>
           <div className='px-2 py-1'
@@ -256,7 +258,7 @@ const ProductDetails = ({match}) => {
                   borderRadius : '.25rem',
                   fontWeight: 'bold'
               }} 
-          >Save 20%</div>
+            >Save {oProduct.discount_sale}%</div>
       </Fragment>
       );
     }
@@ -283,6 +285,16 @@ const ProductDetails = ({match}) => {
       );
     }
   };
+
+  /**
+     * Calculate Sale Price
+     */
+    const calculateSalePrice = (oProduct) => {
+      if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+          return oProduct.price - (oProduct.price * (oProduct.discount_sale / 100));
+      }
+      return oProduct.price;
+  }
 
   const runBuyNow = () => {
     if (iStock > 0) {

@@ -7,6 +7,7 @@ import { IMAGE_API } from "../../../config";
 
 const UpdateProduct = ({ match }) => {
   const [price_error, setPriceError] = useState(false);
+  const [discount_error, setDiscountError] = useState(false);
   const { sToken, user } = isAuthenticated();
   const [categories, setCategories] = useState([]);
   const [values, setValues] = useState({
@@ -44,6 +45,8 @@ const UpdateProduct = ({ match }) => {
     formData,
     display,
     sold_out,
+    display_sale,
+    discount_sale,
     brand,    
     metro_manila,
     luzon,
@@ -176,6 +179,8 @@ const UpdateProduct = ({ match }) => {
             formData: new FormData(),
             display: oData.data.display,
             sold_out: oData.data.sold_out,
+            display_sale: oData.data.display_sale,
+            discount_sale: oData.data.discount_sale,
             brand: oData.data.brand,
             metro_manila: iMetroManila,
             luzon: iLuzon,
@@ -386,7 +391,36 @@ const UpdateProduct = ({ match }) => {
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" type="checkbox" id="inlineCheckbox2" onChange={handleChange("sold_out")} value={sold_out === 'F' ? 'T' : 'F'} checked={sold_out === 'F' ? false : true}></input>
                   <label className="form-check-label" >Sold Out</label>
-                </div>  
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="inlineCheckbox3"
+                    onChange={handleChange("display_sale")}
+                    value={display_sale === "F" ? "T" : "F"}
+                    checked={display_sale === "F" ? false : true}
+                  ></input>
+                  <label className="form-check-label">On Sale</label>
+                </div>
+                {display_sale === 'T' && <div className="row">
+                  <div className="col-sm-3 form-label col-form-label text-center">
+                    <label>Sale Discount %: </label>
+                  </div>
+                  <div className="col-sm-9">
+                    <input
+                      value={discount_sale}
+                      onChange={handleChange("discount_sale")}
+                      type="number"
+                      className={
+                        discount_error
+                          ? "form-control bg-light small mb-2 border-danger"
+                          : "form-control bg-light mb-2"
+                      }
+                      placeholder="Sale Discount %"
+                    />
+                  </div>
+                  </div>}  
               </div>
 
               <div className="border p-3 mt-2">

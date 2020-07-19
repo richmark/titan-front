@@ -64,7 +64,7 @@ const Orders = ({ match }) => {
           mTotal += oProduct.price * oProduct.count;
       });
 
-      return mTotal - order.discount_fee;
+      return mTotal + order.shipping_fee - order.discount_fee;
     };
 
     const getDiscountFee = () => {
@@ -76,6 +76,14 @@ const Orders = ({ match }) => {
         );
       }
     };
+
+    const showShippingFee = () => {
+      return (
+        <Fragment>
+          <p>Shipping Fee: <span>{order.shipping_fee}</span></p>
+        </Fragment>
+      );
+    }
 
     const submitOrder = (oEvent) => {
       oEvent.preventDefault();
@@ -227,6 +235,7 @@ const Orders = ({ match }) => {
                     </table>
                     <div className="float-right">
                       {order && getDiscountFee()}
+                      {order && showShippingFee()}
                       <p>Total: <span>{order && getTotal()}</span></p>
                     </div>
                   </div>
