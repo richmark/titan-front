@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
-const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProductBuyNow = () => {}) => {
+const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
     var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
         sHeader = 'RESULT';
@@ -106,7 +106,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
      */
     const buyNow = (oProduct) => oEvent => {
         oEvent.preventDefault();
-        setProductBuyNow({
+        window.location.href = `/checkout?sType=buyNow&id=${btoa(JSON.stringify({
             ...oProduct,
             image : `${IMAGE_API}/images/products/${oProduct.image}`,
             additional_images: oProduct.additional_images && oProduct.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
@@ -118,7 +118,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS', setProduc
             display: oProduct.display,
             delivery_price: oProduct.delivery_price,
             count: 1
-        });
+        }))}`;
     }
 
     const showSaleFeature = (oProduct) => {
