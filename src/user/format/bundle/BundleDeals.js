@@ -24,7 +24,7 @@ const BundleDeals = () => {
     };
 
     const showBundleDeals = () => {
-        if (bundles) {
+        if (bundles && bundles.data.length > 0) {
             return (
                 <Fragment>
                     <Container>
