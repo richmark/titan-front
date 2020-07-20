@@ -24,11 +24,20 @@ const BundleDeals = () => {
     };
 
     const showBundleDeals = () => {
+        if (bundles) {
+            return (
+                <Fragment>
+                    <Container>
+                        {bundles && BundleCard(bundles, setRun)}
+                        {/* {loadMoreButton()} */}
+                    </Container>
+                </Fragment>
+            );
+        }
         return (
             <Fragment>
-                <Container className="border border-black rounded p-5 mt-4">
-                    {bundles && BundleCard(bundles, setRun)}
-                    {/* {loadMoreButton()} */}
+                <Container>
+                    No Bundles Available
                 </Container>
             </Fragment>
         );

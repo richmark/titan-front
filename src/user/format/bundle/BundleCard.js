@@ -53,7 +53,7 @@ const BundleCard = (aData, setRun = () => {}) => {
                             <p style={{width: '80%'}} className='text-truncate'>{oBundles.product_name}</p>
                         </Col>
                         <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
-                            <p style={{ color : 'red'}}>{`₱${oBundles.price}`}</p>
+                            <p style={{ color : 'red'}}>{`₱${calculateSalePrice(oBundles)}`}</p>
                         </Col>
                         <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
                             {showRating(oBundles)}
@@ -194,6 +194,16 @@ const BundleCard = (aData, setRun = () => {}) => {
         return Math.floor(aRate.reduce((iData, oAdd) => {
             return iData + oAdd.rate
         }, 0) / aRate.length);
+    }
+
+    /**
+     * Calculate Sale Price
+     */
+    const calculateSalePrice = (oProduct) => {
+        if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+            return (oProduct.price - (oProduct.price * (oProduct.discount_sale / 100))).toFixed(2);
+        }
+        return parseFloat(oProduct.price, 10).toFixed(2);
     }
 
     return (
