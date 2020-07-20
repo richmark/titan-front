@@ -27,8 +27,7 @@ const BundleDeals = () => {
         return (
             <Fragment>
                 <Container className="border border-black rounded p-5 mt-4">
-                    <h3>Bundle Deals</h3>
-                    {bundles && BundleCard(bundles)}
+                    {bundles && BundleCard(bundles, setRun)}
                     {/* {loadMoreButton()} */}
                 </Container>
             </Fragment>

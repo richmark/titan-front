@@ -1,36 +1,136 @@
 import React, { Fragment } from 'react';
-import { Card, Container, Image, Col, Row } from 'react-bootstrap';
+import { Card, Container, Image, Col, Row, Button } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import _ from 'lodash';
+import {addItem, getTotalCount, getProductCount} from '../../../core/client/cartHelpers'
 import { Link } from 'react-router-dom';
 
-const BundleCard = (aData) => {
+const BundleCard = (aData, setRun = () => {}) => {
+    
+    const iCount = 1;
+
+    const addToCart = (oProduct) => oEvent => {
+        oEvent.preventDefault();
+        var oCount = getProductCount(oProduct._id, oProduct.stock);
+        if (oCount.bCount === false) {
+            alert('Cannot add product, item is out of stock or item stock is added in cart');
+            return;
+        }
+        var oData = {
+            image : `${IMAGE_API}/images/products/${oProduct.image}`,
+            product_name: oProduct.product_name,
+            _id: oProduct._id,
+            price: oProduct.price,
+            description: oProduct.description,
+            delivery_price: oProduct.delivery_price,
+            display_sale: oProduct.display_sale,
+            discount_sale: oProduct.discount_sale
+        }
+        addItem(oData, iCount, () => {
+          alert('Item added!');
+          setRun(getTotalCount())
+        });
+    };
 
     const showCardBase = (oBundles) => {
         var sImage = (oBundles.image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oBundles.image;
         return (
-            <a href={`/bundles/${oBundles._id}`}>
-                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+            <div className='productCard'>
+                 <Card className="py-3 border-1 mb-2"  style={{background: 'transparent'}}>
+                    {showSoldOutImage(oBundles)}  
                     <Row>
-                        <Col>
-                            <Image 
-                                src={`${IMAGE_API}/images/products/${sImage}`}
-                                style={{width: "200px", height: "200px"}} 
-                            />
+                        <Col className='text-center'>
+                            <a href={`/bundles/${oBundles._id}`}>
+                                <Image 
+                                    src={`${IMAGE_API}/images/products/${sImage}`}
+                                    style={{width: "200px", height: "200px"}} 
+                                />
+                            </a>                         
                         </Col>
                     </Row>
-                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                    {showRating(oBundles)}
-                    <Row className=" mt-2">
-                        <Col>
-                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oBundles.product_name}</strong></p>
-                            </button>
+                    <Row style={{ fontFamily: 'Roboto Condensed, sans-serif', fontWeight: 'bold'}}>
+                        <Col sm={{offset : 1, span : 12}} style={{fontSize: '.8rem'}}>
+                            <p style={{width: '80%'}} className='text-truncate'>{oBundles.product_name}</p>
+                        </Col>
+                        <Col sm={{offset : 1, span : 12}} style={{fontSize: '.9rem'}}>
+                            <p style={{ color : 'red'}}>{`₱${oBundles.price}`}</p>
+                        </Col>
+                        <Col sm={{offset : 1, span : 12}} style={{fontSize: '.65rem'}}>
+                            {showRating(oBundles)}
                         </Col>
                     </Row>
                 </Card>
-            </a>
+                {showButtons(oBundles)}
+            </div>   
         );
+    };
+
+    /**
+     * Show Buy Now and AddtoCard Buttons
+     */
+    const showButtons = (oProduct) => {
+        var oAddCart = addToCart(oProduct);
+        var oBuyNow = buyNow(oProduct);
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            oAddCart = showAlertNoStock;
+            oBuyNow = showAlertNoStock;
+        } 
+        return (
+            <Row className="ml-1 productCardHide text-center pb-2">
+                <Col lg={5} className='mr-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
+                    <Button onClick={oBuyNow} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
+                </Col>
+                <Col lg={5} className='text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
+                    <Button className='border-0' onClick={oAddCart} style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
+                </Col>
+            </Row>
+        );
+    }
+
+    /**
+     * Put BUY NOW FUNCTION HERE!!!!
+     */
+    const buyNow = (oProduct) => oEvent => {
+        oEvent.preventDefault();
+        window.location.href = `/checkout?sType=buyNow&id=${btoa(JSON.stringify({
+            ...oProduct,
+            image : `${IMAGE_API}/images/products/${oProduct.image}`,
+            additional_images: oProduct.additional_images && oProduct.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
+            product_name: oProduct.product_name,
+            price: oProduct.price,
+            description: oProduct.description,
+            stock: oProduct.stock,
+            sold_out : oProduct.sold_out,
+            display: oProduct.display,
+            delivery_price: oProduct.delivery_price,
+            count: 1
+        }))}`;
+    }
+
+    const showAlertNoStock = () => {
+        return alert('Product is out of stock.');
+    };
+
+    const showSoldOutImage = (oProduct) => {
+        if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
+            return (
+                <Fragment>
+                    <div className='p-1'
+                        style={{
+                            fontSize: '.6rem', 
+                            position: 'absolute', 
+                            bottom: '10px', 
+                            right: '10px', 
+                            zIndex : 10,
+                            backgroundColor: 'black',
+                            color: 'white',
+                            borderRadius : '.25rem',
+                            fontWeight: 'bold'
+                        }} 
+                    >Sold Out</div>
+                </Fragment>
+            );
+        }
     };
 
     const showLayout = (aBundles) => {
@@ -41,7 +141,7 @@ const BundleCard = (aData) => {
                         <Row className="mb-2">
                             {aBundles.data.map((oBundles, iIndex) => {
                                 return (
-                                    <Col sm={3} key={iIndex} className="pl-0">
+                                    <Col lg={3} md={6} sm={6} xs={12} key={iIndex} className="pl-0">
                                         {showCardBase(oBundles)}
                                     </Col>
                                 );
@@ -82,9 +182,7 @@ const BundleCard = (aData) => {
         }
         return (
             <Fragment>
-                <div className="mt-2" style={{marginLeft: '40px'}}>
-                    {aItems}
-                </div>  
+                {aItems}
             </Fragment>
         );
     };
@@ -100,7 +198,7 @@ const BundleCard = (aData) => {
 
     return (
         <Fragment>
-            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', letterSpacing: '7px'}}>OUR BUNDLES</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', fontFamily : 'Oswald, sans-serif', fontWeight : 'bold'}}>OUR BUNDLES</p></strong></div>
             {arrangeBundles(aData)}
         </Fragment>
     );

@@ -84,7 +84,8 @@ const BundleDetails = ({match}) => {
           stock: oBundle.stock,
           sold_out : oBundle.sold_out,
           display: oBundle.display,
-          bundle_product:oBundle.bundle_product
+          bundle_product: oBundle.bundle_product,
+          delivery_price: oBundle.delivery_price
         });
         calculateCartStock(oBundle._id, oBundle.stock);
         getListBundles();
