@@ -357,10 +357,7 @@ const ProductDetails = ({match}) => {
     if (oRelatedProducts.data && oRelatedProducts.data.length > 0) {
       return (
         <Fragment>
-          <Container className="border border-black rounded p-5 mt-4">
-            <h5>Related Product</h5>
-            {ProductCard(oRelatedProducts.data, setRun)}
-          </Container>
+            {ProductCard(oRelatedProducts.data, setRun, 'RELATED PRODUCTS', true)}
         </Fragment>
       );
     }

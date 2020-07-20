@@ -28,11 +28,8 @@ const ProductsByCategory = ({ match }) => {
     const showProductsByCategory = () => {
         return (
             <Fragment>
-                <Container className="border border-black rounded p-5 mt-4">
-                    {mCategory && <h3>{mCategory}</h3>}
-                    {data && ProductCard(data, setRun)}
-                    {loadMoreButton()}
-                </Container>
+                {data && mCategory && ProductCard(data, setRun, mCategory)}
+                {loadMoreButton()}
             </Fragment>
         );
     };
@@ -65,9 +62,15 @@ const ProductsByCategory = ({ match }) => {
         return (
             size > 0 &&
             size >= limit && (
-                <button onClick={loadMore} className='btn btn-warning mt-5'>
-                    Load more
-                </button>
+                <Container fluid>
+                    <Row>
+                        <Col className="text-center">
+                            <button onClick={loadMore} className='btn btn-warning my-4'>
+                                Load more
+                            </button>
+                        </Col>
+                    </Row>
+                </Container>
             )
         );
     };

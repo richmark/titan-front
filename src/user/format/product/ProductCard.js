@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
 
 
-const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
+const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
     var sHeader = sName;
     if (window.location.pathname.split('/')[1] === 'search' && window.location.pathname.split('/')[2] === 'result') {
         sHeader = 'RESULT';
@@ -235,7 +235,7 @@ const ProductCard = (aData, setRun = () => {}, sName = 'OUR PRODUCTS') => {
     }
 
     return (
-        <Container>
+        <Container className={bBorder === true ? 'border border-black rounded p-4 my-4' : ''}>
             <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '60px', fontSize : '20px', fontFamily : 'Oswald, sans-serif', fontWeight : 'bold'}}>{sHeader}</p></strong></div>
             {showLayout(aData)}
         </Container>
