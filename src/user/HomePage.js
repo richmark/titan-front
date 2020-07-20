@@ -7,7 +7,6 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
-import { Redirect } from "react-router-dom";
 import { listSideBanner } from '../core/admin/sidebanner/sidebannerApi';
 
 const HomePage = () => {
