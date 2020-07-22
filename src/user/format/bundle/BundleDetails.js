@@ -84,7 +84,8 @@ const BundleDetails = ({match}) => {
           stock: oBundle.stock,
           sold_out : oBundle.sold_out,
           display: oBundle.display,
-          bundle_product:oBundle.bundle_product
+          bundle_product: oBundle.bundle_product,
+          delivery_price: oBundle.delivery_price
         });
         calculateCartStock(oBundle._id, oBundle.stock);
         getListBundles();
@@ -145,7 +146,7 @@ const BundleDetails = ({match}) => {
               </span>
               <hr />
               <h4>
-                ₱ <span>{price}</span>
+                ₱ <span>{calculateSalePrice(bundle)}</span>
               </h4>
               {showAddCartButton()}
             </Col>
@@ -190,11 +191,20 @@ const BundleDetails = ({match}) => {
     if (bundle.stock === 0 || bundle.sold_out === 'T') {
       return (
         <Fragment>
-          <Image
-            src={`${IMAGE_API}/images/others/soldout.png`}
-            style={{width: "80px", height: "35px", position: 'absolute', top: '15px', left: '245px'}}
-          />
-        </Fragment>
+          <div className='p-1'
+              style={{
+                  fontSize: '.6rem', 
+                  position: 'absolute', 
+                  bottom: '1rem', 
+                  right: '1.5rem', 
+                  zIndex : 10,
+                  backgroundColor: 'black',
+                  color: 'white',
+                  borderRadius : '.25rem',
+                  fontWeight: 'bold'
+              }} 
+          >Sold Out</div>
+      </Fragment>
       );
     }
   };
@@ -223,62 +233,51 @@ const BundleDetails = ({match}) => {
   }
 
   const showDetails = () => {
+    var sWidth = '200px';
+    var sHeight = '200px';
+    var mLg = 3;
     if (bundle_product.length > 0 && bundle_product.length === 5) {
-      return (
-        <Fragment>
-          <Container className="border border-black rounded p-5 mt-4">
-              <h5>Bundled Items</h5>
-              <Row className="mt-3 text-center">
-                {bundle_product.map((oItem, iKey) => {
-                  return (
-                    <Col key={iKey}>
-                      <a href={`/product/details/${oItem.product._id}`}>
-                        <Image
-                          className="border mx-auto"
-                          src={`${IMAGE_API}/images/products/${oItem.product.image}`}
-                          rounded
-                          width="150px"
-                          height="150px"
-                        />
-                        <p>{oItem.product.product_name}</p>
-                      </a>
-                    </Col>
-                  );
-                })}
-              </Row>
-          </Container>
-        </Fragment>
-      );
+      sWidth = '150px';
+      sHeight = '150px';
+      mLg = undefined;
     }
+    return bundle_product && (
+      <Fragment>
+        <Container className="border border-black rounded p-5 my-4">
+            <h5>Bundled Items</h5>
+            <Row className="mt-3 text-center">
+              {bundle_product.map((oItem, iKey) => {
+                return (
+                  <Col key={iKey} lg={mLg} md={6} sm={12}>
+                    <a style={{textDecoration : 'none'}} href={`/product/details/${oItem.product._id}`}>
+                      <Image
+                        className="border mx-auto"
+                        src={`${IMAGE_API}/images/products/${oItem.product.image}`}
+                        rounded
+                        width={sWidth}
+                        height={sHeight}
+                      />
+                      <p style={{color : 'black', fontFamily: 'Roboto Condensed, sans-serif', fontWeight: 'bold', fontSize: '.8rem'}}>{oItem.product.product_name}</p>
+                    </a>
+                  </Col>
+                );
+              })}
+            </Row>
+        </Container>
+      </Fragment>
+    );
 
-    if (bundle_product.length > 0 && bundle_product.length < 5) {
-      return (
-        <Fragment>
-          <Container className="border border-black rounded p-5 mt-4">
-              <h5>Bundled Items</h5>
-              <Row className="mt-3 text-center">
-                {bundle_product.map((oItem, iKey) => {
-                  return (
-                    <Col key={iKey} sm={3}>
-                      <a href={`/product/details/${oItem.product._id}`}>
-                        <Image
-                          className="border mx-auto"
-                          src={`${IMAGE_API}/images/products/${oItem.product.image}`}
-                          rounded
-                          width="200px"
-                          height="200px"
-                        />
-                        <p>{oItem.product.product_name}</p>
-                      </a>
-                    </Col>
-                  );
-                })}
-              </Row>
-          </Container>
-        </Fragment>
-      );
-    }
   };
+
+  /**
+   * Calculate Sale Price
+   */
+  const calculateSalePrice = (oProduct) => {
+    if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+        return (oProduct.price - (oProduct.price * (oProduct.discount_sale / 100))).toFixed(2);
+    }
+    return parseFloat(oProduct.price, 10).toFixed(2);
+  }
 
   /**
    * Show Related Bundle

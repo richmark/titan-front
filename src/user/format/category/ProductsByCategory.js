@@ -28,11 +28,8 @@ const ProductsByCategory = ({ match }) => {
     const showProductsByCategory = () => {
         return (
             <Fragment>
-                <Container className="border border-black rounded p-5 mt-4">
-                    {mCategory && <h3>{mCategory}</h3>}
-                    {data && ProductCard(data, setRun)}
-                    {loadMoreButton()}
-                </Container>
+                {data && mCategory && ProductCard(data, setRun, mCategory)}
+                {loadMoreButton()}
             </Fragment>
         );
     };
@@ -68,7 +65,7 @@ const ProductsByCategory = ({ match }) => {
         return (
             size % limit === 0 && (
                 <Row>
-                    <Col className="text-center">
+                    <Col className="text-center pb-2">
                         <Button variant="warning" onClick={loadMore}>Load More</Button>
                     </Col>
                 </Row>

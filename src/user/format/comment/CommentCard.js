@@ -71,7 +71,7 @@ const CommentCard = sProductId => {
   const showReviews = () => {
     if (reviews.length > 0) {
       return (
-        <Container className="border border-black rounded p-5 mt-4">
+        <Container className="border border-black rounded p-5 my-4">
           <h5 className="mb-4">Comments</h5>
           {reviews.map((oReview, iIndex) => {
             return (

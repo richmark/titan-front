@@ -287,13 +287,13 @@ const ProductDetails = ({match}) => {
   };
 
   /**
-     * Calculate Sale Price
-     */
-    const calculateSalePrice = (oProduct) => {
-      if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
-          return (oProduct.price - (oProduct.price * (oProduct.discount_sale / 100))).toFixed(2);
-      }
-      return parseFloat(oProduct.price, 10).toFixed(2);
+   * Calculate Sale Price
+   */
+  const calculateSalePrice = (oProduct) => {
+    if (oProduct.display_sale === 'T' && oProduct.discount_sale !== 0) {
+        return (oProduct.price - (oProduct.price * (oProduct.discount_sale / 100))).toFixed(2);
+    }
+    return parseFloat(oProduct.price, 10).toFixed(2);
   }
 
   const runBuyNow = () => {
@@ -357,10 +357,7 @@ const ProductDetails = ({match}) => {
     if (oRelatedProducts.data && oRelatedProducts.data.length > 0) {
       return (
         <Fragment>
-          <Container className="border border-black rounded p-5 mt-4">
-            <h5>Related Product</h5>
-            {ProductCard(oRelatedProducts.data, setRun)}
-          </Container>
+            {ProductCard(oRelatedProducts.data, setRun, 'RELATED PRODUCTS', true)}
         </Fragment>
       );
     }
