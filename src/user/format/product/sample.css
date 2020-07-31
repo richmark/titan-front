@@ -8,17 +8,22 @@
 }
 
 .ATC {
+    bottom: 0;
     opacity: 0;
     max-height: 0;
-    transition: 0.25s ease;
+    transition: 0.25s ease-out;
     overflow: hidden;
 
     position: absolute;
     z-index: 1;
-    width: 94%;
+    width: 100%;
 }
 
 .productCard:hover .ATC{
     max-height: 100px;
     opacity: 1;
+}
+
+.productCard {
+    position: relative;
 }

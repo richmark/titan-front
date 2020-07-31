@@ -48,7 +48,7 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
         return (
             <Fragment>
                 <div className='productCard'>
-                    <Card className="py-3 border-1 mb-2"  style={{background: 'transparent'}}>
+                    <Card className="py-3 border-1 mb-2"  style={{background: 'transparent', width: 'inherit'}}>
                         {showSoldOutImage(oProduct)} 
                         <Row>
                             <Col className='text-center'>
@@ -90,7 +90,7 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
             oBuyNow = showAlertNoStock;
         } 
         return (
-            <div className='text-center pb-2 ATC'>
+            <div className='text-center ATC'>
                 <Col onClick={oBuyNow} className='mr-1 text-center' style={{cursor: 'pointer', border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', backgroundColor: 'white'}}>
                     <Button variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
                 </Col>
