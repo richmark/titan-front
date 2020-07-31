@@ -3,7 +3,7 @@ import { Card, Container, Col, Row, Button, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
-
+import './sample.css';
 
 const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
     var sHeader = sName;
@@ -56,7 +56,7 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
                                 <a href={`/product/details/${oProduct._id}`} className="mx-auto">
                                     <Image 
                                         src={`${IMAGE_API}/images/products/${sImage}`}
-                                        style={{width: "200px", height: "200px"}} 
+                                        style={{width: "200px", height: "200px", display: "block", margin: "auto", maxWidth: "100%"}} 
                                     />
                                 </a>
                             </Col>
@@ -90,14 +90,14 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
             oBuyNow = showAlertNoStock;
         } 
         return (
-            <Row className="ml-1 productCardHide text-center pb-2">
-                <Col lg={5} className='mr-1 text-center' style={{border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
-                    <Button onClick={oBuyNow} variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
+            <div className='text-center pb-2 ATC'>
+                <Col onClick={oBuyNow} className='mr-1 text-center' style={{cursor: 'pointer', border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', backgroundColor: 'white'}}>
+                    <Button variant="" style={{ fontWeight : 'bold',fontSize: '.79rem', color : '#ff6900', fontFamily : 'Oswald, sans-serif'}}>Buy Now</Button>
                 </Col>
-                <Col lg={5} className='text-center' style={{border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem', flex : '1 0 41.67%', maxWidth : '45.67%'}}>
-                    <Button className='border-0' onClick={oAddCart} style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
+                <Col onClick={oAddCart} className='text-center' style={{cursor: 'pointer', marginTop: '4px', border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem'}}>
+                    <Button className='border-0' style={{fontSize: '.79rem', backgroundColor: 'transparent',fontFamily : 'Oswald, sans-serif'}}>Add to Cart</Button>
                 </Col>
-            </Row>
+            </div>
         );
     }
 

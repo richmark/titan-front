@@ -1,0 +1,24 @@
+@media(min-width: 1200px) {
+    .ATC {
+        display: flex;
+    }
+    .ATC :nth-child(2) {
+        margin-top: 0 !important;
+    }
+}
+
+.ATC {
+    opacity: 0;
+    max-height: 0;
+    transition: 0.25s ease;
+    overflow: hidden;
+
+    position: absolute;
+    z-index: 1;
+    width: 94%;
+}
+
+.productCard:hover .ATC{
+    max-height: 100px;
+    opacity: 1;
+}
