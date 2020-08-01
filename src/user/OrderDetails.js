@@ -117,7 +117,7 @@ const OrderDetails = ({match}) => {
         return oOrder && (
             <Container>
                 <h2>Order Details</h2>
-                <Card className="mt-2">
+                <Card className="my-2">
                     <Row>
                         <Col sm={{span: 6}}>
                             <Container className="m-2">

@@ -240,7 +240,7 @@ const Layout = ({
         var aCategorySplit = aTempCategory.splice(0, 10);
         aCategorySplit.push({ name: "Load More...", _id: "list/show" });
         return (
-          <Dropdown.Menu>
+          <Dropdown.Menu className="mb-1">
             {aCategorySplit.map((oCategory, iIndex) => {
               return (
                 <Dropdown.Item
@@ -349,83 +349,81 @@ const Layout = ({
         expand="lg"
         style={{ borderBottom: "8px solid #ffc044", backgroundColor: "black" }}
       >
-        <Navbar
-          id="basic-navbar-nav"
-          className="mt-2 mb-2 container"
-          style={{ width: "100%" }}
-        >
-          <Col xs={3} md={3} xl={3} sm={3} className="text-white pl-0">
-            <Link to="/">
-              <Image
-                src={`${IMAGE_API}/images/others/titan-supertools-logo.png`}
-                alt="Titan Super Tools"
-                style={{ width: "250px", height: "auto" }}
-              ></Image>
-            </Link>
-          </Col>
-          <Col xs={2} md={2} xl={2} sm={2}>
-            <Dropdown style={{ width: "100%" }}>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className="rounded-pill"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #ced4da",
-                  color: "black",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  width: "100%"
-                }}
-              >
-                Categories
-              </Dropdown.Toggle>
-              {showNavCategories()}
-            </Dropdown>
-          </Col>
-          <Col xs={5} md={5} xl={5} sm={5}>
-            <InputGroup style={{ width: "100%" }}>
-              <FormControl
-                placeholder={sPlaceHolder}
-                aria-label="Search here"
-                aria-describedby="basic-addon2"
-                style={{
-                  borderTopLeftRadius: "50rem",
-                  borderBottomLeftRadius: "50rem"
-                }}
-                onChange={handleQueryChange}
-                onClick={handleSearchboxClick}
-                onKeyPress={handleEnterSearch}
-              />
-              <InputGroup.Append>
-                <Button
-                  style={{
-                    borderTopRightRadius: "50rem",
-                    borderBottomRightRadius: "50rem",
-                    backgroundColor: "#ffc044",
-                    border: "1px solid #ffc044 "
-                  }}
-                  className="text-white"
-                  onClick={handleSearchClick}
-                >
-                  Search
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Col>
-          <Col xs={2} md={2} xl={2} sm={2} className="text-center">
-            <Container>
-              <a href="/checkout" style={{ textDecoration: "none" }}>
-                <i
-                  className="fas fa-shopping-cart mt-3 ml-3"
-                  style={{ color: "white" }}
-                ></i>
-                {showBadge()}
-                <p className="text-white">Your Cart</p>
-              </a>
-            </Container>
-          </Col>
-        </Navbar>
+        <Container>
+          <Navbar.Brand href="/" className="ml-1">
+            <Image
+              src={`${IMAGE_API}/images/others/titan-supertools-logo.png`}
+              alt="Titan Super Tools"
+              className="brand-nav"
+              style={{ width: "15.5rem", height: "auto" }}
+            ></Image>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" style={{backgroundColor: "red"}} />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav>
+              <Col lg={3}>
+                <Dropdown className="collapse-dropdown">
+                  <Dropdown.Toggle
+                    id="dropdown-basic"
+                    className="rounded-pill categories-nav"
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #ced4da",
+                      color: "black",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      width: "100%"
+                    }}
+                  >
+                    Categories
+                  </Dropdown.Toggle>
+                  {showNavCategories()}
+                </Dropdown>
+              </Col>
+              <Col lg={9}>
+                <InputGroup className="search-nav">
+                  <FormControl
+                    placeholder={sPlaceHolder}
+                    aria-label="Search here"
+                    aria-describedby="basic-addon2"
+                    style={{
+                      borderTopLeftRadius: "50rem",
+                      borderBottomLeftRadius: "50rem"
+                    }}
+                    onChange={handleQueryChange}
+                    onClick={handleSearchboxClick}
+                    onKeyPress={handleEnterSearch}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      style={{
+                        borderTopRightRadius: "50rem",
+                        borderBottomRightRadius: "50rem",
+                        backgroundColor: "#ffc044",
+                        border: "1px solid #ffc044",
+                        height: "2.4rem"
+                      }}
+                      className="text-white"
+                      onClick={handleSearchClick}
+                    >
+                      Search
+                    </Button>
+                  </InputGroup.Append>
+                  <a href="/checkout" className="cart-nav" style={{ textDecoration: "none"}}>
+                    <i
+                      className="fas fa-shopping-cart mt-3 ml-3"
+                      style={{ color: "white" }}
+                    ></i>
+                    {showBadge()}
+                    <p className="text-white">Your Cart</p>
+                </a>
+                </InputGroup>
+                
+              </Col>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     );
   };
