@@ -358,7 +358,7 @@ const Layout = ({
               style={{ width: "15.5rem", height: "auto" }}
             ></Image>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" style={{backgroundColor: "red"}} />
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className="navbar-dark" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav>
               <Col lg={3}>

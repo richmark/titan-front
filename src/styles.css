@@ -165,6 +165,10 @@ ul {
   display: flex !important;
 }
 
+/* MOBILE VERSION */
+.navbar-toggler {
+  border: 1px solid rgb(255, 192,68) !important;
+}
 /* Extra small devices (portrait phones, less than 576px)
 No media query for `xs` since this is the default in Bootstrap
 
@@ -245,6 +249,9 @@ Small devices (landscape phones, 576px and up) */
   .brand-nav {
     width: 15.5rem !important
   }
+  .collapse-dropdown {
+    width: 100% !important;
+  }
   .collapse-nav {
     margin-top: .75rem;
   }
@@ -263,9 +270,6 @@ Small devices (landscape phones, 576px and up) */
 @media (min-width: 768px) {
   .categories-nav {
     width: 100%;
-  }
-  .collapse-dropdown {
-    width: 100% !important;
   }
   .search-nav {
     width: 39rem !important;
