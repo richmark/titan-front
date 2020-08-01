@@ -534,7 +534,7 @@ const Layout = ({
         >
           <Container>
             <Row className="border-bottom pb-5 mb-1">
-              <Col xs={4} md={4} xl={4} sm={4} className="text-left">
+              <Col xs={12} md={12} lg={4} sm={12} className="text-left">
                 <p style={{ color: "#ffc044" }}>NAVIGATION</p>
                 <a href="/" className="text-white">
                   HOME
@@ -558,7 +558,7 @@ const Layout = ({
                 <br></br>
               </Col>
               {showFooterCategories()}
-              <Col xs={3} md={3} xl={3} sm={3} className="text-left">
+              <Col xs={12} md={12} lg={3} sm={12} className="text-left">
                 <p style={{ color: "#ffc044" }}>ABOUT US</p>
                 <p>
                   Titan Supertools Hardware is a company that carries multiple
@@ -575,7 +575,7 @@ const Layout = ({
                   ></i>{" "}
                   (02)285-7337 0916-2927228
                 </p>
-                <p>
+                <p style={{wordWrap : "break-word"}}>
                   <i
                     className="fas fa-paper-plane"
                     style={{ color: "#ffc044" }}
