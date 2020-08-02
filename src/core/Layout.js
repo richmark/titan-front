@@ -95,139 +95,94 @@ const Layout = ({
   };
 
   const getStyle = () => {
+    var oStyle = {
+      backgroundColor: "white"
+    }
     if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
-      return {
+      oStyle = {
         backgroundImage: `url(${IMAGE_API}/images/others/background.png)`
       };
     }
-    return { backgroundColor: "white" };
+    oStyle.fontFamily = 'Oswald, sans-serif';
+    return oStyle;
   };
 
   const getFontColor = () => {
-    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
-      return {
-        color: 'white',
-        textDecoration: 'none'
-      };
-    }
-    return { color: "black", textDecoration: 'none' };
+    // if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
+    //   return {
+    //     color: 'white',
+    //     textDecoration: 'none'
+    //   };
+    // }
+    return { color: "white", textDecoration: 'none' };
   };
 
-  const showUserGuest = () => {
+  const showRegisterLogout = () => {
     if (user) {
       return (
         <Fragment>
-          <div
-            className="container"
-            style={{ display: "flex", flexWrap: "wrap" }}
-          >
-            <Col
-              className="mt-2 mb-2 ellipsis pl-0 pr-0"
-              style={{ maxWidth: "170px" }}
-            >
-              <span className="text-white">
-                <i className="far fa-envelope" style={{ color: "#ffc044" }}></i>{" "}
-                admin@titan.com
-              </span>
-            </Col>
-            <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
-              <span id="top" className="text-white">
-                <i
-                  className="fas fa-phone-alt"
-                  style={{ color: "#ffc044" }}
-                ></i>{" "}
-                028-00000
-              </span>
-            </Col>
-            <Col
-              xs={6}
-              md={6}
-              xl={6}
-              sm={6}
-              className="mt-2 mb-2 text-right ellipsis"
-            >
-              <a href={`/profile/${user._id}`} className="text-white">
-                <i className="fas fa-user" style={{ color: "#ffc044" }}></i> My
-                Profile
-              </a>
-            </Col>
-            <Col
-              xs={1}
-              md={1}
-              xl={1}
-              sm={1}
-              className="mt-2 mb-2 text-right ellipsis pr-0"
-            >
-              <a href="/signout" className="text-white">
-                <i
-                  className="fas fa-sign-out-alt"
-                  style={{ color: "#ffc044" }}
-                ></i>{" "}
-                Logout
-              </a>
-            </Col>
-          </div>
+          <a href="/signout" className="text-white">
+            <i className="fas fa-sign-out-alt" style={{ color: "#ffc044" }}></i>{" "}Logout
+          </a>
         </Fragment>
       );
     }
     return (
       <Fragment>
-        <div
-          className="container"
-          style={{ display: "flex", flexWrap: "wrap" }}
+        <a
+          href="/signup"
+          className="text-white"
+          style={{
+            backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
+            backgroundPosition: "6px -2px",
+            backgroundSize: "20px",
+            backgroundRepeat: "no-repeat",
+            height: "22px",
+            width: "24px",
+            cursor: "pointer",
+            paddingLeft: "25px"
+          }}
         >
-          <Col
-            className="mt-2 mb-2 ellipsis pl-0 pr-0"
-            style={{ maxWidth: "170px" }}
-          >
-            <span className="text-white">
+          Register
+        </a>
+      </Fragment>
+    );
+  }
+
+  const showLoginIcons = () => {
+    var sHref = '/login';
+    var sLogin = 'Login';
+    if (user) {
+      sHref = `/profile/${user._id}`;
+      sLogin = 'My Profile'
+    }
+    return (
+      <Fragment>
+        <Col xs={12} sm={6} className="mt-2 mb-2 ellipsis login-nav">
+          <a href={sHref} className="text-white mr-3">
+            <i className="fas fa-user" style={{ color: "#ffc044" }}></i> {sLogin}
+          </a>
+          {showRegisterLogout()}
+        </Col>
+      </Fragment>
+    );
+  }
+
+  const showUserGuest = () => {
+    return (
+      <Fragment>
+        <div className="container" style={{ display: "flex", flexWrap: "wrap"}}>
+          <Col xs={12} sm={6} className="mt-2 mb-2 ellipsis pl-0 pr-0 info-nav">
+            <span className="text-white mr-3">
               <i className="far fa-envelope" style={{ color: "#ffc044" }}></i>{" "}
               admin@titan.com
             </span>
-          </Col>
-          <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
             <span id="top" className="text-white">
               <i className="fas fa-phone-alt" style={{ color: "#ffc044" }}></i>{" "}
               028-00000
             </span>
           </Col>
-          <Col
-            xs={6}
-            md={6}
-            xl={6}
-            sm={6}
-            className="mt-2 mb-2 text-right ellipsis"
-          >
-            <a href="/login" className="text-white">
-              <i className="fas fa-user" style={{ color: "#ffc044" }}></i> Login
-            </a>
-          </Col>
-          <Col
-            xs={2}
-            md={2}
-            xl={2}
-            sm={2}
-            className="mt-2 mb-2 ellipsis pr-0"
-            style={{ maxWidth: "102px", marginRight: "5px" }}
-          >
-            <a
-              href="/signup"
-              className="text-white"
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
-                backgroundPosition: "6px -2px",
-                backgroundSize: "20px",
-                backgroundRepeat: "no-repeat",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "25px"
-              }}
-            >
-              Register
-            </a>
-          </Col>
+          {showLoginIcons()}
         </div>
       </Fragment>
     );
@@ -430,95 +385,47 @@ const Layout = ({
   const showNavBarThird = () => {
     return (
       <Fragment>
-        <Nav activeKey="/home" className="container">
-        <Nav.Item>
-          <Nav.Link style={getFontColor()} href="/">
-            <span
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                backgroundPosition: "125px -152px",
-                backgroundSize: "60px",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "28px",
-                marginRight: "30px"
-              }}
-            >
-              <strong>HOME</strong>
-            </span>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href="/search/result"
-          >
-            <span
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                backgroundPosition: "132px -134px",
-                backgroundSize: "65px",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "28px",
-                marginRight: "30px"
-              }}
-            >
-              <strong>SHOP</strong>
-            </span>
-          </Nav.Link>
-        </Nav.Item>
-        {user && <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href={user && `/profile/${user._id}`}
-          >
-            <Row className="ml-1">
-              <span
-                style={{
-                  backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
-                  backgroundPosition: "6px 0px",
-                  backgroundSize: "18px",
-                  backgroundRepeat: "no-repeat",
-                  height: "22px",
-                  width: "24px",
-                  display: "block",
-                  cursor: "pointer",
-                  paddingLeft: "28px"
-                }}
-              ></span>
-              <strong>YOUR ORDER</strong>
-            </Row>
-          </Nav.Link>
-        </Nav.Item>}
-        <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href={`/bundles`}
-          >
-            <Row className="ml-1">
-              <span
-                style={{
-                  backgroundImage: `url(${IMAGE_API}/images/others/bundle.png)`,
-                  backgroundPosition: "6px 0px",
-                  backgroundSize: "18px",
-                  backgroundRepeat: "no-repeat",
-                  height: "22px",
-                  width: "24px",
-                  display: "block",
-                  cursor: "pointer",
-                  paddingLeft: "28px"
-                }}
-              ></span>
-              <strong>BUNDLE DEALS</strong>
-            </Row>
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
+        <Container style={{backgroundColor: "#4c4847"}} fluid>
+          <Nav activeKey="/home" className="container" style={{fontSize : "1.25rem"}}>
+            <Nav.Item>
+              <Nav.Link style={getFontColor()} href="/">
+                <span>
+                  <strong>Home</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href="/search/result"
+              >
+                <span>
+                  <strong>Shop</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+            {user && <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href={user && `/profile/${user._id}`}
+              >
+                <span>
+                  <strong>Your Order</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>}
+            <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href={`/bundles`}
+              >
+                <span>
+                  <strong>Bundle Deals</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Container>
         <div style={{ borderBottom: "8px solid #ffc044", backgroundColor: "black" }}>
         </div>
       </Fragment>

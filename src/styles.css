@@ -192,6 +192,12 @@ Small devices (landscape phones, 576px and up) */
   .brand-nav {
     width: 10rem !important
   }
+  .info-nav {
+    display: none;
+  }
+  .login-nav {
+    text-align: left !important;
+  }  
 }
 
 /* For Iphone 5 */
@@ -263,7 +269,7 @@ Small devices (landscape phones, 576px and up) */
     left: 29rem !important; 
     top: -1rem !important; 
     width: 5rem !important;
-  }  
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -279,7 +285,13 @@ Small devices (landscape phones, 576px and up) */
     left: 40rem !important; 
     top: -1rem !important; 
     width: 5rem !important;
-  } 
+  }
+  .info-nav {
+    display: inline-block;
+  }
+  .login-nav {
+    text-align: right !important;
+  }   
 }
 
 /* Large devices (desktops, 992px and up) */

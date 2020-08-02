@@ -8,7 +8,7 @@ const AboutUs = () => {
   const showAboutMain = () => {
     return (
       <Fragment>
-        <Container>
+        <Container className="mb-3">
           <Image 
               src={`${IMAGE_API}/images/others/aboutus.jpg`}
               style={{width: '1110px', height: 'auto'}}
