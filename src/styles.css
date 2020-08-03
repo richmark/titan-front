@@ -164,3 +164,168 @@ ul {
 .productCard:hover .productCardHide {
   display: flex !important;
 }
+
+/* MOBILE VERSION */
+.navbar-toggler {
+  border: 1px solid rgb(255, 192,68) !important;
+}
+/* Extra small devices (portrait phones, less than 576px)
+No media query for `xs` since this is the default in Bootstrap
+
+Small devices (landscape phones, 576px and up) */
+
+/* For Galaxy Fold Smallest */
+@media (min-width: 280px) {
+  .collapse-dropdown {
+    width: 14.5rem !important;
+    margin-bottom: 1rem;
+  }
+  .search-nav {
+    width: 9rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 10rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .brand-nav {
+    width: 10rem !important
+  }
+  .info-nav {
+    display: none;
+  }
+  .login-nav {
+    text-align: left !important;
+  }  
+}
+
+/* For Iphone 5 */
+@media (min-width: 320px) {
+  .collapse-dropdown {
+    width: 16rem !important;
+  }
+  .search-nav {
+    width: 11rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 12rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .brand-nav {
+    width: 12rem !important
+  }
+}
+
+/* For Galaxy S5 */
+@media (min-width: 360px) {
+  .collapse-dropdown {
+    width: 19rem !important;
+  }
+  .search-nav {
+    width: 14rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 15rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+}
+
+/* For Pixel 2 */
+@media (min-width: 411px) {
+  .collapse-dropdown {
+    width: 22rem !important;
+  }
+  .search-nav {
+    width: 17rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 18rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .brand-nav {
+    width: 15.5rem !important
+  }
+  .collapse-dropdown {
+    width: 100% !important;
+  }
+  .collapse-nav {
+    margin-top: .75rem;
+  }
+  .search-nav {
+    width: 28rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 29rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .categories-nav {
+    width: 100%;
+  }
+  .search-nav {
+    width: 39rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 40rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .info-nav {
+    display: inline-block;
+  }
+  .login-nav {
+    text-align: right !important;
+  }   
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .collapse-dropdown {
+    position: absolute !important; 
+    width: 9rem !important;
+  }
+  .search-nav {
+    width: 25rem !important;
+    margin-left: 2rem;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 26rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .search-nav {
+    width: 32rem !important;
+    margin-left: 1rem;
+  }
+  .collapse-dropdown {
+    position: absolute !important; 
+    width: 9rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 33rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+}
