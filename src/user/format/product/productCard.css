@@ -1,6 +1,19 @@
+@media(max-width: 575px) {
+    div.mb-2.row > div {
+        text-align: -webkit-center;
+    }
+    .productCard {
+        width: 50vw;
+        text-align: left;
+    }
+    .productCard .col-sm-12.offset-sm-1 {
+        margin-left: 5vw;
+    }
+}
+
 @media(max-width: 767px) {
     div.mb-2.row > div {
-        flex: 1 0 83.333333%;
+        flex: 1 0 100%;
         max-width: 100%;
     }
 }
@@ -21,7 +34,7 @@
     transition: 0.25s ease-out;
     overflow: hidden;
 
-    position: absolute;
+    padding-bottom: .5rem;
     z-index: 1;
     width: 100%;
 }
