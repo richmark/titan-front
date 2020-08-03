@@ -3,7 +3,7 @@ import { Card, Container, Col, Row, Button, Image } from 'react-bootstrap';
 import { IMAGE_API } from '../../../config';
 import { Link } from 'react-router-dom';
 import { addItem, getTotalCount, getProductCount } from '../../../core/client/cartHelpers'; 
-import './sample.css';
+import './productCard.css';
 
 const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
     var sHeader = sName;
