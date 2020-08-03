@@ -191,7 +191,7 @@ const ProductDetails = ({match}) => {
             </Col>
             <Col xs={12} md={8}>
               <span>
-                <h3>{product_name}</h3>
+                <h3><strong>{product_name}</strong></h3>
               </span>
               <span>
                 <h6>
@@ -234,8 +234,8 @@ const ProductDetails = ({match}) => {
             </Form.Group>
           </Form>
           <hr />
-          <Button variant="outline-warning" onClick={runBuyNow}>Buy Now</Button>{" "}
-          <Button variant="outline-warning" onClick={addToCart}>Add to Cart</Button>
+          <Button className='mr-2' style={{fontSize: '1rem',fontWeight : 'bold', color : '#ff6900', cursor: 'pointer', border : '1px solid rgba(0,0,0,.125)', borderRadius : '.25rem', backgroundColor: 'white'}} onClick={runBuyNow}>Buy Now</Button>
+          <Button style={{fontSize: '1rem', cursor: 'pointer', border: '1px solid #ff6900', backgroundColor: '#ff6900', borderRadius : '.25rem'}} onClick={addToCart}>Add to Cart</Button>
         </Fragment>
       );
     }
@@ -343,7 +343,7 @@ const ProductDetails = ({match}) => {
   const showDetails = () => {
     return (
       <Fragment>
-        <Container className="border border-black rounded p-5 mt-4">
+        <Container className="border border-black rounded p-5 my-4">
           <h5>{product_name} Details</h5>
           <p>
             {description}
