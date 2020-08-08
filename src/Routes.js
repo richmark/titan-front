@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Signup from "./user/Signup";
 import Signout from "./user/Signout";
-import Login from "./user/Login";
+import Login from "./user/Login/Login";
 import ForgotPassword from "./user/ForgotPassword";
 import ResetPassword from "./user/ResetPassword";
 import HomePage from "./user/HomePage";
