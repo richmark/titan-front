@@ -5,6 +5,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
 
 const Signup = ({ match }) => {
+    console.log(match.params.roleId);
     const [result, setResult] = useState(false);
     const [error, setError] = useState(false);
     const [message, setMessage] = useState('');
@@ -152,14 +153,13 @@ const Signup = ({ match }) => {
             'wholesaler': 'Wholesale'
         };
         return (
-            <h3>{`Register / ${oTitle[match.params.roleId]}`}</h3>
+            <h3 style={{ fontFamily: 'Oswald, sans-serif'}}>{`Register / ${oTitle[match.params.roleId]}`}</h3>
         );
     };
 
     const showCommonForm = () => {
         return (
             <Fragment>
-                {showTitle()}
                 <div className="row mt-3">
                     <div className="col-sm-4">
                         <label className="mt-2 " htmlFor="exampleInputEmail1">Email</label>
@@ -322,17 +322,20 @@ const Signup = ({ match }) => {
 
     const showForm = () =>
         !result && (
-            <div className='container text-center'>
+            <div className='container text-center' style={{ fontFamily: 'Roboto Condensed, sans-serif'}}>
                 <div className='row'>
-                    <div className='col-sm'></div>
-                    <div className='col-sm-6 border m-5 p-5 rounded'  style={{backgroundColor: '#ffc044'}} onKeyPress={doLoginEnter}>
-                        {showCommonForm()}
-                        {showConditionalForm()}
-                        <Col sm={{span: 6, offset: 3}}>
-                            <Button onClick={clickSubmit} variant="primary" className="mt-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>REGISTER</Button>
-                        </Col>
+                    <div className='col-md-6 offset-md-3 mb-5'>
+                        <div className='card text-center'>
+                            <div className='card-body border p-5 rounded' style={{backgroundColor: '#ffc044'}}>
+                                {showTitle()}
+                                {showCommonForm()}
+                                {showConditionalForm()}
+                                <Col sm={{span: 6, offset: 3}}>
+                                    <Button onClick={clickSubmit} variant="primary" className="mt-3" type="submit" style={{backgroundColor: 'black', border: '1px solid black'}} block>REGISTER</Button>
+                                </Col>
+                            </div>
+                        </div>
                     </div>
-                    <div className='col-sm'></div>
                 </div>
             </div>
         );
