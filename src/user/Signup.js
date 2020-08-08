@@ -5,7 +5,6 @@ import { Redirect, Link } from 'react-router-dom';
 import { Form, Card, Container, Row, Col, Button } from 'react-bootstrap';
 
 const Signup = ({ match }) => {
-    console.log(match.params.roleId);
     const [result, setResult] = useState(false);
     const [error, setError] = useState(false);
     const [message, setMessage] = useState('');
