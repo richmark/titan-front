@@ -1,14 +1,15 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Layout from '../core/Layout';
-import { isAuthenticated } from '../auth/authUtil';
+import Layout from '../../core/Layout';
+import { isAuthenticated } from '../../auth/authUtil';
 import { Container, Row, Col, Form, Card, Button, Table, Modal } from 'react-bootstrap';
-import BasicFormInput from './format/BasicFormInput';
-import BasicAlert from './format/BasicAlert';
-import { oValidatorLibrary } from '../libraries/validatorLibrary';
-import { sendUpdateUserData, updateUserData, sendUpdateUserPassword } from '../core/client/clientApi';
-import { getOrderByUser } from '../core/admin/orders/ordersApi';
+import BasicFormInput from '../format/BasicFormInput';
+import BasicAlert from '../format/BasicAlert';
+import { oValidatorLibrary } from '../../libraries/validatorLibrary';
+import { sendUpdateUserData, updateUserData, sendUpdateUserPassword } from '../../core/client/clientApi';
+import { getOrderByUser } from '../../core/admin/orders/ordersApi';
 import DataTable from 'react-data-table-component';
+import './Profile.css';
 
 const Profile = ({match}) => {
 
@@ -42,21 +43,12 @@ const Profile = ({match}) => {
     const showPersonal = () => {
         return (
             <Fragment>
-                <Row className="mt-3">
-                    {showColHelper('Email:', user.email)}
-                    {showColHelper('Mobile No:', user.mobile_number)}
-                </Row>
-                <Row className="mt-3">
-                    {showColHelper('First Name:', user.first_name)}
-                    {showColHelper('Address:', user.address)}
-                </Row>
-                <Row className="mt-3">
-                    <Col sm={{ span: 6}}>
-                        <Row>
-                            <Col sm={3} className="p-0">Last Name:</Col>
-                            <Col className="text-left">{user.last_name}</Col>
-                        </Row>
-                    </Col>
+                <Row className='mt-3'>
+                    {showColHelperv2('Email:', user.email)}
+                    {showColHelperv2('Mobile No:', user.mobile_number)}
+                    {showColHelperv2('First Name:', user.first_name)}
+                    {showColHelperv2('Last Name:', user.last_name)}
+                    {showColHelperv2('Address:', user.address)}
                 </Row>
             </Fragment>
         );
@@ -68,37 +60,25 @@ const Profile = ({match}) => {
     const showWholeSaler = () => {
         return (
             <Fragment>
-                {showRowHelper('Email:', user.email)}
-                {showRowHelper('First Name:', user.first_name)}
-                {showRowHelper('Last Name:', user.last_name)}
-                {showRowHelper('Contact:', user.mobile_number)}
-                {showRowHelper('Address:', user.address)}
-                {showRowHelper('TIN:', user.tin)}
-                {showRowHelper('Company Name:', user.company_name)}
-                {showRowHelper('Company Address:', user.company_address)}
-            </Fragment>
-        );
-    }
-
-    const showRowHelper = (sName, sData) => {
-        return (
-            <Fragment>
-                <Row className="mt-3">
-                    {showColHelper(sName, sData)}
+                <Row className='mt-3'>
+                    {showColHelperv2('Email:', user.email)}
+                    {showColHelperv2('First Name:', user.first_name)}
+                    {showColHelperv2('Last Name:', user.last_name)}
+                    {showColHelperv2('Contact:', user.mobile_number)}
+                    {showColHelperv2('Address:', user.address)}
+                    {showColHelperv2('TIN:', user.tin)}
+                    {showColHelperv2('Company Name:', user.company_name)}
+                    {showColHelperv2('Company Address:', user.company_address)}
                 </Row>
             </Fragment>
         );
     }
 
-    const showColHelper = (sName, sData) => {
+    const showColHelperv2 = (sName, sData) => {
         return (
             <Fragment>
-                <Col>
-                    <Row>
-                        <Col sm={3} className="p-0">{sName}</Col>
-                        <Col className="text-left">{sData}</Col>
-                    </Row>
-                </Col>
+                <div className='col-4 mb-2 infoKey'>{sName}</div>
+                <div className='col-8 mb-2 infoData'>{sData}</div>
             </Fragment>
         );
     }
@@ -110,7 +90,7 @@ const Profile = ({match}) => {
                     <Row className="mt-3">{sUserType} Profile</Row>
                         {bWholesaler === true ? showWholeSaler() : showPersonal()}
                     <Row className="my-3">
-                        <Col sm={{ offset: 7}}>
+                        <Col sm={{ offset: 7}} className='update'>
                             <Row className="float-right">
                                 <Button variant="outline-warning" className="m-1" onClick={() => setModalEdit(true)}>Edit</Button>
                                 <Button variant="outline-warning" className="m-1" onClick={() => setModalPassword(true)}>Change Password</Button>
@@ -194,7 +174,7 @@ const Profile = ({match}) => {
 
     const showProfile = () => {
         return (
-            <Container className="mt-5">
+            <Container className="mt-5 profile">
                 <Row>
                     <Col sm={{ span: 10, offset: 1 }}>
                         <Card className="mt-3 px-3 py-2">
