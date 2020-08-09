@@ -230,7 +230,7 @@ const Profile = ({match}) => {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
+                    <Modal.Title id="contained-modal-title-vcenter" style={{ wordBreak: 'break-word' }}>
                         Edit Profile {`(${user.email})`}
                     </Modal.Title>
                 </Modal.Header>
