@@ -1,12 +1,13 @@
 import React, { useState, Fragment } from "react";
 import { Redirect, Link } from "react-router-dom";
-import Layout from "../core/Layout";
-import { sendSignin, resendTokenEmail } from "../core/client/clientApi";
-import { authenticate, isAuthenticated } from "../auth/authUtil";
+import Layout from "../../core/Layout";
+import { sendSignin, resendTokenEmail } from "../../core/client/clientApi";
+import { authenticate, isAuthenticated } from "../../auth/authUtil";
 import { Col, Container, Row, Card, Button } from "react-bootstrap";
-import BasicFormInput from "./format/BasicFormInput";
-import BasicAlert from "./format/BasicAlert";
-import { oValidatorLibrary } from "../libraries/validatorLibrary";
+import BasicFormInput from "../format/BasicFormInput";
+import BasicAlert from "../format/BasicAlert";
+import { oValidatorLibrary } from "../../libraries/validatorLibrary";
+import './Login.css';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -157,22 +158,21 @@ const Login = () => {
   const bootstrapLogin = () => {
     const aFormLabel = [3, 0];
     const iFormLength = 8;
-
     return (
-      <Container className="px-3 py-2">
-        <Row>
-          <Col sm={{ span: 6, offset: 3 }}>
+      <Container className="px-3 py-2 login">
+        <Row className="rowParent">
+          <Col className="rowCol" sm={{ span: 6, offset: 3 }}>
             <Card
               className="mx-4 pt-2 pb-4 mt-2"
               style={{ backgroundColor: "#ffc044" }}
             >
               <Card.Title
                 className="text-center p-3 mt-3"
-                style={{ fontSize: "27px" }}
+                style={{ fontSize: "27px", fontFamily: "Oswald, sans-serif", fontWeight: "bold"}}
               >
                 LOG IN
               </Card.Title>
-              <Card.Body>
+              <Card.Body style={{ fontFamily: "Roboto Condensed, sans-serif" }}>
                 {BasicFormInput(
                   "Email",
                   "text",
