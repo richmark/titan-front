@@ -1,0 +1,147 @@
+/* For Galaxy Fold Smallest */
+@media (min-width: 280px) {
+    .profile .infoKey {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .profile .infoData {
+        flex: 0 0 100%;
+        max-width: 100%;
+        font-size: small;
+    }
+
+    .profile .update button {
+        width: 100%;
+    }
+}
+
+/* For Iphone 5 */
+@media (min-width: 320px) {
+    .profile .infoKey {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .profile .infoData {
+        flex: 0 0 100%;
+        max-width: 100%;
+        font-size: small;
+    }
+
+    .profile .update button {
+        width: 100%;
+    }
+}
+
+/* For Galaxy S5 */
+@media (min-width: 360px) {
+    .profile .infoKey {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .profile .infoData {
+        flex: 0 0 100%;
+        max-width: 100%;
+        font-size: small;
+    }
+
+    .profile .update button {
+        width: 100%;
+    }
+
+    .profile .float-right {
+        width: -webkit-fill-available;
+    }
+}
+
+/* For Pixel 2 */
+@media (min-width: 411px) {
+    .profile .infoKey {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    
+    .profile .infoData {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+        font-size: unset;
+    }
+    
+    .profile .update button {
+        width: auto;
+    }
+
+    .profile .float-right {
+        width: auto;
+    }
+}
+
+@media (min-width: 576px) {
+    .profile .update {
+        margin-left: 38.333333%;
+    }
+
+    .profile .update button {
+        width: auto;
+    }
+
+    .profile .float-right {
+        width: auto;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .profile .infoKey {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    
+    .profile .infoData {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+        font-size: unset;
+    }
+
+    .profile .float-right {
+        width: auto;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .profile .infoKey {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    
+    .profile .infoData {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+        font-size: unset;
+    }
+
+    .profile .float-right {
+        width: auto;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .profile .infoKey {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+    }
+    
+    .profile .infoData {
+        flex: 0 0 83.333333%;
+        max-width: 83.333333%;
+        font-size: unset;
+    }
+
+    .profile .float-right {
+        width: auto;
+    }
+}

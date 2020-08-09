@@ -1,23 +1,23 @@
 @media(min-width: 768px) and (max-width: 991px) {
-    .rowParent {
+    .login .rowParent {
         padding-left: 14vw;
     }
 }
 
 @media(min-width: 576px) and (max-width: 991px){
-    .card {
+    .login .card {
         width: 30rem;
     }
-    .rowCol {
+    .login .rowCol {
         margin-left: 0 !important;
     }
 }
 
 @media(max-width: 575px){
-    .card-body {
+    .login .card-body {
         text-align-last: left;
     }
-    .row {
+    .login .row {
         justify-content: center;
     }
 }
