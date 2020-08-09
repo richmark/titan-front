@@ -50,22 +50,6 @@ const Profile = ({match}) => {
                     {showColHelperv2('Last Name:', user.last_name)}
                     {showColHelperv2('Address:', user.address)}
                 </Row>
-                {/* <Row className="mt-3">
-                    {showColHelper('Email:', user.email)}
-                    {showColHelper('Mobile No:', user.mobile_number)}
-                </Row>
-                <Row className="mt-3">
-                    {showColHelper('First Name:', user.first_name)}
-                    {showColHelper('Address:', user.address)}
-                </Row>
-                <Row className="mt-3">
-                    <Col sm={{ span: 6}}>
-                        <Row>
-                            <Col sm={3} className="p-0">Last Name:</Col>
-                            <Col className="text-left">{user.last_name}</Col>
-                        </Row>
-                    </Col>
-                </Row> */}
             </Fragment>
         );
     }
@@ -90,34 +74,11 @@ const Profile = ({match}) => {
         );
     }
 
-    const showRowHelper = (sName, sData) => {
-        return (
-            <Fragment>
-                <Row className="mt-3">
-                    {showColHelper(sName, sData)}
-                </Row>
-            </Fragment>
-        );
-    }
-
     const showColHelperv2 = (sName, sData) => {
         return (
             <Fragment>
                 <div className='col-4 mb-2 infoKey'>{sName}</div>
                 <div className='col-8 mb-2 infoData'>{sData}</div>
-            </Fragment>
-        );
-    }
-
-    const showColHelper = (sName, sData) => {
-        return (
-            <Fragment>
-                <Col>
-                    <Row>
-                        <Col sm={3} className="p-0">{sName}</Col>
-                        <Col className="text-left">{sData}</Col>
-                    </Row>
-                </Col>
             </Fragment>
         );
     }
