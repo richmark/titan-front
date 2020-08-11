@@ -24,14 +24,6 @@ const ContactUs = () => {
                 ></i>{" "}
                 sales.tsthardware@gmail.com
             </p>
-
-            <p>
-                <i
-                className="fab fa-facebook-messenger"
-                style={{ color: "#0084ff" }}
-                ></i>{" "}
-                MESSENGER PLUGIN WIP
-            </p>
         </Container>
       </Fragment>
     );
