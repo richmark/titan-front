@@ -289,6 +289,9 @@ Small devices (landscape phones, 576px and up) */
     bottom: 4rem !important; 
     right: -5.5rem !important; 
   }
+  .product-detail-comment {
+    font-size: 0.77rem !important;
+  }
 }
 
 /* For Pixel 2 */
@@ -318,6 +321,9 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 5rem !important; 
     right: -9.5rem !important; 
+  }
+  .product-detail-comment {
+    font-size: 0.9rem !important;
   }  
 }
 
@@ -332,6 +338,9 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 5rem !important; 
     right: -8.5rem !important; 
+  }
+  .product-detail-comment {
+    font-size: 1rem !important;
   }
 }
 
