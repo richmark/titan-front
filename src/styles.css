@@ -197,6 +197,14 @@ Small devices (landscape phones, 576px and up) */
   }
   .login-nav {
     text-align: left !important;
+  }
+  .product-detail-image {
+    width: 10rem !important;
+    height: 10rem !important;
+  }
+  .product-detail-additional {
+    width: 2.5rem;
+    height: 2.5rem;
   }  
 }
 
@@ -233,6 +241,10 @@ Small devices (landscape phones, 576px and up) */
     top: -1rem !important; 
     width: 5rem !important;
   }
+  .product-detail-image {
+    width: 15rem !important;
+    height: 15rem !important;
+  }
 }
 
 /* For Pixel 2 */
@@ -249,6 +261,10 @@ Small devices (landscape phones, 576px and up) */
     top: -1rem !important; 
     width: 5rem !important;
   }
+  .product-detail-image {
+    width: 20rem !important;
+    height: 20rem !important;
+  }  
 }
 
 @media (min-width: 576px) {
@@ -269,6 +285,10 @@ Small devices (landscape phones, 576px and up) */
     left: 29rem !important; 
     top: -1rem !important; 
     width: 5rem !important;
+  }
+  .product-detail-additional {
+    width: 3.5rem;
+    height: 3.5rem;
   }
 }
 
@@ -291,7 +311,8 @@ Small devices (landscape phones, 576px and up) */
   }
   .login-nav {
     text-align: right !important;
-  }   
+  }
+   
 }
 
 /* Large devices (desktops, 992px and up) */

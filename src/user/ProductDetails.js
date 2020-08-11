@@ -159,8 +159,8 @@ const ProductDetails = ({match}) => {
       const aColumn = [];
       aImages.map((sImage, iIndex) => {
         aColumn.push(iLength < 5 ?
-          (<Col onMouseEnter={changeImage(sImage)} key={iIndex} xs={3} md={3}><Image className="border mx-auto" src={sImage} rounded width="100%" height="100%" /></Col>) :
-          (<Col onMouseEnter={changeImage(sImage)} key={iIndex}><Image className="border mx-auto" src={sImage} rounded width="100%" height="100%" /></Col>));
+          (<Col onMouseEnter={changeImage(sImage)} key={iIndex} xs={3} md={3}><Image className="border mx-auto product-detail-additional" src={sImage} rounded  /></Col>) :
+          (<Col onMouseEnter={changeImage(sImage)} key={iIndex}><Image className="border mx-auto product-detail-additional" src={sImage} rounded /></Col>));
       });
       return aColumn;
     }
@@ -173,15 +173,13 @@ const ProductDetails = ({match}) => {
         <Container className="border border-black rounded p-5">
           {/* Stack the columns on mobile by making one full-width and the other half-width */}
           <Row>
-            <Col xs={6} md={4}>
+            <Col xs={6} lg={5} xl={4}>
               {showSaleFeature()}
               {checkIfSoldOut()}
               <Image
-                className="border mx-auto"
+                className="border mx-auto product-detail-image"
                 src={previewImage}
                 rounded
-                width="100%"
-                height="300px"
               />
               <div>
                 <Row className="mt-2">
@@ -189,7 +187,7 @@ const ProductDetails = ({match}) => {
                 </Row>
               </div>
             </Col>
-            <Col xs={12} md={8}>
+            <Col xs={12} lg={7} xl={8}>
               <span>
                 <h3><strong>{product_name}</strong></h3>
               </span>
@@ -246,7 +244,7 @@ const ProductDetails = ({match}) => {
     if (oProduct.display_sale === 'T' && oProduct.discount_sale > 0) {
       return (
         <Fragment>
-          <div className='px-2 py-1'
+          <div className='px-2 py-1 product-detail-sale'
               style={{
                   fontSize: '.6rem', 
                   position: 'absolute', 
@@ -268,7 +266,7 @@ const ProductDetails = ({match}) => {
     if (oProduct.stock === 0 || oProduct.sold_out === 'T') {
       return (
         <Fragment>
-          <div className='p-1'
+          <div className='p-1 product-detail-soldout'
               style={{
                   fontSize: '.6rem', 
                   position: 'absolute', 
