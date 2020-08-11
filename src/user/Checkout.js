@@ -359,9 +359,9 @@ const Checkout = ({location}) => {
         return oRealProduct && (
             <div className="border rounded p-4 mb-2">
                 <Row>
-                    <Col xs={1} md={1} className="align-middle text-center">
-                        {bEnable && <Button variant="light" style={{marginTop:'35px'}} onClick={deleteItem(oProduct._id)}>
-                            <i className="fas fa-trash-alt" style={{fontSize:'24px'}}></i>
+                    <Col xs={1} md={1} className="align-middle text-center checkout-delete-button">
+                        {bEnable && <Button variant="light" onClick={deleteItem(oProduct._id)}>
+                            <i className="fas fa-trash-alt checkout-delete-button-icon"></i>
                         </Button>}
                     </Col>
                     <Col xs={3} md={3} className="text-center">
@@ -373,10 +373,10 @@ const Checkout = ({location}) => {
                             height="100px"
                         />
                     </Col>
-                    <Col xs={6} md={6}>
-                        <div className="mt-2">
+                    <Col xs={12} md={6}>
+                        <div className="mt-2 checkout-product-detail">
                         <p>{oProduct.product_name}</p>
-                            <div className="float-right font-weight-bold">Qty: 
+                            <div className="float-right font-weight-bold checkout-product-detail-quantity">Qty: 
                                 {<Button variant="outline-warning" className="mr-2 ml-2 btn-sm" onClick={bEnable === false ? updateItemBuyNow(false) : updateItem(oProduct._id, false, oRealProduct[oProduct._id].stock)}>
                                     -
                                 </Button>}
@@ -385,7 +385,10 @@ const Checkout = ({location}) => {
                                     +
                                 </Button>}
                             </div>
-                            ₱ <span>{calculateSalePrice(oProduct)}</span>
+                            <div>
+                                ₱ <span>{calculateSalePrice(oProduct)}</span>
+                            </div>
+
                         </div>
                         
                     </Col>
@@ -555,10 +558,12 @@ const Checkout = ({location}) => {
         if (user && ((iRole <= 2) || (iRole > 2 && iRole <= 4 && bVerify === true))) {
             return (
                 <Fragment>
+                    <div className="border rounded p-4 checkout-delivery-details">
                     {showDetails('Billing', oBilling, setModalBilling)}
                     <br />
                     {showDetails('Shipping', oShipping, setModalShipping)}
                     {showPlaceOrder()}
+                    </div>
                 </Fragment>
             );
         }
@@ -868,11 +873,11 @@ const Checkout = ({location}) => {
         const displayCheckout = () => {
             return (
                 <Fragment>
-                    <Col xs={12} md={8}>
+                    <Col xs={12} md={12} lg={8} xl={8}>
                         {showProducts()} 
                         {showTotal()}
                     </Col>
-                    <Col xs={6} md={4} className="border rounded border-left-dark p-4">
+                    <Col xs={12} md={12} lg={4} xl={4} >
                         {showDeliveryDetails()}
                     </Col>
                 </Fragment>
