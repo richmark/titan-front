@@ -246,10 +246,7 @@ const ProductDetails = ({match}) => {
         <Fragment>
           <div className='px-2 py-1 product-detail-sale'
               style={{
-                  fontSize: '.6rem', 
-                  position: 'absolute', 
-                  bottom: '5rem', 
-                  left: '2rem', 
+                  fontSize: '.6rem',  
                   zIndex : 10,
                   backgroundColor: 'red',
                   color: 'white',
@@ -268,10 +265,7 @@ const ProductDetails = ({match}) => {
         <Fragment>
           <div className='p-1 product-detail-soldout'
               style={{
-                  fontSize: '.6rem', 
-                  position: 'absolute', 
-                  bottom: '5rem', 
-                  right: '1.5rem', 
+                  fontSize: '.6rem',
                   zIndex : 10,
                   backgroundColor: 'black',
                   color: 'white',

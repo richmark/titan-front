@@ -205,7 +205,17 @@ Small devices (landscape phones, 576px and up) */
   .product-detail-additional {
     width: 2.5rem;
     height: 2.5rem;
-  }  
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -3.5rem !important; 
+  }   
 }
 
 /* For Iphone 5 */
@@ -225,6 +235,16 @@ Small devices (landscape phones, 576px and up) */
   .brand-nav {
     width: 12rem !important
   }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -2.5rem !important; 
+  } 
 }
 
 /* For Galaxy S5 */
@@ -245,6 +265,30 @@ Small devices (landscape phones, 576px and up) */
     width: 15rem !important;
     height: 15rem !important;
   }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -6.5rem !important; 
+  } 
+}
+
+/* For Iphone 6/7/8 */
+@media (min-width: 375px) {
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -5.5rem !important; 
+  }
 }
 
 /* For Pixel 2 */
@@ -264,7 +308,31 @@ Small devices (landscape phones, 576px and up) */
   .product-detail-image {
     width: 20rem !important;
     height: 20rem !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -9.5rem !important; 
   }  
+}
+
+/* For Surface Duo */
+@media (min-width: 450px) {
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -8.5rem !important; 
+  }
 }
 
 @media (min-width: 576px) {
@@ -290,6 +358,16 @@ Small devices (landscape phones, 576px and up) */
     width: 3.5rem;
     height: 3.5rem;
   }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -5rem !important; 
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -312,7 +390,16 @@ Small devices (landscape phones, 576px and up) */
   .login-nav {
     text-align: right !important;
   }
-   
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 0.50rem !important; 
+  }
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -331,6 +418,16 @@ Small devices (landscape phones, 576px and up) */
     top: -1rem !important; 
     width: 5rem !important;
   }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 2.75rem !important; 
+  }
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -348,5 +445,15 @@ Small devices (landscape phones, 576px and up) */
     left: 33rem !important; 
     top: -1rem !important; 
     width: 5rem !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 2rem !important; 
   }
 }
