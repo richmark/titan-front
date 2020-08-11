@@ -72,13 +72,13 @@ const CommentCard = sProductId => {
     if (reviews.length > 0) {
       return (
         <Container className="border border-black rounded p-5 my-4">
-          <h5 className="mb-4">Comments</h5>
+          <h5 className="mb-4">Comment</h5>
           {reviews.map((oReview, iIndex) => {
             return (
               <Card className='mb-3' key={iIndex}>
                 <Card.Body>
                   <Card.Title></Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
+                  <Card.Subtitle className="mb-2 text-muted product-detail-comment">
                     {oReview.user.first_name} {oReview.user.last_name} - Verified Purchase
                     <span className="ml-2">
                         {
