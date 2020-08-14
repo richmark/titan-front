@@ -215,7 +215,27 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 4rem !important; 
     right: -3.5rem !important; 
-  }   
+  }
+  .checkout-delivery-details {
+    margin-top: 0.5rem;
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1rem !important;
+  }
+  .checkout-product-detail {
+    font-size: .55rem !important;
+  }
+  .checkout-product-detail-quantity {
+    position: absolute;
+    left: 3.5rem;
+  }
+  .checkout-text-price-vat {
+    display: block;
+  }     
 }
 
 /* For Iphone 5 */
@@ -244,7 +264,14 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 4rem !important; 
     right: -2.5rem !important; 
-  } 
+  }
+  .checkout-product-detail {
+    font-size: .80rem !important;
+  }
+  .checkout-product-detail-quantity {
+    position: relative;
+    left: 0rem;
+  }  
 }
 
 /* For Galaxy S5 */
@@ -274,6 +301,9 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 5rem !important; 
     right: -6.5rem !important; 
+  }
+  .checkout-product-detail {
+    font-size: 1rem !important;
   } 
 }
 
@@ -324,7 +354,7 @@ Small devices (landscape phones, 576px and up) */
   }
   .product-detail-comment {
     font-size: 0.9rem !important;
-  }  
+  } 
 }
 
 /* For Surface Duo */
@@ -340,6 +370,13 @@ Small devices (landscape phones, 576px and up) */
     right: -8.5rem !important; 
   }
   .product-detail-comment {
+    font-size: 1rem !important;
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
     font-size: 1rem !important;
   }
 }
@@ -377,6 +414,16 @@ Small devices (landscape phones, 576px and up) */
     bottom: 5rem !important; 
     right: -5rem !important; 
   }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1.25rem !important;
+  }
+  .checkout-text-price {
+    text-align: left !important;
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -409,6 +456,19 @@ Small devices (landscape phones, 576px and up) */
     bottom: 5rem !important; 
     right: 0.50rem !important; 
   }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 0rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1.5rem !important;
+  }
+  .checkout-text-price {
+    text-align: right !important;
+  }
+  .checkout-text-price-vat {
+    display: inline;
+  }
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -436,6 +496,9 @@ Small devices (landscape phones, 576px and up) */
     position: absolute !important; 
     bottom: 5rem !important; 
     right: 2.75rem !important; 
+  }
+  .checkout-delivery-details {
+    margin-top: 0rem;
   }
 }
 
@@ -465,4 +528,5 @@ Small devices (landscape phones, 576px and up) */
     bottom: 5rem !important; 
     right: 2rem !important; 
   }
+  
 }
