@@ -482,22 +482,47 @@ const Checkout = ({location}) => {
         return (
             <div className="border rounded p-4 mt-2">
                 <Row>
-                    <Col xs={4} md={4}>
+                    <Col xs={12} md={4}>
                         <p className="font-weight-bold">Subtotal</p>
-                        {oTotal.discount > 0 && <p className="font-weight-bold">Discount {iRole === 4 && `(${sLevel})`}</p>}
+                    </Col>
+                    <Col xs={12} md={8} className="checkout-text-price">
+                        <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
+                    </Col>
+                    {showDiscount(oTotal)}
+                    <Col xs={12} md={4}>
                         <p className="font-weight-bold">Shipping Fee</p>
+                    </Col>
+                    <Col xs={12} md={8} className="checkout-text-price">
+                        <p className="font-weight-bold "> {(bFreight === false) && "₱"} <span>{(bFreight === true) ? "Freight Collect*" : oTotal.fee}</span></p>
+                    </Col>
+                    <Col xs={12} md={4}>
                         <p className="font-weight-bold">Total</p>
                     </Col>
-                    <Col xs={8} md={8} className="text-right">
-                        <p className="font-weight-bold "> ₱ <span>{oTotal.price}</span></p>
-                        {oTotal.discount > 0 && <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>}
-                        <p className="font-weight-bold "> {(bFreight === false) && "₱"} <span>{(bFreight === true) ? "Freight Collect*" : oTotal.fee}</span></p>
-                        <p>VAT included, when applicable <span className="font-weight-bold"> ₱ <span>{oTotal.total}</span></span></p>
+                    <Col xs={12} md={8} className="checkout-text-price">
+                        <p><sup>VAT included, when applicable</sup><span className="font-weight-bold checkout-text-price-vat"> ₱ <span>{oTotal.total}</span></span></p>
                     </Col>
                     {showFreightMessage()}
                 </Row>
             </div>
         );
+    }
+
+    /**
+     * Show Discount in Checkout
+     */
+    const showDiscount = (oTotal) => {
+        if (oTotal.discount > 0) {
+            return (
+                <Fragment>
+                    <Col xs={12} md={4}>
+                        <p className="font-weight-bold">Discount {iRole === 4 && `(${sLevel})`}</p>
+                    </Col>
+                    <Col xs={12} md={8} className="checkout-text-price">
+                        <p className="font-weight-bold "> ₱ <span>({oTotal.discount})</span></p>
+                    </Col>
+                </Fragment>
+            );
+        }
     }
 
     /**
@@ -516,10 +541,10 @@ const Checkout = ({location}) => {
         }
         return (
             <Fragment>
-                <Col xs={8} md={8}>
+                <Col xs={12} md={8}>
                     <p className="font-weight-bold">Delivery Location</p>
                 </Col>
-                <Col xs={4} md={4}>
+                <Col xs={12} md={4}>
                     <Form.Control onChange={updateLocationDelivery} id="location_delivery" as="select" custom>
                         <option value="metro_manila">Metro Manila</option>
                         <option value="luzon">Luzon</option>

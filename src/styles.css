@@ -232,6 +232,9 @@ Small devices (landscape phones, 576px and up) */
   .checkout-product-detail-quantity {
     position: absolute;
     left: 3.5rem;
+  }
+  .checkout-text-price-vat {
+    display: block;
   }     
 }
 
@@ -418,6 +421,9 @@ Small devices (landscape phones, 576px and up) */
   .checkout-delete-button-icon {
     font-size: 1.25rem !important;
   }
+  .checkout-text-price {
+    text-align: left !important;
+  }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -456,6 +462,12 @@ Small devices (landscape phones, 576px and up) */
   }
   .checkout-delete-button-icon {
     font-size: 1.5rem !important;
+  }
+  .checkout-text-price {
+    text-align: right !important;
+  }
+  .checkout-text-price-vat {
+    display: inline;
   }
 }
 
