@@ -561,7 +561,7 @@ const Layout = ({
           {children}
         </div>
         {oCategories && showFooter()}
-        {messenger === true && <MessengerChat />}
+        {/* {messenger === true && <MessengerChat />} */}
       </div>
     </Fragment>
   );
