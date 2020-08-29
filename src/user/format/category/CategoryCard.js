@@ -45,7 +45,7 @@ const CategoryCard = (aData, aSideBanner) => {
                             })}
                         </Row>
                     </Col>
-                    {aSideBanner !== false && aSideBanner[iIndex] !== undefined && 
+                    {aSideBanner[iIndex] !== undefined && 
                         <a href={`${aSideBanner[iIndex].side_banner_link}`} target="_blank">
                             <Col sm={{offset:0, span: 3}} className='d-xl-block d-lg-none d-md-none d-sm-none d-none'>
                                 <Image
