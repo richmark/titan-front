@@ -14,7 +14,7 @@ const CategoryList = () => {
     const showCategoryLayout = () => {
         return (
             <Container className="border border-black rounded p-5 mt-4">
-                {CategoryCard(aCategories)}
+                {aCategories.length > 0 && CategoryCard(aCategories, false)}
             </Container>
         );
     };
