@@ -9,7 +9,7 @@ const CategoryCard = (aData, aSideBanner) => {
     const showCardBase = (oCategories) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
-            <Link to={`categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
+            <Link to={`/categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
                 <Card className="my-2 mx-auto border-1"  style={{background: 'white', width: "225px"}}> 
                     <Row>
                         <Col>
@@ -45,7 +45,7 @@ const CategoryCard = (aData, aSideBanner) => {
                             })}
                         </Row>
                     </Col>
-                    {aSideBanner[iIndex] !== undefined && 
+                    {aSideBanner !== false && aSideBanner[iIndex] !== undefined && 
                         <a href={`${aSideBanner[iIndex].side_banner_link}`} target="_blank">
                             <Col sm={{offset:0, span: 3}} className='d-xl-block d-lg-none d-md-none d-sm-none d-none'>
                                 <Image
@@ -61,17 +61,54 @@ const CategoryCard = (aData, aSideBanner) => {
     }
 
     /**
+     * Load more categories
+     * @param  aCategories 
+     */
+    const showLayoutv2 = (aCategories) => {
+        return (
+            <Container>
+                <Row className="mt-2 ml-3 mr-2">
+                    <Col sm={{offset:0, span: 12}}>
+                        <Row className="mb-2">
+                            {aCategories.map((oBundles, iIndex) => {
+                                return (
+                                    <Col lg={3} md={6} sm={6} xs={12} key={iIndex} className="pl-0">
+                                        {showCardBase(oBundles)}
+                                    </Col>
+                                );
+                            })}
+                        </Row>
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+
+    /**
      * TODO: add validation if aChunks is empty
      */
     const arrangeCategories = (aData) => {
-        const aChunks = _.chunk(aData, 6);
-        return aChunks.map((aCategories, iIndex) => {
-            return (
-                <Fragment key={iIndex}>
-                    {showLayout(aCategories, iIndex)}
-                </Fragment>
-            );
-        });
+        if (aSideBanner === false) {
+            var aChunks = _.chunk(aData, 4);
+            aChunks = aChunks.length === 0 ? [aData] : aChunks;
+            return aChunks.map((aCategories, iIndex) => {
+                return (
+                    <Fragment key={iIndex}>
+                        {showLayoutv2(aCategories)}
+                    </Fragment>
+                );
+            });
+        } else {
+            const aChunks = _.chunk(aData, 6);
+            return aChunks.map((aCategories, iIndex) => {
+                return (
+                    <Fragment key={iIndex}>
+                        {showLayout(aCategories, iIndex)}
+                    </Fragment>
+                );
+            });
+        }
+        
     }
 
     return (
