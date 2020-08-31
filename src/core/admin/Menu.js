@@ -256,9 +256,10 @@ const Menu = () => {
               <Link to="/admin/orders" className="collapse-item">
                 All Order
               </Link>
-              <Link to="/admin/orders/details/settings" className="collapse-item">
+              {/* Disabled Order Settings, will not be used - 31/08/20 Carlo Barcena */}
+              {/* <Link to="/admin/orders/details/settings" className="collapse-item">
                 Order Settings
-              </Link>
+              </Link> */}
             </div>
           </div>
         </li>
