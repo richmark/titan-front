@@ -72,7 +72,7 @@ const OrderDetails = ({match}) => {
                         </Link>
                     </td>
                     <td className="align-middle"><strong>Qty:</strong> <span>{oProduct.count}</span></td>
-                    <td className="align-middle">₱ <span>{oProduct.price * oProduct.count}</span></td>
+                    <td className="align-middle">₱ <span>{parseFloat(oProduct.price * oProduct.count, 10).toFixed(2)}</span></td>
                     <td className="align-middle">
                         {showReview(oProduct)}
                     </td>
@@ -128,7 +128,7 @@ const OrderDetails = ({match}) => {
                         </Col>
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
-                                <strong>Total:</strong> ₱ <span>{oOrder.amount}</span>
+                                <strong>Total:</strong> ₱ <span>{parseFloat(oOrder.amount, 10).toFixed(2)}</span>
                             </Container>
                         </Col>
                     </Row>
@@ -196,7 +196,7 @@ const OrderDetails = ({match}) => {
                                     <h5>Payment Summary</h5>
                                     {showSubTotal()}
                                     {showDiscount()}
-                                    <strong>Shipping Fee</strong> <span className="float-right">₱ <span>{oOrder.shipping_fee}</span></span><br/>
+                                    <strong>Shipping Fee</strong> <span className="float-right">₱ <span>{parseFloat(oOrder.shipping_fee, 10).toFixed(2)}</span></span><br/>
                                     <hr/>
                                     <strong>Total (with VAT)</strong> <span className="float-right">₱ <span>{parseFloat(oOrder.amount, 10).toFixed(2)}</span></span>
                                 </Container>
