@@ -90,7 +90,7 @@ const ProcessWholesaler = ({ match }) => {
                         </div>
                     </div>
                 </div>
-                <div className="form-inline mb-2">
+                <div className="form-inline mb-2 px-3">
                     <button onClick={acceptUser} className="btn btn-primary mr-2">Accept</button>
                     <button onClick={rejectUser} className="btn btn-primary">Pending</button>
                 </div>
