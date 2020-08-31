@@ -198,7 +198,7 @@ const OrderDetails = ({match}) => {
                                     {showDiscount()}
                                     <strong>Shipping Fee</strong> <span className="float-right">₱ <span>{oOrder.shipping_fee}</span></span><br/>
                                     <hr/>
-                                    <strong>Total (with VAT)</strong> <span className="float-right">₱ <span>{oOrder.amount}</span></span>
+                                    <strong>Total (with VAT)</strong> <span className="float-right">₱ <span>{parseFloat(oOrder.amount, 10).toFixed(2)}</span></span>
                                 </Container>
                             </Col>
                             <Col sm={{span: 6}}>
@@ -228,26 +228,19 @@ const OrderDetails = ({match}) => {
     };
 
     const showSubTotal = () => {
-        if (oOrder.discount_fee > 0) {
-            return (
-                <Fragment>
-                    <strong>Subtotal</strong> <span className="float-right">₱ <span>{oOrder.amount - oOrder.shipping_fee + oOrder.discount_fee}</span></span><br/>
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
-                    <strong>Subtotal</strong> <span className="float-right">₱ <span>{oOrder.amount - oOrder.shipping_fee}</span></span><br/>
-                </Fragment>
-            );
-        }
+        var oSubTotal = parseFloat(oOrder.amount, 10) - parseFloat(oOrder.shipping_fee, 10) + parseFloat(oOrder.discount_fee, 10);
+        return (
+            <Fragment>
+                <strong>Subtotal</strong> <span className="float-right">₱ <span>{parseFloat(oSubTotal, 10).toFixed(2)}</span></span><br/>
+            </Fragment>
+        );
     }
 
     const showDiscount = () => {
         if (oOrder.discount_fee > 0) {
             return (
                 <Fragment>
-                    <strong>Discount</strong> <span className="float-right">₱ <span>({oOrder.discount_fee})</span></span><br/>
+                    <strong>Discount</strong> <span className="float-right">₱ <span>({parseFloat(oOrder.discount_fee).toFixed(2)})</span></span><br/>
                 </Fragment>
             );
         }
