@@ -8,6 +8,10 @@ const Receipt = ({order}) => {
     const oShipping = order.shipping[0];
 
     const showDetails = () => {
+        order.discount_fee = parseFloat(order.discount_fee);
+        order.amount = parseFloat(order.amount);
+        order.shipping_fee = parseFloat(order.shipping_fee);
+
         return order && (
             <Container>
                 <h2>Titan Supertools - Official Receipt</h2>
