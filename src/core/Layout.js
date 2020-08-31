@@ -175,11 +175,11 @@ const Layout = ({
           <Col xs={12} sm={6} className="mt-2 mb-2 ellipsis pl-0 pr-0 info-nav">
             <span className="text-white mr-3">
               <i className="far fa-envelope" style={{ color: "#ffc044" }}></i>{" "}
-              admin@titan.com
+              sales.tsthardware@gmail.com
             </span>
             <span id="top" className="text-white">
               <i className="fas fa-phone-alt" style={{ color: "#ffc044" }}></i>{" "}
-              028-00000
+              (02)285-7337 0916-2927228
             </span>
           </Col>
           {showLoginIcons()}
@@ -493,7 +493,7 @@ const Layout = ({
             </Row>
             <div className="float-left">© 2020 Titan. All rights reserved</div>
             <div className="float-right">
-              <a href="/" style={{ color: "white" }}>
+              <a href="https://www.facebook.com/TitanSupertoolsPH/" target="_blank" style={{ color: "white" }}>
                 follow us<i className="ml-2 fab fa-facebook-square"></i>
               </a>
             </div>
