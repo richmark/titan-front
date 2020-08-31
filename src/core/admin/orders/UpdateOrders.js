@@ -222,7 +222,7 @@ const Orders = ({ match }) => {
                                     src={`${IMAGE_API}/images/products/${oProduct.image}`}  style={{width: '50%'}} />
                                 </td>
                                 <td>
-                                    <Link to={`/admin/products/update/${oProduct._id}`}>
+                                    <Link to={`/admin/products/update/${oProduct._id}?preview=true`} target='_blank'>
                                         {oProduct.product_name}
                                     </Link>
                                 </td>

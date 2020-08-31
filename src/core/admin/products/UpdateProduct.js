@@ -6,6 +6,9 @@ import { updateProduct, getProduct } from "./productsApi";
 import { IMAGE_API } from "../../../config";
 
 const UpdateProduct = ({ match }) => {
+  const sQuery = window.location.search;
+  const sSearchParam = new URLSearchParams(sQuery);
+  const mPreview = sSearchParam.get('preview');
   const [price_error, setPriceError] = useState(false);
   const [discount_error, setDiscountError] = useState(false);
   const { sToken, user } = isAuthenticated();
@@ -589,7 +592,7 @@ const UpdateProduct = ({ match }) => {
     <DashboardLayout name="Product Management" detail={[<a href='/admin/products'>All Products</a>, ' / Update Product']}>
       {showUpdateProductForm()}
       {showUpdateProductDetail()}
-      {showUpdate()}
+      {mPreview !== 'true' && showUpdate()}
     </DashboardLayout>
   );
 };

@@ -27,7 +27,6 @@ const Receipt = ({order}) => {
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
                                 <strong>Total:</strong> ₱ <span>{order.amount}</span><br/>
-                                <strong>Status</strong> <span>{order.status}</span>
                             </Container>
                         </Col>
                     </Row>
