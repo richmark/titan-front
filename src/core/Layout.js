@@ -95,139 +95,94 @@ const Layout = ({
   };
 
   const getStyle = () => {
+    var oStyle = {
+      backgroundColor: "white"
+    }
     if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
-      return {
+      oStyle = {
         backgroundImage: `url(${IMAGE_API}/images/others/background.png)`
       };
     }
-    return { backgroundColor: "white" };
+    oStyle.fontFamily = 'Oswald, sans-serif';
+    return oStyle;
   };
 
   const getFontColor = () => {
-    if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
-      return {
-        color: 'white',
-        textDecoration: 'none'
-      };
-    }
-    return { color: "black", textDecoration: 'none' };
+    // if (window.location.pathname === "/" || window.location.pathname === "/about-us") {
+    //   return {
+    //     color: 'white',
+    //     textDecoration: 'none'
+    //   };
+    // }
+    return { color: "white", textDecoration: 'none' };
   };
 
-  const showUserGuest = () => {
+  const showRegisterLogout = () => {
     if (user) {
       return (
         <Fragment>
-          <div
-            className="container"
-            style={{ display: "flex", flexWrap: "wrap" }}
-          >
-            <Col
-              className="mt-2 mb-2 ellipsis pl-0 pr-0"
-              style={{ maxWidth: "170px" }}
-            >
-              <span className="text-white">
-                <i className="far fa-envelope" style={{ color: "#ffc044" }}></i>{" "}
-                admin@titan.com
-              </span>
-            </Col>
-            <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
-              <span id="top" className="text-white">
-                <i
-                  className="fas fa-phone-alt"
-                  style={{ color: "#ffc044" }}
-                ></i>{" "}
-                028-00000
-              </span>
-            </Col>
-            <Col
-              xs={6}
-              md={6}
-              xl={6}
-              sm={6}
-              className="mt-2 mb-2 text-right ellipsis"
-            >
-              <a href={`/profile/${user._id}`} className="text-white">
-                <i className="fas fa-user" style={{ color: "#ffc044" }}></i> My
-                Profile
-              </a>
-            </Col>
-            <Col
-              xs={1}
-              md={1}
-              xl={1}
-              sm={1}
-              className="mt-2 mb-2 text-right ellipsis pr-0"
-            >
-              <a href="/signout" className="text-white">
-                <i
-                  className="fas fa-sign-out-alt"
-                  style={{ color: "#ffc044" }}
-                ></i>{" "}
-                Logout
-              </a>
-            </Col>
-          </div>
+          <a href="/signout" className="text-white">
+            <i className="fas fa-sign-out-alt" style={{ color: "#ffc044" }}></i>{" "}Logout
+          </a>
         </Fragment>
       );
     }
     return (
       <Fragment>
-        <div
-          className="container"
-          style={{ display: "flex", flexWrap: "wrap" }}
+        <a
+          href="/signup"
+          className="text-white"
+          style={{
+            backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
+            backgroundPosition: "6px -2px",
+            backgroundSize: "20px",
+            backgroundRepeat: "no-repeat",
+            height: "22px",
+            width: "24px",
+            cursor: "pointer",
+            paddingLeft: "25px"
+          }}
         >
-          <Col
-            className="mt-2 mb-2 ellipsis pl-0 pr-0"
-            style={{ maxWidth: "170px" }}
-          >
-            <span className="text-white">
+          Register
+        </a>
+      </Fragment>
+    );
+  }
+
+  const showLoginIcons = () => {
+    var sHref = '/login';
+    var sLogin = 'Login';
+    if (user) {
+      sHref = `/profile/${user._id}`;
+      sLogin = 'My Profile'
+    }
+    return (
+      <Fragment>
+        <Col xs={12} sm={6} className="mt-2 mb-2 ellipsis login-nav">
+          <a href={sHref} className="text-white mr-3">
+            <i className="fas fa-user" style={{ color: "#ffc044" }}></i> {sLogin}
+          </a>
+          {showRegisterLogout()}
+        </Col>
+      </Fragment>
+    );
+  }
+
+  const showUserGuest = () => {
+    return (
+      <Fragment>
+        <div className="container" style={{ display: "flex", flexWrap: "wrap"}}>
+          <Col xs={12} sm={6} className="mt-2 mb-2 ellipsis pl-0 pr-0 info-nav">
+            <span className="text-white mr-3">
               <i className="far fa-envelope" style={{ color: "#ffc044" }}></i>{" "}
-              admin@titan.com
+              sales.tsthardware@gmail.com
             </span>
-          </Col>
-          <Col className="mt-2 mb-2 ellipsis pl-0 pr-0">
             <span id="top" className="text-white">
               <i className="fas fa-phone-alt" style={{ color: "#ffc044" }}></i>{" "}
-              028-00000
+              (02)285-7337 0916-2927228
             </span>
           </Col>
-          <Col
-            xs={6}
-            md={6}
-            xl={6}
-            sm={6}
-            className="mt-2 mb-2 text-right ellipsis"
-          >
-            <a href="/login" className="text-white">
-              <i className="fas fa-user" style={{ color: "#ffc044" }}></i> Login
-            </a>
-          </Col>
-          <Col
-            xs={2}
-            md={2}
-            xl={2}
-            sm={2}
-            className="mt-2 mb-2 ellipsis pr-0"
-            style={{ maxWidth: "102px", marginRight: "5px" }}
-          >
-            <a
-              href="/signup"
-              className="text-white"
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/register.png)`,
-                backgroundPosition: "6px -2px",
-                backgroundSize: "20px",
-                backgroundRepeat: "no-repeat",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "25px"
-              }}
-            >
-              Register
-            </a>
-          </Col>
+          {showLoginIcons()}
         </div>
       </Fragment>
     );
@@ -240,7 +195,7 @@ const Layout = ({
         var aCategorySplit = aTempCategory.splice(0, 10);
         aCategorySplit.push({ name: "Load More...", _id: "list/show" });
         return (
-          <Dropdown.Menu>
+          <Dropdown.Menu className="mb-1">
             {aCategorySplit.map((oCategory, iIndex) => {
               return (
                 <Dropdown.Item
@@ -349,178 +304,128 @@ const Layout = ({
         expand="lg"
         style={{ borderBottom: "8px solid #ffc044", backgroundColor: "black" }}
       >
-        <Navbar
-          id="basic-navbar-nav"
-          className="mt-2 mb-2 container"
-          style={{ width: "100%" }}
-        >
-          <Col xs={3} md={3} xl={3} sm={3} className="text-white pl-0">
-            <Link to="/">
-              <Image
-                src={`${IMAGE_API}/images/others/titan-supertools-logo.png`}
-                alt="Titan Super Tools"
-                style={{ width: "250px", height: "auto" }}
-              ></Image>
-            </Link>
-          </Col>
-          <Col xs={2} md={2} xl={2} sm={2}>
-            <Dropdown style={{ width: "100%" }}>
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className="rounded-pill"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid #ced4da",
-                  color: "black",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  width: "100%"
-                }}
-              >
-                Categories
-              </Dropdown.Toggle>
-              {showNavCategories()}
-            </Dropdown>
-          </Col>
-          <Col xs={5} md={5} xl={5} sm={5}>
-            <InputGroup style={{ width: "100%" }}>
-              <FormControl
-                placeholder={sPlaceHolder}
-                aria-label="Search here"
-                aria-describedby="basic-addon2"
-                style={{
-                  borderTopLeftRadius: "50rem",
-                  borderBottomLeftRadius: "50rem"
-                }}
-                onChange={handleQueryChange}
-                onClick={handleSearchboxClick}
-                onKeyPress={handleEnterSearch}
-              />
-              <InputGroup.Append>
-                <Button
-                  style={{
-                    borderTopRightRadius: "50rem",
-                    borderBottomRightRadius: "50rem",
-                    backgroundColor: "#ffc044",
-                    border: "1px solid #ffc044 "
-                  }}
-                  className="text-white"
-                  onClick={handleSearchClick}
-                >
-                  Search
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-          </Col>
-          <Col xs={2} md={2} xl={2} sm={2} className="text-center">
-            <Container>
-              <a href="/checkout" style={{ textDecoration: "none" }}>
-                <i
-                  className="fas fa-shopping-cart mt-3 ml-3"
-                  style={{ color: "white" }}
-                ></i>
-                {showBadge()}
-                <p className="text-white">Your Cart</p>
-              </a>
-            </Container>
-          </Col>
-        </Navbar>
+        <Container>
+          <Navbar.Brand href="/" className="ml-1">
+            <Image
+              src={`${IMAGE_API}/images/others/titan-supertools-logo.png`}
+              alt="Titan Super Tools"
+              className="brand-nav"
+              style={{ width: "15.5rem", height: "auto" }}
+            ></Image>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" className="navbar-dark" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav>
+              <Col lg={3}>
+                <Dropdown className="collapse-dropdown">
+                  <Dropdown.Toggle
+                    id="dropdown-basic"
+                    className="rounded-pill categories-nav"
+                    style={{
+                      backgroundColor: "white",
+                      border: "1px solid #ced4da",
+                      color: "black",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      width: "100%"
+                    }}
+                  >
+                    Categories
+                  </Dropdown.Toggle>
+                  {showNavCategories()}
+                </Dropdown>
+              </Col>
+              <Col lg={9}>
+                <InputGroup className="search-nav">
+                  <FormControl
+                    placeholder={sPlaceHolder}
+                    aria-label="Search here"
+                    aria-describedby="basic-addon2"
+                    style={{
+                      borderTopLeftRadius: "50rem",
+                      borderBottomLeftRadius: "50rem"
+                    }}
+                    onChange={handleQueryChange}
+                    onClick={handleSearchboxClick}
+                    onKeyPress={handleEnterSearch}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      style={{
+                        borderTopRightRadius: "50rem",
+                        borderBottomRightRadius: "50rem",
+                        backgroundColor: "#ffc044",
+                        border: "1px solid #ffc044",
+                        height: "2.4rem"
+                      }}
+                      className="text-white"
+                      onClick={handleSearchClick}
+                    >
+                      Search
+                    </Button>
+                  </InputGroup.Append>
+                  <a href="/checkout" className="cart-nav" style={{ textDecoration: "none"}}>
+                    <i
+                      className="fas fa-shopping-cart mt-3 ml-3"
+                      style={{ color: "white" }}
+                    ></i>
+                    {showBadge()}
+                    <p className="text-white">Your Cart</p>
+                </a>
+                </InputGroup>
+                
+              </Col>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     );
   };
   const showNavBarThird = () => {
     return (
       <Fragment>
-        <Nav activeKey="/home" className="container">
-        <Nav.Item>
-          <Nav.Link style={getFontColor()} href="/">
-            <span
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                backgroundPosition: "125px -152px",
-                backgroundSize: "60px",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "28px",
-                marginRight: "30px"
-              }}
-            >
-              <strong>HOME</strong>
-            </span>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href="/search/result"
-          >
-            <span
-              style={{
-                backgroundImage: `url(${IMAGE_API}/images/others/ICons.png)`,
-                backgroundPosition: "132px -134px",
-                backgroundSize: "65px",
-                height: "22px",
-                width: "24px",
-                display: "block",
-                cursor: "pointer",
-                paddingLeft: "28px",
-                marginRight: "30px"
-              }}
-            >
-              <strong>SHOP</strong>
-            </span>
-          </Nav.Link>
-        </Nav.Item>
-        {user && <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href={user && `/profile/${user._id}`}
-          >
-            <Row className="ml-1">
-              <span
-                style={{
-                  backgroundImage: `url(${IMAGE_API}/images/others/order.png)`,
-                  backgroundPosition: "6px 0px",
-                  backgroundSize: "18px",
-                  backgroundRepeat: "no-repeat",
-                  height: "22px",
-                  width: "24px",
-                  display: "block",
-                  cursor: "pointer",
-                  paddingLeft: "28px"
-                }}
-              ></span>
-              <strong>YOUR ORDER</strong>
-            </Row>
-          </Nav.Link>
-        </Nav.Item>}
-        <Nav.Item>
-          <Nav.Link
-            style={getFontColor()}
-            href={`/bundles`}
-          >
-            <Row className="ml-1">
-              <span
-                style={{
-                  backgroundImage: `url(${IMAGE_API}/images/others/bundle.png)`,
-                  backgroundPosition: "6px 0px",
-                  backgroundSize: "18px",
-                  backgroundRepeat: "no-repeat",
-                  height: "22px",
-                  width: "24px",
-                  display: "block",
-                  cursor: "pointer",
-                  paddingLeft: "28px"
-                }}
-              ></span>
-              <strong>BUNDLE DEALS</strong>
-            </Row>
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
+        <Container style={{backgroundColor: "#4c4847"}} fluid>
+          <Nav activeKey="/home" className="container" style={{fontSize : "1.25rem"}}>
+            <Nav.Item>
+              <Nav.Link style={getFontColor()} href="/">
+                <span>
+                  <strong>Home</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href="/search/result"
+              >
+                <span>
+                  <strong>Shop</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+            {user && <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href={user && `/profile/${user._id}`}
+              >
+                <span>
+                  <strong>Your Order</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>}
+            <Nav.Item>
+              <Nav.Link
+                style={getFontColor()}
+                href={`/bundles`}
+              >
+                <span>
+                  <strong>Bundle Deals</strong>
+                </span>
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Container>
         <div style={{ borderBottom: "8px solid #ffc044", backgroundColor: "black" }}>
         </div>
       </Fragment>
@@ -531,12 +436,12 @@ const Layout = ({
     return (
       oCategories && (
         <footer
-          className="text-center p-5 text-white mt-5"
+          className="text-center p-5 text-white"
           style={{ backgroundColor: "black" }}
         >
           <Container>
             <Row className="border-bottom pb-5 mb-1">
-              <Col xs={4} md={4} xl={4} sm={4} className="text-left">
+              <Col xs={12} md={12} lg={4} sm={12} className="text-left">
                 <p style={{ color: "#ffc044" }}>NAVIGATION</p>
                 <a href="/" className="text-white">
                   HOME
@@ -560,7 +465,7 @@ const Layout = ({
                 <br></br>
               </Col>
               {showFooterCategories()}
-              <Col xs={3} md={3} xl={3} sm={3} className="text-left">
+              <Col xs={12} md={12} lg={3} sm={12} className="text-left">
                 <p style={{ color: "#ffc044" }}>ABOUT US</p>
                 <p>
                   Titan Supertools Hardware is a company that carries multiple
@@ -577,7 +482,7 @@ const Layout = ({
                   ></i>{" "}
                   (02)285-7337 0916-2927228
                 </p>
-                <p>
+                <p style={{wordWrap : "break-word"}}>
                   <i
                     className="fas fa-paper-plane"
                     style={{ color: "#ffc044" }}
@@ -588,7 +493,7 @@ const Layout = ({
             </Row>
             <div className="float-left">© 2020 Titan. All rights reserved</div>
             <div className="float-right">
-              <a href="/" style={{ color: "white" }}>
+              <a href="https://www.facebook.com/TitanSupertoolsPH/" target="_blank" style={{ color: "white" }}>
                 follow us<i className="ml-2 fab fa-facebook-square"></i>
               </a>
             </div>

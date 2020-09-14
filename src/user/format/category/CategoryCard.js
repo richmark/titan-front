@@ -4,27 +4,25 @@ import { IMAGE_API } from '../../../config';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
-const CategoryCard = (aData) => {
+const CategoryCard = (aData, aSideBanner) => {
 
     const showCardBase = (oCategories) => {
         var sImage = (oCategories.category_image === undefined) ? "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRQGvHazjKHOSITUSvJC1CUOSWGBZKYbMiEYNZHn5sg007KcVhS" : oCategories.category_image;
         return (
-            <Link to={`categories/${oCategories._id}`}>
-                <Card className="pt-3 ml-3 border-0"  style={{background: 'transparent'}}> 
+            <Link to={`/categories/${oCategories._id}`} style={{textDecoration: 'none'}}>
+                <Card className="my-2 mx-auto border-1"  style={{background: 'white', width: "225px"}}> 
                     <Row>
                         <Col>
-                            <Image 
+                            <Image
+                                className='ml-1' 
                                 src={`${IMAGE_API}/images/categories/${sImage}`}
                                 style={{width: "200px", height: "200px"}} 
                             />
                         </Col>
                     </Row>
-                    <div className="border-bottom border-white mt-2 ml-2 mr-5 boder" style={{width: '180px'}}></div>
-                    <Row className=" mt-2">
+                    <Row className="mt-2">
                         <Col>
-                            <button className="default-button text-center" style={{color: 'white', background: `url(${IMAGE_API}/images/others/Button.png) no-repeat 0px 2px`}}>
-                                <p className="ellipsis-button text-center" style={{fontSize: "16px", marginTop: '18px', textTransform: 'uppercase'}}><strong>{oCategories.name}</strong></p>
-                            </button>
+                           <p className="text-center" style={{fontSize: "14px", marginTop: '18px', textTransform: 'uppercase', fontFamily: 'Oswald', color: 'black'}}><strong>{oCategories.name}</strong></p>
                         </Col>
                     </Row>
                 </Card>
@@ -32,16 +30,50 @@ const CategoryCard = (aData) => {
         );
     };
 
-    const showLayout = (aCategories) => {
+    const showLayout = (aCategories, iIndex) => {
+        return (
+            <Container>
+                <Row>
+                    <Col sm={12} md={12} lg={9}>
+                        <Row className="mx-auto">
+                            {aCategories.map((oCategories, iIndex) => {
+                                return (
+                                    <Col xs={12} sm={6} md={4} lg={4} key={iIndex} className="pl-0">
+                                        {showCardBase(oCategories)}
+                                    </Col>
+                                );
+                            })}
+                        </Row>
+                    </Col>
+                    {aSideBanner[iIndex] !== undefined && 
+                        <a href={`${aSideBanner[iIndex].side_banner_link}`} target="_blank">
+                            <Col sm={{offset:0, span: 3}} className='d-xl-block d-lg-none d-md-none d-sm-none d-none'>
+                                <Image
+                                    className='mx-auto' 
+                                    src={`${IMAGE_API}/images/sidebanners/${aSideBanner[iIndex].side_banner_image}`}
+                                />
+                            </Col>
+                        </a>
+                    }
+                </Row>
+            </Container>
+        );
+    }
+
+    /**
+     * Load more categories
+     * @param  aCategories 
+     */
+    const showLayoutv2 = (aCategories) => {
         return (
             <Container>
                 <Row className="mt-2 ml-3 mr-2">
                     <Col sm={{offset:0, span: 12}}>
                         <Row className="mb-2">
-                            {aCategories.map((oCategories, iIndex) => {
+                            {aCategories.map((oBundles, iIndex) => {
                                 return (
-                                    <Col sm={3} key={iIndex} className="pl-0">
-                                        {showCardBase(oCategories)}
+                                    <Col lg={3} md={6} sm={6} xs={12} key={iIndex} className="pl-0">
+                                        {showCardBase(oBundles)}
                                     </Col>
                                 );
                             })}
@@ -56,19 +88,32 @@ const CategoryCard = (aData) => {
      * TODO: add validation if aChunks is empty
      */
     const arrangeCategories = (aData) => {
-        const aChunks = _.chunk(aData, 4);
-        return aChunks.map((aCategories, iIndex) => {
-            return (
-                <Fragment key={iIndex}>
-                    {showLayout(aCategories)}
-                </Fragment>
-            );
-        });
+        if (aSideBanner === false) {
+            var aChunks = _.chunk(aData, 4);
+            aChunks = aChunks.length === 0 ? [aData] : aChunks;
+            return aChunks.map((aCategories, iIndex) => {
+                return (
+                    <Fragment key={iIndex}>
+                        {showLayoutv2(aCategories)}
+                    </Fragment>
+                );
+            });
+        } else {
+            const aChunks = _.chunk(aData, 6);
+            return aChunks.map((aCategories, iIndex) => {
+                return (
+                    <Fragment key={iIndex}>
+                        {showLayout(aCategories, iIndex)}
+                    </Fragment>
+                );
+            });
+        }
+        
     }
 
     return (
         <Fragment>
-            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', letterSpacing: '7px'}}>CATEGORIES</p></strong></div>
+            <div className="category-tab mt-3" style={{background: `url(${IMAGE_API}/images/others/CategoryTab.png) no-repeat 0 0`, height: '85px'}}><strong><p className="mb-0 absolute" style={{position: 'relative', top: '14px', left: '80px', fontSize : '20px', fontFamily : 'Oswald, sans-serif'}}>CATEGORIES</p></strong></div>
             {arrangeCategories(aData)}
         </Fragment>
     );    

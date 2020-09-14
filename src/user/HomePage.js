@@ -7,6 +7,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { getAllProducts } from '../core/client/productApi';
 import { getTotalCount } from '../core/client/cartHelpers';
 import { PRODUCT_LIMIT } from '../config'; 
+import { listSideBanner } from '../core/admin/sidebanner/sidebannerApi';
 
 const HomePage = () => {
 
@@ -18,6 +19,7 @@ const HomePage = () => {
     const [aBestSellers, setBestSellers] = useState([]);
     const [bLoadButton, setLoadButton] = useState(true);
     const [iOffset, setOffset] = useState(0);
+    const [aSideBanner, setSideBanner] = useState(false);
 
     const iLimit = parseInt(PRODUCT_LIMIT, 10);
 
@@ -25,12 +27,23 @@ const HomePage = () => {
         getOurProducts(iLimit, iOffset);
         getNewArrivals();
         getBestSellers();
+        getSideBanner();
+    };
+
+    const getSideBanner = () => {
+        listSideBanner().then(oData => {
+            if(oData.error) {
+                console.log(oData.error)
+            } else {
+                setSideBanner(oData.data);
+            }
+        });
     };
 
     const populateOurProducts = (aData) => {
         if (aData.length % iLimit > 0 || aData.length === 0) {
             setLoadButton(false);
-        } 
+        }
         setProducts(aProducts.concat(aData));
     }
 
@@ -68,7 +81,7 @@ const HomePage = () => {
     const showCategoryLayout = () => {
         return (
             <Container>
-                {CategoryCard(aCategories)}
+                {CategoryCard(aCategories, aSideBanner)}
             </Container>
         );
     };
@@ -81,7 +94,7 @@ const HomePage = () => {
         if (bLoadButton === true) {
             return (
                 <Fragment>
-                    <Container>
+                    <Container className='pb-2'>
                         <Row>
                             <Col className="text-center">
                                 <Button variant="warning" onClick={addMoreProducts}>Load More</Button>
@@ -100,11 +113,13 @@ const HomePage = () => {
 	return (
         <Layout oGetCategory={getCategory} run={iRun}>
             {ProductBundleCarousel()}
-            {showCategoryLayout()}
-            {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
-            {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
-            {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
-            {showLoadMoreButton()}
+            <Container style={{backgroundColor: 'white'}} fluid>
+                {aSideBanner.length && showCategoryLayout()}
+                {aNewArrivals.length > 0 && ProductCard(aNewArrivals, setRun, 'NEW ARRIVALS')}
+                {aBestSellers.length > 0 && ProductCard(aBestSellers, setRun, 'BEST SELLERS')}
+                {aProducts.length > 0 && ProductCard(aProducts, setRun, 'OUR PRODUCTS')}
+                {showLoadMoreButton()}
+            </Container>
         </Layout>
     );
 };

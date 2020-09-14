@@ -5,7 +5,7 @@
 	"dependencies": {
 		"@fortawesome/react-fontawesome": "^0.1.7",
 		"braintree-web-drop-in-react": "^1.1.0",
-		"lodash": "^4.17.15",
+		"lodash": "^4.17.20",
 		"moment": "^2.24.0",
 		"query-string": "^6.10.1",
 		"react": "^16.11.0",
@@ -14,7 +14,7 @@
 		"react-data-table-component": "^6.2.1",
 		"react-dom": "^16.11.0",
 		"react-router-dom": "^5.1.2",
-		"react-scripts": "^3.3.0",
+		"react-scripts": "^3.4.3",
 		"simple-react-validator": "^1.2.4",
 		"styled-components": "^5.0.0"
 	},

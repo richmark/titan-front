@@ -7,9 +7,13 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  overflow-x: hidden;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+    monospace;
 }
 
 span {
@@ -27,11 +31,11 @@ span {
     color: #fbad17;
 }
 
-.titan-link :hover {
+.titan-link:hover {
     color: #c08414;
 }
 
-.titan-link :link {
+.titan-link:link {
     color: #fbad17;
 }
 
@@ -68,91 +72,465 @@ span {
 @keyframes ldio-o8fa4n59lro {
     0% { transform: translate(-50%,-50%) rotate(0deg); }
     100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
+.ldio-o8fa4n59lro div {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 10px solid #fbad17;
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.ldio-o8fa4n59lro div {
+  animation: ldio-o8fa4n59lro 1s linear infinite;
+  top: 50px;
+  left: 50px
+}
+.loadingio-spinner-rolling-9vq94p0gkx5 {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  overflow: hidden;
+  background: rgba(NaN, NaN, NaN, 0);
+}
+.ldio-o8fa4n59lro {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.ldio-o8fa4n59lro div { box-sizing: content-box; }
+
+.category-side-list:hover {
+  font-weight: bold;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.carousel-indicators > li {
+  border-radius: 50% !important;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.carousel-indicators {
+  top: 100%;
+}
+
+.carousel-control-prev:hover {
+  background-image: linear-gradient(to right, #00000070 , transparent);
+}
+
+.carousel-control-next:hover {
+  background-image: linear-gradient(to right, transparent , #00000070);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tst-current {
+  padding-left: 1em; 
+  text-indent: -.7em;
+}
+
+.tst-current::before {
+  content: "• "  !important;
+  color: #fbad17 !important; /* or whatever color you prefer */
+}
+
+.tst-list {
+  padding-left: 1em; 
+  text-indent: -.7em;
+  color: lightgray;
+
+}
+
+.tst-list::before {
+  content: "• "  !important;
+  color: lightgray !important; /* or whatever color you prefer */
+}
+
+.fa-star {
+  color: #99948a;
+}
+
+.productCardHide {
+  display: none !important;
+}
+
+.productCard:hover .productCardHide {
+  display: flex !important;
+}
+
+/* MOBILE VERSION */
+.navbar-toggler {
+  border: 1px solid rgb(255, 192,68) !important;
+}
+/* Extra small devices (portrait phones, less than 576px)
+No media query for `xs` since this is the default in Bootstrap
+
+Small devices (landscape phones, 576px and up) */
+
+/* For Galaxy Fold Smallest */
+@media (min-width: 280px) {
+  .collapse-dropdown {
+    width: 14.5rem !important;
+    margin-bottom: 1rem;
   }
-  .ldio-o8fa4n59lro div {
+  .search-nav {
+    width: 9rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 10rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .brand-nav {
+    width: 10rem !important
+  }
+  .info-nav {
+    display: none;
+  }
+  .login-nav {
+    text-align: left !important;
+  }
+  .product-detail-image {
+    width: 10rem !important;
+    height: 10rem !important;
+  }
+  .product-detail-additional {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -3.5rem !important; 
+  }
+  .checkout-delivery-details {
+    margin-top: 0.5rem;
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1rem !important;
+  }
+  .checkout-product-detail {
+    font-size: .55rem !important;
+  }
+  .checkout-product-detail-quantity {
     position: absolute;
-    width: 60px;
-    height: 60px;
-    border: 10px solid #fbad17;
-    border-top-color: transparent;
-    border-radius: 50%;
+    left: 3.5rem;
   }
-  .ldio-o8fa4n59lro div {
-    animation: ldio-o8fa4n59lro 1s linear infinite;
-    top: 50px;
-    left: 50px
+  .checkout-text-price-vat {
+    display: block;
+  }     
+}
+
+/* For Iphone 5 */
+@media (min-width: 320px) {
+  .collapse-dropdown {
+    width: 16rem !important;
   }
-  .loadingio-spinner-rolling-9vq94p0gkx5 {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    overflow: hidden;
-    background: rgba(NaN, NaN, NaN, 0);
+  .search-nav {
+    width: 11rem !important;
   }
-  .ldio-o8fa4n59lro {
-    width: 100%;
-    height: 100%;
+  .cart-nav {
+    position: absolute !important; 
+    left: 12rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .brand-nav {
+    width: 12rem !important
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -2.5rem !important; 
+  }
+  .checkout-product-detail {
+    font-size: .80rem !important;
+  }
+  .checkout-product-detail-quantity {
     position: relative;
-    transform: translateZ(0) scale(1);
-    backface-visibility: hidden;
-    transform-origin: 0 0; /* see note above */
-  }
-  .ldio-o8fa4n59lro div { box-sizing: content-box; }
+    left: 0rem;
+  }  
+}
 
-  .category-side-list:hover {
-    font-weight: bold;
+/* For Galaxy S5 */
+@media (min-width: 360px) {
+  .collapse-dropdown {
+    width: 19rem !important;
   }
-
-  .active {
-    font-weight: bold;
+  .search-nav {
+    width: 14rem !important;
   }
-
-  .carousel-indicators > li {
-    border-radius: 50% !important;
-    width: 10px !important;
-    height: 10px !important;
+  .cart-nav {
+    position: absolute !important; 
+    left: 15rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
   }
-
-  .carousel-indicators {
-    top: 100%;
+  .product-detail-image {
+    width: 15rem !important;
+    height: 15rem !important;
   }
-
-  .carousel-control-prev:hover {
-    background-image: linear-gradient(to right, #00000070 , transparent);
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
   }
-
-  .carousel-control-next:hover {
-    background-image: linear-gradient(to right, transparent , #00000070);
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -6.5rem !important; 
   }
+  .checkout-product-detail {
+    font-size: 1rem !important;
+  } 
+}
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* For Iphone 6/7/8 */
+@media (min-width: 375px) {
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    left: 2rem !important; 
   }
-
-  .tst-current {
-    padding-left: 1em; 
-    text-indent: -.7em;
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 4rem !important; 
+    right: -5.5rem !important; 
   }
-
-  .tst-current::before {
-    content: "• "  !important;
-    color: #fbad17 !important; /* or whatever color you prefer */
+  .product-detail-comment {
+    font-size: 0.77rem !important;
   }
+}
 
-  .tst-list {
-    padding-left: 1em; 
-    text-indent: -.7em;
-    color: lightgray;
-
+/* For Pixel 2 */
+@media (min-width: 411px) {
+  .collapse-dropdown {
+    width: 22rem !important;
   }
-
-  .tst-list::before {
-    content: "• "  !important;
-    color: lightgray !important; /* or whatever color you prefer */
+  .search-nav {
+    width: 17rem !important;
   }
-
-  .fa-star {
-    color: #99948a;
+  .cart-nav {
+    position: absolute !important; 
+    left: 18rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
   }
+  .product-detail-image {
+    width: 20rem !important;
+    height: 20rem !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -9.5rem !important; 
+  }
+  .product-detail-comment {
+    font-size: 0.9rem !important;
+  } 
+}
+
+/* For Surface Duo */
+@media (min-width: 450px) {
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -8.5rem !important; 
+  }
+  .product-detail-comment {
+    font-size: 1rem !important;
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1rem !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .brand-nav {
+    width: 15.5rem !important
+  }
+  .collapse-dropdown {
+    width: 100% !important;
+  }
+  .collapse-nav {
+    margin-top: .75rem;
+  }
+  .search-nav {
+    width: 28rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 29rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .product-detail-additional {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: -5rem !important; 
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 1rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1.25rem !important;
+  }
+  .checkout-text-price {
+    text-align: left !important;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .categories-nav {
+    width: 100%;
+  }
+  .search-nav {
+    width: 39rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 40rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .info-nav {
+    display: inline-block;
+  }
+  .login-nav {
+    text-align: right !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 0.50rem !important; 
+  }
+  .checkout-delete-button {
+    margin-top: 2rem !important;
+    margin-right: 0rem !important;
+  }
+  .checkout-delete-button-icon {
+    font-size: 1.5rem !important;
+  }
+  .checkout-text-price {
+    text-align: right !important;
+  }
+  .checkout-text-price-vat {
+    display: inline;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .collapse-dropdown {
+    position: absolute !important; 
+    width: 9rem !important;
+  }
+  .search-nav {
+    width: 25rem !important;
+    margin-left: 2rem;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 26rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 2.75rem !important; 
+  }
+  .checkout-delivery-details {
+    margin-top: 0rem;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .search-nav {
+    width: 32rem !important;
+    margin-left: 1rem;
+  }
+  .collapse-dropdown {
+    position: absolute !important; 
+    width: 9rem !important;
+  }
+  .cart-nav {
+    position: absolute !important; 
+    left: 33rem !important; 
+    top: -1rem !important; 
+    width: 5rem !important;
+  }
+  .product-detail-sale {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    left: 2rem !important; 
+  }
+  .product-detail-soldout {
+    position: absolute !important; 
+    bottom: 5rem !important; 
+    right: 2rem !important; 
+  }
+  
+}

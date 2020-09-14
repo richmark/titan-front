@@ -15,6 +15,7 @@ const AddProduct = () => {
   const [stock_error, setStockError] = useState(false);
   const [image_error, setImageError] = useState(false);
   const [description_error, setDescriptionError] = useState(false);
+  const [discount_error, setDiscountError] = useState(false);
 
   const [values, setValues] = useState({
     product_name: "",
@@ -30,7 +31,9 @@ const AddProduct = () => {
     error: false,
     formData: "",
     display: "T",
-    sold_out: "F"    
+    sold_out: "F",
+    display_sale: "F",
+    discount_sale: 0    
   });
 
   const {
@@ -48,6 +51,8 @@ const AddProduct = () => {
     formData,
     display,
     sold_out,
+    display_sale,
+    discount_sale,
     metro_manila,
     luzon,
     visayas,
@@ -192,6 +197,7 @@ const AddProduct = () => {
     oValidator.message("Description", description, "required|max:200");
     oValidator.message("Stock", stock, "required");
     oValidator.message("Image", image, "required");
+    oValidator.message("Sale Discount", discount_sale, "required|numeric|min:0,num|max:100,num");
     
     oValidator.message("Metro Manila", metro_manila, "required");
     oValidator.message("Luzon", luzon, "required");
@@ -203,6 +209,7 @@ const AddProduct = () => {
       : setNameError(true);
     oValidator.fieldValid("Price") ? setPriceError(false) : setPriceError(true);
     oValidator.fieldValid("Stock") ? setStockError(false) : setStockError(true);
+    oValidator.fieldValid("Sale Discount") ? setDiscountError(false) : setDiscountError(true);
     oValidator.fieldValid("Description")
       ? setDescriptionError(false)
       : setDescriptionError(true);
@@ -455,6 +462,35 @@ const AddProduct = () => {
                   ></input>
                   <label className="form-check-label">Sold Out</label>
                 </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="inlineCheckbox3"
+                    onChange={handleChange("display_sale")}
+                    value={display_sale === "F" ? "T" : "F"}
+                    checked={display_sale === "F" ? false : true}
+                  ></input>
+                  <label className="form-check-label">On Sale</label>
+                </div>
+                {display_sale === 'T' && <div className="row">
+                  <div className="col-sm-3 form-label col-form-label text-center">
+                    <label>Sale Discount %: </label>
+                  </div>
+                  <div className="col-sm-9">
+                    <input
+                      value={discount_sale}
+                      onChange={handleChange("discount_sale")}
+                      type="number"
+                      className={
+                        discount_error
+                          ? "form-control bg-light small mb-2 border-danger"
+                          : "form-control bg-light mb-2"
+                      }
+                      placeholder="Sale Discount %"
+                    />
+                  </div>
+                  </div>}
               </div>
               <div className="border p-3 mt-2">
                 <h6>Delivery Price</h6>

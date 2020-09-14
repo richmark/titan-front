@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Signup from "./user/Signup";
 import Signout from "./user/Signout";
-import Login from "./user/Login";
+import Login from './user/Login/Login';
 import ForgotPassword from "./user/ForgotPassword";
 import ResetPassword from "./user/ResetPassword";
 import HomePage from "./user/HomePage";
@@ -23,7 +23,7 @@ import Shippers from "./core/admin/shippers/Shippers";
 import UpdateShipper from "./core/admin/shippers/UpdateShipper";
 import Wholesalers from "./core/admin/wholesalers/Wholesalers";
 import VerifyEmail from "./user/VerifyEmail";
-import Profile from "./user/Profile";
+import Profile from "./user/profile/Profile";
 import AdminDashboard from "./core/admin/AdminDashboard";
 import Categories from "./core/admin/categories/Categories";
 import UpdateCategory from "./core/admin/categories/UpdateCategory";
@@ -49,6 +49,8 @@ import ContactUs from "./user/ContactUs";
 import ManageLevel from "./core/admin/levels/ManageLevel";
 import PurchaseHistory from './core/admin/verifiedusers/PurchaseHistory';
 import BundleDeals from './user/format/bundle/BundleDeals';
+import SideBanner from "./core/admin/sidebanner/SideBanner";
+import UpdateSideBanner from './core/admin/sidebanner/UpdateSideBanner';
 // custom routes
 import AdminRoute from "./auth/AdminRoute";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -169,6 +171,16 @@ const Routes = () => {
         path="/admin/banner"
         exact
         component={Banner}
+      />
+      <AdminRoute
+        path="/admin/sidebanner"
+        exact
+        component={SideBanner}
+      />
+      <AdminRoute
+        path="/admin/sidebanner/update/:sidebannerId"
+        exact
+        component={UpdateSideBanner}
       />
       <AdminRoute
         path="/admin/banner/update/:bannerId"

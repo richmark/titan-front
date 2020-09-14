@@ -57,7 +57,7 @@ const ProcessWholesaler = ({ match }) => {
                             <div className="row">
                                 <div className="col-sm-4 col-md-4 col-xl-4">
                                     <h5>User Details</h5>
-                                    <p>User status: <span>Processing</span></p>
+                                    <p>User status: <span>{data.verified_admin ?  'Verified' : 'Pending'}</span></p>
                                     <p>Name: <span>{data.first_name} {data.last_name}</span></p>
                                     <p>Company Name: <span>{data.company_name}</span></p>
                                     <p>Company Address: <span>{data.company_address}</span></p>
@@ -90,7 +90,7 @@ const ProcessWholesaler = ({ match }) => {
                         </div>
                     </div>
                 </div>
-                <div className="form-inline mb-2">
+                <div className="form-inline mb-2 px-3">
                     <button onClick={acceptUser} className="btn btn-primary mr-2">Accept</button>
                     <button onClick={rejectUser} className="btn btn-primary">Pending</button>
                 </div>

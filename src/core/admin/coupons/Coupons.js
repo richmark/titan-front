@@ -100,10 +100,11 @@ const Coupons = () => {
         cell: oRow => {
           return (
             <Fragment>
-              <Link to={`/admin/coupons/update/${oRow._id}`}>
+              {/* Update Coupon Feature is disabled 26/08/2020  - Carlo Barcena*/}
+              {/* <Link to={`/admin/coupons/update/${oRow._id}`}>
                 Edit
                 <i className="ml-1 mr-2 fa fa-pen" />
-              </Link>
+              </Link> */}
               <a href="#" onClick={handleDelete(oRow._id)}>
                 Delete
                 <i className="ml-1 fa fa-trash" />

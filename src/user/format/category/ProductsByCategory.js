@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Layout from '../../../core/Layout';
-import { Card, Container, Image, Col, Row } from 'react-bootstrap';
+import { Card, Container, Image, Col, Row, Button } from 'react-bootstrap';
 import { getProductByCategory } from '../../../core/client/productApi';
 import ProductCard from '../product/ProductCard';
 import { getTotalCount } from '../../../core/client/cartHelpers';
@@ -28,11 +28,8 @@ const ProductsByCategory = ({ match }) => {
     const showProductsByCategory = () => {
         return (
             <Fragment>
-                <Container className="border border-black rounded p-5 mt-4">
-                    {mCategory && <h3>{mCategory}</h3>}
-                    {data && ProductCard(data, setRun)}
-                    {loadMoreButton()}
-                </Container>
+                {data && mCategory && ProductCard(data, setRun, mCategory)}
+                {loadMoreButton()}
             </Fragment>
         );
     };
@@ -42,7 +39,10 @@ const ProductsByCategory = ({ match }) => {
             if(oData.error) {
                 console.log(oData.error);
             } else {
-                setValues({...values, ...oData});
+                setValues({
+                    size: oData.data.length,
+                    data: oData.data
+                });
                 setSkip(skip + limit);
             }
         });
@@ -53,7 +53,7 @@ const ProductsByCategory = ({ match }) => {
                 console.log(oData.error);
             } else {
                 setValues({
-                    size: oData.size,
+                    size: oData.data.length,
                     data: (values.data).concat(oData.data)
                 });
                 setSkip(skip + limit);
@@ -63,11 +63,12 @@ const ProductsByCategory = ({ match }) => {
 
     const loadMoreButton = () => {
         return (
-            size > 0 &&
-            size >= limit && (
-                <button onClick={loadMore} className='btn btn-warning mt-5'>
-                    Load more
-                </button>
+            size % limit === 0 && (
+                <Row>
+                    <Col className="text-center pb-2">
+                        <Button variant="warning" onClick={loadMore}>Load More</Button>
+                    </Col>
+                </Row>
             )
         );
     };

@@ -8,6 +8,10 @@ const Receipt = ({order}) => {
     const oShipping = order.shipping[0];
 
     const showDetails = () => {
+        order.discount_fee = parseFloat(order.discount_fee);
+        order.amount = parseFloat(order.amount);
+        order.shipping_fee = parseFloat(order.shipping_fee);
+
         return order && (
             <Container>
                 <h2>Titan Supertools - Official Receipt</h2>
@@ -23,7 +27,6 @@ const Receipt = ({order}) => {
                         <Col sm={{span: 6}}>
                             <Container className="m-2">
                                 <strong>Total:</strong> ₱ <span>{order.amount}</span><br/>
-                                <strong>Status</strong> <span>{order.status}</span>
                             </Container>
                         </Col>
                     </Row>
