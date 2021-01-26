@@ -47,7 +47,7 @@ const setWithExpiry = (oData, iTTL) => {
 
 const checkExpiry = (oData) => {
     const oNow = new Date();
-    console.log(oNow.getTime() > oData.expiry, oNow.getTime(), oData.expiry);
+  
     if (oNow.getTime() > oData.expiry) {
         localStorage.removeItem('jwt');
         return false;
