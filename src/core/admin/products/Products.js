@@ -41,7 +41,6 @@ const Products = () => {
       if (oProducts.error) {
         console.log(oProducts.error);
       } else {
-        console.log(oProducts.data);
         setProducts(oProducts.data);
         setOriginalProducts(oProducts.data);
       }

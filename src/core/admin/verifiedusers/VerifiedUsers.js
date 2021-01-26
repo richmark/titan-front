@@ -56,7 +56,7 @@ const VerifiedUsers = () => {
       },
       {
         name: 'Type',
-        cell: oRow => {
+        selector: oRow => {
             return checkUserType(oRow.role)
         },
         sortable: true,
