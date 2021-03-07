@@ -106,7 +106,7 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
      */
     const buyNow = (oProduct) => oEvent => {
         oEvent.preventDefault();
-        window.location.href = `/checkout?sType=buyNow&id=${btoa(JSON.stringify({
+        window.location.href = `/checkout?sType=buyNow&id=${btoa(unescape(encodeURIComponent(JSON.stringify({
             ...oProduct,
             image : `${IMAGE_API}/images/products/${oProduct.image}`,
             additional_images: oProduct.additional_images && oProduct.additional_images.map(sImage => `${IMAGE_API}/images/products/${sImage}`) || false,
@@ -118,7 +118,7 @@ const ProductCard = (aData, setRun = () => {}, sName, bBorder = false) => {
             display: oProduct.display,
             delivery_price: oProduct.delivery_price,
             count: 1
-        }))}`;
+        }))))}`;
     }
 
     const showSaleFeature = (oProduct) => {
