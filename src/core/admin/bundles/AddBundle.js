@@ -21,7 +21,7 @@ const AddBundle = () => {
     product_name: "",
     description: "",
     image:
-      "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
+      "/default_image.png",
     formData: "",
     display: "T",
     sold_out: "F",

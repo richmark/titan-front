@@ -166,7 +166,7 @@ const Categories = () => {
                     <img
                       src={
                         category_image ||
-                        "https://ctt.trains.com/sitefiles/images/no-preview-available.png"
+                        "/default_image.png"
                       }
                       style={{ width: "100%" }}
                     />

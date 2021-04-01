@@ -21,7 +21,7 @@ const UpdateBundle = ({ match }) => {
     description: "",
     discount_type: "",
     image:
-      "https://ctt.trains.com/sitefiles/images/no-preview-available.png",
+      "/default_image.png",
     products: [],
     formData: "",
     display: "T",
