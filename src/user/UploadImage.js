@@ -77,7 +77,7 @@ const UploadImage = () => {
 
     const handleError = (oEvent) => {
         oEvent.target.onerror = null;
-        oEvent.target.src = 'https://ctt.trains.com/sitefiles/images/no-preview-available.png';
+        oEvent.target.src = '/default_image.png';
     }
 
     const showResult = () => {

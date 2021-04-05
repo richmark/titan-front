@@ -581,7 +581,7 @@ const AddProduct = () => {
         <img
           key={iIndex}
           className="mr-2 mt-2"
-          src="https://ctt.trains.com/sitefiles/images/no-preview-available.png"
+          src="/default_image.png"
           style={{ width: "8vw", height: "10vh" }}
         />
       );
@@ -600,7 +600,7 @@ const AddProduct = () => {
                   <img
                     src={
                       (image && image) ||
-                      "https://ctt.trains.com/sitefiles/images/no-preview-available.png"
+                      "/default_image.png"
                     }
                     style={{ width: "100%", height: "auto" }}
                   />
